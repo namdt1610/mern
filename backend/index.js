@@ -8,6 +8,10 @@ app.get('/api/data', (req, res) => {
     res.json(data)
 })
 
+app.get('/admin', (req, res) => {
+    res.send('This is the admin page')
+})
+
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
 })
