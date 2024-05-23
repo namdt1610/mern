@@ -1,17 +1,14 @@
-const express = require('express')
-const app = express()
-const port = 8888
+const app = require('./app');  // Import ứng dụng Express đã cấu hình
+const connectDB = require('./config/dbConfig'); // Import cấu hình kết nối MongoDB
+const dotenv = require('dotenv'); // Import thư viện dotenv
 
-app.get('/api/data', (req, res) => {
-    // Handle your API logic here
-    const data = { message: 'Hello from the server!' }
-    res.json(data)
-})
+dotenv.config(); // Đọc các biến môi trường từ file .env
 
-app.get('/admin', (req, res) => {
-    res.send('This is the admin page')
-})
+// Kết nối MongoDB
+connectDB();
+
+const port = process.env.PORT || 8888;
 
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
-})
+  console.log(`Server is running on port ${port}`);
+});
