@@ -1,6 +1,6 @@
 import React from 'react'
-
 import { NavLink, Outlet } from 'react-router-dom'
+import Header from './Header'
 
 export default function Layout() {
     const testMenuItems = [
@@ -8,18 +8,15 @@ export default function Layout() {
         { href: 'store', title: 'Store' },
         { href: 'about', title: 'About' },
         { href: 'contact', title: 'Contact' },
-        { href: 'api', title: 'API'},
-        { href: 'admin', title: 'Admin'}
+        { href: 'api', title: 'API' },
+        { href: 'admin', title: 'Admin' },
     ]
 
     return (
         <div className="min-h-screen flex flex-col">
             {/* Add 1 more div tag to wrap the header */}
-            <div>
-                <header className="bg-gray-200 text-black sticky top-0 h-14 flex justify-center items-center font-semibold uppercase">
-                    Shoesify
-                </header>
-            </div>
+            
+            <Header />
 
             {/* Navigation */}
             <div className="flex flex-col md:flex-row flex-1">
