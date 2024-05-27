@@ -1,6 +1,6 @@
 # Node modules
-./server/node_modules
-./client/node_modules
+server/node_modules
+client/node_modules
 
 # Log files
 logs/
@@ -10,7 +10,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # Environment variable files
-.env
+# .env
 .env.local
 .env.development.local
 .env.test.local
