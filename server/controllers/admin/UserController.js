@@ -12,10 +12,12 @@ exports.loginUser = async (req, res) => {
 
 // User logout
 exports.signUpUser = async (req, res) => {
+    const { email, password } = req.body
+
     try {
-        res.json({ message: 'Sign up user' })
+        const user = await User.signUp(email, password)
+        res.status(200).json({email, user})
     } catch (error) {
-        console.error(error)
-        res.status(500).json({ message: 'Error sign up user' })
+        res.status(400).json({error: error.message})
     }
 }

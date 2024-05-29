@@ -20,8 +20,9 @@ const connectDB = async () => {
     // Kết nối client đến server
     await client.connect();
     // Gửi lệnh ping để xác nhận kết nối thành công
-    await client.db("admin").command({ ping: 1 });
+    await client.db("sample_mflix").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
+
   } catch (error) {
     console.error(`Error: ${error.message}`);
     process.exit(1);
