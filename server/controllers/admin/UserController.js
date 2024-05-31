@@ -1,12 +1,21 @@
 const User = require('../../models/UserModel')
+const jwt = require('jsonwebtoken')
+
+const createToken = (_id) => {
+    return jwt.sign({ _id }, process.env.JWT_SECRET, { expiresIn: '3d' })
+}
 
 // User login
 exports.loginUser = async (req, res) => {
+    const { email, password } = req.body
+
     try {
-        res.json({ message: 'Login user' })
+        const user = await User.login(email, password)
+
+        const token = createToken(user._id)
+        res.status(200).json({ email, token })
     } catch (error) {
-        console.error(error)
-        res.status(500).json({ message: 'Error login user' })
+        res.status(400).json({ message: error.message })
     }
 }
 
@@ -15,9 +24,13 @@ exports.signUpUser = async (req, res) => {
     const { email, password } = req.body
 
     try {
-        const user = await User.signUp(email, password)
-        res.status(200).json({email, user})
+        const user = await User.signup(email, password)
+
+        // Create token
+        const token = createToken(user._id)
+
+        res.status(200).json({ email, token })
     } catch (error) {
-        res.status(400).json({error: error.message})
+        res.status(400).json({ error: error.message })
     }
 }
