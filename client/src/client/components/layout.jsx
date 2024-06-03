@@ -5,11 +5,11 @@ import Header from './Header'
 export default function Layout() {
     const testMenuItems = [
         { href: '/', title: 'Home' },
-        { href: 'store', title: 'Store' },
-        { href: 'about', title: 'About' },
-        { href: 'contact', title: 'Contact' },
-        { href: 'api', title: 'API' },
-        { href: 'admin', title: 'Admin' },
+        { href: '/store', title: 'Store' },
+        { href: '/about', title: 'About' },
+        { href: '/contact', title: 'Contact' },
+        { href: '/api', title: 'API' },
+        { href: '/admin', title: 'Admin' },
     ]
 
     return (
