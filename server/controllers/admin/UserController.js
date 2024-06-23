@@ -20,7 +20,7 @@ exports.loginUser = async (req, res) => {
 }
 
 // User logout
-exports.signUpUser = async (req, res) => {
+exports.signupUser = async (req, res) => {
     const { email, password } = req.body
 
     try {

@@ -28,6 +28,7 @@ dist/
 
 # Optional eslint cache
 .eslintcache
+./client/node_modules/.cache/.eslintcache
 
 # Next.js build output
 .next/

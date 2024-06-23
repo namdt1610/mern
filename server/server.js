@@ -10,7 +10,7 @@ app.use((req, res, next) => {
 })
 
 // Import routes
-const userRoutes = require('./routes/admin/user')
+const userRoutes = require('./routes/client/user')
 
 // Use routes
 app.use('/api/user', userRoutes)
