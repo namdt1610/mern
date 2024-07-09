@@ -11,9 +11,11 @@ app.use((req, res, next) => {
 
 // Import routes
 const userRoutes = require('./routes/client/user')
+const productRoutes = require('./routes/admin/product')
 
 // Use routes
 app.use('/api/user', userRoutes)
+app.use('/api/admin/product', productRoutes)
 
 // Error handling middleware
 app.use((err, req, res, next) => {

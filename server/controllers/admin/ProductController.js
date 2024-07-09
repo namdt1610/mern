@@ -1,134 +1,93 @@
-// const Product = require('../../models/Product')
+const Product = require('../../models/productModel')
+const mongoose = require('mongoose')
 
-// // Controller cho quản lý sản phẩm bởi admin
-// exports.getAllProducts = async (req, res) => {
-//     try {
-//         const products = await Product.find()
-//         res.status(200).json(products)
-//     } catch (error) {
-//         console.error(error)
-//         res.status(500).json({ message: 'Error retrieving products' })
-//     }
-// }
+// GET all products
+const getAllProducts = async (req, res) => {
+    const products = await Product.find({}).sort({ createdAt: -1 })
+    res.status(200).json(products)
+}
 
-// exports.getProductById = async (req, res) => {
-//     try {
-//         const product = await Product.findById(req.params.id)
-//         if (!product) {
-//             return res.status(404).json({ message: 'Product not found' })
-//         }
-//         res.status(200).json(product)
-//     } catch (error) {
-//         console.error(error)
-//         res.status(500).json({ message: 'Error retrieving product' })
-//     }
-// }
+// GET a product by id
+const getProductById = async (req, res) => {
+    const { id } = req.params
 
-// exports.createProduct = async (req, res) => {
-//     try {
-//         const product = new Product(req.body)
-//         await product.save()
-//         res.status(201).json(product)
-//     } catch (error) {
-//         console.error(error)
-//         res.status(500).json({ message: 'Error creating product' })
-//     }
-// }
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(404).json({ error: 'Invalid product id' })
+    }
+    const product = await Product.findById(id)
 
-// exports.updateProduct = async (req, res) => {
-//     try {
-//         const updates = req.body
-//         const product = await Product.findByIdAndUpdate(
-//             req.params.id,
-//             updates,
-//             { new: true }
-//         )
-//         if (!product) {
-//             return res.status(404).json({ message: 'Product not found' })
-//         }
-//         res.status(200).json(product)
-//     } catch (error) {
-//         console.error(error)
-//         res.status(500).json({ message: 'Error updating product' })
-//     }
-// }
+    if (!product) {
+        return res
+            .status(404)
+            .json({ message: `Product with id ${id} not found` })
+    }
 
-// exports.deleteProduct = async (req, res) => {
-//     try {
-//         const product = await Product.findByIdAndDelete(req.params.id)
-//         if (!product) {
-//             return res.status(404).json({ message: 'Product not found' })
-//         }
-//         res.status(200).json({ message: 'Product deleted successfully' })
-//     } catch (error) {
-//         console.error(error)
-//         res.status(500).json({ message: 'Error deleting product' })
-//     }
-// }
-// const Product = require('../../models/Product')
+    res.status(200).json(product)
+}
 
-// // Controller cho quản lý sản phẩm bởi admin
-// exports.getAllProducts = async (req, res) => {
-//     try {
-//         const products = await Product.find()
-//         res.status(200).json(products)
-//     } catch (error) {
-//         console.error(error)
-//         res.status(500).json({ message: 'Error retrieving products' })
-//     }
-// }
+// POST a product
+const createProduct = async (req, res) => {
+    const { name, description, price, imageUrl } = req.body
 
-// exports.getProductById = async (req, res) => {
-//     try {
-//         const product = await Product.findById(req.params.id)
-//         if (!product) {
-//             return res.status(404).json({ message: 'Product not found' })
-//         }
-//         res.status(200).json(product)
-//     } catch (error) {
-//         console.error(error)
-//         res.status(500).json({ message: 'Error retrieving product' })
-//     }
-// }
+    try {
+        const product = await Product.create({
+            name,
+            description,
+            price,
+            imageUrl,   
+        })
+        res.status(200).json(product)
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+    }
+}
 
-// exports.createProduct = async (req, res) => {
-//     try {
-//         const product = new Product(req.body)
-//         await product.save()
-//         res.status(201).json(product)
-//     } catch (error) {
-//         console.error(error)
-//         res.status(500).json({ message: 'Error creating product' })
-//     }
-// }
+// DELETE a product by id
+const deleteProduct = async (req, res) => {
+    const { id } = req.params
 
-// exports.updateProduct = async (req, res) => {
-//     try {
-//         const updates = req.body
-//         const product = await Product.findByIdAndUpdate(
-//             req.params.id,
-//             updates,
-//             { new: true }
-//         )
-//         if (!product) {
-//             return res.status(404).json({ message: 'Product not found' })
-//         }
-//         res.status(200).json(product)
-//     } catch (error) {
-//         console.error(error)
-//         res.status(500).json({ message: 'Error updating product' })
-//     }
-// }
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ error: 'Invalid product id' })
+    }
 
-// exports.deleteProduct = async (req, res) => {
-//     try {
-//         const product = await Product.findByIdAndDelete(req.params.id)
-//         if (!product) {
-//             return res.status(404).json({ message: 'Product not found' })
-//         }
-//         res.status(200).json({ message: 'Product deleted successfully' })
-//     } catch (error) {
-//         console.error(error)
-//         res.status(500).json({ message: 'Error deleting product' })
-//     }
-// }
+    const product = await Product.findOneAndDelete({ _id: id })
+
+    if (!product) {
+        return res
+            .status(400)
+            .json({ error: `Product with id ${id} not found` })
+    }
+
+    res.status(200).json(product)
+}
+// UPDATE a product by id
+const updateProduct = async (req, res) => {
+    const { id } = req.params
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(404).json({ error: 'Invalid product id' })
+    }
+
+    const product = await Product.findOneAndUpdate(
+        { _id: id },
+        {
+            ...req.body,
+        }
+    )
+
+    if (!product) {
+        return res
+            .status(400)
+            .json({ error: `Product with id ${id} not found` })
+    }
+
+    res.status(200).json(product)
+}
+
+module.exports = {
+    createProduct,
+    getAllProducts,
+    getProductById,
+    deleteProduct,
+    updateProduct,
+}
