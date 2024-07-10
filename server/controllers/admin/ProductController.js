@@ -29,12 +29,31 @@ const getProductById = async (req, res) => {
 const createProduct = async (req, res) => {
     const { name, description, price, imageUrl } = req.body
 
+    let emtyFields = []
+
+    if (!name) {
+        emtyFields.push('name')
+    }
+    if (!description) {
+        emtyFields.push('description')
+    }
+    if (!price) {
+        emtyFields.push('price')
+    }
+    if (!imageUrl) {
+        emtyFields.push('imageUrl')
+    }
+    if (emtyFields.length > 0) {
+        return res
+            .status(400)
+            .json({ error: `Please provide ${emtyFields.join(', ')}` })
+    }
     try {
         const product = await Product.create({
             name,
             description,
             price,
-            imageUrl,   
+            imageUrl,
         })
         res.status(200).json(product)
     } catch (error) {

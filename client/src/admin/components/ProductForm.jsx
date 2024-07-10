@@ -8,6 +8,7 @@ const ProductForm = () => {
     const [price, setPrice] = useState('')
     const [imageUrl, setImageUrl] = useState('')
     const [error, setError] = useState(null)
+    const [emptyFields, setEmptyFiels] = useState([])
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -26,6 +27,7 @@ const ProductForm = () => {
 
         if (!response.ok) {
             setError(json.error)
+            setEmptyFiels(json.emptyFields)
         }
 
         if (response.ok) {
@@ -34,6 +36,7 @@ const ProductForm = () => {
             setPrice('')
             setImageUrl('')
             setError(null)
+            setEmptyFiels([])
             console.log('Product added successfully', json)
             dispatch({ type: 'CREATE_PRODUCT', payload: json })
         }
@@ -47,12 +50,14 @@ const ProductForm = () => {
                 type="text"
                 onChange={(e) => setName(e.target.value)}
                 value={name}
+                className={emptyFields.includes('name') ? 'empty' : ''}
             />
 
             <label>Product Description:</label>
             <textarea
                 onChange={(e) => setDescription(e.target.value)}
                 value={description}
+                className={emptyFields.includes('description') ? 'empty' : ''}
             ></textarea>
 
             <label>Product Price:</label>
@@ -60,6 +65,7 @@ const ProductForm = () => {
                 type="number"
                 onChange={(e) => setPrice(e.target.value)}
                 value={price}
+                className={emptyFields.includes('price') ? 'empty' : ''}
             />
 
             <label>Product Image:</label>
@@ -67,6 +73,7 @@ const ProductForm = () => {
                 type="file"
                 onChange={(e) => setImageUrl(e.target.value)}
                 value={imageUrl}
+                className={emptyFields.includes('imageUrl') ? 'empty' : ''}
             />
 
             <button>Create</button>
