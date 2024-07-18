@@ -1,4 +1,4 @@
-import { createContext } from 'react'
+import { createContext, useReducer } from 'react'
 
 export const ProductsContext = createContext()
 
@@ -18,11 +18,11 @@ export const productsReducer = (state, action) => {
 }
 
 export const ProductsContextProvider = ({ children }) => {
-    const [state, dispatch] = useReducer(productReducer, { products: null })
+    const [state, dispatch] = useReducer(productsReducer, { products: null })
 
     return (
-        <WorkoutContext.Provider value={{ ...state, dispatch }}>
+        <ProductsContext.Provider value={{ ...state, dispatch }}>
             {children}
-        </WorkoutContext.Provider>
+        </ProductsContext.Provider>
     )
 }

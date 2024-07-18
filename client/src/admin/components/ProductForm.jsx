@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { useProductContext } from '../../context/ProductContext'
+import { useProductsContext } from '../../hooks/useProductsContext'
 
 const ProductForm = () => {
-    const { dispatch } = useProductContext()
+    const { dispatch } = useProductsContext()
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
     const [price, setPrice] = useState('')

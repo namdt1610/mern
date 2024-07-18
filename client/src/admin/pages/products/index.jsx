@@ -18,7 +18,7 @@ const Products = () => {
         }
 
         fetchProducts()
-    }, [])
+    },)
 
     return (
         <div className="product">
