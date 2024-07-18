@@ -63,7 +63,7 @@ const linkSections = [
 function App() {
     return (
         <div className="container mx-auto my-4">
-            <div className="banner-section">
+            <div className="banner-section shadow-xl rounded-xl p-4">
                 <div className="flex md:flex-row justify-center items-center">
                     {/* Banner Slideshow */}
                     <div className="banner-slideshow mx-2 w-full md:w-2/3 h-auto md:h-128">
@@ -105,8 +105,14 @@ function App() {
                 </div>
             </div>
             {/* Categories Section*/}
-            <div className="categories-section">
+            <div className="categories-section shadow-xl rounded-xl p-4">
+                <div className="section-header ">
+                    <h3 className="text-2xl uppercase font-medium">Danh mục</h3>
 
+                </div>
+                <div className="section-body ">
+
+                </div>
             </div>
             {/* Product Section */}
             <div className="product-section"></div>

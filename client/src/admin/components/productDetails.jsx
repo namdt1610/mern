@@ -24,6 +24,7 @@ const ProductDetails = ({ product }) => {
             <p>Price: {product.price}</p>
             <p>Stock: {product.stock}</p>
             {/* <p>Created: {formatDistanceToNow(new Date(product.createdAt))} ago</p> */}
+            <button onClick={handleClick}>Del</button>
         </div>
     )
 }
