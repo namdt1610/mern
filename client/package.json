@@ -20,6 +20,9 @@
         "eject": "react-scripts eject"
     },
     "eslintConfig": {
+        "rules": {
+            "jsx-ally/accessible-emoji": "off"
+        },
         "extends": [
             "react-app",
             "react-app/jest"

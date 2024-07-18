@@ -1,7 +1,7 @@
 import { useProductsContext } from '../../hooks/useProductsContext'
 
 //date fns
-import formatDistanceToNow from 'date-fns/formatDistanceToNow'
+// import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 
 const ProductDetails = ({ product }) => {
     const { dispatch } = useProductsContext()
@@ -23,7 +23,7 @@ const ProductDetails = ({ product }) => {
             <p>{product.description}</p>
             <p>Price: {product.price}</p>
             <p>Stock: {product.stock}</p>
-            <p>Created: {formatDistanceToNow(new Date(product.createdAt))} ago</p>
+            {/* <p>Created: {formatDistanceToNow(new Date(product.createdAt))} ago</p> */}
         </div>
     )
 }

@@ -1,0 +1,11 @@
+.slide-container .react-slideshow-fade-indicators {
+    position: absolute;
+    bottom: 10px; /* Điều chỉnh theo ý bạn */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+.slide-container .react-slideshow-fade-indicators > div {
+    background-color: rgba(255, 255, 255, 0.5); /* Điều chỉnh màu sắc */
+}

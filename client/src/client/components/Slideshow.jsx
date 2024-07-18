@@ -1,24 +1,25 @@
 import React from 'react'
 import { Fade } from 'react-slideshow-image'
 import 'react-slideshow-image/dist/styles.css'
+import '../styles/Slideshow.css'
 
 const Slideshow = ({ images }) => {
     const properties = {
         duration: 2000,
         transitionDuration: 500,
         infinite: true,
-        indicators: true,
+        // indicators: true,
         arrows: true,
         pauseOnHover: true,
     }
 
     return (
-        <div className="slide-container relative">
+        <div className="slide-container relative ">
             <Fade {...properties}>
                 {images.map((image, index) => (
-                    <div className="each-fade" key={index}>
+                    <div className="each-fade " key={index}>
                         <img
-                            className="w-full h-full object-cover"
+                            className="w-full h-full bg-cover bg-center rounded-xl"
                             src={image}
                             alt={`slide-${index}`}
                         />

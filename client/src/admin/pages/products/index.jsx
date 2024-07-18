@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useProductsContext } from '../../../hooks/useProductsContext'
 
-import ProductDetails from '../../components/productDetails'
+import ProductDetails from '../../components/ProductDetails'
 import ProductForm from '../../components/ProductForm'
 
 const Products = () => {
