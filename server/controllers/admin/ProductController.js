@@ -27,26 +27,21 @@ const getProductById = async (req, res) => {
 
 // POST a product
 const createProduct = async (req, res) => {
-    const { name, description, price, imageUrl } = req.body
+    const { name, description, price } = req.body
 
-    let emtyFields = []
+    const imageUrl = req.file ? `/uploads/${req.file.filename}` : null
 
-    if (!name) {
-        emtyFields.push('name')
-    }
-    if (!description) {
-        emtyFields.push('description')
-    }
-    if (!price) {
-        emtyFields.push('price')
-    }
-    if (!imageUrl) {
-        emtyFields.push('imageUrl')
-    }
-    if (emtyFields.length > 0) {
+    let emptyFields = []
+
+    if (!name) emptyFields.push('name')
+    if (!description) emptyFields.push('description')
+    if (!price) emptyFields.push('price')
+    if (!imageUrl) emptyFields.push('imageUrl')
+        
+    if (emptyFields.length > 0) {
         return res
             .status(400)
-            .json({ error: `Please provide ${emtyFields.join(', ')}` })
+            .json({ error: `Please provide ${emptyFields.join(', ')}` })
     }
     try {
         const product = await Product.create({
@@ -55,7 +50,7 @@ const createProduct = async (req, res) => {
             price,
             imageUrl,
         })
-        res.status(200).json(product)
+        res.status(201).json(product)
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
@@ -79,6 +74,7 @@ const deleteProduct = async (req, res) => {
 
     res.status(200).json(product)
 }
+
 // UPDATE a product by id
 const updateProduct = async (req, res) => {
     const { id } = req.params

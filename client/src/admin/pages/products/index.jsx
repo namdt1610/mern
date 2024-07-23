@@ -2,10 +2,9 @@ import { useEffect } from 'react'
 import { useProductsContext } from '../../../hooks/useProductsContext'
 
 import ProductDetails from '../../components/ProductDetails'
-import ProductForm from '../../components/ProductForm'
 
 const Products = () => {
-    const {products, dispatch} = useProductsContext()
+    const { products, dispatch } = useProductsContext()
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -13,12 +12,13 @@ const Products = () => {
             const json = await response.json()
 
             if (response.ok) {
-                dispatch({type:'SET_PRODUCTS', payload: json})
+                dispatch({ type: 'SET_PRODUCTS', payload: json })
             }
         }
 
         fetchProducts()
-    },)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return (
         <div className="product">
@@ -26,7 +26,6 @@ const Products = () => {
                 products.map((product) => (
                     <ProductDetails key={product._id} product={product} />
                 ))}
-            <ProductForm />
         </div>
     )
 }

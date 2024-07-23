@@ -4,10 +4,10 @@ import Header from './Header'
 
 export default function Layout() {
     const testMenuItems = [
-        { href: '/', title: 'Home' },
-        { href: '/store', title: 'Store' },
-        { href: '/about', title: 'About' },
-        { href: '/contact', title: 'Contact' },
+        { href: '/admin', title: 'Home' },
+        { href: '/admin/products', title: 'Products' },
+        { href: '/admin/categories', title: 'Categories' },
+        { href: '/admin/suppliers', title: 'suppliers' },
         { href: '/api', title: 'API' },
         { href: '/admin', title: 'Admin' },
     ]
@@ -15,12 +15,12 @@ export default function Layout() {
     return (
         <div className="min-h-screen flex flex-col">
             {/* Add 1 more div tag to wrap the header */}
-            
+
             <Header />
 
             {/* Navigation */}
             <div className="flex flex-col md:flex-row flex-1">
-                <aside className="bg-gray-100 w-full md:w-60">
+                <aside className="w-full md:w-60 m-4">
                     <nav>
                         <ul className="space-y-2">
                             {testMenuItems.map(({ href, title }) => (
@@ -39,7 +39,7 @@ export default function Layout() {
                 </aside>
 
                 {/* Main content */}
-                <main className="flex-1">
+                <main className="flex-1 m-4">
                     <Outlet />
                 </main>
             </div>

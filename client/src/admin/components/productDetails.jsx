@@ -1,7 +1,8 @@
 import { useProductsContext } from '../../hooks/useProductsContext'
+import ImagePreview from './ImagePreview'
 
 //date fns
-// import formatDistanceToNow from 'date-fns/formatDistanceToNow'
+import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 
 const ProductDetails = ({ product }) => {
     const { dispatch } = useProductsContext()
@@ -18,14 +19,35 @@ const ProductDetails = ({ product }) => {
     }
 
     return (
-        <div className="product-details">
-            <h4>{product.name}</h4>
-            <p>{product.description}</p>
-            <p>Price: {product.price}</p>
-            <p>Stock: {product.stock}</p>
-            {/* <p>Created: {formatDistanceToNow(new Date(product.createdAt))} ago</p> */}
-            <button onClick={handleClick}>Del</button>
-        </div>
+        <>
+            <div className="product-details flex h-auto shadow rounded-2xl">
+                <div className="image-section w-96 h-auto m-2">
+                    <ImagePreview
+                        url={`http://localhost:3000${product.imageUrl}`}
+                    />
+                </div>
+                <div className="body-section m-4 flex items-center">
+                    <div className='w-96'>
+                        <h1>{product.name}</h1>
+                        <p>{product.description}</p>
+                        <p>Price: {product.price}</p>
+                        <p>Stock: {product.stock}</p>
+                        <p>
+                            Created:{' '}
+                            {formatDistanceToNow(new Date(product.createdAt))}{' '}
+                            ago
+                        </p>
+                    </div>
+
+                    <div className="flex flex-col">
+                        <button className="btn-warning mb-2">Edit</button>
+                        <button className="btn-danger" onClick={handleClick}>
+                            Delele
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </>
     )
 }
 

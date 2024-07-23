@@ -1,11 +1,12 @@
 const mongoose = require('mongoose')
-const schema = moongoose.Schema
+const schema = mongoose.Schema
 
 const categorySchema = new schema({
-    _id: {
+    id: {
         type: String,
         required: true,
         unique: true,
+        autoIncrement: true,
     },
     name: {
         type: String,
@@ -15,9 +16,7 @@ const categorySchema = new schema({
         type: String,
         default: null,
     },
-
 })
-
 
 const Category = mongoose.model('Category', categorySchema)
 module.exports = Category

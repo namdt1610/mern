@@ -1,0 +1,59 @@
+/* Styles for dropdown */
+.dropdown {
+    position: relative;
+}
+
+.dropdown-toggle {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.dropdown-menu {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    width: 100%;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+    opacity: 0;
+}
+
+.dropdown-menu.open {
+    max-height: 300px; /* Adjust this value based on your dropdown content */
+    opacity: 1;
+}
+
+.dropdown-menu.closed {
+    max-height: 0;
+    opacity: 0;
+}
+
+.dropdown-menu li {
+    padding: 0;
+}
+
+.dropdown-menu li a {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: #000;
+    text-decoration: none;
+}
+
+.dropdown-menu li a:hover,
+.dropdown-menu li a.active {
+    background-color: #f0f0f0;
+    color: #3b82f6;
+}
+
+.mt-2 {
+    margin-top: 0.5rem;
+}
+
+.m-2 {
+    margin: 0.5rem;
+}

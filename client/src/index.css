@@ -21,7 +21,19 @@
     }
 
     .btn-primary {
-        @apply w-full bg-blue-500 text-white px-4 py-2 rounded-lg;
+        @apply w-32 bg-blue-500 text-white px-4 py-2 rounded-lg;
+    }
+
+    .btn-secondary {
+        @apply w-32 bg-gray-500 text-white px-4 py-2 rounded-lg;
+    }
+
+    .btn-warning {
+        @apply w-32 bg-yellow-500 text-white px-4 py-2 rounded-lg;
+    }
+
+    .btn-danger {
+        @apply w-32 bg-red-500 text-white px-4 py-2 rounded-lg;
     }
 
     .div-error {
