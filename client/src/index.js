@@ -1,5 +1,7 @@
 import React from 'react'
 import './index.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import ClientRoutes from './client/routes/ClientRoutes'

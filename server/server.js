@@ -13,7 +13,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 
 // Import routes
 const userRoutes = require('./routes/client/user')
-const productRoutes = require('./routes/admin/product')
+const productRoutes = require('./routes/admin/Product')
 const categoryRoutes = require('./routes/admin/category')
 
 // Use routes

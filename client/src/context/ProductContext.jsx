@@ -12,9 +12,20 @@ export const productsReducer = (state, action) => {
             return {
                 products: [action.payload, ...state.products],
             }
+        case 'GET_PRODUCT':
+            return {
+                product: action.payload,
+            }
+        case 'UPDATE_PRODUCT':
+            return {
+                products: state.products.map((p) =>
+                    p._id === action.payload._id ? action.payload : p
+                ),
+            }
         case 'DELETE_PRODUCT':
             return {
-                products: state.products.filter( // filter out the product that was deleted
+                products: state.products.filter(
+                    // filter out the product that was deleted
                     (p) => p._id !== action.payload._id
                 ),
             }

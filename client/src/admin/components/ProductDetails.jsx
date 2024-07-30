@@ -1,17 +1,28 @@
 import { useProductsContext } from '../../hooks/useProductsContext'
 import ImagePreview from './ImagePreview'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
+import { useNavigate } from 'react-router-dom'
+import { Button } from 'react-bootstrap'
+import { useState } from 'react'
+import ConfirmationModal from './ConfirmationModal'
 
 const ProductDetails = ({ product }) => {
     const { dispatch } = useProductsContext()
-    const handleClick = async () => {
-        const respone = await fetch(`/api/products/` + product._id, {
+    const navigate = useNavigate()
+    const [showModal, setShowModal] = useState(false)
+
+    const handleRemove = async () => {
+        const respone = await fetch(`/api/admin/products/` + product._id, {
             method: 'DELETE',
         })
         const json = await respone.json()
         if (respone.ok) {
             dispatch({ type: 'DELETE_PRODUCT', payload: json })
         }
+    }
+
+    const handleDetails = async () => {
+        navigate(`/admin/products/${product._id}`)
     }
 
     return (
@@ -36,13 +47,30 @@ const ProductDetails = ({ product }) => {
                     </div>
 
                     <div className="flex flex-col">
-                        <button className="btn-warning mb-2">Edit</button>
-                        <button className="btn-danger" onClick={handleClick}>
-                            Delele
+                        <button
+                            className="btn-warning mb-2"
+                            onClick={handleDetails}
+                        >
+                            Details
                         </button>
+                        <Button
+                            className="btn-danger"
+                            onClick={() => setShowModal(true)}
+                        >
+                            Remove
+                        </Button>
+
+                        <ConfirmationModal
+                            show={showModal}
+                            onClose={() => setShowModal(false)}
+                            onConfirm={handleRemove}
+                            message="Are you sure you want to delete this product?"
+                        />
                     </div>
                 </div>
             </div>
         </>
     )
 }
+
+export default ProductDetails
