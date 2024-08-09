@@ -27,7 +27,7 @@ const ProductDetailsForm = () => {
             } finally {
                 setLoading(false)
             }
-        }
+        }   
         fetchProduct()
     }, [id])
 

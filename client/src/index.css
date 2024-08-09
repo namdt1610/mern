@@ -21,7 +21,7 @@
     }
 
     .btn-primary {
-        @apply w-32 bg-blue-500 text-white px-4 py-2 rounded-lg;
+        @apply no-underline w-32 h-12 bg-green-200 text-black rounded-lg flex items-center justify-center;
     }
 
     .btn-secondary {

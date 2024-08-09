@@ -14,12 +14,12 @@ const Slideshow = ({ images }) => {
     }
 
     return (
-        <div className="slide-container relative ">
+        <div className="slide-container h-[36rem]">
             <Fade {...properties}>
                 {images.map((image, index) => (
-                    <div className="each-fade " key={index}>
+                    <div className="each-fade h-[36rem]" key={index}>
                         <img
-                            className="w-full h-full bg-cover bg-center rounded-xl"
+                            className="h-full w-full rounded-xl object-cover"
                             src={image}
                             alt={`slide-${index}`}
                         />

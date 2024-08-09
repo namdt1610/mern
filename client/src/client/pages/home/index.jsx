@@ -1,159 +1,92 @@
+import React from 'react'
 import { Link } from 'react-router-dom'
 import Slideshow from '../../components/Slideshow'
-import { useProductsContext } from '../../../hooks/useProductsContext'
-import { useEffect } from 'react'
-import { images, bannerSideImages, linkSections } from './images'
+import { images, bannerSideImages, linkSections } from './import'
+import Featured from './Featured'
+import Links from './Links'
+import Categories from './Categories'
 
-function App() {
-    console.log(images, bannerSideImages, linkSections)
-    const { products, dispatch } = useProductsContext()
-
-    useEffect(() => {
-        const fetchProducts = async () => {
-            const response = await fetch('/api/admin/products')
-            const json = await response.json()
-            if (response.ok) {
-                dispatch({ type: 'SET_PRODUCTS', payload: json })
-            }
-        }
-        fetchProducts()
-        // eslint-disable-next-line
-    }, [])
+function Home() {
     return (
-        <div className="container mx-auto my-4">
-            <div className="banner-section shadow-xl rounded-xl p-4">
-                <div className="flex md:flex-row justify-center items-center">
-                    {/* Banner Slideshow */}
-                    <div className="banner-slideshow mx-2 w-full md:w-2/3 h-auto md:h-128">
-                        <Slideshow images={images} />
-                    </div>
+        <>
+            {/* Welcome Section */}
+            <div className="welcome-section border">
+                <div className="content m-4 flex flex-col items-center justify-center">
+                    <h1 className="text-4xl font-bold">
+                        Welcome to New Balance Outlet Store
+                    </h1>
+                    <p className="">Sale up to 50% for all products</p>
+                    <Link className="btn-primary uppercase" to="/store">
+                        Shop Now
+                    </Link>
+                </div>
+            </div>
+            {/* Hero Section */}
+            <div className="hero-section border">
+                <div className="hero-2-image">
+                    <img src="./img/574.gif" alt="" />
+                </div>
+                <div className="hero-2-content flex flex-col items-center justify-center my-10">
+                    <h1 className="text-4xl font-bold">New Balance 574</h1>
+                    <p className="">
+                        New Balance 574 is the most iconic sneaker in the New
+                        Balance family. The 574 is a clean and classic die cut
+                        EVA runner that utilizes ENCAP cushioning technology.
+                    </p>
+                    <Link className="btn-primary uppercase" to="/574">
+                        Shop Now
+                    </Link>
+                </div>
+            </div>
+            {/* Links Section */}
+            <Links />
+            {/* Main Content */}
+            <div className="container mx-auto">
+                {/* Banner Section */}
+                <div className="banner-section rounded-xl my-4">
+                    {/* Banner Slideshow and Side */}
+                    <div className="grid grid-cols-3 grid-rows-2 gap-4 h-[36rem]">
+                        {/* Banner Slideshow */}
+                        <div className="banner-slideshow col-span-2 row-span-2 h-[36rem]">
+                            <Slideshow images={images} />
+                        </div>
 
-                    {/* Banner Side */}
-                    <div className="banner-side flex flex-col w-full md:w-1/3 mx-2 h-fit md:h-128">
-                        {bannerSideImages.map((image, index) => (
-                            <div key={index}>
-                                <img
-                                    className="rounded-xl w-full h-[250px] object-cover mb-4"
-                                    src={image}
-                                    alt="banner-side-1"
-                                />
-                            </div>
-                        ))}
+                        {/* Banner Side */}
+                        <div className="banner-side-1">
+                            <img
+                                className="rounded-xl object-cover w-full h-full"
+                                src={bannerSideImages[0].imageUrl}
+                                alt="banner-side-1"
+                            />
+                        </div>
+                        <div className="banner-side-2">
+                            <img
+                                className="rounded-xl object-cover w-full h-full"
+                                src={bannerSideImages[1].imageUrl}
+                                alt="banner-side-2"
+                            />
+                        </div>
                     </div>
                 </div>
-                {/* Link Section */}
-                <div className="flex-col items-center my-4">
-                    <div className="section-header mb-4">
-                        <h3 className="text-2xl uppercase font-medium">
-                            Hôm nay mang gì đây nhỉ?
-                        </h3>
-                    </div>
-                    <div className="section-body flex justify-between">
-                        {linkSections.map((section) => (
-                            <div key={section.index}>
-                                <Link
-                                    to="/"
-                                    className="flex flex-col items-center justify-center"
-                                >
-                                    <img
-                                        src={section.imageUrl}
-                                        alt={section.title}
-                                        className="w-12 h-auto object-cover mb-2"
-                                    />
-                                    <span className="font-light">
-                                        {section.title}
-                                    </span>
-                                </Link>
-                            </div>
-                        ))}
+                <Categories />
+                <Featured />
+                {/* Hero 2 Section */}
+                <div className="hero-2-section my-4">
+                    <div className="hero-content flex flex-col items-center justify-center h-dvh">
+                        <div className="video-container relative w-full h-full">
+                            <video
+                                className="absolute top-0 left-0 w-full h-full sm:object-cover rounded-xl"
+                                src="/videos/hero_nb574.mp4"
+                                autoPlay
+                                loop
+                                muted
+                            ></video>
+                        </div>
                     </div>
                 </div>
             </div>
-            {/* Categories Section*/}
-            <div className="categories-section shadow-xl rounded-xl p-4">
-                <div className="section-header ">
-                    <h3 className="text-2xl uppercase font-medium">Danh mục</h3>
-                </div>
-                <div className="section-body ">
-                    <div className="flex justify-between">
-                        <Link
-                            to="/"
-                            className="flex flex-col items-center justify-center"
-                        >
-                            <img
-                                src="https://cf.shopee.vn/file/0a3e9c0e7e8b1c0c1d6b9f8f2c7c1b6f"
-                                alt="category-1"
-                                className="w-20 h-auto object-cover mb-2"
-                            />
-                            <span className="font-light">
-                                Tất cả các sản phẩm
-                            </span>
-                        </Link>
-                        <Link
-                            to="/"
-                            className="flex flex-col items-center justify-center"
-                        >
-                            <img
-                                src="https://cf.shopee.vn/file/0a3e9c0e7e8b1c0c1d6b9f8f2c7c1b6f"
-                                alt="category-2"
-                                className="w-20 h-auto object-cover mb-2"
-                            />
-                            <span className="font-light">Nam</span>
-                        </Link>
-                        <Link
-                            to="/"
-                            className="flex flex-col items-center justify-center"
-                        >
-                            <img
-                                src="https://cf.shopee.vn/file/0a3e9c0e7e8b1c0c1d6b9f8f2c7c1b6f"
-                                alt="category-3"
-                                className="w-20 h-auto object-cover mb-2"
-                            />
-                            <span className="font-light">Nữ</span>
-                        </Link>
-                        <Link
-                            to="/"
-                            className="flex flex-col items-center justify-center"
-                        >
-                            <img
-                                src="https://cf.shopee.vn/file/0a3e9c0e7e8b1c0c1d6b9f8f2c7c1b6f"
-                                alt="category-4"
-                                className="w-20 h-auto object-cover mb-2"
-                            />
-                            <span className="font-light">Trẻ em</span>
-                        </Link>
-                    </div>
-                </div>
-            </div>
-            {/* Product Section */}
-            <div className="product-section shadow-xl rounded-xl p-4">
-                <div className="section-header">
-                    <h3 className="text-2xl uppercase font-medium">
-                        New arrivals
-                    </h3>
-                </div>
-                <div className="section-body flex">
-                    {products &&
-                        products.map((product) => (
-                            <div
-                                key={product._id}
-                                className="product-card mx-2"
-                            >
-                                <img
-                                    src={`http://localhost:3000${product.imageUrl}`}
-                                    alt={product.name}
-                                    className="w-48 h-48 object-cover rounded-lg"
-                                />
-                                <h3>{product.name}</h3>
-                                <p>{product.description}</p>
-                                <p>Price: {product.price}</p>
-                                <p>Stock: {product.stock}</p>
-                            </div>
-                        ))}
-                </div>
-            </div>
-        </div>
+        </>
     )
 }
 
-export default App
+export default Home
