@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { featuredSection } from './import'
 const Featured = () => {
     return (
@@ -12,18 +13,18 @@ const Featured = () => {
                 <div className="section-body ">
                     <div className="grid grid-cols-4 gap-4">
                         {featuredSection.map((product, index) => (
-                            <div key={index} className="product-card">
-                                {/* <img
-                                    className="rounded-xl"
-                                    src={product.imageUrl}
-                                    alt=""
-                                /> */}
+                            <Link
+                                to="/"
+                                key={index}
+                                className="product-card no-underline text-black"
+                            >
                                 <picture>
                                     <source
                                         srcSet={product.imageUrl}
                                         type="image/webp"
                                     />
                                     <img
+                                        loading="lazy"
                                         className="rounded-xl"
                                         src={product.imageUrl}
                                         alt="Alt Text!"
@@ -38,7 +39,7 @@ const Featured = () => {
                                         Price: ${product.price}
                                     </p>
                                 </div>
-                            </div>
+                            </Link>
                         ))}
                     </div>
                 </div>

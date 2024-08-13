@@ -13,6 +13,10 @@
         background-color: #f7f7f7;
         overflow-x: hidden;
     }
+
+    Link {
+        no-underline: true;
+    }
 }
 
 @layer components {

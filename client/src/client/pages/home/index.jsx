@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import Slideshow from '../../components/Slideshow'
-import { images, bannerSideImages, linkSections } from './import'
+import { images, bannerSideImages } from './import'
 import Featured from './Featured'
 import Links from './Links'
 import Categories from './Categories'
@@ -24,7 +24,12 @@ function Home() {
             {/* Hero Section */}
             <div className="hero-section border">
                 <div className="hero-2-image">
-                    <img src="./img/574.gif" alt="" />
+                    <img
+                        className="object-cover w-full h-full"
+                        loading="lazy"
+                        src="./img/574.gif"
+                        alt=""
+                    />
                 </div>
                 <div className="hero-2-content flex flex-col items-center justify-center my-10">
                     <h1 className="text-4xl font-bold">New Balance 574</h1>
@@ -75,8 +80,10 @@ function Home() {
                     <div className="hero-content flex flex-col items-center justify-center h-dvh">
                         <div className="video-container relative w-full h-full">
                             <video
+                                loading="lazy"
                                 className="absolute top-0 left-0 w-full h-full sm:object-cover rounded-xl"
                                 src="/videos/hero_nb574.mp4"
+                                type="video/mp4"
                                 autoPlay
                                 loop
                                 muted

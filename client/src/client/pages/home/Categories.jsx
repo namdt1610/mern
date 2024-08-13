@@ -14,8 +14,13 @@ const Categories = () => {
                 <div className="section-body">
                     <div className="grid grid-cols-4 gap-4">
                         {categoriesSection.map((category, index) => (
-                            <Link to={category.link} key={index} className="category-card no-underline text-black">
+                            <Link
+                                to={category.link}
+                                key={index}
+                                className="category-card no-underline text-black"
+                            >
                                 <img
+                                    loading="lazy"
                                     className="rounded-xl"
                                     src={category.imageUrl}
                                     alt=""

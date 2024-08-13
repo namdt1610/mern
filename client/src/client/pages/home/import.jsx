@@ -77,24 +77,28 @@ const featuredSection = [
         imageUrl: './img/1906.webp',
         title: 'New Balance 2002s',
         price: 150,
+        link: '/2002s',
     },
     {
         index: 1,
         imageUrl: './img/1906.webp',
         title: 'New Balance 1906s',
         price: 150,
+        link: '/1906s',
     },
     {
         index: 2,
         imageUrl: './img/1906.webp',
         title: 'New Balance 574',
         price: 150,
+        link: '/574',
     },
     {
         index: 3,
         imageUrl: './img/1906.webp',
         title: 'New Balance 550',
         price: 150,
+        link: '/550',
     },
 ]
 

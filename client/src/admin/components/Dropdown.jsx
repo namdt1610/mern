@@ -16,24 +16,24 @@ const Dropdown = ({ title, items }) => {
             >
                 {title}
             </button>
-                <ul
-                    className={`dropdown-menu ${
-                        open ? 'open' : 'closed'
-                    } left-0 w-48 bg-white shadow-lg`}
-                >
-                    {items.map((item) => (
-                        <li key={item.title} className="">
-                            <NavLink
-                                to={item.href}
-                                className="text-black hover:text-blue-500"
-                                // activeClassName="text-blue-500"
-                                onClick={() => setOpen(false)}
-                            >
-                                {item.title}
-                            </NavLink>
-                        </li>
-                    ))}
-                </ul>
+            <ul
+                className={`dropdown-menu ${
+                    open ? 'open' : 'closed'
+                } left-0 w-48 bg-white shadow-lg`}
+            >
+                {items.map((item) => (
+                    <li key={item.title} className="">
+                        <NavLink
+                            to={item.href}
+                            className="text-black hover:text-blue-500"
+                            // activeClassName="text-blue-500"
+                            onClick={() => setOpen(false)}
+                        >
+                            {item.title}
+                        </NavLink>
+                    </li>
+                ))}
+            </ul>
         </div>
     )
 }

@@ -27,24 +27,36 @@ const Footer = () => {
                 {/* Cột 2: Danh mục sản phẩm */}
                 <div>
                     <h4 className="text-lg font-semibold mb-4">Products</h4>
-                    <ul>
+                    <ul className="p-0">
                         <li className="mb-2">
-                            <a href="/" className="hover:underline">
+                            <a
+                                href="/"
+                                className="text-black no-underline hover:underline"
+                            >
                                 Men’s Shoes
                             </a>
                         </li>
                         <li className="mb-2">
-                            <a href="/" className="hover:underline">
+                            <a
+                                href="/"
+                                className="text-black no-underline hover:underline"
+                            >
                                 Women’s Shoes
                             </a>
                         </li>
                         <li className="mb-2">
-                            <a href="/" className="hover:underline">
+                            <a
+                                href="/"
+                                className="text-black no-underline hover:underline"
+                            >
                                 Kid’s Shoes
                             </a>
                         </li>
                         <li className="mb-2">
-                            <a href="/" className="hover:underline">
+                            <a
+                                href="/"
+                                className="text-black no-underline hover:underline"
+                            >
                                 Apparel
                             </a>
                         </li>
@@ -62,8 +74,8 @@ const Footer = () => {
                 {/* Cột 4: Mạng xã hội */}
                 <div>
                     <h4 className="text-lg font-semibold mb-4">Follow Us</h4>
-                    <ul className="flex space-x-4">
-                        <li>
+                    <ul className="flex flex-col p-0 space-x-4">
+                        <li className='m-0'>
                             <i className="fab fa-facebook-f"></i>
                             <a
                                 href="https://facebook.com"
@@ -72,7 +84,7 @@ const Footer = () => {
                                 Facebook
                             </a>
                         </li>
-                        <li>
+                        <li className='m-0'>
                             <i className="fab fa-instagram"></i>
                             <a
                                 href="https://instagram.com"
@@ -81,7 +93,7 @@ const Footer = () => {
                                 Instagram
                             </a>
                         </li>
-                        <li>
+                        <li className='m-0'>
                             <i className="fab fa-twitter"></i>
                             <a
                                 href="https://twitter.com"
