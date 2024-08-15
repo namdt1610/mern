@@ -7,6 +7,7 @@ import Men from '../pages/store/Men'
 import Women from '../pages/store/Women'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import Store from '../pages/store/index'
 
 export default function ClientRoutes() {
     return (
@@ -17,9 +18,10 @@ export default function ClientRoutes() {
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/" element={<Home />} />
 
-                {/* Men */}
-                <Route path="/men" element={<Men />} />
-                <Route path="/women" element={<Women />} />
+                {/* Store */}
+                <Route path="store" element={<Store />} />
+                <Route path="store/men" element={<Men />} />
+                <Route path="store/women" element={<Women />} />
 
                 <Route path="/*" element={<h1>404 Not Found</h1>} />
             </Routes>

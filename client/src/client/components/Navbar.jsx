@@ -1,42 +1,28 @@
 import { Link } from 'react-router-dom'
-import { useLogout } from '../../hooks/useLogout'
 
 const Navbar = () => {
-    const { logout } = useLogout()
-    const handleClick = () => {
-        logout()
-    }
     return (
-        <div className="nav-bar m-3">
-            <nav className="uppercase flex items-center justify-around">
-                <div className="logo w-[120px]">
-                    <Link to="/">
-                        <img className="" src="/img/logo.png" alt="" />
-                    </Link>
-                </div>
-                <div className="mx-5 ">
-                    <Link className="no-underline" to="/">
-                        <h1 className="text-3xl text-black">
-                            New Balance Outlet Store
-                        </h1>
-                    </Link>
-                </div>
-                <div className="flex items-center justify-center">
-                    <button
-                        className="mx-4 uppercase bg-green-200 w-24 h-12 rounded-xl"
-                        onClick={handleClick}
-                    >
-                        Logout
-                    </button>
-                    <Link className="mx-4 no-underline" to="/login">
-                        Login
-                    </Link>
-                    <Link className="mx-4 no-underline" to="/signup">
-                        Signup
-                    </Link>
-                </div>
-            </nav>
-        </div>
+        <nav className="bg-black text-white py-2 ">
+            <div className="container mx-auto">
+                <ul className="flex items-center justify-around">
+                    <li>
+                        <Link to="store/men">Men</Link>
+                    </li>
+                    <li>
+                        <Link to="store/women">Women</Link>
+                    </li>
+                    <li>
+                        <Link to="store/kids">Kids</Link>
+                    </li>
+                    <li>
+                        <Link to="store">Products</Link>
+                    </li>
+                    <li>
+                        <Link to="cart">Cart</Link>
+                    </li>
+                </ul>
+            </div>
+        </nav>
     )
 }
 

@@ -14,8 +14,11 @@
         overflow-x: hidden;
     }
 
-    Link {
+    Link,
+    a,
+    li {
         no-underline: true;
+        text-decoration: none;
     }
 }
 
@@ -46,5 +49,13 @@
 
     .input-error {
         @apply text-red-500 text-sm;
+    }
+
+    .border-gray {
+        @apply border border-gray-300 rounded-md;
+    }
+
+    .center {
+        @apply flex items-center justify-center no-underline;
     }
 }
