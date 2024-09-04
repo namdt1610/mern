@@ -1,6 +1,5 @@
 // ConfirmationModal.jsx
 import React from 'react'
-import { Modal, Button } from 'react-bootstrap'
 
 const ConfirmationModal = ({ show, onClose, onConfirm, message }) => {
     return (

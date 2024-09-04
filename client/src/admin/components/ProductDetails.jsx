@@ -2,7 +2,6 @@ import { useProductsContext } from '../../hooks/useProductsContext'
 import ImagePreview from './ImagePreview'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { useNavigate } from 'react-router-dom'
-import { Button } from 'react-bootstrap'
 import { useState } from 'react'
 import ConfirmationModal from './ConfirmationModal'
 

@@ -1,6 +1,5 @@
 import React from 'react'
 import LeftColumn from './LeftCol'
-import RightColumn from './RightCol'
 
 const Store = () => {
     return (
@@ -9,7 +8,6 @@ const Store = () => {
             if (condition) {
                   
             }
-            <RightColumn />
         </div>
     )
 }

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import ConfirmationModal from '../../components/ConfirmationModal'
-import { Button } from 'react-bootstrap'
 
 const ProductDetailsForm = () => {
     const { id } = useParams()

@@ -3,24 +3,21 @@
     "version": "0.1.0",
     "private": true,
     "dependencies": {
+        "@vitejs/plugin-react": "^4.3.1",
         "axios": "^1.7.2",
         "css-minimizer-webpack-plugin": "^7.0.0",
         "date-fns": "^3.6.0",
-        "jest-worker": "^29.7.0",
-        "npm": "^10.8.2",
-        "react-bootstrap": "^2.10.4",
         "react-router-dom": "^6.23.1",
         "react-slideshow-image": "^4.3.1",
-        "rollup-plugin-terser": "^7.0.2",
         "webpack": "^5.93.0",
         "workbox-webpack-plugin": "^7.1.0"
     },
     "proxy": "http://localhost:8888",
     "scripts": {
-        "start": "react-scripts start",
-        "build": "react-scripts build",
-        "test": "react-scripts test",
-        "eject": "react-scripts eject"
+        "start": "vite",
+        "build": "vite build",
+        "serve": "vite preview",
+        "test": "echo \"No test specified\" && exit 1"
     },
     "eslintConfig": {
         "rules": {
@@ -45,10 +42,16 @@
     },
     "devDependencies": {
         "@rollup/plugin-terser": "^0.4.4",
+        "@svgr/webpack": "^8.1.0",
         "autoprefixer": "^10.4.19",
-        "postcss": "^8.4.38",
+        "postcss": "^8.4.41",
         "react-scripts": "^5.0.1",
         "tailwindcss": "^3.4.3",
         "vite": "^5.2.11"
+    },
+    "overrides": {
+        "postcss": "^8.4.41",
+        "nth-check": "^2.1.1",
+        "@svgr/webpack": "$@svgr/webpack"
     }
 }
