@@ -1,7 +1,7 @@
 import { useProductsContext } from '../../hooks/useProductsContext'
 import ImagePreview from './ImagePreview'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useState } from 'react'
 import ConfirmationModal from './ConfirmationModal'
 
@@ -29,7 +29,7 @@ const ProductDetails = ({ product }) => {
             <div className="product-details flex h-auto shadow rounded-2xl">
                 <div className="image-section w-96 h-auto m-2">
                     <ImagePreview
-                        url={`http://localhost:3000${product.imageUrl}`}
+                        url={`http://localhost:8888${product.imageUrl}`}
                     />
                 </div>
                 <div className="body-section m-4 flex items-center">
@@ -52,12 +52,12 @@ const ProductDetails = ({ product }) => {
                         >
                             Details
                         </button>
-                        <Button
+                        <Link
                             className="btn-danger"
                             onClick={() => setShowModal(true)}
                         >
                             Remove
-                        </Button>
+                        </Link>
 
                         <ConfirmationModal
                             show={showModal}
