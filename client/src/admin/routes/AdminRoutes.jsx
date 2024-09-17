@@ -5,6 +5,7 @@ import Product from '../pages/products/index'
 import CreateProductForm from '../pages/products/create.jsx'
 import Layout from '../../admin/components/Layout.jsx'
 import ProductDetailsForm from '../pages/products/read.jsx'
+import Category from '../pages/categories/index.jsx'
 
 export default function AdminRoutes() {
     return (
@@ -21,7 +22,7 @@ export default function AdminRoutes() {
                         path="products/:id"
                         element={<ProductDetailsForm />}
                     />
-                    {/* <Route path="categories" element={<Category />} /> */}
+                    <Route path="categories" element={<Category />} />
                     <Route path="*" element={<h1>404 Not Found</h1>} />
                 </Route>
             </Routes>
