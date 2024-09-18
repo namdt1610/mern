@@ -1,40 +1,63 @@
 import { useEffect, useState } from 'react'
 import { useProductsContext } from '../../../hooks/useProductsContext'
 import DataTable from '../../components/DataTable'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import ConfirmationModal from '../../components/ConfirmationModal'
 
 const Products = () => {
-    const { products, dispatch } = useProductsContext()
+    const { products = [], dispatch } = useProductsContext()
+    const [totalProducts, setTotalProducts] = useState(0)
+
     const [sortedField, setSortedField] = useState(null)
     const [sortDirection, setSortDirection] = useState('asc')
-    const [currentPage, setCurrentPage] = useState(1)
-    const [productsPerPage, setProductsPerPage] = useState(10)
+
     const [showModal, setShowModal] = useState(false)
     const [productToDelete, setProductToDelete] = useState(null)
+
+    const { page = 1 } = useParams()
+    const [currentPage, setCurrentPage] = useState(parseInt(page))
+    const [productsPerPage, setProductsPerPage] = useState(5)
+
     const navigate = useNavigate()
 
     useEffect(() => {
-        const fetchProducts = async () => {
-            const response = await fetch('/api/admin/products')
-            const json = await response.json()
+        setCurrentPage(parseInt(page) || 1)
+    }, [page])
 
-            if (response.ok) {
-                dispatch({ type: 'SET_PRODUCTS', payload: json })
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const apiUrl = `/api/admin/products?page=${currentPage}&limit=${productsPerPage}`
+                console.log('Fetching from URL:', apiUrl) // Kiểm tra URL API
+
+                const response = await fetch(apiUrl)
+                if (!response.ok) {
+                    throw new Error('Network response was not ok')
+                }
+
+                const json = await response.json()
+                console.log('API response:', json) // Kiểm tra dữ liệu trả về từ API
+
+                dispatch({ type: 'SET_PRODUCTS', payload: json.products })
+                setTotalProducts(json.totalProducts)
+            } catch (error) {
+                console.error('Failed to fetch products:', error)
             }
         }
 
         fetchProducts()
-    }, [dispatch])
+    }, [currentPage, productsPerPage, dispatch])
+
+    useEffect(() => {
+        setCurrentPage(parseInt(page) || 1)
+    }, [page])
 
     const handleView = (productId) => {
-        console.log('Viewing product', productId)
-        navigate(`/products/${productId}`)
+        navigate(`/admin/products/${productId}`)
     }
 
     const handleEdit = (productId) => {
-        console.log('Editing product', productId)
-        navigate(`/products/edit/${productId}`)
+        navigate(`/admin/products/edit/${productId}`)
     }
 
     const openDeleteModal = (productId) => {
@@ -44,36 +67,36 @@ const Products = () => {
 
     const handleDelete = async () => {
         if (productToDelete) {
-            const response = await fetch(
-                `/api/admin/products/${productToDelete}`,
-                {
-                    method: 'DELETE',
+            try {
+                const response = await fetch(
+                    `/api/admin/products/${productToDelete}`,
+                    { method: 'DELETE' }
+                )
+                if (response.ok) {
+                    dispatch({
+                        type: 'DELETE_PRODUCT',
+                        payload: { _id: productToDelete },
+                    })
+                    setProductToDelete(null)
+                    setShowModal(false)
+                } else {
+                    throw new Error('Failed to delete product')
                 }
-            )
-            if (response.ok) {
-                dispatch({
-                    type: 'SET_PRODUCTS',
-                    payload: products.filter(
-                        (product) => product._id !== productToDelete
-                    ),
-                })
-                console.log('Deleted product', productToDelete)
-                setProductToDelete(null)
-                setShowModal(false)
+            } catch (error) {
+                console.error('Failed to delete product:', error)
             }
         }
     }
 
-    const sortedProducts = [...products].sort((a, b) => {
-        if (sortedField) {
-            if (sortDirection === 'asc') {
-                return a[sortedField] > b[sortedField] ? 1 : -1
-            } else {
-                return a[sortedField] < b[sortedField] ? 1 : -1
-            }
-        }
-        return products
-    })
+    const sortedProducts = sortedField
+        ? [...products].sort((a, b) => {
+              if (sortDirection === 'asc') {
+                  return a[sortedField] > b[sortedField] ? 1 : -1
+              } else {
+                  return a[sortedField] < b[sortedField] ? 1 : -1
+              }
+          })
+        : [...products]
 
     const handleSort = (field) => {
         setSortedField(field)
@@ -82,16 +105,17 @@ const Products = () => {
         )
     }
 
-    // Pagination logic
     const indexOfLastProduct = currentPage * productsPerPage
     const indexOfFirstProduct = indexOfLastProduct - productsPerPage
     const currentProducts = sortedProducts.slice(
         indexOfFirstProduct,
         indexOfLastProduct
     )
-    const totalPages = Math.ceil(products.length / productsPerPage)
 
-    const handlePageChange = (page) => setCurrentPage(page)
+    const handlePageChange = (page) => {
+        setCurrentPage(page)
+        navigate(`/admin/products/page/${page}`)
+    }
 
     const productColumns = [
         { key: 'name', label: 'Product Name' },
@@ -111,7 +135,7 @@ const Products = () => {
                 productsPerPage={productsPerPage}
                 setProductsPerPage={setProductsPerPage}
                 handlePageChange={handlePageChange}
-                totalPages={totalPages}
+                totalProducts={totalProducts}
                 onView={handleView}
                 onEdit={handleEdit}
                 onDelete={openDeleteModal}

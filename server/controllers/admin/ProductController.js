@@ -3,8 +3,16 @@ const mongoose = require('mongoose')
 
 // GET all products
 const getAllProducts = async (req, res) => {
-    const products = await Product.find({}).sort({ createdAt: -1 })
-    res.status(200).json(products)
+    try {
+        const products = await Product.find({}).sort({ createdAt: -1 })
+        const totalProducts = await Product.countDocuments()
+        res.status(200).json({ products, totalProducts })
+    } catch (error) {
+        res.status(500).json({
+            message: 'Server Error: Unable to get products',
+            error: error.message,
+        })
+    }
 }
 
 // GET a product by id
@@ -37,7 +45,7 @@ const createProduct = async (req, res) => {
     if (!description) emptyFields.push('description')
     if (!price) emptyFields.push('price')
     if (!imageUrl) emptyFields.push('imageUrl')
-        
+
     if (emptyFields.length > 0) {
         return res
             .status(400)

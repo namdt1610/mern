@@ -85,30 +85,30 @@ const ProductDetailsForm = () => {
                 </a>
                 {isEditing ? (
                     <>
-                        <Button className="btn-success" onClick={handleSave}>
+                        <button className="btn-success" onClick={handleSave}>
                             Save
-                        </Button>
-                        <Button
+                        </button>
+                        <button
                             className="btn-secondary"
                             onClick={() => setIsEditing(false)}
                         >
                             Cancel
-                        </Button>
+                        </button>
                     </>
                 ) : (
-                    <Button
+                    <button
                         className="btn-warning"
                         onClick={() => setIsEditing(true)}
                     >
                         Edit
-                    </Button>
+                    </button>
                 )}
-                <Button
+                <button
                     className="btn-danger"
                     onClick={() => setShowModal(true)}
                 >
                     Remove
-                </Button>
+                </button>
             </div>
             <h1>{product.name}</h1>
             {isEditing ? (
@@ -148,7 +148,7 @@ const ProductDetailsForm = () => {
             <p>Created: {new Date(product.createdAt).toLocaleString()}</p>
             {product.imageUrl && (
                 <img
-                    src={`http://localhost:3000${product.imageUrl}`}
+                    src={`http://localhost:5173${product.imageUrl}`}
                     alt={product.name}
                 />
             )}

@@ -1,4 +1,3 @@
-// components/Pagination.jsx
 import React from 'react'
 
 const Pagination = ({ totalPages, currentPage, handlePageChange }) => {
@@ -7,7 +6,7 @@ const Pagination = ({ totalPages, currentPage, handlePageChange }) => {
             {Array.from({ length: totalPages }, (_, index) => (
                 <button
                     key={index}
-                    onClick={() => handlePageChange(index + 1)}
+                    onClick={() => handlePageChange(index + 1)} // Chuyển trang
                     className={`px-4 py-2 mx-1 border ${
                         currentPage === index + 1
                             ? 'bg-blue-500 text-white'
