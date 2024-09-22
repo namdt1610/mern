@@ -14,6 +14,7 @@ export default function AdminRoutes() {
                 <Route path="/" element={<Layout />}>
                     <Route index element={<Home />} />
                     <Route path="products" element={<Product />} />
+                    
                     {/* Pagination */}
                     <Route path="products/page/:page" element={<Product />} />
                     <Route
@@ -24,7 +25,9 @@ export default function AdminRoutes() {
                         path="products/:id"
                         element={<ProductDetailsForm />}
                     />
+
                     <Route path="categories" element={<Category />} />
+
                     <Route path="*" element={<h1>404 Not Found</h1>} />
                 </Route>
             </Routes>

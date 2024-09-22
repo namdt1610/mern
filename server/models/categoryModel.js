@@ -2,12 +2,6 @@ const mongoose = require('mongoose')
 const schema = mongoose.Schema
 
 const categorySchema = new schema({
-    id: {
-        type: String,
-        required: true,
-        unique: true,
-        autoIncrement: true,
-    },
     name: {
         type: String,
         required: true,

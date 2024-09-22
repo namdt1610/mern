@@ -1,192 +1,242 @@
-import React, { useState, useEffect } from 'react'
-import Pagination from './Pagination'
-import Filter from './Filter'
+import React, { useMemo } from 'react'
+import VisibilityIcon from '@mui/icons-material/Visibility'
+import EditIcon from '@mui/icons-material/Edit'
+import DeleteIcon from '@mui/icons-material/Delete'
+import PropTypes from 'prop-types'
+import {
+    Box,
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    TableSortLabel,
+    Toolbar,
+    Typography,
+    Checkbox,
+    IconButton,
+    Tooltip,
+    TablePagination,
+} from '@mui/material'
 
 const DataTable = ({
-    data,
-    handleSort,
-    sortedField,
-    sortDirection,
-    columns,
-    currentPage,
-    productsPerPage,
-    setProductsPerPage,
-    handlePageChange,
-    totalProducts,
+    rows,
+    headCells,
+    title,
+    onRowClick,
     onView,
     onEdit,
     onDelete,
+    rowsPerPageOptions = [5, 10, 25],
 }) => {
-    const [selectedItems, setSelectedItems] = useState({})
-    const [searchQuery, setSearchQuery] = useState('')
-    const [filteredData, setFilteredData] = useState(data)
+    const [order, setOrder] = React.useState('asc')
+    const [orderBy, setOrderBy] = React.useState(headCells[0].id)
+    const [selected, setSelected] = React.useState([])
+    const [page, setPage] = React.useState(0)
+    const [rowsPerPage, setRowsPerPage] = React.useState(rowsPerPageOptions[0])
 
-    useEffect(() => {
-        const lowercasedQuery = searchQuery.toLowerCase()
-        const newFilteredData = data.filter((item) =>
-            columns.some((col) =>
-                item[col.key]
-                    ?.toString()
-                    .toLowerCase()
-                    .includes(lowercasedQuery)
-            )
-        )
-        setFilteredData(newFilteredData)
-    }, [searchQuery, data, columns])
-
-    // Tính tổng số trang dựa trên tổng số sản phẩm và số sản phẩm mỗi trang
-    const totalPages = Math.ceil(totalProducts / productsPerPage)
-
-    // Xử lý chọn tất cả các sản phẩm
-    const handleSelectAll = (e) => {
-        const isChecked = e.target.checked
-        const newSelectedItems = {}
-        filteredData.forEach((item) => {
-            newSelectedItems[item._id] = isChecked
-        })
-        setSelectedItems(newSelectedItems)
+    const handleRequestSort = (property) => {
+        const isAsc = orderBy === property && order === 'asc'
+        setOrder(isAsc ? 'desc' : 'asc')
+        setOrderBy(property)
     }
 
-    // Xử lý chọn từng sản phẩm
-    const handleSelectItem = (itemId, isChecked) => {
-        setSelectedItems((prev) => ({
-            ...prev,
-            [itemId]: isChecked,
-        }))
+    const handleSelectAllClick = (event) => {
+        if (event.target.checked) {
+            const newSelected = rows.map((n) => n.id)
+            setSelected(newSelected)
+            return
+        }
+        setSelected([])
     }
 
-    // Xử lý xóa các sản phẩm đã chọn
-    const handleBulkDelete = () => {
-        const selectedIds = Object.keys(selectedItems).filter(
-            (id) => selectedItems[id]
-        )
-        onDelete(selectedIds)
-        setSelectedItems({})
+    const handleClick = (event, id) => {
+        if (event.target.closest('button')) return
+        const selectedIndex = selected.indexOf(id)
+        let newSelected =
+            selectedIndex === -1
+                ? [...selected, id]
+                : selected.filter((_, index) => index !== selectedIndex)
+        setSelected(newSelected)
+        if (onRowClick) onRowClick(id)
     }
 
-    const currentProducts = filteredData
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage)
+    }
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10))
+        setPage(0)
+    }
+
+    const visibleRows = useMemo(() => {
+        return [...rows]
+            .sort((a, b) => {
+                return order === 'desc'
+                    ? b[orderBy] < a[orderBy]
+                        ? -1
+                        : 1
+                    : a[orderBy] < b[orderBy]
+                    ? -1
+                    : 1
+            })
+            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+    }, [order, orderBy, page, rowsPerPage, rows])
 
     return (
-        <>
-            {/* Bộ lọc (Filter) */}
-            <Filter
-                productsPerPage={productsPerPage}
-                setProductsPerPage={setProductsPerPage}
-            />
+        <Box sx={{ width: '100%' }}>
+            <Paper sx={{ width: '100%', mb: 2 }}>
+                <Toolbar sx={{ pl: 2, pr: 1 }}>
+                    <Typography
+                        sx={{ flex: '1 1 100%' }}
+                        variant="h6"
+                        component="div"
+                    >
+                        {title}
+                    </Typography>
+                    {selected.length > 0 && (
+                        <Tooltip title="Delete">
+                            <IconButton>
+                                <i></i>
+                            </IconButton>
+                        </Tooltip>
+                    )}
+                </Toolbar>
+                <TableContainer>
+                    <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell padding="checkbox">
+                                    <Checkbox
+                                        color="primary"
+                                        indeterminate={
+                                            selected.length > 0 &&
+                                            selected.length < rows.length
+                                        }
+                                        checked={
+                                            rows.length > 0 &&
+                                            selected.length === rows.length
+                                        }
+                                        onChange={handleSelectAllClick}
+                                    />
+                                </TableCell>
+                                <TableCell>Actions</TableCell>{' '}
+                                {headCells.map((headCell) => (
+                                    <TableCell
+                                        key={headCell.id}
+                                        align={
+                                            headCell.numeric ? 'right' : 'left'
+                                        }
+                                    >
+                                        <TableSortLabel
+                                            active={orderBy === headCell.id}
+                                            direction={
+                                                orderBy === headCell.id
+                                                    ? order
+                                                    : 'asc'
+                                            }
+                                            onClick={() =>
+                                                handleRequestSort(headCell.id)
+                                            }
+                                        >
+                                            {headCell.label}
+                                        </TableSortLabel>
+                                    </TableCell>
+                                ))}
+                            </TableRow>
+                        </TableHead>
 
-            {/* Thanh tìm kiếm */}
-            <div className="mb-4">
-                <input
-                    type="text"
-                    placeholder="Search..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="border border-gray-300 px-4 py-2 rounded w-full"
+                        <TableBody>
+                            {visibleRows.map((row) => {
+                                const isItemSelected = selected.includes(
+                                    row._id
+                                )
+                                return (
+                                    <TableRow
+                                        hover
+                                        onClick={(event) =>
+                                            handleClick(event, row._id)
+                                        }
+                                        role="checkbox"
+                                        aria-checked={isItemSelected}
+                                        tabIndex={-1}
+                                        key={row._id}
+                                        selected={isItemSelected}
+                                    >
+                                        <TableCell padding="checkbox">
+                                            <Checkbox
+                                                color="primary"
+                                                checked={isItemSelected}
+                                            />
+                                        </TableCell>
+                                        <TableCell>
+                                            <IconButton
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    onView(row._id)
+                                                }}
+                                            >
+                                                <VisibilityIcon />
+                                            </IconButton>
+                                            <IconButton
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    onEdit(row._id)
+                                                }}
+                                            >
+                                                <EditIcon />
+                                            </IconButton>
+                                            <IconButton
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    onDelete(row._id)
+                                                }}
+                                            >
+                                                <DeleteIcon />
+                                            </IconButton>
+                                        </TableCell>
+
+                                        {headCells.map((cell) => (
+                                            <TableCell
+                                                key={`${row.id}-${cell.id}`}
+                                                align={
+                                                    cell.numeric
+                                                        ? 'right'
+                                                        : 'left'
+                                                }
+                                            >
+                                                {row[cell.id]}
+                                            </TableCell>
+                                        ))}
+                                    </TableRow>
+                                )
+                            })}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                <TablePagination
+                    rowsPerPageOptions={rowsPerPageOptions}
+                    component="div"
+                    count={rows.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
                 />
-            </div>
-
-            {/* Nút xóa hàng loạt */}
-            <button
-                onClick={handleBulkDelete}
-                className="mb-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-700"
-            >
-                Delete Selected
-            </button>
-
-            <p className="py-2">
-                Displaying {currentProducts.length} / {totalProducts} products
-            </p>
-
-            {/* Bảng dữ liệu (Table) */}
-            <table className="table-auto w-full border-collapse border border-gray-200">
-                <thead>
-                    <tr className="bg-gray-100">
-                        <th>
-                            <input
-                                type="checkbox"
-                                onChange={handleSelectAll}
-                                checked={
-                                    filteredData.length > 0 &&
-                                    Object.keys(selectedItems).length ===
-                                        filteredData.length &&
-                                    Object.values(selectedItems).every(
-                                        (val) => val
-                                    )
-                                }
-                            />
-                        </th>
-                        {columns.map((col) => (
-                            <th
-                                key={col.key}
-                                className="border border-gray-300 px-4 py-2 cursor-pointer"
-                                onClick={() => handleSort(col.key)}
-                            >
-                                {col.label}{' '}
-                                {sortedField === col.key &&
-                                    (sortDirection === 'asc' ? '↑' : '↓')}
-                            </th>
-                        ))}
-                        <th className="border border-gray-300 px-4 py-2">
-                            Actions
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {currentProducts.map((item) => (
-                        <tr key={item._id}>
-                            <td className="border border-gray-300 px-4 py-2">
-                                <input
-                                    type="checkbox"
-                                    checked={!!selectedItems[item._id]}
-                                    onChange={(e) =>
-                                        handleSelectItem(
-                                            item._id,
-                                            e.target.checked
-                                        )
-                                    }
-                                />
-                            </td>
-                            {columns.map((col) => (
-                                <td
-                                    key={col.key}
-                                    className="border border-gray-300 px-4 py-2"
-                                >
-                                    {item[col.key]}
-                                </td>
-                            ))}
-                            <td className="border border-gray-300 px-4 py-2">
-                                <button
-                                    className="text-blue-500 hover:underline"
-                                    onClick={() => onView(item._id)}
-                                >
-                                    View
-                                </button>
-                                <button
-                                    className="text-yellow-500 hover:underline ml-2"
-                                    onClick={() => onEdit(item._id)}
-                                >
-                                    Edit
-                                </button>
-                                <button
-                                    className="text-red-500 hover:underline ml-2"
-                                    onClick={() => onDelete(item._id)}
-                                >
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-
-            {/* Phân trang (Pagination) */}
-            <Pagination
-                totalPages={totalPages}
-                currentPage={currentPage}
-                handlePageChange={handlePageChange}
-            />
-        </>
+            </Paper>
+        </Box>
     )
+}
+
+DataTable.propTypes = {
+    rows: PropTypes.array.isRequired,
+    headCells: PropTypes.array.isRequired,
+    title: PropTypes.string.isRequired,
+    onRowClick: PropTypes.func,
+    rowsPerPageOptions: PropTypes.array,
 }
 
 export default DataTable

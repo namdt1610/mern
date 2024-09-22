@@ -1,8 +1,14 @@
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
+
 function Home() {
     return (
-        <div>
-            <h1>Admin Home</h1>
-        </div>
+        <>
+            <h1>
+                <Skeleton />
+                Home
+            </h1>
+        </>
     )
 }
 

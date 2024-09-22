@@ -31,6 +31,10 @@
         @apply no-underline w-32 h-12 bg-green-200 text-black rounded-lg flex items-center justify-center;
     }
 
+    .btn-success {
+        @apply w-32 bg-green-500 text-white px-4 py-2 rounded-lg;
+    }
+
     .btn-secondary {
         @apply w-32 bg-gray-500 text-white px-4 py-2 rounded-lg;
     }

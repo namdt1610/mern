@@ -29,7 +29,7 @@ const ProductDetails = ({ product }) => {
             <div className="product-details flex h-auto shadow rounded-2xl">
                 <div className="image-section w-96 h-auto m-2">
                     <ImagePreview
-                        url={`http://localhost:8888${product.imageUrl}`}
+                        url={`http://localhost:8888/uploads/${product.imageUrl}`}
                     />
                 </div>
                 <div className="body-section m-4 flex items-center">
@@ -38,6 +38,8 @@ const ProductDetails = ({ product }) => {
                         <p>{product.description}</p>
                         <p>Price: {product.price}</p>
                         <p>Stock: {product.stock}</p>
+                        <p>alo{product.imageUrl}</p>
+
                         <p>
                             Created:{' '}
                             {formatDistanceToNow(new Date(product.createdAt))}{' '}

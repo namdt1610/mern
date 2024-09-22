@@ -1,12 +1,25 @@
-import { useEffect, useState } from 'react'
-import { useProductsContext } from '../../../hooks/useProductsContext'
-import DataTable from '../../components/DataTable'
+import React, { useState, useMemo, useContext } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import DataTable from '../../components/DataTable'
+import useFetchData from '../../../hooks/useFetchData'
 import ConfirmationModal from '../../components/ConfirmationModal'
+import Skeleton from 'react-loading-skeleton'
+import { ProductsContext } from '../../../context/ProductContext'
 
 const Products = () => {
-    const { products = [], dispatch } = useProductsContext()
-    const [totalProducts, setTotalProducts] = useState(0)
+    const { dispatch } = useContext(ProductsContext)
+    const { page = 1 } = useParams()
+    const navigate = useNavigate()
+    const currentPage = parseInt(page) || 1
+    const [productsPerPage, setProductsPerPage] = useState(5)
+    const apiUrl = `/api/admin/products?page=${currentPage}&limit=${productsPerPage}`
+
+    const {
+        data: products = [],
+        total,
+        loading,
+        error,
+    } = useFetchData(apiUrl, dispatch, 'SET_PRODUCTS')
 
     const [sortedField, setSortedField] = useState(null)
     const [sortDirection, setSortDirection] = useState('asc')
@@ -14,43 +27,30 @@ const Products = () => {
     const [showModal, setShowModal] = useState(false)
     const [productToDelete, setProductToDelete] = useState(null)
 
-    const { page = 1 } = useParams()
-    const [currentPage, setCurrentPage] = useState(parseInt(page))
-    const [productsPerPage, setProductsPerPage] = useState(5)
+    const sortedProducts = useMemo(() => {
+        if (!sortedField) return products
+        const direction = sortDirection === 'asc' ? 1 : -1
+        return [...products].sort((a, b) =>
+            a[sortedField] > b[sortedField] ? direction : -direction
+        )
+    }, [products, sortedField, sortDirection])
 
-    const navigate = useNavigate()
+    const currentProducts = useMemo(() => {
+        const indexOfLastProduct = currentPage * productsPerPage
+        const indexOfFirstProduct = indexOfLastProduct - productsPerPage
+        return sortedProducts.slice(indexOfFirstProduct, indexOfLastProduct)
+    }, [sortedProducts, currentPage, productsPerPage])
 
-    useEffect(() => {
-        setCurrentPage(parseInt(page) || 1)
-    }, [page])
+    const handleSort = (field) => {
+        setSortedField(field)
+        setSortDirection((prevDirection) =>
+            prevDirection === 'asc' ? 'desc' : 'asc'
+        )
+    }
 
-    useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const apiUrl = `/api/admin/products?page=${currentPage}&limit=${productsPerPage}`
-                console.log('Fetching from URL:', apiUrl) // Kiểm tra URL API
-
-                const response = await fetch(apiUrl)
-                if (!response.ok) {
-                    throw new Error('Network response was not ok')
-                }
-
-                const json = await response.json()
-                console.log('API response:', json) // Kiểm tra dữ liệu trả về từ API
-
-                dispatch({ type: 'SET_PRODUCTS', payload: json.products })
-                setTotalProducts(json.totalProducts)
-            } catch (error) {
-                console.error('Failed to fetch products:', error)
-            }
-        }
-
-        fetchProducts()
-    }, [currentPage, productsPerPage, dispatch])
-
-    useEffect(() => {
-        setCurrentPage(parseInt(page) || 1)
-    }, [page])
+    const handlePageChange = (page) => {
+        navigate(`/admin/products/page/${page}`)
+    }
 
     const handleView = (productId) => {
         navigate(`/admin/products/${productId}`)
@@ -66,76 +66,46 @@ const Products = () => {
     }
 
     const handleDelete = async () => {
-        if (productToDelete) {
-            try {
-                const response = await fetch(
-                    `/api/admin/products/${productToDelete}`,
-                    { method: 'DELETE' }
-                )
-                if (response.ok) {
-                    dispatch({
-                        type: 'DELETE_PRODUCT',
-                        payload: { _id: productToDelete },
-                    })
-                    setProductToDelete(null)
-                    setShowModal(false)
-                } else {
-                    throw new Error('Failed to delete product')
-                }
-            } catch (error) {
-                console.error('Failed to delete product:', error)
+        if (!productToDelete) return
+
+        try {
+            const response = await fetch(
+                `/api/admin/products/${productToDelete}`,
+                { method: 'DELETE' }
+            )
+            if (response.ok) {
+                setShowModal(false)
+            } else {
+                throw new Error('Failed to delete product')
             }
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setProductToDelete(null)
         }
     }
 
-    const sortedProducts = sortedField
-        ? [...products].sort((a, b) => {
-              if (sortDirection === 'asc') {
-                  return a[sortedField] > b[sortedField] ? 1 : -1
-              } else {
-                  return a[sortedField] < b[sortedField] ? 1 : -1
-              }
-          })
-        : [...products]
+    if (loading) return <Skeleton count={5} height={40} />
+    if (error) return <div>Error: {error}</div>
+    if (products.length === 0) return <div>No products found</div>
 
-    const handleSort = (field) => {
-        setSortedField(field)
-        setSortDirection((prevDirection) =>
-            prevDirection === 'asc' ? 'desc' : 'asc'
-        )
-    }
+    const rows = products
 
-    const indexOfLastProduct = currentPage * productsPerPage
-    const indexOfFirstProduct = indexOfLastProduct - productsPerPage
-    const currentProducts = sortedProducts.slice(
-        indexOfFirstProduct,
-        indexOfLastProduct
-    )
-
-    const handlePageChange = (page) => {
-        setCurrentPage(page)
-        navigate(`/admin/products/page/${page}`)
-    }
-
-    const productColumns = [
-        { key: 'name', label: 'Product Name' },
-        { key: 'price', label: 'Price' },
-        { key: 'category', label: 'Category' },
+    const headCells = [
+        { id: 'name', numeric: false, label: 'Name' },
+        { id: 'description', numeric: true, label: 'Description' },
+        { id: 'price', numeric: true, label: 'Price' },
+        { id: 'category', numeric: true, label: 'Category' },
+        { id: 'stock', numeric: true, label: 'Stock' },
     ]
 
     return (
         <>
             <DataTable
-                data={currentProducts}
-                handleSort={handleSort}
-                sortedField={sortedField}
-                sortDirection={sortDirection}
-                columns={productColumns}
-                currentPage={currentPage}
-                productsPerPage={productsPerPage}
-                setProductsPerPage={setProductsPerPage}
-                handlePageChange={handlePageChange}
-                totalProducts={totalProducts}
+                rows={rows}
+                headCells={headCells}
+                title="My Data Table"
+                onRowClick={handleView}
                 onView={handleView}
                 onEdit={handleEdit}
                 onDelete={openDeleteModal}

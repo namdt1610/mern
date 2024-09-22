@@ -19,6 +19,16 @@ const productSchema = new Schema(
         imageUrl: {
             type: String,
         },
+        category: {
+            type: Schema.Types.ObjectId,
+            ref: 'Category',
+            required: true,
+        },
+        stock: {
+            type: Schema.Types.ObjectId,
+            ref: 'Stock',
+            required: true,
+        },
     },
     { timestamps: true }
 )
