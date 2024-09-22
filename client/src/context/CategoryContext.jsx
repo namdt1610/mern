@@ -1,8 +1,8 @@
 import { createContext, useReducer } from 'react'
 
-export const CategoriesContext = createContext()
+export const CategoryContext = createContext()
 
-export const categoriesReducer = (state, action) => {
+export const categoryReducer = (state, action) => {
     switch (action.type) {
         case 'SET_CATEGORIES':
             return {
@@ -34,12 +34,12 @@ export const categoriesReducer = (state, action) => {
     }
 }
 
-export const CategoriesContextProvider = ({ children }) => {
-    const [state, dispatch] = useReducer(categoriesReducer, { categories: [] })
+export const CategoryContextProvider = ({ children }) => {
+    const [state, dispatch] = useReducer(categoryReducer, { categories: [] })
 
     return (
-        <CategoriesContext.Provider value={{ ...state, dispatch }}>
+        <CategoryContext.Provider value={{ ...state, dispatch }}>
             {children}
-        </CategoriesContext.Provider>
+        </CategoryContext.Provider>
     )
 }

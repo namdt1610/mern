@@ -1,9 +1,9 @@
-import ProductForm from '../../components/CreateProductForm.tsx'
+import CreateProduct from './CreateProductForm.tsx'
 
 export default function CreateProductForm() {
     return (
         <>
-            <ProductForm />
+            <CreateProduct />
         </>
     )
 }
