@@ -24,6 +24,7 @@ const ProductDetailsForm = () => {
   }
 
   interface Category {
+    _id: string
     name: string
   }
 
@@ -45,6 +46,7 @@ const ProductDetailsForm = () => {
         const dataCategory = responseCategory.data
         const data = response.data
         dispatch({ type: 'GET_PRODUCT', payload: data })
+
         dispatchCategory({
           type: 'SET_CATEGORY',
           payload: dataCategory.categories,
@@ -72,8 +74,8 @@ const ProductDetailsForm = () => {
     if (
       !updatedProduct.name ||
       !updatedProduct.category ||
-      !updatedProduct.price ||
-      !updatedProduct.stock
+      !updatedProduct.price
+      //!updatedProduct.stock
     ) {
       console.error('Please fill in all required fields')
       return
@@ -121,6 +123,11 @@ const ProductDetailsForm = () => {
     )
   }
 
+  const getCategoryNameById = (id: string) => {
+    const categoryFound = category.find((cat) => cat._id === id)
+    return categoryFound ? categoryFound.name : 'Unknown Category'
+  }
+  
   return (
     <div className={styles.productDetails}>
       <div>
@@ -183,18 +190,11 @@ const ProductDetailsForm = () => {
                       Select a category
                     </option>
                     {category && category.length > 0 ? (
-                      category.map(
-                        (
-                          cat,
-                          index // Đảm bảo rằng bạn cung cấp key cho mỗi phần tử
-                        ) => (
-                          <option key={index} value={cat.name}>
-                            {' '}
-                            {/* Giả sử mỗi cat có thuộc tính name */}
-                            {cat.name}
-                          </option>
-                        )
-                      )
+                      category.map((cat) => (
+                        <option key={cat._id} value={cat._id}>
+                          {cat.name}
+                        </option>
+                      ))
                     ) : (
                       <option value="">No categories available</option>
                     )}
@@ -229,7 +229,7 @@ const ProductDetailsForm = () => {
           ) : (
             <>
               <h1 className={styles.productName}>Name: {product.name}</h1>
-              <p>Category: {product.category}</p>
+              <p>Category: {getCategoryNameById(product.category as string)}</p>
               <p className={styles.productDescription}>
                 Description: {product.description}
               </p>

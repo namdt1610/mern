@@ -1,0 +1,1 @@
+npm prune // remove all deprecated packages
