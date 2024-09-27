@@ -24,6 +24,7 @@ const ProductDetailsForm = () => {
   }
 
   interface Category {
+    _id: string
     name: string
   }
 
@@ -48,6 +49,7 @@ const ProductDetailsForm = () => {
           throw new Error('Failed to fetch product')
         }
         dispatch({ type: 'GET_PRODUCT', payload: data })
+
         dispatchCategory({
           type: 'SET_CATEGORY',
           payload: dataCategory.categories,
@@ -75,25 +77,28 @@ const ProductDetailsForm = () => {
     if (
       !updatedProduct.name ||
       !updatedProduct.category ||
-      !updatedProduct.price ||
-      !updatedProduct.stock
+      !updatedProduct.price
+      //!updatedProduct.stock
     ) {
       console.error('Please fill in all required fields')
       return
     }
 
     try {
-      const response = axios.patch(`/api/admin/products/${id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedProduct),
-      })
-      if (!response.ok) {
+      const response = await axios.patch(
+        `/api/admin/products/${id}`,
+        updatedProduct,
+        {
+          method: 'UPDATE_PRODUCT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+      if (response.status !== 200) {
         throw new Error('Failed to update product')
       }
-      const data = await response.json()
+      const data = response.data
       setProduct(data)
       setIsEditing(false)
     } catch (error) {
@@ -131,6 +136,11 @@ const ProductDetailsForm = () => {
     )
   }
 
+  const getCategoryNameById = (id: string) => {
+    const categoryFound = category.find((cat) => cat._id === id)
+    return categoryFound ? categoryFound.name : 'Unknown Category'
+  }
+  
   return (
     <div className={styles.productDetails}>
       <div>
@@ -193,18 +203,11 @@ const ProductDetailsForm = () => {
                       Select a category
                     </option>
                     {category && category.length > 0 ? (
-                      category.map(
-                        (
-                          cat,
-                          index // Đảm bảo rằng bạn cung cấp key cho mỗi phần tử
-                        ) => (
-                          <option key={index} value={cat.name}>
-                            {' '}
-                            {/* Giả sử mỗi cat có thuộc tính name */}
-                            {cat.name}
-                          </option>
-                        )
-                      )
+                      category.map((cat) => (
+                        <option key={cat._id} value={cat._id}>
+                          {cat.name}
+                        </option>
+                      ))
                     ) : (
                       <option value="">No categories available</option>
                     )}
@@ -239,7 +242,7 @@ const ProductDetailsForm = () => {
           ) : (
             <>
               <h1 className={styles.productName}>Name: {product.name}</h1>
-              <p>Category: {product.category}</p>
+              <p>Category: {getCategoryNameById(product.category as string)}</p>
               <p className={styles.productDescription}>
                 Description: {product.description}
               </p>
