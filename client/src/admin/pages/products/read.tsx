@@ -40,13 +40,10 @@ const ProductDetailsForm = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await fetch(apiUrl)
-        const responseCategory = await fetch(apiUrlCategory)
-        const dataCategory = await responseCategory.json()
-        const data = await response.json()
-        if (!response.ok) {
-          throw new Error('Failed to fetch product')
-        }
+        const response = await axios.get(apiUrl)
+        const responseCategory = await axios.get(apiUrlCategory)
+        const dataCategory = responseCategory.data
+        const data = response.data
         dispatch({ type: 'GET_PRODUCT', payload: data })
         dispatchCategory({
           type: 'SET_CATEGORY',
@@ -58,7 +55,7 @@ const ProductDetailsForm = () => {
         setUpdatedProduct(data)
         setCategory(dataCategory.categories)
       } catch (error) {
-        console.error(`Failed to update product: ${error.message}`)
+        console.error(`Failed to fetch product: ${error.message}`)
       }
     }
     fetchProduct()
@@ -83,17 +80,12 @@ const ProductDetailsForm = () => {
     }
 
     try {
-      const response = axios.patch(`/api/admin/products/${id}`, {
-        method: 'PATCH',
+      const response = await axios.patch(apiUrl, updatedProduct, {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(updatedProduct),
       })
-      if (!response.ok) {
-        throw new Error('Failed to update product')
-      }
-      const data = await response.json()
+      const data = response.data
       setProduct(data)
       setIsEditing(false)
     } catch (error) {
@@ -104,10 +96,8 @@ const ProductDetailsForm = () => {
   // Remove product
   const handleRemove = async () => {
     try {
-      const response = await fetch(apiUrl, {
-        method: 'DELETE',
-      })
-      if (!response.ok) {
+      const response = await axios.delete(apiUrl)
+      if (response.status !== 200) {
         throw new Error('Failed to remove product')
       }
       window.location.href = '/admin/products'
