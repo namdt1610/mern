@@ -1,6 +1,6 @@
 import { createContext, useReducer } from 'react'
 
-export const ProductsContext = createContext()
+export const ProductContext = createContext()
 
 export const productsReducer = (state, action) => {
     switch (action.type) {
@@ -34,12 +34,12 @@ export const productsReducer = (state, action) => {
     }
 }
 
-export const ProductsContextProvider = ({ children }) => {
+export const ProductContextProvider = ({ children }) => {
     const [state, dispatch] = useReducer(productsReducer, { products: [] })
 
     return (
-        <ProductsContext.Provider value={{ ...state, dispatch }}>
+        <ProductContext.Provider value={{ ...state, dispatch }}>
             {children}
-        </ProductsContext.Provider>
+        </ProductContext.Provider>
     )
 }

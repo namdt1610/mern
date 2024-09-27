@@ -36,7 +36,6 @@ const getProductById = async (req, res) => {
 // POST a product
 const createProduct = async (req, res) => {
     const { name, description, price } = req.body
-
     const imageUrl = req.file ? `/uploads/${req.file.filename}` : null
 
     let emptyFields = []

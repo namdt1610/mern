@@ -1,10 +1,10 @@
 import React from 'react'
-import Navbar from '../../admin/components/Navbar'
+import Navigation from './Navigation'
 
 const Header = () => {
     return (
         <>
-            <Navbar />
+            <Navigation />
         </>
     )
 }

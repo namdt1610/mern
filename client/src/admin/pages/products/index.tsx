@@ -4,53 +4,39 @@ import DataTable from '../../components/DataTable'
 import useFetchData from '../../../hooks/useFetchData'
 import ConfirmationModal from '../../components/ConfirmationModal'
 import Skeleton from 'react-loading-skeleton'
-import { ProductsContext } from '../../../context/ProductContext'
+import { ProductContext } from '../../../context/ProductContext'
+
+interface ApiResponse {
+    products: Array<{
+        name: string;
+        description: string;
+        price: number;
+        category: string;
+        stock: number;
+
+    }>;
+    totalProducts: number;
+}
 
 const Products = () => {
-    const { dispatch } = useContext(ProductsContext)
-    const { page = 1 } = useParams()
+    const { dispatch } = useContext(ProductContext)
+    const { page = '1' } = useParams()
     const navigate = useNavigate()
     const currentPage = parseInt(page) || 1
-    const [productsPerPage, setProductsPerPage] = useState(5)
-    const apiUrl = `/api/admin/products?page=${currentPage}&limit=${productsPerPage}`
+    const apiUrl = `/api/admin/products?page=${currentPage}`
+
+    const extractProductsData = (result: ApiResponse) => result.products
+    const extractProductsTotal = (result: ApiResponse) => result.totalProducts
 
     const {
         data: products = [],
         total,
         loading,
         error,
-    } = useFetchData(apiUrl, dispatch, 'SET_PRODUCTS')
-
-    const [sortedField, setSortedField] = useState(null)
-    const [sortDirection, setSortDirection] = useState('asc')
+    } = useFetchData(apiUrl, dispatch, 'SET_PRODUCTS', extractProductsData, extractProductsTotal)
 
     const [showModal, setShowModal] = useState(false)
     const [productToDelete, setProductToDelete] = useState(null)
-
-    const sortedProducts = useMemo(() => {
-        if (!sortedField) return products
-        const direction = sortDirection === 'asc' ? 1 : -1
-        return [...products].sort((a, b) =>
-            a[sortedField] > b[sortedField] ? direction : -direction
-        )
-    }, [products, sortedField, sortDirection])
-
-    const currentProducts = useMemo(() => {
-        const indexOfLastProduct = currentPage * productsPerPage
-        const indexOfFirstProduct = indexOfLastProduct - productsPerPage
-        return sortedProducts.slice(indexOfFirstProduct, indexOfLastProduct)
-    }, [sortedProducts, currentPage, productsPerPage])
-
-    const handleSort = (field) => {
-        setSortedField(field)
-        setSortDirection((prevDirection) =>
-            prevDirection === 'asc' ? 'desc' : 'asc'
-        )
-    }
-
-    const handlePageChange = (page) => {
-        navigate(`/admin/products/page/${page}`)
-    }
 
     const handleView = (productId) => {
         navigate(`/admin/products/${productId}`)
@@ -104,20 +90,20 @@ const Products = () => {
             <DataTable
                 rows={rows}
                 headCells={headCells}
-                title="My Data Table"
                 onRowClick={handleView}
                 onView={handleView}
                 onEdit={handleEdit}
                 onDelete={openDeleteModal}
+                title="My Data Table"
             />
-            {showModal && (
+            {showModal ? (
                 <ConfirmationModal
                     show={showModal}
                     onClose={() => setShowModal(false)}
                     onConfirm={handleDelete}
                     message="Are you sure you want to delete this product?"
                 />
-            )}
+            ) : null}
         </>
     )
 }

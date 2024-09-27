@@ -1,13 +1,13 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import Home from '../pages/home/index'
-import Layout from '../../admin/components/Layout.jsx'
+import Layout from '../components/Layout.tsx'
 
 import Product from '../pages/products/index'
-import CreateProductForm from '../pages/products/create.jsx'
-import ProductDetailsForm from '../pages/products/read.jsx'
+import CreateProductForm from '../pages/products/create.tsx'
+import ProductDetailsForm from '../pages/products/read.tsx'
 
-import Category from '../pages/categories/index.jsx'
+import Category from '../pages/categories/index.tsx'
 import CreateCategoryForm from '../pages/categories/create.tsx'
 
 export default function AdminRoutes() {

@@ -10,7 +10,7 @@ const {
 const router = express.Router()
 
 // GET all categories
-// router.get('/', getAllCategories)
+router.get('/', getAllCategories)
 
 // GET a Category by id
 // router.get('/:id', getCategoryById)
