@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react'
 import axios from 'axios'
-import styles from './style.module.scss'
-import getCategoryNameById from '../../utils/category'
+// import getCategoryNameById from '../../utils/category'
 import ConfirmationModal from '../../components/ConfirmationModal'
 import { useParams, Link } from 'react-router-dom'
 import { ProductContext } from '../../../context/ProductContext'
@@ -131,71 +130,43 @@ const ProductDetailsForm = () => {
     }
 
     return (
-        <div className={styles.productDetails}>
+        <div>
             <div>
-                <Link className={styles.btnSecondary} to={'/admin/products'}>
-                    Back to Products
-                </Link>
+                <Link to={'/admin/products'}>Back to Products</Link>
                 {isEditing ? (
                     <>
-                        <button
-                            className={styles.btnSuccess}
-                            onClick={handleSave}
-                        >
-                            Save
-                        </button>
-                        <button
-                            className={styles.btnSecondary}
-                            onClick={() => setIsEditing(false)}
-                        >
+                        <button onClick={handleSave}>Save</button>
+                        <button onClick={() => setIsEditing(false)}>
                             Cancel
                         </button>
                     </>
                 ) : (
-                    <button
-                        className={styles.btnWarning}
-                        onClick={() => setIsEditing(true)}
-                    >
-                        Edit
-                    </button>
+                    <button onClick={() => setIsEditing(true)}>Edit</button>
                 )}
-                <button
-                    className={styles.btnDanger}
-                    onClick={() => setShowModal(true)}
-                >
-                    Remove
-                </button>
+                <button onClick={() => setShowModal(true)}>Remove</button>
             </div>
-            <div className={`${styles.main} ${styles.flex}`}>
-                <div className={`${styles.leftCol} ${styles.wHalf}`}>
+            <div>
+                <div>
                     {isEditing ? (
                         <form>
-                            <div className={styles.mb6}>
-                                <label className={styles.label}>
-                                    Product Name
-                                </label>
+                            <div>
+                                <label>Product Name</label>
                                 <input
                                     type="text"
                                     name="name"
                                     value={updatedProduct.name || ''}
                                     onChange={handleChange}
-                                    className={styles.input}
                                     placeholder={product.name}
                                     required
                                 />
                             </div>
-                            <div
-                                className={`${styles.grid} ${styles.gap6} ${styles.mb6} ${styles.mdGridCols2}`}
-                            >
+                            <div>
                                 <div>
-                                    <label className={styles.label}>
-                                        Category
-                                    </label>
+                                    <label>Category</label>
                                     <select
                                         name="category"
                                         value={updatedProduct.category || ''}
                                         onChange={handleChange}
-                                        className={styles.input}
                                         required
                                     >
                                         <option value="" disabled>
@@ -218,15 +189,12 @@ const ProductDetailsForm = () => {
                                     </select>
                                 </div>
                                 <div>
-                                    <label className={styles.label}>
-                                        Stock
-                                    </label>
+                                    <label>Stock</label>
                                     <input
                                         type="number"
                                         name="stock"
                                         value={updatedProduct.stock || ''}
                                         onChange={handleChange}
-                                        className={styles.input}
                                         placeholder={(
                                             product.stock ?? ''
                                         ).toString()}
@@ -234,15 +202,12 @@ const ProductDetailsForm = () => {
                                     />
                                 </div>
                                 <div>
-                                    <label className={styles.label}>
-                                        Price
-                                    </label>
+                                    <label>Price</label>
                                     <input
                                         type="number"
                                         name="price"
                                         value={updatedProduct.price || ''}
                                         onChange={handleChange}
-                                        className={styles.input}
                                         placeholder={
                                             product.price.toString() || ''
                                         }
@@ -253,37 +218,26 @@ const ProductDetailsForm = () => {
                         </form>
                     ) : (
                         <>
-                            <h1 className={styles.productName}>
-                                Name: {product.name}
-                            </h1>
+                            <h1>Name: {product.name}</h1>
                             <p>
                                 Category:{' '}
                                 {getCategoryNameById(
                                     product.category as string
                                 )}
                             </p>
-                            <p className={styles.productDescription}>
-                                Description: {product.description}
-                            </p>
-                            <p className={styles.productPrice}>
-                                Price: {product.price}
-                            </p>
-                            <p className={styles.productStock}>
-                                Stock: {product.stock}
-                            </p>
-                            <p className={styles.productCreated}>
+                            <p>Description: {product.description}</p>
+                            <p>Price: {product.price}</p>
+                            <p>Stock: {product.stock}</p>
+                            <p>
                                 Created:{' '}
                                 {new Date(product.createdAt).toLocaleString()}
                             </p>
                         </>
                     )}
                 </div>
-                <div
-                    className={`${styles.rightCol} ${styles.flex} ${styles.justifyCenter} ${styles.itemsCenter}`}
-                >
+                <div>
                     {product.imageUrl && (
                         <img
-                            className={styles.productImage}
                             src={`http://localhost:8888${product.imageUrl}`}
                             alt={product.name}
                         />

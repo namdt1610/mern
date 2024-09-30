@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import styles from './CreateProductForm.module.scss'
+// import styles from './CreateProductForm.module.scss'
 
 interface Category {
     _id: string
@@ -48,9 +48,8 @@ const CreateProductForm = () => {
     }
 
     return (
-        <form className={styles.createProductForm} onSubmit={handleSubmit}>
-            <div className={styles.formGroup}>
-                <label htmlFor="name">Tên sản phẩm</label>
+        <form onSubmit={handleSubmit}>
+            <div>                <label htmlFor="name">Tên sản phẩm</label>
                 <input
                     type="text"
                     id="name"
@@ -59,7 +58,7 @@ const CreateProductForm = () => {
                     required
                 />
             </div>
-            <div className={styles.formGroup}>
+            <div>
                 <label htmlFor="description">Mô tả</label>
                 <textarea
                     id="description"
@@ -68,7 +67,7 @@ const CreateProductForm = () => {
                     required
                 ></textarea>
             </div>
-            <div className={styles.formGroup}>
+            <div>
                 <label htmlFor="price">Giá</label>
                 <input
                     type="number"
@@ -78,7 +77,7 @@ const CreateProductForm = () => {
                     required
                 />
             </div>
-            <div className={styles.formGroup}>
+            <div>
                 <label htmlFor="imageUrl">URL hình ảnh</label>
                 <input
                     type="text"
@@ -87,7 +86,7 @@ const CreateProductForm = () => {
                     onChange={handleChange}
                 />
             </div>
-            <div className={styles.formGroup}>
+            <div>
                 <label htmlFor="category">Danh mục</label>
                 <select
                     id="category"
@@ -103,7 +102,7 @@ const CreateProductForm = () => {
                     ))}
                 </select>
             </div>
-            <button type="submit" className={styles.submitButton}>
+            <button type="submit">
                 Tạo sản phẩm
             </button>
         </form>
