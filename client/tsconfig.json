@@ -1,0 +1,44 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "esnext",
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "allowSyntheticDefaultImports": true,
+        "sourceMap": true,
+        // "declaration": true,
+        "declarationMap": true,
+        "composite": true,
+        // "outDir": "./dist",
+        "rootDir": "./src",
+        "baseUrl": ".",
+        "paths": {
+            "@/*": ["./src/*"]
+        },
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitOverride": true,
+        "noPropertyAccessFromIndexSignature": true,
+        "noUncheckedIndexedAccess": true,
+        "allowImportingTsExtensions": true,
+        "moduleResolution": "bundler",
+        "noEmit": true
+        // "emitDeclarationOnly": true
+    },
+    "include": ["src"],
+    "exclude": ["node_modules"],
+    "references": [
+        {
+            "path": "./src/tsconfig.app.json"
+        },
+        {
+            "path": "./src/tsconfig.node.json"
+        }
+    ]
+}

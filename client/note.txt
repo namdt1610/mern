@@ -1,1 +1,2 @@
 npm prune // remove all deprecated packages
+npm update --save 

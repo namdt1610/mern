@@ -1,5 +1,5 @@
-import 'bootstrap/dist/css/bootstrap.min.css'
-import './App.scss'
+import './App.css'
+import '../src/styles/global.css'
 
 import React from 'react'
 import { createRoot } from 'react-dom/client'
@@ -11,20 +11,20 @@ import { ProductContextProvider } from './context/ProductContext'
 import { CategoryContextProvider } from './context/CategoryContext'
 
 const App = () => (
-  <React.StrictMode>
-    <AuthContextProvider>
-      <ProductContextProvider>
-        <CategoryContextProvider>
-          <Router>
-            <Routes>
-              <Route path="/*" element={<ClientRoutes />} />
-              <Route path="admin/*" element={<AdminRoutes />} />
-            </Routes>
-          </Router>
-        </CategoryContextProvider>
-      </ProductContextProvider>
-    </AuthContextProvider>
-  </React.StrictMode>
+    <React.StrictMode>
+        <AuthContextProvider>
+            <ProductContextProvider>
+                <CategoryContextProvider>
+                    <Router>
+                        <Routes>
+                            <Route path="/*" element={<ClientRoutes />} />
+                            <Route path="admin/*" element={<AdminRoutes />} />
+                        </Routes>
+                    </Router>
+                </CategoryContextProvider>
+            </ProductContextProvider>
+        </AuthContextProvider>
+    </React.StrictMode>
 )
 
 const container = document.getElementById('root')

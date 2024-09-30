@@ -7,7 +7,6 @@ import useFetchData from '../../../hooks/useFetchData'
 import Skeleton from 'react-loading-skeleton'
 import ConfirmationModal from '../../components/ConfirmationModal'
 import { Link } from 'react-router-dom'
-import styles from './style.module.scss'
 
 interface ApiResponse {
   categories: Array<{
@@ -16,7 +15,7 @@ interface ApiResponse {
   totalCategories: number
 }
 
-const Categories = () => {
+export const Categories = () => {
   const { dispatch } = useContext(CategoryContext)
   const { page = '1' } = useParams()
   const navigate = useNavigate()
