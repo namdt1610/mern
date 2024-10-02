@@ -5,9 +5,10 @@ import Signup from '../pages/auth/Signup'
 import Home from '../pages/home'
 import Men from '../pages/store/Men'
 import Women from '../pages/store/Women'
-import Header from '../components/Header'
-import Footer from '../components/Footer'
+import Header from '../components/layout/Header'
+import Footer from '../components/layout/Footer'
 import Store from '../pages/store/index'
+import ErrorPage from '../pages/other/404'
 
 export default function ClientRoutes() {
     return (
@@ -23,7 +24,7 @@ export default function ClientRoutes() {
                 <Route path="store/men" element={<Men />} />
                 <Route path="store/women" element={<Women />} />
 
-                <Route path="/*" element={<h1>404 Not Found</h1>} />
+                <Route path="/*" element={<ErrorPage />} />
             </Routes>
             <Footer />
         </>

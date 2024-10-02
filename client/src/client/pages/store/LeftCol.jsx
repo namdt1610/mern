@@ -1,3 +1,7 @@
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { ChevronDown } from 'lucide-react'
+
 const LeftColumn = () => {
     const [openDropdowns, setOpenDropdowns] = useState({
         size: false,
@@ -6,12 +10,6 @@ const LeftColumn = () => {
         price: false,
         technology: false,
     })
-    const toggleDropdown = (dropdown) => {
-        setOpenDropdowns((prevState) => ({
-            ...prevState,
-            [dropdown]: !prevState[dropdown],
-        }))
-    }
 
     const genders = ['Male', 'Female', 'Kids']
     const sizes = ['36', '37', '38', '39', '40', '41', '42', '43', '44', '45']
@@ -25,123 +23,80 @@ const LeftColumn = () => {
         '2500-3000',
     ]
     const technologies = ['Fresh Foam', 'Fuel Cell']
+
     return (
         <div className="left-column">
-            <div className="left-col bg-gray-100 w-1/4">
-                <div className="m-4">
-                    <button
-                        className="text-gray-600 hover:text-black"
-                        onClick={() => toggleDropdown('size')}
-                    >
+            <div className="collapse bg-base-200">
+                <input type="checkbox" />
+                <div className="collapse-title text-xl font-medium flex justify-between items-center">
                         Size
-                    </button>
-                    {openDropdowns.size && (
-                        <div className="dropdown mt-2 bg-white shadow-lg grid grid-cols-4 gap-2 p-2 rounded-md">
-                            {sizes.map((size, index) => (
-                                <div className="border border-gray-300 rounded-md">
-                                    <a
-                                        key={index}
-                                        href="/"
-                                        className="center text-gray-600 hover:text-black py-1 px-2 text-wrap"
-                                    >
-                                        {size}
-                                    </a>
-                                </div>
-                            ))}
-                        </div>
-                    )}
+                        <ChevronDown />
                 </div>
-                <div className="m-4">
-                    <button
-                        className="text-gray-600 hover:text-black"
-                        onClick={() => toggleDropdown('gender')}
-                    >
-                        Gender
-                    </button>
-                    {openDropdowns.gender && (
-                        <div className="dropdown mt-2 bg-white shadow-lg grid grid-cols-4 gap-2 p-2 rounded-md">
-                            {genders.map((gender, index) => (
-                                <div className="border-gray">
-                                    <a
-                                        key={index}
-                                        href="/"
-                                        className="center text-gray-600 hover:text-black py-1 px-2 text-wrap"
-                                    >
-                                        {gender}
-                                    </a>
-                                </div>
-                            ))}
+                <div className="collapse-content flex flex-wrap">
+                    {sizes.map((size) => (
+                        <div className="m-1">
+                            <Link to="/" className="btn btn-outline">
+                                {size}
+                            </Link>
                         </div>
-                    )}
+                    ))}
                 </div>
-                <div className="m-4 ">
-                    <button
-                        className="text-gray-600 hover:text-black"
-                        onClick={() => toggleDropdown('color')}
-                    >
-                        Color
-                    </button>
-                    {openDropdowns.color && (
-                        <div className="dropdown mt-2 bg-white shadow-lg grid grid-cols-4 gap-2 p-2 rounded-md">
-                            {colors.map((color, index) => (
-                                <div className="border-gray">
-                                    <a
-                                        key={index}
-                                        href="/"
-                                        className="center text-gray-600 hover:text-black py-1 px-2 text-wrap"
-                                    >
-                                        {color}
-                                    </a>
-                                </div>
-                            ))}
-                        </div>
-                    )}
+            </div>
+            <div className="collapse bg-base-200">
+                <input type="checkbox" />
+                <div className="collapse-title text-xl font-medium">
+                    Genders
                 </div>
-                <div className="m-4 ">
-                    <button
-                        className="text-gray-600 hover:text-black"
-                        onClick={() => toggleDropdown('price')}
-                    >
-                        Price
-                    </button>
-                    {openDropdowns.price && (
-                        <div className="dropdown  mt-2 bg-white shadow-lg grid grid-cols-4 gap-2 p-2 rounded-md">
-                            {prices.map((price, index) => (
-                                <div className="border-gray">
-                                    <a
-                                        key={index}
-                                        href="/"
-                                        className="center text-gray-600 hover:text-black py-1 px-2 text-wrap"
-                                    >
-                                        {price}
-                                    </a>
-                                </div>
-                            ))}
+                <div className="collapse-content flex flex-wrap">
+                    {genders.map((gender) => (
+                        <div className="m-1">
+                            <Link to="/" className="btn btn-outline">
+                                {gender}
+                            </Link>
                         </div>
-                    )}
+                    ))}
                 </div>
-                <div className="m-4 ">
-                    <button
-                        className="text-gray-600 hover:text-black"
-                        onClick={() => toggleDropdown('technology')}
-                    >
-                        Technology
-                    </button>
-                    {openDropdowns.technology && (
-                        <div className="dropdown mt-2 bg-white shadow-lg grid grid-cols-4 gap-2 p-2 rounded-md">
-                            {technologies.map((technology, index) => (
-                                <div className="border-gray">
-                                    <a
-                                        key={index}
-                                        href="/"
-                                        className="center text-gray-600 hover:text-black py-1 px-2 text-wrap"
-                                    >
-                                        {technology}
-                                    </a>
-                                </div>
-                            ))}
+            </div>
+
+            <div className="collapse bg-base-200">
+                <input type="checkbox" />
+                <div className="collapse-title text-xl font-medium">Colors</div>
+                <div className="collapse-content flex flex-wrap">
+                    {colors.map((color) => (
+                        <div className="m-1">
+                            <Link to="/" className="btn btn-outline">
+                                {color}
+                            </Link>
                         </div>
-                    )}
+                    ))}
+                </div>
+            </div>
+            <div className="collapse bg-base-200">
+                <input type="checkbox" />
+                <div className="collapse-title text-xl font-medium">Price</div>
+                <div className="collapse-content flex flex-wrap">
+                    {prices.map((price) => (
+                        <div className="m-1">
+                            <Link to="/" className="btn btn-outline">
+                                {price}
+                            </Link>
+                        </div>
+                    ))}
+                </div>
+            </div>
+            <div className="collapse bg-base-200">
+                <input type="checkbox" />
+                <div className="collapse-title text-xl font-medium">
+                    Technologies
+                </div>
+                <div className="collapse-content flex flex-wrap">
+                    {technologies.map((technology) => (
+                        <div className="m-1">
+                            <Link to="/" className="btn btn-outline">
+                                {technology}
+                            </Link>
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>

@@ -15,8 +15,8 @@ function Home() {
                     <h1 className="text-4xl font-bold">
                         Welcome to New Balance Outlet Store
                     </h1>
-                    <p className="">Sale up to 50% for all products</p>
-                    <Link className="btn-primary uppercase" to="/store">
+                    <p className="m-3">Sale up to 50% for all products</p>
+                    <Link to="/store" className="btn btn-success">
                         Shop Now
                     </Link>
                 </div>
