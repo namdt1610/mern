@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react'
 import axios from 'axios'
 // import getCategoryNameById from '../../utils/category'
-import ConfirmationModal from '../../components/ConfirmationModal'
+import ConfirmationModal from '../../../components/ConfirmationModal'
 import { useParams, Link } from 'react-router-dom'
 import { ProductContext } from '../../../context/ProductContext'
 import { CategoryContext } from '../../../context/CategoryContext'

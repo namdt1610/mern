@@ -1,9 +1,9 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import Home from '../pages/home/index'
-import Layout from '../components/Layout'
-
-// import Dashboard from '../pages/dashboard/index'
+import Layout from '../../components/Layout'
+import Error from '../pages/others/404'
+import Dashboard from '../pages/dashboard/index'
 import Product from '../pages/products/index'
 import CreateProductForm from '../pages/products/create'
 import ProductDetailsForm from '../pages/products/read'
@@ -18,6 +18,7 @@ export default function AdminRoutes() {
             <Routes>
                 <Route path="/" element={<Layout />}>
                     <Route index element={<Home />} />
+                    <Route path="dashboard" element={<Dashboard />} /> 
 
                     {/* Products */}
                     <Route path="products" element={<Product />} />
@@ -41,7 +42,7 @@ export default function AdminRoutes() {
                     {/* Orders */}
                     <Route path="orders" element={<Orders />} />
 
-                    <Route path="*" element={<h1>404 Not Found</h1>} />
+                    <Route path="*" element={<Error />} />
                 </Route>
             </Routes>
         </>
