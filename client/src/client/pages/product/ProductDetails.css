@@ -1,0 +1,20 @@
+.container {
+    @apply pt-12 grid gap-x-0 gap-y-6 grid-cols-12;
+}
+
+.product-imagery {
+    @apply col-start-1 col-end-7 row-start-1 row-end-3;
+}
+
+.image-carousel {
+    @apply flex flex-row gap-4 h-96 pl-12 ml-2 max-h-[42rem] min-h-[30rem] justify-end;
+}
+
+.thumbnail-list {
+      @apply flex relative flex-row gap-2;
+}
+
+.hero-image {
+    @apply h-96 overflow-hidden relative flex-grow;
+}
+

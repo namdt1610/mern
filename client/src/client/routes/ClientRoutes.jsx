@@ -8,6 +8,7 @@ import Women from '../pages/store/Women'
 import Header from '../components/layout/Header'
 import Footer from '../components/layout/Footer'
 import Store from '../pages/store/index'
+import ProductDetails from '../pages/product/ProductDetails'
 import ErrorPage from '../pages/other/404'
 
 export default function ClientRoutes() {
@@ -24,6 +25,8 @@ export default function ClientRoutes() {
                 <Route path="store/men" element={<Men />} />
                 <Route path="store/women" element={<Women />} />
 
+                <Route path="/a" element={<ProductDetails />} />
+                {/* Error Page */}
                 <Route path="/*" element={<ErrorPage />} />
             </Routes>
             <Footer />
