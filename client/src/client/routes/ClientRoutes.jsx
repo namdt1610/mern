@@ -15,7 +15,7 @@ export default function ClientRoutes() {
     return (
         <>
             <Header />
-            <Routes>
+         <Routes>
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/" element={<Home />} />
