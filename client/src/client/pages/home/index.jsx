@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import Slideshow from '../../components/Slideshow'
-import { images, bannerSideImages } from './import'
+import { images, bannerSideImages } from './Imports'
 import Featured from './Featured'
 import Links from './Links'
 import Categories from './Categories'
@@ -16,7 +16,7 @@ function Home() {
                         Welcome to New Balance Outlet Store
                     </h1>
                     <p className="m-3">Sale up to 50% for all products</p>
-                    <Link to="/store" className="btn btn-success">
+                    <Link to="/store" className="btn btn-outline">
                         Shop Now
                     </Link>
                 </div>
@@ -33,12 +33,12 @@ function Home() {
                 </div>
                 <div className="hero-2-content flex flex-col items-center justify-center my-10">
                     <h1 className="text-4xl font-bold">New Balance 574</h1>
-                    <p className="">
+                    <p className="m-4">
                         New Balance 574 is the most iconic sneaker in the New
                         Balance family. The 574 is a clean and classic die cut
                         EVA runner that utilizes ENCAP cushioning technology.
                     </p>
-                    <Link className="btn-primary uppercase" to="/574">
+                    <Link className="btn btn-outline" to="/574">
                         Shop Now
                     </Link>
                 </div>
@@ -46,7 +46,7 @@ function Home() {
             {/* Links Section */}
             <Links />
             {/* Main Content */}
-            <div className="container mx-auto">
+            <div className="mx-auto">
                 {/* Banner Section */}
                 <div className="banner-section rounded-xl my-4">
                     {/* Banner Slideshow and Side */}
@@ -76,20 +76,16 @@ function Home() {
                 <Categories />
                 <Featured />
                 {/* Hero 2 Section */}
-                <div className="hero-2-section my-4">
-                    <div className="hero-content flex flex-col items-center justify-center h-dvh">
-                        <div className="video-container relative w-full h-full">
-                            <video
-                                loading="lazy"
-                                className="absolute top-0 left-0 w-full h-full sm:object-cover rounded-xl"
-                                src="/videos/hero_nb574.mp4"
-                                type="video/mp4"
-                                autoPlay
-                                loop
-                                muted
-                            ></video>
-                        </div>
-                    </div>
+                <div className=" flex flex-col items-center justify-center w-auto h-screen relative">
+                    <video
+                        loading="lazy"
+                        className="absolute  w-auto h-full object-cover rounded-xl"
+                        src="/videos/hero_nb574.mp4"
+                        type="video/mp4"
+                        autoPlay
+                        loop
+                        muted
+                    ></video>
                 </div>
             </div>
         </>

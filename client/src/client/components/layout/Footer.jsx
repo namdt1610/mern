@@ -6,11 +6,11 @@ const Footer = () => {
         <footer className="text-black py-8">
             <div className="bg-black text-white py-4 flex items-center justify-center">
                 <h5 className="mx-3">Before shopping, please</h5>
-                <Link className="btn-primary" to="/login">
+                <Link className="btn btn-primary" to="/login">
                     Login here
                 </Link>
                 <h5 className="mx-3">or</h5>
-                <Link className="btn-primary" to="/signup">
+                <Link className="btn btn-primary" to="/signup">
                     Register here
                 </Link>
             </div>
