@@ -1,56 +1,58 @@
-// productService.js
 import axiosInstance from './axiosInstance'
 import { productApi } from './apiConfig'
 
-export const fetchProducts = async (dispatch) => {
+export const fetchProductsApi = async () => {
     try {
-        const response = await axiosInstance.get(`${productApi.base}`)
-        dispatch({ type: 'SET_PRODUCTS', payload: response.data.products })
+        const response = await axiosInstance.get(productApi.base)
         return response.data
     } catch (error) {
+        console.error('Lỗi khi lấy sản phẩm:', error)
         throw error
     }
 }
 
-export const fetchProductById = async (id, dispatch) => {
+export const fetchProductByIdApi = async (id) => {
+    if (!id) throw new Error('ID không hợp lệ')
     try {
         const response = await axiosInstance.get(productApi.getById(id))
-        dispatch({ type: 'GET_PRODUCT', payload: response.data })
         return response.data
     } catch (error) {
+        console.error(`Lỗi khi lấy sản phẩm với ID ${id}:`, error)
         throw error
     }
 }
 
-export const createProduct = async (productData, dispatch) => {
+export const createProductApi = async (productData) => {
     try {
         const response = await axiosInstance.post(productApi.base, productData)
-        dispatch({ type: 'CREATE_PRODUCT', payload: response.data })
         return response.data
     } catch (error) {
+        console.error('Lỗi khi tạo sản phẩm mới:', error)
         throw error
     }
 }
 
-export const updateProduct = async (id, updatedData, dispatch) => {
+export const updateProductApi = async (id, updatedData) => {
+    if (!id) throw new Error('ID không hợp lệ')
     try {
         const response = await axiosInstance.put(
             productApi.getById(id),
             updatedData
         )
-        dispatch({ type: 'UPDATE_PRODUCT', payload: response.data })
         return response.data
     } catch (error) {
+        console.error(`Lỗi khi cập nhật sản phẩm với ID ${id}:`, error)
         throw error
     }
 }
 
-export const deleteProduct = async (id, dispatch) => {
+export const deleteProductApi = async (id) => {
+    if (!id) throw new Error('ID không hợp lệ')
     try {
         const response = await axiosInstance.delete(productApi.getById(id))
-        dispatch({ type: 'DELETE_PRODUCT', payload: id })
         return response.data
     } catch (error) {
+        console.error(`Lỗi khi xóa sản phẩm với ID ${id}:`, error)
         throw error
     }
 }

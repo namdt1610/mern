@@ -2,13 +2,13 @@ import React, { useState, useEffect, useContext } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import { toast } from 'react-hot-toast'
 import { Link, useNavigate } from 'react-router-dom'
-import { fetchProducts, deleteProduct } from '../../api/productApi'
+import { fetchProducts, deleteProduct } from '../../../hook/useProductActions'
 import { ProductContext } from '../../../context/ProductContext'
 import { ProductIndex } from './ProductIndex'
 // import { getCache, setCache } from '../../utils/cache'
 
 const Products = () => {
-    const { dispatch } = useContext(ProductContext)
+    const dispatch = useContext(ProductContext)
     const navigate = useNavigate()
 
     const [showModal, setShowModal] = useState(false)

@@ -1,18 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import ProductDetails from './ProductDetails'
+import { fetchProductById } from '../../../hook/useProductActions'
 
 const ProductContainer = () => {
-    const [product, setProduct] = useState(null)
-
     useEffect(() => {
-        fetchProductData()
+        id = window.location.pathname.split('/')[1]
+        fetchProductById(id)
     }, [])
-
-    const fetchProductData = async () => {
-        const data = await fetch('/api/product/1')
-        const result = await data.json()
-        setProduct(result)
-    }
 
     return <ProductDetails />
 }

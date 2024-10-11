@@ -1,19 +1,20 @@
+import React, { useEffect, useContext } from 'react'
 import { Link } from 'react-router-dom'
-import React, { useState } from 'react'
+import Loading from '../../../components/loading'
+import { fetchProducts } from '../../../hook/useProductActions'
+import { ProductContext } from '../../../context/ProductContext'
 
 const Men = () => {
-    const [openDropdowns, setOpenDropdowns] = useState({
-        size: false,
-        gender: false,
-        color: false,
-        price: false,
-        technology: false,
-    })
-    const toggleDropdown = (dropdown) => {
-        setOpenDropdowns((prevState) => ({
-            ...prevState,
-            [dropdown]: !prevState[dropdown],
-        }))
+    const { state, dispatch } = useContext(ProductContext)
+
+    useEffect(() => {
+        fetchProducts(dispatch)
+    }, [dispatch])
+
+    const products = state.products || []
+
+    if (products.length === 0) {
+        return <div className="text-center">Không có sản phẩm nào.</div>
     }
 
     const genders = ['Male', 'Female', 'Kids']
@@ -31,6 +32,7 @@ const Men = () => {
 
     return (
         <>
+            {state.loading && <Loading />}
             <div className="main-content gap-2">
                 <div className="breadcrumb flex m-2">
                     <a href="/" className="no-underline text-black">
@@ -55,27 +57,25 @@ const Men = () => {
                     </select>
                 </div>
                 <div className="grid grid-cols-3 gap-3">
-                    {Array.from(Array(9)).map((_, index) => (
+                    {products.map((product) => (
                         <Link
-                            to="/{index}"
-                            key={index}
+                            to={`/${product._id}`}
+                            key={product.id}
                             className="no-underline p-2 rounded-lg shadow-lg bg-gray-100 min-h-48 transform transition-transform duration-300 hover:scale-105 cursor-pointer"
                         >
                             <div className="h-48 bg-gray-200 mb-2 rounded-lg shadow-lg">
-                                {/* Phần hình ảnh */}
                                 <img
-                                    src={`https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/2fb6ff59-aca1-4f1f-a836-0888d4f119a6/v2k-run-shoes-zJV8TV.png`}
-                                    alt={`Product ${index + 1}`}
+                                    src={`http://localhost:8888${product.imageUrl}`}
+                                    alt={product.name}
                                     className="object-cover w-full h-full rounded-lg"
                                 />
                             </div>
                             <div className="bg-white p-4 rounded-lg shadow-lg">
-                                {/* Phần thông tin giày */}
                                 <h3 className="text-lg font-semibold mb-2 text-black">
-                                    Product {index + 1}
+                                    {product.name}
                                 </h3>
                                 <p className="text-gray-600">
-                                    Thông tin về giày...
+                                    {product.description}
                                 </p>
                             </div>
                         </Link>
@@ -94,4 +94,5 @@ const Men = () => {
         </>
     )
 }
+
 export default Men
