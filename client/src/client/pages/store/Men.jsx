@@ -1,8 +1,9 @@
 import React, { useEffect, useContext } from 'react'
 import { Link } from 'react-router-dom'
-import Loading from '../../../components/loading'
 import { fetchProducts } from '../../../hook/useProductActions'
 import { ProductContext } from '../../../context/ProductContext'
+import Loading from '../../../components/loading'
+import Breadcrumbs from '../../../components/Breadcrumbs'
 
 const Men = () => {
     const { state, dispatch } = useContext(ProductContext)
@@ -14,7 +15,7 @@ const Men = () => {
     const products = state.products || []
 
     if (products.length === 0) {
-        return <div className="text-center">Không có sản phẩm nào.</div>
+        return <Loading />
     }
 
     const genders = ['Male', 'Female', 'Kids']
@@ -35,17 +36,7 @@ const Men = () => {
             {state.loading && <Loading />}
             <div className="main-content gap-2">
                 <div className="breadcrumb flex m-2">
-                    <a href="/" className="no-underline text-black">
-                        Home
-                    </a>
-                    <span className="mx-2">/</span>
-                    <a href="/" className="no-underline text-black">
-                        Store
-                    </a>
-                    <span className="mx-2">/</span>
-                    <a href="/" className="no-underline text-black">
-                        Men
-                    </a>
+                    <Breadcrumbs />
                 </div>
                 <div className="flex my-2">
                     <h1 className="text-2xl font-semibold m-2">Sort</h1>
@@ -57,10 +48,10 @@ const Men = () => {
                     </select>
                 </div>
                 <div className="grid grid-cols-3 gap-3">
-                    {products.map((product) => (
+                    {products.map((product, i) => (
                         <Link
                             to={`/${product._id}`}
-                            key={product.id}
+                            key={i}
                             className="no-underline p-2 rounded-lg shadow-lg bg-gray-100 min-h-48 transform transition-transform duration-300 hover:scale-105 cursor-pointer"
                         >
                             <div className="h-48 bg-gray-200 mb-2 rounded-lg shadow-lg">

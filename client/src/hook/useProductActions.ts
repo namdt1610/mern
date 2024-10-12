@@ -6,12 +6,21 @@ import {
     createProductApi,
     updateProductApi,
 } from '../api/productApi'
+import { setCache, getCache } from '../utils/cache'
+
+const cacheKey = 'products' // Đặt key cho cache
+const cacheDuration = 60 * 60 * 1000 // 1 giờ
 
 // Hàm lấy danh sách sản phẩm và dispatch vào state
 export const fetchProducts = async (dispatch) => {
+    const cachedProducts = getCache(cacheKey) // Kiểm tra cache
+    if (cachedProducts) {
+        dispatch({ type: 'SET_PRODUCTS', payload: cachedProducts }) // Cập nhật state từ cache
+        return // Nếu có cache, không cần gọi API
+    }
     try {
         const data = await fetchProductsApi() // Gọi API
-      //   console.log(data)
+        //   console.log(data)
         dispatch({ type: 'SET_PRODUCTS', payload: data.products }) // Cập nhật state
     } catch (error) {
         console.error(error)
