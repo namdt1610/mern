@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
-import DataTable from '../../components/DataTable'
-import { TransitionsModal } from '../../components/TransitionsModal'
+import DataTable from '../../../components/DataTable'
+import { TransitionsModal } from '../../../components/TransitionsModal'
 import { Stack } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import SendIcon from '@mui/icons-material/Send'

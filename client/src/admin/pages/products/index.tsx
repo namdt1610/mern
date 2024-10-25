@@ -3,10 +3,10 @@ import Skeleton from 'react-loading-skeleton'
 import { toast } from 'react-hot-toast'
 import { Link, useNavigate } from 'react-router-dom'
 import DataTable from '../../../components/DataTable'
-import { fetchProducts, deleteProduct } from '../../api/productApi'
+import { fetchProductsApi, deleteProductApi } from '../../../api/productApi'
 import { ProductContext } from '../../../context/ProductContext'
 import { ProductIndex } from './ProductIndex'
-// import { getCache, setCache } from '../../utils/cache'
+import { set, get } from '../../utils/cache'
 import { TransitionsModal } from '../../../components/TransitionsModal'
 import { Button, Stack } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -33,7 +33,7 @@ const Products = () => {
 
         if (products.length > 0) return
         try {
-            const response = await fetchProducts(dispatch)
+            const response = await fetchProductsApi(dispatch)
             console.log('Products:', response.products)
             setProducts(response.products)
             setCache(cacheKey, response.products)
