@@ -6,9 +6,9 @@ import Home from '../pages/home'
 import Header from '../components/layout/Header'
 import Footer from '../components/layout/Footer'
 import Store from '../pages/store/index'
+import ProductDetails from '../pages/product/ProductDetails'
 import Cart from '../pages/cart/index'
 import ErrorPage from '../pages/other/404'
-import ProductContainer from '../pages/product/ProductContainer'
 
 export default function ClientRoutes() {
     return (
@@ -22,7 +22,7 @@ export default function ClientRoutes() {
                 {/* Store */}
                 <Route path="store" element={<Store />} />
 
-                <Route path="/:id" element={<ProductContainer />} />
+                <Route path="/:id" element={<ProductDetails />} />
 
                 {/* Cart */}
                 <Route path="/cart" element={<Cart />} />

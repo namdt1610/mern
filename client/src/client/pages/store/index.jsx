@@ -1,6 +1,6 @@
 import React from 'react'
 import LeftColumn from './LeftCol'
-import List from './Men'
+import Men from './Men'
 import RightColumn from './RightCol'
 
 const Store = () => {
@@ -10,7 +10,7 @@ const Store = () => {
                 <LeftColumn />
             </div>
             <div className="flex-auto w-3/4">
-                <List />
+                <Men />
             </div>
             <div className="flex-auto w-1/4">
                 <RightColumn />

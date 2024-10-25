@@ -1,29 +1,10 @@
 import axiosInstance from './axiosInstance'
 import { productApi } from './apiConfig'
 
-/**
- *TODO - Thêm state cho từng api
- */
-
-export const searchProductsApi = async (searchTerm) => {
-    if (!searchTerm) throw new Error('Từ khóa tìm kiếm không hợp lệ')
-    try {
-        const response = await axiosInstance.get(productApi.search(searchTerm))
-        return response.data
-    } catch (error) {
-        console.error('Lỗi khi tìm kiếm sản phẩm:', error)
-        throw error
-    }
-}
-
 export const fetchProductsApi = async () => {
     try {
         const response = await axiosInstance.get(productApi.base)
-        if (response.data.status === 'success') {
-            return response.data.data // Lấy `data` chứa products và totalProducts
-        } else {
-            throw new Error(response.data.message) // Ném lỗi nếu status không phải success
-        }
+        return response.data
     } catch (error) {
         console.error('Lỗi khi lấy sản phẩm:', error)
         throw error

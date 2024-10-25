@@ -29,12 +29,12 @@ const LeftColumn = () => {
             <div className="collapse bg-base-200">
                 <input type="checkbox" />
                 <div className="collapse-title text-xl font-medium flex justify-between items-center">
-                    Size
-                    <ChevronDown />
+                        Size
+                        <ChevronDown />
                 </div>
                 <div className="collapse-content flex flex-wrap">
-                    {sizes.map((size, i) => (
-                        <div className="m-1" key={i}>
+                    {sizes.map((size) => (
+                        <div className="m-1">
                             <Link to="/" className="btn btn-outline">
                                 {size}
                             </Link>
@@ -48,8 +48,8 @@ const LeftColumn = () => {
                     Genders
                 </div>
                 <div className="collapse-content flex flex-wrap">
-                    {genders.map((gender, i) => (
-                        <div className="m-1" key={i}>
+                    {genders.map((gender) => (
+                        <div className="m-1">
                             <Link to="/" className="btn btn-outline">
                                 {gender}
                             </Link>
@@ -62,8 +62,8 @@ const LeftColumn = () => {
                 <input type="checkbox" />
                 <div className="collapse-title text-xl font-medium">Colors</div>
                 <div className="collapse-content flex flex-wrap">
-                    {colors.map((color, i) => (
-                        <div className="m-1" key={i}>
+                    {colors.map((color) => (
+                        <div className="m-1">
                             <Link to="/" className="btn btn-outline">
                                 {color}
                             </Link>
@@ -75,8 +75,8 @@ const LeftColumn = () => {
                 <input type="checkbox" />
                 <div className="collapse-title text-xl font-medium">Price</div>
                 <div className="collapse-content flex flex-wrap">
-                    {prices.map((price, i) => (
-                        <div className="m-1" key={i}> 
+                    {prices.map((price) => (
+                        <div className="m-1">
                             <Link to="/" className="btn btn-outline">
                                 {price}
                             </Link>
@@ -90,8 +90,8 @@ const LeftColumn = () => {
                     Technologies
                 </div>
                 <div className="collapse-content flex flex-wrap">
-                    {technologies.map((technology, i) => (
-                        <div className="m-1" key={i}>
+                    {technologies.map((technology) => (
+                        <div className="m-1">
                             <Link to="/" className="btn btn-outline">
                                 {technology}
                             </Link>

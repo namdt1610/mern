@@ -1,14 +1,8 @@
 import { Link } from 'react-router-dom'
 import s from './ProductDetails.module.scss'
-import Loading from '../../../components/loading'
 
-export default function ProductDetails({ p }) {
-    // console.log(p)
-    return !p ? (
-        <div className={s.loadingContainer}>
-            <Loading />
-        </div>
-    ) : (
+export default function ProductDetails() {
+    return (
         <div className={s.container}>
             <div className={s.imageGrid}>
                 {[...Array(10)].map((_, i) => (
@@ -22,9 +16,9 @@ export default function ProductDetails({ p }) {
                 ))}
             </div>
             <div className="price-container m-6 ">
-                <div className="product-category">{p.category}</div>
-                <p className="product-name text-4xl">{p.name}</p>
-                <span className="sales">{p.price}</span>
+                <div className="product-category">Unisex</div>
+                <h1 className="product-name text-4xl">530</h1>
+                <span className="sales">$99.99</span>
                 <div className="rating">
                     <div className="start">
                         <span>⭐️</span>

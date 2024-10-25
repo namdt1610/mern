@@ -1,19 +1,14 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import ProductDetails from './ProductDetails'
 import { fetchProductById } from '../../../hook/useProductActions'
-import { ProductContext } from '../../../context/ProductContext'
 
 const ProductContainer = () => {
-    const { state, dispatch } = useContext(ProductContext)
-
     useEffect(() => {
-        let id = window.location.pathname.split('/')[1]
-        fetchProductById(id, dispatch)
-    }, [dispatch])
+        id = window.location.pathname.split('/')[1]
+        fetchProductById(id)
+    }, [])
 
-    // console.log(state.product)
-
-    return <ProductDetails p={state.product} />
+    return <ProductDetails />
 }
 
 export default ProductContainer

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { useLogout } from '../../../hook/useLogout'
 import { useThemeContext } from '../../../hook/useThemeContext'
 import { ShoppingBasket } from 'lucide-react'
-import SearchBar from '../../../components/searchbar'
+import './Header.css'
 
 const Header = () => {
     const { theme, setTheme } = useThemeContext()
@@ -33,12 +33,11 @@ const Header = () => {
                         </Link>
                     </div>
                     <div className="">
-                        <Link to="/">
-                            <p className="text-2xl">New Balance Outlet Store</p>
+                        <Link className="no-underline" to="/">
+                            <h1 className="text-3xl">
+                                New Balance Outlet Store
+                            </h1>
                         </Link>
-                        <div className="m-2">
-                            <SearchBar />
-                        </div>
                     </div>
                     <div className="flex items-center justify-center">
                         {/* Checkbox để chuyển đổi theme */}
