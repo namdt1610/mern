@@ -3,7 +3,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import DataTable from '../../../components/DataTable'
 import { CategoryContext } from '../../../context/CategoryContext'
-import useFetchData from '../../../hooks/useFetchData'
+import useFetchData from '../../../hook/useFetchData'
 import Skeleton from 'react-loading-skeleton'
 import ConfirmationModal from '../../../components/ConfirmationModal'
 import { Link } from 'react-router-dom'
@@ -100,10 +100,34 @@ export const Categories = () => {
         }
     }
 
-    if (loading) return <Skeleton count={5} height={40} />
-    if (error) return <div>Error: {error}</div>
-    if (categories.length === 0) return <div>No categorys found</div>
+      if (loading) return <Skeleton count={5} height={40} />
+      if (error) return <div>Error: {error}</div>
+      if (categories.length === 0) return <div>No categorys found</div>
 
+    return (
+        <>
+            <Link to={'/admin/categories/create'} className={styles.linkBtn}>
+                New Categories
+            </Link>
+            <DataTable
+                rows={categoryRows}
+                headCells={categoryColumns}
+                onRowClick={handleView}
+                onView={handleView}
+                onEdit={handleEdit}
+                onDelete={openDeleteModal}
+                title="Categories"
+            />
+            {showModal && (
+                <ConfirmationModal
+                    show={showModal}
+                    onClose={() => setShowModal(false)}
+                    onConfirm={handleDelete}
+                    message="Are you sure you want to delete this product?"
+                />
+            )}
+        </>
+    )
     return (
         <>
             <div className='my-4'>
