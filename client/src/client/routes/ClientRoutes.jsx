@@ -3,11 +3,12 @@ import { Routes, Route } from 'react-router-dom'
 import Login from '../pages/auth/Login'
 import Signup from '../pages/auth/Signup'
 import Home from '../pages/home'
-import Men from '../pages/store/Men'
-import Women from '../pages/store/Women'
-import Header from '../components/Header'
-import Footer from '../components/Footer'
+import Header from '../components/layout/Header'
+import Footer from '../components/layout/Footer'
 import Store from '../pages/store/index'
+import Cart from '../pages/cart/index'
+import ErrorPage from '../pages/other/404'
+import ProductContainer from '../pages/product/ProductContainer'
 
 export default function ClientRoutes() {
     return (
@@ -20,10 +21,14 @@ export default function ClientRoutes() {
 
                 {/* Store */}
                 <Route path="store" element={<Store />} />
-                <Route path="store/men" element={<Men />} />
-                <Route path="store/women" element={<Women />} />
 
-                <Route path="/*" element={<h1>404 Not Found</h1>} />
+                <Route path="/:id" element={<ProductContainer />} />
+
+                {/* Cart */}
+                <Route path="/cart" element={<Cart />} />
+
+                {/* Error Page */}
+                <Route path="/*" element={<ErrorPage />} />
             </Routes>
             <Footer />
         </>

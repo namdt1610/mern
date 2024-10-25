@@ -29,6 +29,12 @@ const productSchema = new Schema(
             ref: 'Stock',
             required: true,
         },
+        reviews: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'Review',
+            },
+        ],
     },
     { timestamps: true }
 )

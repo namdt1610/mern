@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { linkSections } from './import'
+import { linkSections } from './Imports'
 
 const Links = () => {
     return (
