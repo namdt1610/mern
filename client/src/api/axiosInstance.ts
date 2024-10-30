@@ -2,7 +2,7 @@
 import axios from 'axios'
 
 const axiosInstance = axios.create({
-    baseURL: '/api/admin', // Base URL cho tất cả các request
+    baseURL: '/api', // Base URL cho tất cả các request
     headers: {
         'Content-Type': 'application/json',
     },

@@ -6,7 +6,7 @@ const initialState = {
 
 export const ProductContext = createContext(initialState)
 
-export const productsReducer = (state, action) => {
+export const productReducer = (state, action) => {
     switch (action.type) {
         case 'SET_PRODUCTS':
             return {
@@ -43,7 +43,7 @@ export const productsReducer = (state, action) => {
 }
 
 export const ProductContextProvider = ({ children }) => {
-    const [state, dispatch] = useReducer(productsReducer, initialState)
+    const [state, dispatch] = useReducer(productReducer, initialState)
 
     return (
         <ProductContext.Provider value={{ state, dispatch }}>

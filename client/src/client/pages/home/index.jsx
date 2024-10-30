@@ -1,49 +1,18 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import Slideshow from '../../components/Slideshow'
-import { images, bannerSideImages } from './Imports'
-import Featured from './Featured'
-import Links from './Links'
-import Categories from './Categories'
+import Slideshow from '../../../components/home/Slideshow'
+import WelcomeSection from '../../../components/home/WelcomeSection'
+import HeroSection from '../../../components/home/HeroSection'
+import { images, bannerSideImages } from '../../../components/home/Imports'
+import Featured from '../../../components/home/Featured'
+import Links from '../../../components/home/Links'
+import Categories from '../../../components/home/Categories'
 
 function Home() {
     return (
         <>
-            {/* Welcome Section */}
-            <div className="welcome-section border">
-                <div className="content m-4 flex flex-col items-center justify-center">
-                    <h1 className="text-4xl font-bold">
-                        Welcome to New Balance Outlet Store
-                    </h1>
-                    <p className="m-3">Sale up to 50% for all products</p>
-                    <Link to="/store" className="btn btn-outline">
-                        Shop Now
-                    </Link>
-                </div>
-            </div>
-            {/* Hero Section */}
-            <div className="hero-section border">
-                <div className="hero-2-image">
-                    <img
-                        className="object-cover w-full h-full"
-                        loading="lazy"
-                        src="./img/574.gif"
-                        alt=""
-                    />
-                </div>
-                <div className="hero-2-content flex flex-col items-center justify-center my-10">
-                    <h1 className="text-4xl font-bold">New Balance 574</h1>
-                    <p className="m-4">
-                        New Balance 574 is the most iconic sneaker in the New
-                        Balance family. The 574 is a clean and classic die cut
-                        EVA runner that utilizes ENCAP cushioning technology.
-                    </p>
-                    <Link className="btn btn-outline" to="/574">
-                        Shop Now
-                    </Link>
-                </div>
-            </div>
-            {/* Links Section */}
+            <WelcomeSection />
+            <HeroSection />
             <Links />
             {/* Main Content */}
             <div className="mx-auto">

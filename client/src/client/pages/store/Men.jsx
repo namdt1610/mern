@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from 'react'
 import { Link } from 'react-router-dom'
 import Loading from '../../../components/loading'
-import { fetchProducts } from '../../../hook/useProductActions'
+import { fetchProducts } from '../../../hooks/useProductActions'
 import { ProductContext } from '../../../context/ProductContext'
 
 const Men = () => {

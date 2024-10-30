@@ -29,6 +29,9 @@ const Sidebar = () => {
                         <Link to={'/admin/categories'}>Categories</Link>
                     </li>
                     <li>
+                        <Link to={'/admin/users'}>Users</Link>
+                    </li>
+                    <li>
                         <Link to={'/admin/customers'}>Customers</Link>
                     </li>
                     <li>

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import Home from '../pages/home/index'
-import Layout from '../../components/Layout'
+import Layout from '../../components/layout/AdminLayout'
 import Error from '../pages/others/404'
 import Dashboard from '../pages/dashboard/index'
 import Product from '../pages/products/index'
@@ -9,7 +9,7 @@ import CreateProductForm from '../pages/products/create'
 import ProductDetailsForm from '../pages/products/read'
 import Category from '../pages/categories/index'
 import CreateCategoryForm from '../pages/categories/create'
-
+import Users from '../pages/users/index'
 import Orders from '../pages/orders/index'
 
 export default function AdminRoutes() {
@@ -18,7 +18,7 @@ export default function AdminRoutes() {
             <Routes>
                 <Route path="/" element={<Layout />}>
                     <Route index element={<Home />} />
-                    <Route path="dashboard" element={<Dashboard />} /> 
+                    <Route path="dashboard" element={<Dashboard />} />
 
                     {/* Products */}
                     <Route path="products" element={<Product />} />
@@ -39,8 +39,14 @@ export default function AdminRoutes() {
                         element={<CreateCategoryForm />}
                     />
 
+                    {/* Users */}
+                    <Route path="users" element={<Users />} />
+
+                    {/* Customers */}
+                    {/* <Route path="customers" element={<Customers />} />
+
                     {/* Orders */}
-                    <Route path="orders" element={<Orders />} />
+                    {/* <Route path="orders" element={<Orders />} /> */}
 
                     <Route path="*" element={<Error />} />
                 </Route>
