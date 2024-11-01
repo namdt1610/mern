@@ -3,14 +3,16 @@ import Navbar from './Navbar'
 import { Link } from 'react-router-dom'
 import { useLogout } from '../../../hooks/useLogout'
 import { useThemeContext } from '../../../hooks/useThemeContext'
-import User from '../../../components/header/User'
+import { useAuthContext } from '../../../hooks/useAuthContext'
 import Cart from '../../../components/header/Cart'
+import User from '../../../components/header/User'
 import './Header.css'
 
 const Header = () => {
     const { theme, setTheme } = useThemeContext()
-
     const { logout } = useLogout()
+    const { state } = useAuthContext()
+    const { user } = state
 
     const handleClick = () => {
         logout()
@@ -41,27 +43,33 @@ const Header = () => {
                         </Link>
                     </div>
                     <div className="flex items-center justify-center">
-                        {/* Checkbox để chuyển đổi theme */}
-
-                        <Link
-                            to={'/logout'}
-                            className="btn btn-outline btn-error mx-2"
-                            onClick={handleClick}
-                        >
-                            Logout
-                        </Link>
-
-                        <Link
-                            className="btn btn-outline btn-success mx-2"
-                            to="/login"
-                        >
-                            Login
-                        </Link>
-
-                        <Link className="btn btn-outline mx-2" to="/signup">
-                            Signup
-                        </Link>
-
+                        {user ? (
+                            <div>
+                                <span>{user.email}</span>
+                                <Link
+                                    to={'/logout'}
+                                    className="btn btn-outline btn-error mx-2"
+                                    onClick={handleClick}
+                                >
+                                    Logout
+                                </Link>
+                            </div>
+                        ) : (
+                            <>
+                                <Link
+                                    className="btn btn-outline btn-success mx-2"
+                                    to="/login"
+                                >
+                                    Login
+                                </Link>
+                                <Link
+                                    className="btn btn-outline mx-2"
+                                    to="/signup"
+                                >
+                                    Signup
+                                </Link>
+                            </>
+                        )}
                         <label className="swap swap-rotate mx-2">
                             {/* this hidden checkbox controls the state */}
                             <input

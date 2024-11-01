@@ -1,3 +1,4 @@
+// useSignup.ts
 import { useState } from 'react'
 import { useAuthContext } from './useAuthContext'
 
@@ -11,7 +12,7 @@ export function useSignup() {
         setError(null)
 
         // register proxy before declare this
-        const respone = await fetch('api/users/register', {
+        const respone = await fetch('api/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password }),

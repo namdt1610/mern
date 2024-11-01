@@ -1,12 +1,14 @@
 import React from 'react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useLogin } from '../../../hook/useLogin'
+// import { useLogin } from '../../../hooks/useLogin'
+import useAuthApi from '../../../hooks/useAuthApi'
 
 const Login = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const { login, isLoading, error } = useLogin()
+    // const { login, isLoading, error } = useLogin()
+    const { login, isLoading, error } = useAuthApi()
 
     const handleSubmit = async (e) => {
         e.preventDefault()

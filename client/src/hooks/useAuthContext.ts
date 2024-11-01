@@ -1,7 +1,15 @@
-import { AuthContext } from '../context/AuthContext'
+// hooks/useAuthContext.ts
+import { AuthContext, User } from '../context/AuthContext'
 import { useContext } from 'react'
 
-export function useAuthContext() {
+interface AuthContextType {
+    state: {
+        user: User | null
+    }
+    dispatch: React.Dispatch<{ type: string; payload?: any }>
+}
+
+export function useAuthContext(): AuthContextType {
     const context = useContext(AuthContext)
 
     if (!context) {
