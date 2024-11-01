@@ -10,7 +10,7 @@ import ProductDetailsForm from '../pages/products/read'
 import Category from '../pages/categories/index'
 import CreateCategoryForm from '../pages/categories/create'
 import Users from '../pages/users/index'
-import Orders from '../pages/orders/index'
+import UserDetail from '../pages/userDetails/index'
 
 export default function AdminRoutes() {
     return (
@@ -41,6 +41,7 @@ export default function AdminRoutes() {
 
                     {/* Users */}
                     <Route path="users" element={<Users />} />
+                    <Route path="users/:id" element={<UserDetail />} />
 
                     {/* Customers */}
                     {/* <Route path="customers" element={<Customers />} />

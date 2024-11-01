@@ -1,4 +1,3 @@
-// hooks/useUserActions.ts
 import { useContext } from 'react'
 import {
     fetchUsersApi,
@@ -7,64 +6,47 @@ import {
     createUserApi,
     updateUserApi,
 } from '../api/userApi'
-import { UserContext } from '../context/UserContext' // Đảm bảo bạn có UserContext quản lý state
+import { UserContext } from '../context/UserContext'
 
 const useUserActions = () => {
     const { dispatch } = useContext(UserContext)
 
-    // Hàm lấy danh sách người dùng
-    const fetchUsers = async () => {
-        try {
-            const data = await fetchUsersApi()
-            dispatch({ type: 'SET_USERS', payload: data.Users })
-            return data.Users
-        } catch (error) {
-            console.error('Error fetching users:', error)
-        }
-    }
+    type ActionType =
+        | 'SET_USERS'
+        | 'CREATE_USER'
+        | 'GET_USER'
+        | 'UPDATE_USER'
+        | 'DELETE_USER'
 
-    // Hàm lấy người dùng theo ID
-    const fetchUserById = async (id: string) => {
+    const apiRequest = async (
+        apiFunc: Function,
+        actionType: ActionType,
+        payload?: any
+    ) => {
         try {
-            const data = await fetchUserByIdApi(id)
-            dispatch({ type: 'GET_USER', payload: data })
-        } catch (error) {
-            console.error('Error fetching user by ID:', error)
-        }
-    }
-
-    // Hàm xóa người dùng
-    const deleteUser = async (id: string) => {
-        try {
-            const data = await deleteUserApi(id)
-            dispatch({ type: 'DELETE_USER', payload: id })
+            const data = await apiFunc(payload)
+            dispatch({ type: actionType, payload: data })
             return data
         } catch (error) {
-            console.error('Error deleting user:', error)
+            console.error(`Error during ${actionType}:`, error)
+            throw error // Optional: throw error if you want to handle it in the calling component
         }
     }
 
-    // Hàm tạo người dùng mới
-    const createUser = async (userData: object) => {
-        try {
-            const data = await createUserApi(userData)
-            dispatch({ type: 'CREATE_USER', payload: data })
-        } catch (error) {
-            console.error('Error creating user:', error)
-        }
-    }
+    const fetchUsers = async () => apiRequest(fetchUsersApi, 'SET_USERS')
 
-    // Hàm cập nhật người dùng
-    const updateUser = async (id: string, updatedData: object) => {
-        try {
-            const data = await updateUserApi(id, updatedData)
-            dispatch({ type: 'UPDATE_USER', payload: data })
-        } catch (error) {
-            console.error('Error updating user:', error)
-        }
-    }
+    const fetchUserById = async (id: string) =>
+        apiRequest(() => fetchUserByIdApi(id), 'GET_USER')
 
-    // Trả về các hàm hành động
+    const deleteUser = async (id: string) =>
+        apiRequest(() => deleteUserApi(id), 'DELETE_USER')
+
+    const createUser = async (userData: object) =>
+        apiRequest(() => createUserApi(userData), 'CREATE_USER')
+
+    const updateUser = async (id: string, updatedData: object) =>
+        apiRequest(() => updateUserApi(id, updatedData), 'UPDATE_USER')
+
     return {
         fetchUsers,
         fetchUserById,
