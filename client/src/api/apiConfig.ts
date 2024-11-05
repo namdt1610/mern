@@ -1,4 +1,5 @@
 // apiConfig.js
+
 export const authApi = {
     login: `/login`,
     register: `/register`,
@@ -6,15 +7,15 @@ export const authApi = {
 }
 export const productApi = {
     base: `/products`,
-    getById: (id) => `/products/${id}`,
+    getById: (id: string) => `/products/${id}`,
 }
 
 export const cartApi = {
     base: `/cart`,
-    getById: (id) => `/cart/${id}`,
+    getById: (id: string) => `/cart/${id}`,
 }
 
 export const userApi = {
     base: `/users`,
-    getById: (id) => `/users/${id}`,
+    getById: (id: string) => `/users/${id}`,
 }

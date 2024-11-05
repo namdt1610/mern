@@ -3,8 +3,34 @@ const bcrypt = require('bcryptjs')
 const validator = require('validator')
 const schema = mongoose.Schema
 
+export interface IUser extends Document {
+    email: string
+    password: string
+    name: string
+    role: string
+    status: string
+    phone: string
+    address: string
+    avatar?: string
+}
+
 const userSchema = new schema(
     {
+        avatar: {
+            type: String,
+            required: false,
+            default: null,
+        },
+        status: {
+            type: String,
+            enum: ['active', 'inactive'],
+            default: 'active',
+        },
+        name: {
+            type: String,
+            required: false,
+            default: null,
+        },
         email: {
             type: String,
             required: true,
@@ -20,11 +46,6 @@ const userSchema = new schema(
             enum: ['user', 'admin'],
             default: 'user',
         },
-        name: {
-            type: String,
-            required: false,
-            default: null,
-        },
         phone: {
             type: String,
             required: false,
@@ -35,10 +56,13 @@ const userSchema = new schema(
             required: false,
             default: null,
         },
-        avatar: {
-            type: String,
-            required: false,
-            default: null,
+        createAt: {
+            type: Date,
+            default: Date.now,
+        },
+        updateAt: {
+            type: Date,
+            default: Date.now,
         },
     },
     {

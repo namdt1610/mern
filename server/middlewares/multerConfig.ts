@@ -1,7 +1,6 @@
 import multer from 'multer'
 import { Request } from 'express'
 
-// Cấu hình Multer để lưu trữ tệp tin
 const storage = multer.diskStorage({
     destination: (
         req: Request,

@@ -40,24 +40,41 @@ export const updateUser = async (
     res: Response
 ): Promise<void> => {
     const { id } = req.params
-    const { email, password } = req.body
+    const { email, password, name, role, status, phone, address, avatar } =
+        req.body
 
     try {
+        // Hash password nếu có trong body
         const hashedPassword = password
             ? await bcrypt.hash(password, 12)
             : undefined
-        const updatedUser = await User.findByIdAndUpdate(
-            id,
-            { email, ...(hashedPassword && { password: hashedPassword }) },
-            { new: true }
-        )
+
+        // Chuẩn bị dữ liệu cập nhật
+        const updatedData = {
+            email,
+            name,
+            role,
+            status,
+            phone,
+            address,
+            avatar,
+            ...(hashedPassword && { password: hashedPassword }),
+            ...(req.file && { avatar: req.file.path }),
+        }
+
+        // Cập nhật thông tin người dùng
+        const updatedUser = await User.findByIdAndUpdate(id, updatedData, {
+            new: true,
+        })
 
         if (!updatedUser) {
             res.status(404).json({ message: 'User not found' })
             return
         }
-        res.status(200).json(updatedUser)
+
+        res.status(200).json(updatedUser.toJSON()) // Trả về user đã cập nhật
     } catch (error) {
+        console.error('Error updating user:', error)
         res.status(500).json({ message: 'Could not update user' })
     }
 }

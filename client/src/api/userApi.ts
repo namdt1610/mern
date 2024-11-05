@@ -1,6 +1,7 @@
 // userApi.ts
 import axiosInstance from './axiosInstance'
 import { userApi } from './apiConfig'
+import { User } from '../interfaces/user.interface'
 
 export const fetchUsersApi = async () => {
     try {
@@ -12,7 +13,7 @@ export const fetchUsersApi = async () => {
     }
 }
 
-export const fetchUserByIdApi = async (id) => {
+export const fetchUserByIdApi = async (id: string) => {
     if (!id) throw new Error('ID không hợp lệ')
     try {
         const response = await axiosInstance.get(userApi.getById(id))
@@ -23,9 +24,9 @@ export const fetchUserByIdApi = async (id) => {
     }
 }
 
-export const createUserApi = async (UserData) => {
+export const createUserApi = async (userData) => {
     try {
-        const response = await axiosInstance.post(userApi.base, UserData)
+        const response = await axiosInstance.post(userApi.base, userData)
         return response.data
     } catch (error) {
         console.error('Lỗi khi tạo user mới:', error)
@@ -33,12 +34,20 @@ export const createUserApi = async (UserData) => {
     }
 }
 
-export const updateUserApi = async (id, updatedData) => {
+export const updateUserApi = async (
+    id: string,
+    updatedData: FormData
+): Promise<User> => {
     if (!id) throw new Error('ID không hợp lệ')
     try {
         const response = await axiosInstance.put(
             userApi.getById(id),
-            updatedData
+            updatedData,
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            }
         )
         return response.data
     } catch (error) {
@@ -47,9 +56,10 @@ export const updateUserApi = async (id, updatedData) => {
     }
 }
 
-export const deleteUserApi = async (id) => {
-    if (!id) throw new Error('ID không hợp lệ')
+export const deleteUserApi = async (id: string) => {
+    if (!id) throw new Error('Invalid ID')
     try {
+        console.log('id', id)
         const response = await axiosInstance.delete(userApi.getById(id))
         return response.data
     } catch (error) {

@@ -44,7 +44,7 @@ const useUserActions = () => {
     const createUser = async (userData: object) =>
         apiRequest(() => createUserApi(userData), 'CREATE_USER')
 
-    const updateUser = async (id: string, updatedData: object) =>
+    const updateUser = async (id: string, updatedData: FormData) =>
         apiRequest(() => updateUserApi(id, updatedData), 'UPDATE_USER')
 
     return {

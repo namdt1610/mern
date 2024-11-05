@@ -1,19 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { Table } from 'antd'
-import { ColumnsType } from 'antd/es/table'
+import Table from 'antd/lib/table'
+import { ColumnsType } from 'antd/lib/table'
 import { useNavigate } from 'react-router-dom'
 import useUserActions from '../../../hooks/useUserActions'
-
-interface User {
-    _id: string
-    key: string
-    avatar: string
-    name: string
-    role: string
-    email: string
-    phone: string
-    address: string
-}
+import { User } from '../../../interfaces/user.interface'
+import { Button, Space, Badge } from 'antd/lib'
 
 export default function Users() {
     const { fetchUsers } = useUserActions()
@@ -36,9 +27,9 @@ export default function Users() {
             key: 'avatar',
             render: (avatar) => (
                 <img
-                    src={avatar}
+                    src={`http://localhost:8888/${avatar}`}
                     alt="Avatar"
-                    style={{ width: 40, height: 40, borderRadius: '50%' }}
+                    className="w-20 h-20 rounded-full object-cover"
                 />
             ),
         },
@@ -63,31 +54,61 @@ export default function Users() {
             key: 'phone',
         },
         {
-            title: 'Address',
-            dataIndex: 'address',
-            key: 'address',
+            title: 'Status',
+            dataIndex: 'status',
+            key: 'status',
+            render: (status) => (
+                <Badge
+                    className="capitalize"
+                    status="processing"
+                    color={status === 'active' ? 'green' : 'red'}
+                    text={status}
+                ></Badge>
+            ),
         },
         {
             title: 'Action',
             key: 'action',
             render: (_, record) => (
                 <div>
-                    <button onClick={() => handleView(record._id)}>Xem</button>
-                    <button onClick={() => handleDelete(record.key)}>
-                        Xóa
-                    </button>
+                    <Space>
+                        <Button
+                            color="primary"
+                            variant="outlined"
+                            onClick={() => handleView(record._id)}
+                        >
+                            Xem
+                        </Button>
+                        <Button
+                            color="danger"
+                            variant="outlined"
+                            onClick={() => handleDelete(record._id)}
+                        >
+                            Xóa
+                        </Button>
+                    </Space>
                 </div>
             ),
         },
     ]
 
     const handleView = (id: string) => {
-        navigate(`/admin/users/${id}`) 
+        navigate(`/admin/users/${id}`)
     }
 
     const handleDelete = (userId: string) => {
         console.log('Delete user ID:', userId)
     }
 
-    return <Table dataSource={users} columns={columns} />
+    return (
+        <>
+            <div className="my-4">
+                <Space>
+                    <Button>New</Button>
+                    <Button>Import</Button>
+                </Space>
+            </div>
+                <Table dataSource={users} columns={columns} />
+        </>
+    )
 }
