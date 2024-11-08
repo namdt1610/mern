@@ -10,7 +10,7 @@ import ProductDetailsForm from '../pages/products/read'
 import Category from '../pages/categories/index'
 import CreateCategoryForm from '../pages/categories/create'
 import Users from '../pages/users/index'
-import UserDetail from '../pages/userDetails/index'
+import UserDetail from '../pages/userDetails/user.details.index'
 
 export default function AdminRoutes() {
     return (

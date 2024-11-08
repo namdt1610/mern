@@ -29,7 +29,7 @@ const userSchema = new schema(
         name: {
             type: String,
             required: false,
-            default: null,
+            default: 'New User',
         },
         email: {
             type: String,

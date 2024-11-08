@@ -8,7 +8,7 @@ import UserAvatar from './user.details.avatar'
 import UserActions from './user.details.actions'
 import UserForm from './user.details.form'
 import * as formatUtils from '../../utils/format.utils'
-import { Card, message, Spin } from 'antd/lib'
+import { Card, message, Spin, Space } from 'antd/lib'
 
 const UserDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>()
@@ -49,11 +49,13 @@ const UserDetail: React.FC = () => {
         const newErrors = { email: '', phone: '' }
 
         if (!formatUtils.isValidEmail(editedUser?.email || '')) {
+            message.warning('Check your email format')
             newErrors.email =
                 'Invalid email format (example: yourname@email.com)'
         }
 
         if (!formatUtils.isValidPhoneNumber(editedUser?.phone || '')) {
+            message.warning('Check your phone number format')
             newErrors.phone = 'Invalid phone number format'
         }
 
@@ -128,29 +130,39 @@ const UserDetail: React.FC = () => {
 
     return (
         <div>
-            <UserActions
-                isEditing={isEditing}
-                onSave={handleSave}
-                onEditToggle={handleEditToggle}
-                onDelete={handleDelete}
-            />
-            <UserAvatar
-                avatar={avatarPreview || `http://localhost:8888/${user.avatar}`}
-                onDrop={onDrop}
-                isEditing={isEditing}
-            />
-            <Card title="User Information">
+            <Space
+                className="flex items-center justify-center"
+                direction="vertical"
+                size="large"
+            >
+                <UserActions
+                    isEditing={isEditing}
+                    onSave={handleSave}
+                    onEditToggle={handleEditToggle}
+                    onDelete={handleDelete}
+                />
+
+                <UserAvatar
+                    avatar={
+                        avatarPreview || `http://localhost:8888/${user.avatar}`
+                    }
+                    onDrop={onDrop}
+                    isEditing={isEditing}
+                />
                 <UserForm
                     user={user}
                     isEditing={isEditing}
                     editedUser={editedUser || {}}
                     onInputChange={(field, value) =>
-                        setEditedUser((prev) => ({ ...prev, [field]: value }))
+                        setEditedUser((prev) => ({
+                            ...prev,
+                            [field]: value,
+                        }))
                     }
                     errors={errors}
                     validations={validations}
                 />
-            </Card>
+            </Space>
         </div>
     )
 }

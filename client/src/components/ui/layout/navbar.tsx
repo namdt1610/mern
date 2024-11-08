@@ -1,47 +1,66 @@
 import React from 'react'
+import { theme, Layout, Menu, MenuProps } from 'antd/lib'
+const { Sider } = Layout
+import {
+    DesktopOutlined,
+    FileOutlined,
+    PieChartOutlined,
+    TeamOutlined,
+    UserOutlined,
+} from '@ant-design/icons'
 
-const Navbar = () => {
+type MenuItem = Required<MenuProps>['items'][number]
+
+function getItem(
+    label: React.ReactNode,
+    key: React.Key,
+    icon?: React.ReactNode,
+    children?: MenuItem[]
+): MenuItem {
+    return {
+        key,
+        icon,
+        children,
+        label,
+    } as MenuItem
+}
+
+const items: MenuItem[] = [
+    getItem('Option 1', '1', <PieChartOutlined />),
+    getItem('Option 2', '2', <DesktopOutlined />),
+    getItem('User', 'sub1', <UserOutlined />, [
+        getItem('Tom', '3'),
+        getItem('Bill', '4'),
+        getItem('Alex', '5'),
+    ]),
+    getItem('Team', 'sub2', <TeamOutlined />, [
+        getItem('Team 1', '6'),
+        getItem('Team 2', '8'),
+    ]),
+    getItem('Files', '9', <FileOutlined />),
+]
+
+const Navbar: React.FC = () => {
+    const [collapsed, setCollapsed] = React.useState(false)
+    const {
+        token: { colorBgContainer, borderRadiusLG },
+    } = theme.useToken()
+
     return (
         <>
-            <div className="navbar bg-base-100">
-                <div className="flex-none">
-                    <button className="btn btn-square btn-ghost">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            className="inline-block h-5 w-5 stroke-current"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M4 6h16M4 12h16M4 18h16"
-                            ></path>
-                        </svg>
-                    </button>
-                </div>
-                <div className="flex-1">
-                    <a className="btn btn-ghost text-xl">daisyUI</a>
-                </div>
-                <div className="flex-none">
-                    <button className="btn btn-square btn-ghost">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            className="inline-block h-5 w-5 stroke-current"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"
-                            ></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
+            <Sider
+                collapsible
+                collapsed={collapsed}
+                onCollapse={(value) => setCollapsed(value)}
+            >
+                <div className="demo-logo-vertical" />
+                <Menu
+                    theme="light"
+                    defaultSelectedKeys={['1']}
+                    mode="inline"
+                    items={items}
+                />
+            </Sider>
         </>
     )
 }

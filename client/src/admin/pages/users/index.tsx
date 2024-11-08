@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from 'react'
-import Table from 'antd/lib/table'
-import { ColumnsType } from 'antd/lib/table'
-import { useNavigate } from 'react-router-dom'
-import useUserActions from '../../../hooks/useUserActions'
+import { useNavigate, Link } from 'react-router-dom'
 import { User } from '../../../interfaces/user.interface'
-import { Button, Space, Badge } from 'antd/lib'
+import useUserActions from '../../../hooks/useUserActions'
+import { Button, Space, Badge, Tag, Input, Table } from 'antd/lib'
+import { ColumnsType, TableProps } from 'antd/lib/table'
+import type { SearchProps } from 'antd/lib/input/'
 
 export default function Users() {
     const { fetchUsers } = useUserActions()
     const navigate = useNavigate()
     const [users, setUsers] = useState<User[]>([])
+    const [filteredData, setFilteredData] = useState<User[]>([])
 
     useEffect(() => {
         const getUsers = async () => {
             const data = await fetchUsers()
-            setUsers(data.map((user: User) => ({ ...user, key: user._id }))) // Đảm bảo có trường `key`
+            setUsers(data.map((user: User) => ({ ...user, key: user._id })))
+            // console.log('Users:', data)
         }
 
         getUsers()
@@ -37,21 +39,37 @@ export default function Users() {
             title: 'Name',
             dataIndex: 'name',
             key: 'name',
+            defaultSortOrder: 'ascend',
+            sorter: (a, b) => (a.name ?? '').localeCompare(b.name ?? ''),
+            render: (_, { name, _id }) => (
+                <Link to={`/admin/users/${_id}`}>{name}</Link>
+            ),
         },
         {
             title: 'Role',
             dataIndex: 'role',
             key: 'role',
+            render: (_, { role }) => {
+                let color = role === 'admin' ? 'red' : 'green'
+                return (
+                    <Tag color={color} key={role}>
+                        {role.toUpperCase()}
+                    </Tag>
+                )
+            },
+            sorter: (a, b) => a.role.localeCompare(b.role),
         },
         {
             title: 'Email',
             dataIndex: 'email',
             key: 'email',
+            sorter: (a, b) => a.email.localeCompare(b.email),
         },
         {
             title: 'Phone',
             dataIndex: 'phone',
             key: 'phone',
+            sorter: (a, b) => (a.phone ?? '').localeCompare(b.phone ?? ''),
         },
         {
             title: 'Status',
@@ -65,6 +83,7 @@ export default function Users() {
                     text={status}
                 ></Badge>
             ),
+            sorter: (a, b) => a.status.localeCompare(b.status),
         },
         {
             title: 'Action',
@@ -100,15 +119,44 @@ export default function Users() {
         console.log('Delete user ID:', userId)
     }
 
+    const onChange: TableProps<User>['onChange'] = (
+        pagination,
+        filters,
+        sorter,
+        extra
+    ) => {
+        console.log('params', pagination, filters, sorter, extra)
+    }
+
+    const onSearch: SearchProps['onSearch'] = (value, _e, info) => {
+        console.log(info?.source, value)
+        const lowercasedValue = value.toLowerCase()
+        const filtered = users.filter((user) =>
+            JSON.stringify(user).toLowerCase().includes(lowercasedValue)
+        )
+        setFilteredData(filtered)
+    }
+
+    const { Search } = Input
+
     return (
         <>
             <div className="my-4">
                 <Space>
                     <Button>New</Button>
                     <Button>Import</Button>
+                    <Search
+                        placeholder="input search text"
+                        allowClear
+                        onSearch={onSearch}
+                        style={{ width: 200 }}
+                    />
                 </Space>
             </div>
-                <Table dataSource={users} columns={columns} />
+            <Table
+                dataSource={filteredData.length ? filteredData : users}
+                columns={columns}
+            />
         </>
     )
 }
