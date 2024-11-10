@@ -40,27 +40,48 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
 export const login = async (req: Request, res: Response): Promise<void> => {
     const { email, password } = req.body
 
+    console.log('Email:', email, '|| Password:', password)
+
     try {
+        // Kiểm tra xem người dùng có tồn tại trong cơ sở dữ liệu hay không
         const user = await User.findOne({ email })
-        if (!user || !(await bcrypt.compare(password, user.password))) {
+        if (!user) {
+            console.log('Không tìm thấy người dùng')
             res.status(401).json({ message: 'Invalid credentials' })
             return
         }
 
+        console.log('Password from request:', password)
+        console.log('Password from database (hashed):', user.password)
+
+        // Kiểm tra so sánh mật khẩu
+        const isMatch = await bcrypt.compare(password, user.password)
+        if (!isMatch) {
+            console.log('Mật khẩu không đúng')
+            res.status(401).json({ message: 'Invalid credentials' })
+            return
+        }
+
+        console.log('Đăng nhập thành công')
+
+        // Tạo token JWT
         const token = jwt.sign(
-            { id: user._id },
+            { id: user._id, role: user.role }, // Lưu thêm role trong token
             process.env.JWT_SECRET as string,
             { expiresIn: '1h' }
         )
+
+        // Trả về thông tin người dùng và token
         res.status(200).json({ user, token })
     } catch (error) {
+        console.error('Lỗi khi đăng nhập:', error)
         res.status(500).json({ message: 'Could not log in user' })
     }
 }
 
-// Logout - POST /api/auth/logout
+// Logout - POST /api/logout
 export const logout = (req: Request, res: Response): void => {
-    res.clearCookie('dangtrannam')
+    res.clearCookie('user')
     res.status(200).json({ message: 'Logged out' })
 }
 
@@ -71,6 +92,7 @@ export const verifyToken = (
     next: NextFunction
 ): void => {
     const token = req.headers.authorization?.split(' ')[1]
+    console.log('Token:', token)
 
     if (!token) {
         res.status(401).json({ message: 'No token provided' })
@@ -88,7 +110,7 @@ export const verifyToken = (
     }
 }
 
-// Làm mới token - POST /api/auth/refresh
+// Làm mới token - POST /api/refresh
 export const refreshToken = (req: Request, res: Response): void => {
     const oldToken = req.headers.authorization?.split(' ')[1]
     if (!oldToken) {

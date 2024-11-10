@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken'
 import User from '../models/UserModel'
 
 // Lấy danh sách người dùng - GET /api/users
@@ -44,21 +45,21 @@ export const updateUser = async (
         req.body
 
     try {
-        // Hash password nếu có trong body
-        const hashedPassword = password
-            ? await bcrypt.hash(password, 12)
-            : undefined
+        // Chỉ hash mật khẩu nếu có sự thay đổi
+        let updatedPassword
+        if (password) {
+            updatedPassword = await bcrypt.hash(password, 12)
+        }
 
-        // Chuẩn bị dữ liệu cập nhật
-        const updatedData = {
+        // Chuẩn bị dữ liệu cập nhật, bỏ qua những thuộc tính không thay đổi
+        const updatedData: any = {
             email,
             name,
             role,
             status,
             phone,
             address,
-            avatar,
-            ...(hashedPassword && { password: hashedPassword }),
+            ...(updatedPassword && { password: updatedPassword }),
             ...(req.file && { avatar: req.file.path }),
         }
 
@@ -72,7 +73,23 @@ export const updateUser = async (
             return
         }
 
-        res.status(200).json(updatedUser.toJSON()) // Trả về user đã cập nhật
+        // Tạo lại JWT token chỉ khi thông tin người dùng thay đổi
+        const token = jwt.sign(
+            { id: updatedUser._id, role: updatedUser.role },
+            process.env.JWT_SECRET as string,
+            { expiresIn: '1h' }
+        )
+
+        // Lưu token vào cookie
+        res.cookie('authToken', token, {
+            httpOnly: true, // Đảm bảo cookie chỉ có thể truy cập từ server
+            //secure: process.env.NODE_ENV === 'production', // Chỉ cho phép cookie khi kết nối https
+            secure: false,
+            maxAge: 3600 * 1000, // Thời gian hết hạn token (1h)
+        })
+
+        // Trả về thông tin người dùng đã cập nhật
+        res.status(200).json(updatedUser.toJSON())
     } catch (error) {
         console.error('Error updating user:', error)
         res.status(500).json({ message: 'Could not update user' })

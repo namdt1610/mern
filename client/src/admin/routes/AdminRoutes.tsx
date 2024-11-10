@@ -12,11 +12,15 @@ import CreateCategoryForm from '../pages/categories/create'
 import Users from '../pages/users/index'
 import UserDetail from '../pages/userDetails/user.details.index'
 import ProtectedRoute from '../../components/auth/ProtectedRoute'
+import Login from '../../admin/pages/auth/Login/Login.Index'
+import Register from '../../admin/pages/auth/Register/Register.Index'
 
 export default function AdminRoutes() {
     return (
         <>
             <Routes>
+                <Route path="login" element={<Login />} />
+                <Route path="register" element={<Register />} />
                 <Route path="/" element={<Layout />}>
                     <Route index element={<Home />} />
                     <Route

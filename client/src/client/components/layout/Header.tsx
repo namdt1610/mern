@@ -5,7 +5,6 @@ import { useThemeContext } from '../../../hooks/useThemeContext'
 import { useAuthContext } from '../../../hooks/useAuthContext'
 import Cart from '../../../components/header/Cart'
 import User from '../../../components/header/User'
-import './Header.css'
 import useAuthApi from '../../../hooks/useAuthApi'
 
 const Header = () => {
@@ -28,7 +27,7 @@ const Header = () => {
 
     return (
         <>
-            <div className="header m-4 space">
+            <div className="header m-4">
                 <nav className="uppercase flex items-center justify-around">
                     <div className="logo w-[120px]">
                         <Link to="/">
@@ -64,7 +63,7 @@ const Header = () => {
                                 </Link>
                                 <Link
                                     className="btn btn-outline mx-2"
-                                    to="/signup"
+                                    to="/register"
                                 >
                                     Signup
                                 </Link>

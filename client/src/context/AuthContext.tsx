@@ -54,10 +54,9 @@ export const AuthContextProvider: React.FC<PropsWithChildren<{}>> = ({
     })
 
     useEffect(() => {
-        const token = Cookies.get('authToken')
         const user = Cookies.get('user')
 
-        if (token && user) {
+        if (user) {
             try {
                 const parsedUser = JSON.parse(user)
                 console.log('Parsed User:', parsedUser)
@@ -75,7 +74,6 @@ export const AuthContextProvider: React.FC<PropsWithChildren<{}>> = ({
         if (state.user) {
             // Lưu thông tin người dùng vào Cookies khi đăng nhập
             Cookies.set('user', JSON.stringify(state.user))
-            Cookies.set('authToken', 'your-auth-token') // Lưu token vào Cookies
         }
     }, [state.user]) // Chạy lại khi thông tin người dùng thay đổi
 

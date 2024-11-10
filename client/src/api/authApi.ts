@@ -7,6 +7,7 @@ export const loginApi = async (credentials: {
     password: string
 }) => {
     try {
+        console.log('Credentials:', credentials)
         const response = await axiosInstance.post(authApi.login, credentials)
         console.log('Data from API login:', response.data)
         return response.data

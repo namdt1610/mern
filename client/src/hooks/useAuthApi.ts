@@ -7,28 +7,23 @@ import { useState } from 'react'
 const useAuthApi = () => {
     const { dispatch } = useAuthContext()
     const navigate = useNavigate()
-
-    // Thêm các state loading và error
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string | null>(null)
 
-    // Hàm đăng nhập
-    const login = async (credentials: {
-        email: string
-        password: string
-    }) => {
-        setLoading(true) // Bắt đầu loading
-        setError(null) // Xóa lỗi cũ nếu có
+    // API login
+    const login = async (credentials: { email: string; password: string }) => {
+        setLoading(true)
+        setError(null)
         try {
+            console.log('Credentials:', credentials)
             const data = await loginApi(credentials)
-            Cookies.set('dangtrannam', data.token, { expires: 7 })
             dispatch({ type: 'LOGIN', payload: data.user })
-            navigate('/') // Thay vì `window.location.href`, sử dụng `navigate` từ react-router-dom
+            navigate('/')
         } catch (error: any) {
             console.error('Error logging in:', error)
-            setError('Error logging in, please try again') // Hiển thị lỗi cho người dùng
+            setError('Error logging in, please try again')
         } finally {
-            setLoading(false) // Dừng loading
+            setLoading(false)
         }
     }
 
@@ -57,7 +52,6 @@ const useAuthApi = () => {
         setError(null)
         try {
             await logoutApi()
-            Cookies.remove('dangtrannam', { path: '/' })
             dispatch({ type: 'LOGOUT' })
             navigate('/login')
         } catch (error: any) {

@@ -1,14 +1,12 @@
 import React from 'react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-// import { useLogin } from '../../../hooks/useLogin'
 import useAuthApi from '../../../hooks/useAuthApi'
 
 const Login = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    // const { login, isLoading, error } = useLogin()
-    const { login, isLoading, error } = useAuthApi()
+    const { login, loading, error } = useAuthApi()
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -82,7 +80,7 @@ const Login = () => {
                             <Link to="/">Forgot Password?</Link>
                         </div>
                         <button
-                            disabled={isLoading}
+                            disabled={loading}
                             type="submit"
                             className="bg-black text-white font-semibold rounded-md py-2 px-4 w-full"
                         >
