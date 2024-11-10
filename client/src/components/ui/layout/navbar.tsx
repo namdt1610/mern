@@ -1,5 +1,6 @@
 import React from 'react'
-import { theme, Layout, Menu, MenuProps } from 'antd/lib'
+import { theme, Layout, Menu } from 'antd/lib'
+import type { MenuProps } from 'antd/'
 const { Sider } = Layout
 import {
     DesktopOutlined,
@@ -55,7 +56,7 @@ const Navbar: React.FC = () => {
             >
                 <div className="demo-logo-vertical" />
                 <Menu
-                    theme="light"
+                    theme="dark"
                     defaultSelectedKeys={['1']}
                     mode="inline"
                     items={items}

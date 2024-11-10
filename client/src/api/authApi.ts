@@ -3,7 +3,7 @@ import axiosInstance from './axiosInstance'
 import { authApi } from './apiConfig'
 
 export const loginApi = async (credentials: {
-    username: string
+    email: string
     password: string
 }) => {
     try {
@@ -16,11 +16,14 @@ export const loginApi = async (credentials: {
     }
 }
 
-export const registerApi = async (registerData) => {
+export const registerApi = async (credenntials: {
+    email: string
+    password: string
+}) => {
     try {
         const response = await axiosInstance.post(
             authApi.register,
-            registerData
+            credenntials
         )
         console.log('Data from API register:', response.data)
         return response.data

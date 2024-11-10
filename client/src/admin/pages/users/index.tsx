@@ -16,6 +16,9 @@ export default function Users() {
         const getUsers = async () => {
             const data = await fetchUsers()
             setUsers(data.map((user: User) => ({ ...user, key: user._id })))
+            // setFilteredData(
+            //     data.map((user: User) => ({ ...user, key: user._id }))
+            // )
             // console.log('Users:', data)
         }
 
@@ -29,7 +32,11 @@ export default function Users() {
             key: 'avatar',
             render: (avatar) => (
                 <img
-                    src={`http://localhost:8888/${avatar}`}
+                    src={
+                        avatar
+                            ? `http://localhost:8888/${avatar}`
+                            : '/img/meerkat.png'
+                    }
                     alt="Avatar"
                     className="w-20 h-20 rounded-full object-cover"
                 />
@@ -119,20 +126,16 @@ export default function Users() {
         console.log('Delete user ID:', userId)
     }
 
-    const onChange: TableProps<User>['onChange'] = (
-        pagination,
-        filters,
-        sorter,
-        extra
-    ) => {
-        console.log('params', pagination, filters, sorter, extra)
-    }
-
-    const onSearch: SearchProps['onSearch'] = (value, _e, info) => {
-        console.log(info?.source, value)
+    const onSearch: SearchProps['onSearch'] = (value) => {
+        console.log('Search:', value)
         const lowercasedValue = value.toLowerCase()
-        const filtered = users.filter((user) =>
-            JSON.stringify(user).toLowerCase().includes(lowercasedValue)
+        const filtered = users.filter(
+            (user) =>
+                user.name?.toLowerCase().includes(lowercasedValue) ||
+                user.email?.toLowerCase().includes(lowercasedValue) ||
+                user.role?.toLowerCase().includes(lowercasedValue) ||
+                user.phone?.toLowerCase().includes(lowercasedValue) ||
+                user.status?.toLowerCase().includes(lowercasedValue)
         )
         setFilteredData(filtered)
     }

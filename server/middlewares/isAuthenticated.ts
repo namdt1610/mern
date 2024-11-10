@@ -1,16 +1,23 @@
-// Backend: middleware/isAuthenticated.ts
+// middlewares/isAuthenticated.ts
 import jwt from 'jsonwebtoken'
 
-// req: Request, res: Response, next: NextFunction
-const isAuthenticated = (req, res, next) => {
-    // Lấy token từ header của request gửi lên từ client (nếu có) và kiểm tra
+const isAuthenticated = async (req, res, next) => {
     const token = req.headers.authorization?.split(' ')[1]
-    // 401: Unauthorized
+
     if (!token) return res.status(401).json({ message: 'Unauthorized' })
-    jwt.verify(token, 'tran-hung-dao', (err, decoded) => {
-        if (err) return res.status(401).json({ message: 'Unauthorized' })
-        // decoded chính là payload đã được mã hóa bên phía client
+
+    try {
+        const decoded = await jwt.verify(token, 'dangtrannam')
         req.user = decoded
+
+        // if (req.user.role !== 'admin') {
+        //     return res.status(403).json({ message: 'Forbidden' })
+        // }
+
         next()
-    })
+    } catch (err) {
+        return res.status(401).json({ message: 'Unauthorized' })
+    }
 }
+
+export default isAuthenticated

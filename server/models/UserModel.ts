@@ -36,6 +36,11 @@ const userSchema = new schema(
             required: true,
             unique: true,
         },
+        username: {
+            type: String,
+            required: false,
+            default: null,
+        },
         password: {
             type: String,
             required: false,

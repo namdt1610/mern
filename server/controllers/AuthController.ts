@@ -10,9 +10,9 @@ interface UserRequest extends Request {
     }
 }
 
-// Đăng ký người dùng mới - POST /api/auth/signup
+// Đăng ký người dùng mới - POST /api/register
 export const signup = async (req: Request, res: Response): Promise<void> => {
-    const { email, password } = req.body
+    const { email, username, password } = req.body
 
     try {
         const existingUser = await User.findOne({ email })
@@ -22,7 +22,7 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
         }
 
         const hashedPassword = await bcrypt.hash(password, 12)
-        const newUser = new User({ email, password: hashedPassword })
+        const newUser = new User({ email, username, password: hashedPassword })
         await newUser.save()
 
         const token = jwt.sign(
@@ -36,7 +36,7 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
     }
 }
 
-// Đăng nhập người dùng - POST /api/auth/login
+// Đăng nhập người dùng - POST /api/login
 export const login = async (req: Request, res: Response): Promise<void> => {
     const { email, password } = req.body
 
@@ -56,6 +56,12 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     } catch (error) {
         res.status(500).json({ message: 'Could not log in user' })
     }
+}
+
+// Logout - POST /api/auth/logout
+export const logout = (req: Request, res: Response): void => {
+    res.clearCookie('dangtrannam')
+    res.status(200).json({ message: 'Logged out' })
 }
 
 // Xác thực token (middleware)

@@ -1,16 +1,16 @@
 import React, { useEffect } from 'react'
 import Navbar from './Navbar'
 import { Link } from 'react-router-dom'
-import { useLogout } from '../../../hooks/useLogout'
 import { useThemeContext } from '../../../hooks/useThemeContext'
 import { useAuthContext } from '../../../hooks/useAuthContext'
 import Cart from '../../../components/header/Cart'
 import User from '../../../components/header/User'
 import './Header.css'
+import useAuthApi from '../../../hooks/useAuthApi'
 
 const Header = () => {
     const { theme, setTheme } = useThemeContext()
-    const { logout } = useLogout()
+    const { logout } = useAuthApi()
     const { state } = useAuthContext()
     const { user } = state
 

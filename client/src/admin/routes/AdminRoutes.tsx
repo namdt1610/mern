@@ -11,6 +11,7 @@ import Category from '../pages/categories/index'
 import CreateCategoryForm from '../pages/categories/create'
 import Users from '../pages/users/index'
 import UserDetail from '../pages/userDetails/user.details.index'
+import ProtectedRoute from '../../components/auth/ProtectedRoute'
 
 export default function AdminRoutes() {
     return (
@@ -18,7 +19,14 @@ export default function AdminRoutes() {
             <Routes>
                 <Route path="/" element={<Layout />}>
                     <Route index element={<Home />} />
-                    <Route path="dashboard" element={<Dashboard />} />
+                    <Route
+                        path="dashboard/overview"
+                        element={
+                            <ProtectedRoute>
+                                <Dashboard />
+                            </ProtectedRoute>
+                        }
+                    />
 
                     {/* Products */}
                     <Route path="products" element={<Product />} />

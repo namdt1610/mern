@@ -5,7 +5,7 @@ import Footer from '../components/layout/Footer'
 import ProtectedRoute from '../../components/auth/ProtectedRoute'
 
 const Login = lazy(() => import('../pages/auth/Login'))
-const Signup = lazy(() => import('../pages/auth/Signup'))
+const Signup = lazy(() => import('../pages/auth/Register'))
 const Home = lazy(() => import('../pages/home'))
 const Store = lazy(() => import('../pages/store/index'))
 const ProductDetails = lazy(() => import('../pages/product/ProductDetails'))

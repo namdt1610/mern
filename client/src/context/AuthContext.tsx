@@ -6,17 +6,15 @@ import React, {
     Dispatch,
     PropsWithChildren,
 } from 'react'
+import Cookies from 'js-cookie'
+import { useEffect } from 'react'
+import { User } from '../interfaces/user.interface'
 
 // Ensure the file is treated as a module with JSX support
 export {}
 
-export type User = {
-    email: string
-    password: string
-}
-
 interface State {
-    user: User | null
+    user: User
 }
 
 interface Action {
@@ -55,7 +53,31 @@ export const AuthContextProvider: React.FC<PropsWithChildren<{}>> = ({
         user: null,
     })
 
-    console.log('AuthContext state:', state)
+    useEffect(() => {
+        const token = Cookies.get('authToken')
+        const user = Cookies.get('user')
+
+        if (token && user) {
+            try {
+                const parsedUser = JSON.parse(user)
+                console.log('Parsed User:', parsedUser)
+                dispatch({ type: 'LOGIN', payload: parsedUser }) // Khôi phục người dùng từ cookies
+            } catch (error) {
+                console.error(
+                    'Lỗi khi parse dữ liệu người dùng từ cookie:',
+                    error
+                )
+            }
+        }
+    }, [])
+
+    useEffect(() => {
+        if (state.user) {
+            // Lưu thông tin người dùng vào Cookies khi đăng nhập
+            Cookies.set('user', JSON.stringify(state.user))
+            Cookies.set('authToken', 'your-auth-token') // Lưu token vào Cookies
+        }
+    }, [state.user]) // Chạy lại khi thông tin người dùng thay đổi
 
     return (
         <AuthContext.Provider value={{ state, dispatch }}>

@@ -1,6 +1,7 @@
 // hooks/useAuthContext.ts
-import { AuthContext, User } from '../context/AuthContext'
+import { AuthContext } from '../context/AuthContext'
 import { useContext } from 'react'
+import { User } from '../interfaces/user.interface'
 
 interface AuthContextType {
     state: {

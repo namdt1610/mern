@@ -1,16 +1,20 @@
 import React from 'react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useSignup } from '../../../hooks/useSignup'
+import useAuthApi from '../../../hooks/useAuthApi'
 
 const Signup = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const { signup, error, isLoading } = useSignup()
+    const { register, loading, error } = useAuthApi()
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        await signup(email, password)
+        await register({
+            email,
+            password,
+            username: email.split('@')[0], // Giả sử username là phần trước dấu '@' trong email
+        })
     }
 
     return (
@@ -119,7 +123,7 @@ const Signup = () => {
                         </div>
                         <div>
                             <button
-                                disabled={isLoading}
+                                disabled={loading}
                                 type="submit"
                                 className="w-full bg-black text-white p-2 rounded-md hover:bg-gray-800 focus:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300"
                             >
