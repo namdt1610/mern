@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react'
 import toast, { Toaster } from 'react-hot-toast'
-import { CategoryContext } from '../../../context/CategoryContext'
+import { CategoryContext } from '../../../contexts/CategoryContext'
 import axios from 'axios'
 
 interface Category {

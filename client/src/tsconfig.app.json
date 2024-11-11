@@ -4,7 +4,9 @@
         "composite": true,
         "baseUrl": ".",
         "paths": {
-            "@/*": ["./src/*"]
+            "@/*": ["./src/*"],
+            "@hooks/*": ["./src/hooks/*"],
+
         },
         "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,

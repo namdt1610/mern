@@ -5,10 +5,10 @@ import ClientRoutes from './client/routes/ClientRoutes'
 import AdminRoutes from './admin/routes/AdminRoutes'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
-import { AuthContextProvider } from './context/AuthContext'
-import { ProductContextProvider } from './context/ProductContext.jsx'
-import { CategoryContextProvider } from './context/CategoryContext.jsx'
-import { ThemeProvider } from './context/ThemeContext'
+import { AuthContextProvider } from './contexts/AuthContext.js'
+import { ProductContextProvider } from './contexts/ProductContext.js'
+import { CategoryContextProvider } from './contexts/CategoryContext.js'
+import { ThemeProvider } from './contexts/ThemeContext.js'
 
 const App = () => (
     <React.StrictMode>

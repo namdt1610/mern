@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import DataTable from '../../../components/DataTable'
-import { CategoryContext } from '../../../context/CategoryContext'
+import { CategoryContext } from '../../../contexts/CategoryContext'
 import useFetchData from '../../../hooks/useFetchData'
 import Skeleton from 'react-loading-skeleton'
 import ConfirmationModal from '../../../components/ConfirmationModal'
@@ -100,9 +100,9 @@ export const Categories = () => {
         }
     }
 
-      if (loading) return <Skeleton count={5} height={40} />
-      if (error) return <div>Error: {error}</div>
-      if (categories.length === 0) return <div>No categorys found</div>
+    if (loading) return <Skeleton count={5} height={40} />
+    if (error) return <div>Error: {error}</div>
+    if (categories.length === 0) return <div>No categorys found</div>
 
     return (
         <>
@@ -130,7 +130,7 @@ export const Categories = () => {
     )
     return (
         <>
-            <div className='my-4'>
+            <div className="my-4">
                 <Link
                     to={'/admin/categories/create'}
                     className="btn btn-success"

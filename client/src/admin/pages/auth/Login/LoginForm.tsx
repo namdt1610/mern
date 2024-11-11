@@ -1,17 +1,22 @@
 import React from 'react'
 import type { FormProps } from 'antd/lib'
 import { Button, Checkbox, Form, Input, message } from 'antd/lib'
-import useAuthApi from '../../../../hooks/useAuthApi'
+import useAuthApi from 'hooks/useAuthApi'
+import { useNavigate } from 'react-router-dom'
 
 type FieldType = {
     email?: string
     password?: string
-    confirmPassword?: string
-    remember?: string
+    remember?: boolean
 }
 
-const LoginForm: React.FC = () => {
-    const { login, loading, error } = useAuthApi()
+type LoginFormProps = {
+    from: string
+}
+
+const LoginForm: React.FC<LoginFormProps> = ({ from }) => {
+    const navigate = useNavigate()
+    const { login, isLoading, error } = useAuthApi()
 
     const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
         onLogin(values)
@@ -25,8 +30,15 @@ const LoginForm: React.FC = () => {
     }
 
     const onLogin = async (values: FieldType) => {
-        console.log('Logging in:', values)
-        await login({ email: values.email, password: values.password })
+        try {
+            await login({
+                email: values.email,
+                password: values.password,
+            })
+            navigate(from || '/')
+        } catch (error: any) {
+            message.error(error?.message || 'Failed to login')
+        }
     }
 
     return (
@@ -79,7 +91,12 @@ const LoginForm: React.FC = () => {
             </Form.Item>
 
             <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                <Button type="primary" htmlType="submit">
+                <Button
+                    type="primary"
+                    htmlType="submit"
+                    loading={isLoading}
+                    disabled={isLoading}
+                >
                     Submit
                 </Button>
             </Form.Item>

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import useUserActions from '../../../hooks/useUserActions'
 import { useParams } from 'react-router-dom'
 import { User } from '../../../interfaces/user.interface'
-import UserAvatar from './user.details.avatar'
+import UserAvatar from './UserDetailsAvatar'
 import * as formatUtils from '../../utils/format.utils'
 import {
     Button,

@@ -6,7 +6,7 @@ import {
     createUserApi,
     updateUserApi,
 } from '../api/userApi'
-import { UserContext } from '../context/UserContext'
+import { UserContext } from '../contexts/UserContext'
 
 const useUserActions = () => {
     const { dispatch } = useContext(UserContext)

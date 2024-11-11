@@ -3,8 +3,8 @@ import axios from 'axios'
 // import getCategoryNameById from '../../utils/category'
 import ConfirmationModal from '../../../components/ConfirmationModal'
 import { useParams, Link } from 'react-router-dom'
-import { ProductContext } from '../../../context/ProductContext'
-import { CategoryContext } from '../../../context/CategoryContext'
+import { ProductContext } from '../../../contexts/ProductContext'
+import { CategoryContext } from '../../../contexts/CategoryContext'
 import { Skeleton, Stack } from '@mui/material'
 
 const ProductDetailsForm = () => {

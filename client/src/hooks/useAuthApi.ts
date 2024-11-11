@@ -1,16 +1,14 @@
-import Cookies from 'js-cookie'
 import { loginApi, registerApi, logoutApi } from '../api/authApi'
 import { useAuthContext } from './useAuthContext'
-import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 
 const useAuthApi = () => {
     const { dispatch } = useAuthContext()
-    const navigate = useNavigate()
-    const [loading, setLoading] = useState<boolean>(false)
+
+    const [isLoading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string | null>(null)
 
-    // API login
+    // Call API and dispatch action
     const login = async (credentials: { email: string; password: string }) => {
         setLoading(true)
         setError(null)
@@ -18,7 +16,6 @@ const useAuthApi = () => {
             console.log('Credentials:', credentials)
             const data = await loginApi(credentials)
             dispatch({ type: 'LOGIN', payload: data.user })
-            navigate('/')
         } catch (error: any) {
             console.error('Error logging in:', error)
             setError('Error logging in, please try again')
@@ -27,7 +24,6 @@ const useAuthApi = () => {
         }
     }
 
-    // Hàm đăng ký
     const register = async (credentials: {
         username: string
         password: string
@@ -46,14 +42,12 @@ const useAuthApi = () => {
         }
     }
 
-    // Hàm đăng xuất
     const logout = async () => {
         setLoading(true)
         setError(null)
         try {
             await logoutApi()
             dispatch({ type: 'LOGOUT' })
-            navigate('/login')
         } catch (error: any) {
             console.error('Error logging out:', error)
             setError('Error logging out, please try again')
@@ -62,7 +56,7 @@ const useAuthApi = () => {
         }
     }
 
-    return { login, register, logout, loading, error }
+    return { login, register, logout, isLoading, error }
 }
 
 export default useAuthApi

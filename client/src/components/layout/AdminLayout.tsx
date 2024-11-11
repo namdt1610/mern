@@ -9,7 +9,7 @@ import {
 } from '@ant-design/icons'
 import { Layout, theme, Menu } from 'antd/lib'
 import type { MenuProps } from 'antd/'
-import { AuthContext } from '../../context/AuthContext'
+import { AuthContext } from '../../contexts/AuthContext'
 import { Outlet, useNavigate, Link } from 'react-router-dom'
 import Breadcrumb from '../ui/breadcrumb'
 import Footer from '../ui/Footer'
@@ -19,7 +19,7 @@ const { Header, Content, Sider } = Layout
 export default function LayoutApp() {
     const { state } = useContext(AuthContext)
     const isLogin = state.user !== null
-    console.log(state,)
+    console.log(state)
 
     const {
         token: { colorBgContainer, borderRadiusLG },
