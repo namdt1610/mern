@@ -1,16 +1,18 @@
 import React from 'react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import useAuthApi from '../../../hooks/useAuthApi'
+import useAuthApi from '../../../hooks/useAuthApiBeta'
+import { useApiContext } from '../../../contexts/ApiContext'
 
 const Login = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const { login, loading, error } = useAuthApi()
+    // const { login, isLoading, error } = useAuthApi()
+    const { login } = useAuthApi()
+    const { state } = useApiContext()
 
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-        await login({ email, password })
+    const handleSubmit = () => {
+        login({ email, password })
     }
 
     return (
@@ -80,14 +82,16 @@ const Login = () => {
                             <Link to="/">Forgot Password?</Link>
                         </div>
                         <button
-                            disabled={loading}
+                            disabled={state.loading}
                             type="submit"
                             className="bg-black text-white font-semibold rounded-md py-2 px-4 w-full"
                         >
                             Login
                         </button>
-                        {error && (
-                            <div className="error text-center m-5">{error}</div>
+                        {state.error && (
+                            <div className="error text-center m-5">
+                                {state.error}
+                            </div>
                         )}
                     </form>
                     <div className="mt-4 text-gray-500 text-sm text-center">

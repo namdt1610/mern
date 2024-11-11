@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import User from '../models/UserModel' // Mô hình User
+import Cookies from 'js-cookie'
 
 interface UserRequest extends Request {
     userId?: string
@@ -43,7 +44,6 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     console.log('Email:', email, '|| Password:', password)
 
     try {
-        // Kiểm tra xem người dùng có tồn tại trong cơ sở dữ liệu hay không
         const user = await User.findOne({ email })
         if (!user) {
             console.log('Không tìm thấy người dùng')
@@ -54,7 +54,6 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         console.log('Password from request:', password)
         console.log('Password from database (hashed):', user.password)
 
-        // Kiểm tra so sánh mật khẩu
         const isMatch = await bcrypt.compare(password, user.password)
         if (!isMatch) {
             console.log('Mật khẩu không đúng')
@@ -70,6 +69,11 @@ export const login = async (req: Request, res: Response): Promise<void> => {
             process.env.JWT_SECRET as string,
             { expiresIn: '1h' }
         )
+
+        // Lưu token trong cookie
+        res.cookie('user', token, {
+            maxAge: 24 * 60 * 60 * 1000,
+        })
 
         // Trả về thông tin người dùng và token
         res.status(200).json({ user, token })

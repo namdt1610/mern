@@ -7,37 +7,66 @@ import {
     LoginOutlined,
     LogoutOutlined,
 } from '@ant-design/icons'
-import { Layout, theme, Menu } from 'antd/lib'
+import { Layout, theme, Menu, Button } from 'antd/lib'
 import type { MenuProps } from 'antd/'
 import { AuthContext } from '../../contexts/AuthContext'
-import { Outlet, useNavigate, Link } from 'react-router-dom'
+import { Outlet, Link } from 'react-router-dom'
 import Breadcrumb from '../ui/breadcrumb'
 import Footer from '../ui/Footer'
+import useAuthApi from '../../hooks/useAuthApiBeta'
 
 const { Header, Content, Sider } = Layout
 
 export default function LayoutApp() {
     const { state } = useContext(AuthContext)
+    const { logout } = useAuthApi()
     const isLogin = state.user !== null
-    console.log(state)
+    console.log('Is user logged in:', isLogin)
 
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken()
 
+    const onLogout = () => {
+        logout({})
+    }
+
     const items1: MenuProps['items'] = [
         ...(isLogin
             ? [
                   {
+                      key: 'greeting',
+                      label: (
+                          <span>
+                              Hello, {state.user?.name} ({state.user.email}){' '}
+                          </span>
+                      ),
+                  },
+                  {
                       key: 'logout',
-                      label: <Link to="/logout">Logout</Link>,
+                      label: (
+                          <Button
+                              variant="solid"
+                              color="danger"
+                              onClick={() => onLogout()}
+                          >
+                              Logout
+                          </Button>
+                      ),
                   },
               ]
-            : []),
-        {
-            key: 'login',
-            label: <Link to="/login">Login</Link>,
-        },
+            : [
+                  {
+                      key: 'login',
+                      label: (
+                          <Link to="/admin/login">
+                              <Button variant="solid" color="primary">
+                                  Login
+                              </Button>
+                          </Link>
+                      ),
+                  },
+              ]),
     ]
 
     const items2: MenuProps['items'] = [
@@ -163,17 +192,22 @@ export default function LayoutApp() {
                 },
             ],
         },
-        // Thêm Login và Logout vào cuối
-        {
-            key: '6',
-            icon: <LoginOutlined />,
-            label: <Link to="/login">Login</Link>,
-        },
-        {
-            key: '7',
-            icon: <LogoutOutlined />,
-            label: <Link to="/logout">Logout</Link>,
-        },
+
+        ...(isLogin
+            ? [
+                  {
+                      key: '7',
+                      icon: <LogoutOutlined />,
+                      label: <Link to="/logout">Logout</Link>,
+                  },
+              ]
+            : [
+                  {
+                      key: '6',
+                      icon: <LoginOutlined />,
+                      label: <Link to="/admin/login">Login</Link>,
+                  },
+              ]),
     ]
     return (
         <Layout>

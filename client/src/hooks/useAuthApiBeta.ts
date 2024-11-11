@@ -1,63 +1,25 @@
+// hooks/useAuthApi.ts
 import { loginApi, registerApi, logoutApi } from '../api/authApi'
-import { useAuthContext } from './useAuthContext'
 import useApiCall from './useApiCall'
+import { useAuthContext } from '../hooks/useAuthContext'
 
 const useAuthApi = () => {
     const { dispatch } = useAuthContext()
 
-    const login = async (credentials: { email: string; password: string }) => {
-        const { callApi, isLoading, error } = useApiCall(
-            (params) => loginApi(params),
-            (data) => ({ type: 'LOGIN', payload: data.user }),
-            'Error logging in, please try again'
-        )
+    // Gọi login API và dispatch kết quả vào context
+    const login = useApiCall(loginApi, (data) =>
+        dispatch({ type: 'LOGIN', payload: data.user })
+    )
 
-        const data = await callApi(credentials)
+    // Gọi register API và dispatch kết quả vào context
+    const register = useApiCall(registerApi, (data) =>
+        dispatch({ type: 'REGISTER', payload: data.user })
+    )
 
-        if (data) {
-            dispatch({ type: 'LOGIN', payload: data.user })
-        }
+    // Gọi logout API và dispatch kết quả vào context
+    const logout = useApiCall(logoutApi, () => dispatch({ type: 'LOGOUT' }))
 
-        return { isLoading, error }
-    }
-
-    const register = async (credentials: {
-        username: string
-        password: string
-        email: string
-    }) => {
-        const { callApi, isLoading, error } = useApiCall(
-            (params) => registerApi(params),
-            (data) => ({ type: 'REGISTER', payload: data }),
-            'Error registering, please try again'
-        )
-
-        const data = await callApi(credentials)
-
-        if (data) {
-            dispatch({ type: 'REGISTER', payload: data })
-        }
-
-        return { isLoading, error }
-    }
-
-    const logout = async () => {
-        const { callApi, isLoading, error } = useApiCall(
-            logoutApi,
-            () => ({ type: 'LOGOUT' }),
-            'Error logging out, please try again'
-        )
-
-        const data = await callApi()
-
-        if (data) {
-            dispatch({ type: 'LOGOUT' })
-        }
-
-        return { isLoading, error }
-    }
-
-    return { login, register, logout,  }
+    return { login, register, logout }
 }
 
 export default useAuthApi

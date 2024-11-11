@@ -2,13 +2,13 @@ import React from 'react'
 import { Card } from 'antd/lib'
 import LoginForm from './LoginForm'
 import LoginBanner from './LoginBanner'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation} from 'react-router-dom'
 
 const Login: React.FC = () => {
     const location = useLocation()
 
     // Lưu trang trước đó vào state
-    const from = location.state?.from?.pathname || '/'
+    const from = location.state?.from?.pathname || '/admin'
 
     return (
         <Card>
