@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import useAuthApi from '../../../hooks/useAuthApiBeta'
+import useAuthApi from '../../../hooks/Auth/useAuthApiBeta'
 import { useApiContext } from '../../../contexts/ApiContext'
 
 const Login = () => {

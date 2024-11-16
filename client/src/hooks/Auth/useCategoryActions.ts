@@ -1,12 +1,12 @@
 import { useContext } from 'react'
-import { CategoryContext } from '../contexts/CategoryContext'
+import { CategoryContext } from '../../contexts/CategoryContext'
 import {
     fetchCategoriesApi,
     fetchCategoryByIdApi,
     deleteCategoryApi,
     createCategoryApi,
     updateCategoryApi,
-} from '../api/categoryApi'
+} from '../../api/categoryApi'
 
 const useCategoryActions = () => {
     const { dispatch } = useContext(CategoryContext)

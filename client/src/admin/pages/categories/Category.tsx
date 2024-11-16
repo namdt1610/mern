@@ -4,7 +4,7 @@ import type { SearchProps } from 'antd/lib/input/'
 import { ColumnsType } from 'antd/lib/table'
 import { Button, Space, Input, Table } from 'antd/lib'
 import { Category } from '../../../interfaces/Category'
-import useCategoryActions from '../../../hooks/useCategoryActions'
+import useCategoryActions from '../../../hooks/Auth/useCategoryActions'
 
 export default function Categories() {
     const { fetchCategories } = useCategoryActions()

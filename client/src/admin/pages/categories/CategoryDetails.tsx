@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button, Space, Typography, Descriptions, Input } from 'antd/lib'
 import { Category } from '../../../interfaces/Category'
-import useCategoryActions from '../../../hooks/useCategoryActions'
+import useCategoryActions from '../../../hooks/Auth/useCategoryActions'
 
 const { Title } = Typography
 

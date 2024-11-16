@@ -2,10 +2,10 @@ import React, { useEffect } from 'react'
 import Navbar from './Navbar'
 import { Link } from 'react-router-dom'
 import { useThemeContext } from '../../../hooks/useThemeContext'
-import { useAuthContext } from '../../../hooks/useAuthContext'
+import { useAuthContext } from '../../../hooks/Auth/useAuthContext'
 import Cart from '../../../components/header/Cart'
 import User from '../../../components/header/User'
-import useAuthApi from '../../../hooks/useAuthApi'
+import useAuthApi from '../../../hooks/Auth/useAuthApi'
 
 const Header = () => {
     const { theme, setTheme } = useThemeContext()

@@ -1,4 +1,4 @@
-export interface Product {
+export interface Import {
     _id: string
     name: string
     price: number
@@ -7,8 +7,6 @@ export interface Product {
     category: string
     createdAt: Date
     updatedAt: Date
-    clickCount: number
     stock: number
-    status: string
     sku: string
 }

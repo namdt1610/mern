@@ -1,12 +1,12 @@
 import { useContext } from 'react'
-import { UserContext } from '../contexts/UserContext'
+import { UserContext } from '../../contexts/UserContext'
 import {
     fetchUsersApi,
     fetchUserByIdApi,
     deleteUserApi,
     createUserApi,
     updateUserApi,
-} from '../api/userApi'
+} from '../../api/userApi'
 
 const useUserActions = () => {
     const { dispatch } = useContext(UserContext)

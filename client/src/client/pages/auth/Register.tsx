@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import useAuthApi from '../../../hooks/useAuthApi'
+import useAuthApi from '../../../hooks/Auth/useAuthApi'
 
 const Signup = () => {
     const [email, setEmail] = useState('')

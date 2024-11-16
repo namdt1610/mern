@@ -1,4 +1,4 @@
-import { ProductContext } from '../contexts/ProductContext'
+import { ProductContext } from '../../contexts/ProductContext'
 import { useContext } from 'react'
 
 export const useProductContext = () => {

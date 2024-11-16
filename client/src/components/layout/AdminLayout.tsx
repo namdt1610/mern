@@ -13,7 +13,7 @@ import { AuthContext } from '../../contexts/AuthContext'
 import { Outlet, Link } from 'react-router-dom'
 import Breadcrumb from '../ui/breadcrumb'
 import Footer from '../ui/Footer'
-import useAuthApi from '../../hooks/useAuthApiBeta'
+import useAuthApi from '../../hooks/Auth/useAuthApiBeta'
 
 const { Header, Content, Sider } = Layout
 

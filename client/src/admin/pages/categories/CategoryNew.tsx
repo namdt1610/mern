@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import useCategoryActions from '../../../hooks/useCategoryActions'
+import useCategoryActions from '../../../hooks/Auth/useCategoryActions'
 import { Category } from '../../../interfaces/Category'
 import { Button, Input, Form } from 'antd/lib'
 

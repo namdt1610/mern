@@ -1,4 +1,4 @@
-import { CategoryContext } from '../contexts/CategoryContext'
+import { CategoryContext } from '../../contexts/CategoryContext'
 import { useContext } from 'react'
 
 export const useCategoryContext = () => {

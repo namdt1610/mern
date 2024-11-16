@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react'
-import useUserActions from 'hooks/useUserActions'
+import useUserActions from '@/hooks/User/useUserActions'
 import Sidebar from '../../../components/user/Sidebar'
 
 const User = () => {
-    
     return (
         <div className="flex">
             <div className="flex-auto w-1/4">
