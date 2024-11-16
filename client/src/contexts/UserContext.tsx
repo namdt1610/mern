@@ -1,16 +1,11 @@
 import React, { createContext, useReducer, ReactNode, Dispatch } from 'react'
+import { User } from '../interfaces/User'
 
-interface User {
-    _id: string
-    // Add other user properties here
-}
-
-interface State {
+export interface State {
     users: User[]
-    user?: User
 }
 
-interface Action {
+export interface Action {
     type:
         | 'SET_USERS'
         | 'CREATE_USER'
@@ -47,7 +42,7 @@ export const userReducer = (state: State, action: Action): State => {
         case 'GET_USER':
             return {
                 ...state,
-                user: action.payload,
+                users: action.payload,
             }
         case 'UPDATE_USER':
             return {

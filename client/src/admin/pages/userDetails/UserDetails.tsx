@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import useUserActions from '../../../hooks/useUserActions'
 import { useParams } from 'react-router-dom'
-import { User } from '../../../interfaces/user.interface'
+import { User } from '../../../interfaces/User'
 import UserAvatar from './UserDetailsAvatar'
 import UserActions from './UserDetailsActions'
 import UserForm from './UserDetailsForm'

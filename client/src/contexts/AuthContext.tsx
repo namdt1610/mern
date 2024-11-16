@@ -8,7 +8,7 @@ import React, {
 } from 'react'
 import Cookies from 'js-cookie'
 import { useEffect } from 'react'
-import { User } from '../interfaces/user.interface'
+import { User } from '../interfaces/User'
 
 // Ensure the file is treated as a module with JSX support
 export {}

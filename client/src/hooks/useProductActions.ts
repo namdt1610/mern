@@ -11,7 +11,7 @@ import {
 export const fetchProducts = async (dispatch) => {
     try {
         const data = await fetchProductsApi() // Gọi API
-      //   console.log(data)
+        //   console.log(data)
         dispatch({ type: 'SET_PRODUCTS', payload: data.products }) // Cập nhật state
     } catch (error) {
         console.error(error)

@@ -1,7 +1,7 @@
 // userApi.ts
 import axiosInstance from './axiosInstance'
 import { userApi } from './apiConfig'
-import { User } from '../interfaces/user.interface'
+import { User } from '../interfaces/User'
 
 export const fetchUsersApi = async () => {
     try {

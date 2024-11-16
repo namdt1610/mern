@@ -19,7 +19,7 @@ import {
     UserOutlined,
     CrownOutlined,
 } from '@ant-design/icons'
-import { User } from '../../../interfaces/user.interface'
+import { User } from '../../../interfaces/User'
 
 interface UserFormProps {
     user: User

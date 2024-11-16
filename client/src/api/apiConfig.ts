@@ -19,3 +19,13 @@ export const userApi = {
     base: `/users`,
     getById: (id: string) => `/users/${id}`,
 }
+
+export const categoryApi = {
+    base: `/categories`,
+    getById: (id: string) => `/categories/${id}`,
+}
+
+export const orderApi = {
+    base: '/orders',
+    getById: (id: string) => `/orders/${id}`,
+}
