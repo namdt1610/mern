@@ -55,11 +55,11 @@ export const AuthContextProvider: React.FC<PropsWithChildren<{}>> = ({
 
     useEffect(() => {
         const user = Cookies.get('user')
+        console.log('User from cookies:', user)
 
         if (user) {
             try {
                 const parsedUser = JSON.parse(user)
-                console.log('Parsed User:', parsedUser)
                 dispatch({ type: 'LOGIN', payload: parsedUser }) // Khôi phục người dùng từ cookies
             } catch (error) {
                 console.error(

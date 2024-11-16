@@ -1,8 +1,9 @@
 import React from 'react'
 import type { FormProps } from 'antd/lib'
 import { Button, Checkbox, Form, Input, message } from 'antd/lib'
-import useAuthApi from 'hooks/useAuthApi'
+import useAuthApi from '../../../../hooks/useAuthApiBeta'
 import { useNavigate } from 'react-router-dom'
+import { useApiContext } from '../../../../contexts/ApiContext'
 
 type FieldType = {
     email?: string
@@ -16,7 +17,8 @@ type LoginFormProps = {
 
 const LoginForm: React.FC<LoginFormProps> = ({ from }) => {
     const navigate = useNavigate()
-    const { login, isLoading, error } = useAuthApi()
+    const { login } = useAuthApi()
+    const { state } = useApiContext()
 
     const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
         onLogin(values)
@@ -31,11 +33,11 @@ const LoginForm: React.FC<LoginFormProps> = ({ from }) => {
 
     const onLogin = async (values: FieldType) => {
         try {
-            await login({
+            login({
                 email: values.email,
                 password: values.password,
             })
-            navigate(from || '/')
+            navigate(from || '/admin')
         } catch (error: any) {
             message.error(error?.message || 'Failed to login')
         }
@@ -94,8 +96,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ from }) => {
                 <Button
                     type="primary"
                     htmlType="submit"
-                    loading={isLoading}
-                    disabled={isLoading}
+                    loading={state.loading}
+                    disabled={state.loading}
                 >
                     Submit
                 </Button>
