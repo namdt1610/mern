@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import User from '../models/UserModel' // Mô hình User
-import Cookies from 'js-cookie'
 
 interface UserRequest extends Request {
     userId?: string
@@ -11,7 +10,6 @@ interface UserRequest extends Request {
     }
 }
 
-// Đăng ký người dùng mới - POST /api/register
 export const signup = async (req: Request, res: Response): Promise<void> => {
     const { email, username, password } = req.body
 
@@ -37,7 +35,6 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
     }
 }
 
-// Đăng nhập người dùng - POST /api/login
 export const login = async (req: Request, res: Response): Promise<void> => {
     const { email, password } = req.body
 
@@ -63,19 +60,16 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
         console.log('Đăng nhập thành công')
 
-        // Tạo token JWT
         const token = jwt.sign(
-            { id: user._id, role: user.role }, // Lưu thêm role trong token
+            { id: user._id, role: user.role },
             process.env.JWT_SECRET as string,
             { expiresIn: '1h' }
         )
 
-        // Lưu token trong cookie
         res.cookie('user', token, {
             maxAge: 24 * 60 * 60 * 1000,
         })
 
-        // Trả về thông tin người dùng và token
         res.status(200).json({ user, token })
     } catch (error) {
         console.error('Lỗi khi đăng nhập:', error)
@@ -83,13 +77,11 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     }
 }
 
-// Logout - POST /api/logout
 export const logout = (req: Request, res: Response): void => {
     res.clearCookie('user')
     res.status(200).json({ message: 'Logged out' })
 }
 
-// Xác thực token (middleware)
 export const verifyToken = (
     req: UserRequest,
     res: Response,
@@ -114,7 +106,6 @@ export const verifyToken = (
     }
 }
 
-// Làm mới token - POST /api/refresh
 export const refreshToken = (req: Request, res: Response): void => {
     const oldToken = req.headers.authorization?.split(' ')[1]
     if (!oldToken) {

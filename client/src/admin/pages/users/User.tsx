@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { User } from '../../../interfaces/User'
 import useUserActions from '../../../hooks/User/useUserActions'
-import { Button, Space, Badge, Tag, Input, Table } from 'antd/lib'
+import { Button, Space, Badge, Tag, Input, Table, Modal } from 'antd/lib'
 import { ColumnsType, TableProps } from 'antd/lib/table'
 import type { SearchProps } from 'antd/lib/input/'
 
@@ -12,18 +12,37 @@ export default function Users() {
     const [users, setUsers] = useState<User[]>([])
     const [filteredData, setFilteredData] = useState<User[]>([])
 
-    useEffect(() => {
-        const getUsers = async () => {
-            const data = await fetchUsers()
-            setUsers(data.map((user: User) => ({ ...user, key: user._id })))
-            // setFilteredData(
-            //     data.map((user: User) => ({ ...user, key: user._id }))
-            // )
-            // console.log('Users:', data)
-        }
+    const getUsers = async () => {
+        const data = await fetchUsers()
+        setUsers(data.map((user: User) => ({ ...user, key: user._id })))
+    }
 
+    useEffect(() => {
         getUsers()
     }, [])
+
+    interface ActionRecord extends User {
+        _id: string
+    }
+
+    const renderActions = (_: unknown, record: ActionRecord): JSX.Element => (
+        <Space>
+            <Button
+                color="primary"
+                variant="outlined"
+                onClick={() => handleView(record._id)}
+            >
+                Xem
+            </Button>
+            <Button
+                color="danger"
+                variant="outlined"
+                onClick={() => handleDelete(record._id)}
+            >
+                Xóa
+            </Button>
+        </Space>
+    )
 
     const columns: ColumnsType<User> = [
         {
@@ -46,7 +65,6 @@ export default function Users() {
             title: 'Name',
             dataIndex: 'name',
             key: 'name',
-            defaultSortOrder: 'ascend',
             sorter: (a, b) => (a.name ?? '').localeCompare(b.name ?? ''),
             render: (_, { name, _id }) => (
                 <Link to={`/admin/users/${_id}`}>{name}</Link>
@@ -95,26 +113,7 @@ export default function Users() {
         {
             title: 'Action',
             key: 'action',
-            render: (_, record) => (
-                <div>
-                    <Space>
-                        <Button
-                            color="primary"
-                            variant="outlined"
-                            onClick={() => handleView(record._id)}
-                        >
-                            Xem
-                        </Button>
-                        <Button
-                            color="danger"
-                            variant="outlined"
-                            onClick={() => handleDelete(record._id)}
-                        >
-                            Xóa
-                        </Button>
-                    </Space>
-                </div>
-            ),
+            render: renderActions,
         },
     ]
 
@@ -123,21 +122,29 @@ export default function Users() {
     }
 
     const handleDelete = (userId: string) => {
-        console.log('Delete user ID:', userId)
+        Modal.confirm({
+            title: 'Are you sure?',
+            content: 'Do you really want to delete this user?',
+            okText: 'Yes',
+            cancelText: 'No',
+            onOk: () => {
+                console.log('Delete user ID:', userId)
+            },
+        })
     }
 
     const onSearch: SearchProps['onSearch'] = (value) => {
-        console.log('Search:', value)
         const lowercasedValue = value.toLowerCase()
-        const filtered = users.filter(
-            (user) =>
-                user.name?.toLowerCase().includes(lowercasedValue) ||
-                user.email?.toLowerCase().includes(lowercasedValue) ||
-                user.role?.toLowerCase().includes(lowercasedValue) ||
-                user.phone?.toLowerCase().includes(lowercasedValue) ||
-                user.status?.toLowerCase().includes(lowercasedValue)
-        )
-        setFilteredData(filtered)
+        if (value === '') {
+            setFilteredData(users)
+        } else {
+            const filtered = users.filter((user) =>
+                ['name', 'email', 'role', 'phone', 'status'].some((key) =>
+                    user[key]?.toLowerCase().includes(lowercasedValue)
+                )
+            )
+            setFilteredData(filtered)
+        }
     }
 
     const { Search } = Input
@@ -146,7 +153,9 @@ export default function Users() {
         <>
             <div className="my-4">
                 <Space>
-                    <Button>New</Button>
+                    <Link to={'/admin/register'}>
+                        <Button>New</Button>
+                    </Link>
                     <Button>Import</Button>
                     <Search
                         placeholder="input search text"
@@ -154,11 +163,18 @@ export default function Users() {
                         onSearch={onSearch}
                         style={{ width: 200 }}
                     />
+                    <Button onClick={() => getUsers()}>Refresh</Button>
                 </Space>
             </div>
             <Table
-                dataSource={filteredData.length ? filteredData : users}
+                dataSource={filteredData}
                 columns={columns}
+                locale={{
+                    emptyText:
+                        filteredData.length === 0
+                            ? 'Không có từ khóa trùng khớp'
+                            : 'Không có dữ liệu',
+                }}
             />
         </>
     )

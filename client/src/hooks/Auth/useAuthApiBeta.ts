@@ -1,7 +1,7 @@
 // hooks/useAuthApi.ts
 import { loginApi, registerApi, logoutApi } from '../../api/authApi'
 import useApiCall from '../useApiCall'
-import { useAuthContext } from '../hooks/useAuthContext'
+import { useAuthContext } from './useAuthContext'
 
 const useAuthApi = () => {
     const { dispatch } = useAuthContext()

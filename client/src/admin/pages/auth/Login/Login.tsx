@@ -2,23 +2,28 @@ import React from 'react'
 import { Card } from 'antd/lib'
 import LoginForm from './LoginForm'
 import LoginBanner from './LoginBanner'
-import { useLocation} from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
+import LoginLayout from './LoginLayout'
 
 const Login: React.FC = () => {
     const location = useLocation()
-
-    // Lưu trang trước đó vào state
     const from = location.state?.from?.pathname || '/admin'
 
     return (
-        <Card>
-            <div className="flex text-center justify-center">
-                <LoginBanner />
-                <div className="flex h-[500px] justify-center">
-                    <LoginForm from={from} />
+        <LoginLayout>
+            <Card className="w-full max-w-6xl p-6  ">
+                <div className="flex flex-col md:flex-row items-center justify-center w-full">
+                    <div className="w-full md:w-1/2 mb-8 md:mb-0">
+                        <LoginBanner />
+                    </div>
+                    <div className="w-full md:w-1/2 flex justify-center items-center">
+                        <div className="w-full max-w-[450px] px-4">
+                            <LoginForm from={from} />
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </Card>
+            </Card>
+        </LoginLayout>
     )
 }
 
