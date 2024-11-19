@@ -4,7 +4,11 @@ import { useApiContext } from '../contexts/ApiContext'
 
 type ApiCallFn<T> = (params: any) => Promise<T>
 
-const useApiCall = <T>(apiCall: ApiCallFn<T>, onSuccess: (data: T) => void) => {
+const useApiCall = <T>(
+    apiCall: ApiCallFn<T>,
+    onSuccess: (data: T) => void,
+    onError: (error: any) => void
+) => {
     const { dispatch } = useApiContext()
 
     const callApi = useCallback(
@@ -13,7 +17,9 @@ const useApiCall = <T>(apiCall: ApiCallFn<T>, onSuccess: (data: T) => void) => {
             try {
                 const result = await apiCall(params)
                 onSuccess(result) // Xử lý kết quả từ API
-            } catch {
+            } catch (error) {
+                // Gửi lỗi lên frontend để xử lý
+                onError(error)
                 dispatch({
                     type: 'SET_ERROR',
                     payload: 'An error occurred, please try again later',
@@ -22,7 +28,7 @@ const useApiCall = <T>(apiCall: ApiCallFn<T>, onSuccess: (data: T) => void) => {
                 dispatch({ type: 'SET_LOADING', payload: false })
             }
         },
-        [apiCall, onSuccess, dispatch]
+        [apiCall, onSuccess, onError, dispatch]
     )
 
     return callApi

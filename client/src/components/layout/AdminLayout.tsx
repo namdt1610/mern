@@ -1,27 +1,34 @@
 // AdminLayout.tsx
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import {
     LaptopOutlined,
     NotificationOutlined,
     UserOutlined,
     LoginOutlined,
     LogoutOutlined,
+    BarChartOutlined,
+    MenuUnfoldOutlined,
+    MenuFoldOutlined,
 } from '@ant-design/icons'
-import { Layout, theme, Menu, Button } from 'antd/lib'
+import { Layout, theme, Menu, Button, Card } from 'antd/lib'
 import type { MenuProps } from 'antd/'
 import { AuthContext } from '../../contexts/AuthContext'
-import { Outlet, Link } from 'react-router-dom'
+import { Outlet, Link, useLocation } from 'react-router-dom'
 import Breadcrumb from '../ui/breadcrumb'
 import Footer from '../ui/Footer'
 import useAuthApi from '../../hooks/Auth/useAuthApiBeta'
+import UserInfoCard from '../../components/admin/UserInfo'
 
-const { Header, Content, Sider } = Layout
+const { Content, Sider } = Layout
 
 export default function LayoutApp() {
     const { state } = useContext(AuthContext)
     const { logout } = useAuthApi()
     const isLogin = state.user !== null
-    console.log('Is user logged in:', isLogin)
+    // console.log('Is user logged in:', isLogin)
+    const location = useLocation()
+    const currentPath = location.pathname
+    const [collapsed, setCollapsed] = useState(false)
 
     const {
         token: { colorBgContainer, borderRadiusLG },
@@ -31,54 +38,16 @@ export default function LayoutApp() {
         logout({})
     }
 
-    const items1: MenuProps['items'] = [
-        ...(isLogin
-            ? [
-                  {
-                      key: 'greeting',
-                      label: (
-                          <span>
-                              Hello, {state.user?.name} ({state.user.email}){' '}
-                          </span>
-                      ),
-                  },
-                  {
-                      key: 'logout',
-                      label: (
-                          <Button
-                              variant="solid"
-                              color="danger"
-                              onClick={() => onLogout()}
-                          >
-                              Logout
-                          </Button>
-                      ),
-                  },
-              ]
-            : [
-                  {
-                      key: 'login',
-                      label: (
-                          <Link to="/admin/login">
-                              <Button variant="solid" color="primary">
-                                  Login
-                              </Button>
-                          </Link>
-                      ),
-                  },
-              ]),
-    ]
-
     const items2: MenuProps['items'] = [
         {
             key: '1',
-            icon: <UserOutlined />,
-            label: 'Dashboard',
+            icon: <BarChartOutlined />,
+            label: <Link to="/admin/dashboard">Dashboard</Link>,
             children: [
                 ...(isLogin
                     ? [
                           {
-                              key: '1-1',
+                              key: '/admin/dashboard',
                               label: (
                                   <Link to="/admin/dashboard/overview">
                                       Overview
@@ -108,7 +77,7 @@ export default function LayoutApp() {
         {
             key: '2',
             icon: <LaptopOutlined />,
-            label: 'Products',
+            label: <Link to="/admin/products">Products</Link>,
             children: [
                 {
                     key: '2-1',
@@ -179,9 +148,12 @@ export default function LayoutApp() {
         {
             key: '5',
             icon: <UserOutlined />,
-            label: 'Users',
+            label: <Link to="/admin/users">Users</Link>,
             children: [
-                { key: '5-1', label: <Link to="/admin/users">All Users</Link> },
+                {
+                    key: '/admin/users',
+                    label: <Link to="/admin/users">All Users</Link>,
+                },
                 {
                     key: '5-2',
                     label: <Link to="/admin/users/roles">User Roles</Link>,
@@ -196,43 +168,69 @@ export default function LayoutApp() {
         ...(isLogin
             ? [
                   {
-                      key: '7',
+                      key: '6',
                       icon: <LogoutOutlined />,
-                      label: <Link to="/logout">Logout</Link>,
+                      label: 'Logout',
+                      onClick: onLogout,
                   },
               ]
             : [
                   {
-                      key: '6',
+                      key: '7',
                       icon: <LoginOutlined />,
                       label: <Link to="/admin/login">Login</Link>,
                   },
               ]),
     ]
     return (
-        <Layout>
-            <Header style={{ display: 'flex', alignItems: 'center' }}>
-                <div className="demo-logo" />
-                <Menu
-                    theme="dark"
-                    mode="horizontal"
-                    defaultSelectedKeys={['2']}
-                    items={items1}
-                    style={{ flex: 1, minWidth: 0 }}
-                />
-            </Header>
+        <>
             <Layout>
-                <Sider width={200} style={{ background: colorBgContainer }}>
+                <Sider
+                    width={'250'}
+                    trigger={null}
+                    collapsible
+                    collapsed={collapsed}
+                    onCollapse={(value) => setCollapsed(value)}
+                    breakpoint="lg"
+                    // collapsedWidth="0"
+                    style={{ background: '#f3f3f3', border: '1px solid' }}
+                >
+                    <div className="items-center justify-center flex flex-col pt-4">
+                        <img
+                            src="/img/logo_dtn.png"
+                            alt="logo"
+                            className="w-16"
+                        />
+                        <Button
+                            type="text"
+                            icon={
+                                collapsed ? (
+                                    <MenuUnfoldOutlined />
+                                ) : (
+                                    <MenuFoldOutlined />
+                                )
+                            }
+                            onClick={() => setCollapsed(!collapsed)}
+                            style={{
+                                fontSize: '16px',
+                                width: 64,
+                                height: 64,
+                            }}
+                        />
+                    </div>
                     <Menu
                         mode="inline"
-                        defaultSelectedKeys={['1']}
-                        defaultOpenKeys={['sub1']}
-                        style={{ height: '100%', borderRight: 0 }}
+                        selectedKeys={[currentPath]}
+                        defaultOpenKeys={[]}
+                        style={{
+                            background: '#f3f3f3',
+                            fontSize: '1.25rem',
+                            minHeight: '100vh',
+                        }}
                         items={items2}
                     />
                 </Sider>
-                <Layout style={{ padding: '0 24px 24px' }}>
-                    <Breadcrumb />
+                <Layout>
                     <Content
                         style={{
                             padding: 24,
@@ -242,11 +240,18 @@ export default function LayoutApp() {
                             borderRadius: borderRadiusLG,
                         }}
                     >
+                        <div className="grid grid-cols-2 gap-4 ">
+                            <Card className="card-border-color h-full">
+                                <Breadcrumb />
+                            </Card>
+                            <UserInfoCard />
+                        </div>
+
                         <Outlet />
                     </Content>
                 </Layout>
             </Layout>
             <Footer />
-        </Layout>
+        </>
     )
 }

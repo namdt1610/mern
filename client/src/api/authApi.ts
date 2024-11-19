@@ -6,8 +6,16 @@ export const loginApi = async (credentials: {
     email: string
     password: string
 }) => {
-    const response = await axiosInstance.post(authApi.login, credentials)
-    return response.data
+    try {
+        const response = await axiosInstance.post(authApi.login, credentials)
+        return response.data
+    } catch (error: any) {
+        console.error(
+            'Login failed:',
+            error.response?.data?.message || error.message
+        )
+        throw error
+    }
 }
 
 export const registerApi = async (credenntials: {

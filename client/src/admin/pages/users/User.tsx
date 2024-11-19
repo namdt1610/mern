@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { User } from '../../../interfaces/User'
 import useUserActions from '../../../hooks/User/useUserActions'
-import { Button, Space, Badge, Tag, Input, Table, Modal } from 'antd/lib'
+import { Button, Space, Badge, Tag, Input, Table, Modal, Card } from 'antd/lib'
 import { ColumnsType, TableProps } from 'antd/lib/table'
 import type { SearchProps } from 'antd/lib/input/'
+import { ReloadOutlined, PlusOutlined, ImportOutlined } from '@ant-design/icons'
 
 export default function Users() {
     const { fetchUsers } = useUserActions()
@@ -15,6 +16,7 @@ export default function Users() {
     const getUsers = async () => {
         const data = await fetchUsers()
         setUsers(data.map((user: User) => ({ ...user, key: user._id })))
+        setFilteredData(data)
     }
 
     useEffect(() => {
@@ -26,10 +28,11 @@ export default function Users() {
     }
 
     const renderActions = (_: unknown, record: ActionRecord): JSX.Element => (
-        <Space>
+        <Space size={'middle'} wrap>
             <Button
                 color="primary"
                 variant="outlined"
+                className="btn-border btn-hover"
                 onClick={() => handleView(record._id)}
             >
                 Xem
@@ -37,6 +40,7 @@ export default function Users() {
             <Button
                 color="danger"
                 variant="outlined"
+                className="btn-border btn-hover"
                 onClick={() => handleDelete(record._id)}
             >
                 Xóa
@@ -151,31 +155,61 @@ export default function Users() {
 
     return (
         <>
-            <div className="my-4">
-                <Space>
+            <Card className="my-6 card-border">
+                <Space size={'middle'} wrap>
                     <Link to={'/admin/register'}>
-                        <Button>New</Button>
+                        <Button
+                            size="large"
+                            className="btn-border btn-hover"
+                            icon={<PlusOutlined />}
+                        >
+                            New
+                        </Button>
                     </Link>
-                    <Button>Import</Button>
+                    <Button
+                        size="large"
+                        className="btn-border btn-hover"
+                        icon={<ImportOutlined />}
+                    >
+                        Import
+                    </Button>
+                    <Button
+                        size="large"
+                        className="btn-border btn-hover"
+                        onClick={() => getUsers()}
+                        icon={<ReloadOutlined />}
+                    >
+                        Refresh
+                    </Button>
                     <Search
+                        size="large"
                         placeholder="input search text"
                         allowClear
                         onSearch={onSearch}
-                        style={{ width: 200 }}
+                        style={{ width: 'auto' }}
                     />
-                    <Button onClick={() => getUsers()}>Refresh</Button>
                 </Space>
-            </div>
-            <Table
-                dataSource={filteredData}
-                columns={columns}
-                locale={{
-                    emptyText:
-                        filteredData.length === 0
-                            ? 'Không có từ khóa trùng khớp'
-                            : 'Không có dữ liệu',
-                }}
-            />
+            </Card>
+            <Card
+                className="card-border"
+                title={'User Management'}
+                color="#f3f3f3"
+            >
+                <Table
+                    bordered
+                    tableLayout="fixed"
+                    rowClassName={'cursor-pointer'}
+                    className="border-black border rounded-lg"
+                    dataSource={filteredData}
+                    columns={columns}
+                    locale={{
+                        emptyText:
+                            filteredData.length === 0
+                                ? 'Không có từ khóa trùng khớp'
+                                : 'Không có dữ liệu',
+                    }}
+                />
+            </Card>
         </>
     )
 }

@@ -2,7 +2,6 @@ import React from 'react'
 import type { FormProps } from 'antd/lib'
 import { Button, Checkbox, Form, Input, message } from 'antd/lib'
 import useAuthApi from '../../../../hooks/Auth/useAuthApiBeta'
-import { useNavigate } from 'react-router-dom'
 import { useApiContext } from '../../../../contexts/ApiContext'
 
 type FieldType = {
@@ -16,12 +15,14 @@ type LoginFormProps = {
 }
 
 const LoginForm: React.FC<LoginFormProps> = ({ from }) => {
-    const navigate = useNavigate()
     const { login } = useAuthApi()
     const { state } = useApiContext()
 
-    const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-        onLogin(values)
+    const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
+        await login({
+            email: values.email,
+            password: values.password,
+        })
     }
 
     const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (
@@ -29,18 +30,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ from }) => {
     ) => {
         message.error('Failed to login')
         console.log('Failed:', errorInfo)
-    }
-
-    const onLogin = async (values: FieldType) => {
-        try {
-            login({
-                email: values.email,
-                password: values.password,
-            })
-            navigate(from || '/admin')
-        } catch (error: any) {
-            message.error(error?.message || 'Failed to login')
-        }
     }
 
     return (

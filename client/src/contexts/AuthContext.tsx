@@ -14,7 +14,7 @@ import { User } from '../interfaces/User'
 export {}
 
 interface State {
-    user: User
+    user: User | null
 }
 
 interface Action {
@@ -72,8 +72,9 @@ export const AuthContextProvider: React.FC<PropsWithChildren<{}>> = ({
 
     useEffect(() => {
         if (state.user) {
-            // Lưu thông tin người dùng vào Cookies khi đăng nhập
             Cookies.set('user', JSON.stringify(state.user))
+        } else {
+            Cookies.remove('user')
         }
     }, [state.user]) // Chạy lại khi thông tin người dùng thay đổi
 

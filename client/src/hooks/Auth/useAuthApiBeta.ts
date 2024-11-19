@@ -2,22 +2,54 @@
 import { loginApi, registerApi, logoutApi } from '../../api/authApi'
 import useApiCall from '../useApiCall'
 import { useAuthContext } from './useAuthContext'
+import { message } from 'antd'
+import { useNavigate } from 'react-router-dom'
 
 const useAuthApi = () => {
     const { dispatch } = useAuthContext()
+    const navigate = useNavigate()
 
-    // Gọi login API và dispatch kết quả vào context
-    const login = useApiCall(loginApi, (data) =>
-        dispatch({ type: 'LOGIN', payload: data.user })
+    const login = useApiCall(
+        loginApi,
+        (data) => {
+            message.loading('Logging in...', 0)
+            dispatch({ type: 'LOGIN', payload: data.user })
+            setTimeout(() => {
+                message.destroy() // Đóng thông báo "Logging in..."
+                message.success('Login successful', 1) // Hiển thị thông báo thành công
+            }, 1000)
+
+            setTimeout(() => {
+                message.loading('Redirecting...', 1) // Thời gian hiển thị 1 giây
+                // Sau 1 giây, chuyển hướng đến trang admin
+                setTimeout(() => {
+                    navigate('/admin')
+                    message.success('Welcome to admin page', 1)
+                }, 1000)
+            }, 2000)
+        },
+        (error) => {
+            message.error(error?.response?.data?.message || 'Login failed')
+        }
     )
 
-    // Gọi register API và dispatch kết quả vào context
-    const register = useApiCall(registerApi, (data) =>
-        dispatch({ type: 'REGISTER', payload: data.user })
+    const register = useApiCall(
+        registerApi,
+        (data) => dispatch({ type: 'REGISTER', payload: data.user }),
+        (error) => {
+            message.error(
+                error?.response?.data?.message || 'Registration failed'
+            )
+        }
     )
 
-    // Gọi logout API và dispatch kết quả vào context
-    const logout = useApiCall(logoutApi, () => dispatch({ type: 'LOGOUT' }))
+    const logout = useApiCall(
+        logoutApi,
+        () => dispatch({ type: 'LOGOUT' }),
+        (error) => {
+            message.error(error?.response?.data?.message || 'Logout failed')
+        }
+    )
 
     return { login, register, logout }
 }

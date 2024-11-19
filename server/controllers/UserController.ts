@@ -3,7 +3,6 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import User from '../models/UserModel'
 
-// Lấy danh sách người dùng - GET /api/users
 export const getAllUsers = async (
     req: Request,
     res: Response
@@ -16,7 +15,6 @@ export const getAllUsers = async (
     }
 }
 
-// Lấy người dùng theo ID - GET /api/users/:id
 export const getUserById = async (
     req: Request,
     res: Response
@@ -35,7 +33,6 @@ export const getUserById = async (
     }
 }
 
-// Cập nhật thông tin người dùng - PUT /api/users/:id
 export const updateUser = async (
     req: Request,
     res: Response
@@ -81,8 +78,8 @@ export const updateUser = async (
         )
 
         // Lưu token vào cookie
-        res.cookie('authToken', token, {
-            httpOnly: true, // Đảm bảo cookie chỉ có thể truy cập từ server
+        res.cookie('user', token, {
+            // httpOnly: true, // Đảm bảo cookie chỉ có thể truy cập từ server
             //secure: process.env.NODE_ENV === 'production', // Chỉ cho phép cookie khi kết nối https
             secure: false,
             maxAge: 3600 * 1000, // Thời gian hết hạn token (1h)
@@ -96,7 +93,6 @@ export const updateUser = async (
     }
 }
 
-// Xóa người dùng - DELETE /api/users/:id
 export const deleteUser = async (
     req: Request,
     res: Response

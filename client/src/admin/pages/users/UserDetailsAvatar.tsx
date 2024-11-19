@@ -1,4 +1,5 @@
 // userDetail/UserAvatar.tsx
+import { Card } from 'antd/lib'
 import React from 'react'
 import { useDropzone } from 'react-dropzone'
 
@@ -19,7 +20,7 @@ const UserAvatar: React.FC<UserAvatarProps> = ({
     })
 
     return (
-        <>
+        <Card className='card-border rounded-full'>
             {isEditing ? (
                 <div
                     {...getRootProps()}
@@ -44,14 +45,14 @@ const UserAvatar: React.FC<UserAvatarProps> = ({
                     src={avatar}
                     alt="avatar"
                     style={{
-                        width: 300,
-                        height: 300,
+                        minWidth: 300,
+                        minHeight: 300,
                         borderRadius: '100%',
                         objectFit: 'cover',
                     }}
                 />
             )}
-        </>
+        </Card>
     )
 }
 

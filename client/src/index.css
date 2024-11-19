@@ -1,5 +1,43 @@
 @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@layer components {
+    .card-border {
+        @apply bg-[#f3f3f3] border-b-8 border-black rounded-3xl;
+    }
+
+    .card-border-color {
+        @apply bg-[#caf0f8] border-b-8 border border-black rounded-3xl;
+    }
+
+    .btn-border {
+        @apply border-black bg-[#90e0ef];
+    }
+
+    .btn-hover {
+        @apply font-semibold transition-transform transform hover:scale-125 hover:border-b-4;
+    }
+
+    .ant-menu-submenu-selected {
+        @apply !bg-[#caf0f8] !text-black !border-b-8 border !border-black !rounded-3xl !-ml-6 !mr-4 p-3 my-2;
+    }
+
+    .ant-menu-submenu-title {
+        @apply !text-black;
+    }
+
+    .ant-menu-submenu-active {
+        @apply !text-black;
+    }
+
+    .ant-menu-item-selected {
+        @apply !bg-[#caf0f8] !text-black border-b-8 border border-black rounded-3xl -left-4 p-7;
+    }
+
+    .ant-menu-item-active {
+        @apply !bg-[#caf0f8] !text-black border-b-8 border border-black rounded-3xl -left-4 p-7;
+    }
+}

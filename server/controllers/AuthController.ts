@@ -43,8 +43,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     try {
         const user = await User.findOne({ email })
         if (!user) {
-            console.log('Không tìm thấy người dùng')
-            res.status(401).json({ message: 'Invalid credentials' })
+            res.status(401).json({ message: 'Invalid user' })
             return
         }
 
@@ -53,12 +52,9 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
         const isMatch = await bcrypt.compare(password, user.password)
         if (!isMatch) {
-            console.log('Mật khẩu không đúng')
-            res.status(401).json({ message: 'Invalid credentials' })
+            res.status(401).json({ message: 'Invalid password' })
             return
         }
-
-        console.log('Đăng nhập thành công')
 
         const token = jwt.sign(
             { id: user._id, role: user.role },

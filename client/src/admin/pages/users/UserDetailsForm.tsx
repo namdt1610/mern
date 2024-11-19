@@ -41,7 +41,7 @@ const UserForm: React.FC<UserFormProps> = ({
     return (
         <>
             <Space direction="vertical" size="large">
-                <Card title="Main informations">
+                <Card title="Main informations" className='card-border'>
                     <Descriptions layout="vertical">
                         <Descriptions.Item label="Name">
                             {isEditing ? (
@@ -124,7 +124,7 @@ const UserForm: React.FC<UserFormProps> = ({
                         </Descriptions.Item>
                     </Descriptions>
                 </Card>
-                <Card title="Contact informations">
+                <Card title="Contact informations" className='card-border'>
                     <Descriptions layout="vertical">
                         <Descriptions.Item label="Email">
                             {isEditing ? (
@@ -223,7 +223,7 @@ const UserForm: React.FC<UserFormProps> = ({
                     </Descriptions>
                 </Card>
 
-                <Card title="Recent activities">
+                <Card title="Recent activities" className='card-border'>
                     <Descriptions layout="vertical">
                         <Descriptions.Item label="Created at">
                             {user.createdAt}

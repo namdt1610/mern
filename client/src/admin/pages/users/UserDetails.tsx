@@ -129,39 +129,47 @@ const UserDetail: React.FC = () => {
     }
 
     return (
-        <div>
+        <div className="py-4">
             <Space
                 className="flex items-center justify-center"
                 direction="vertical"
                 size="large"
             >
-                <UserActions
-                    isEditing={isEditing}
-                    onSave={handleSave}
-                    onEditToggle={handleEditToggle}
-                    onDelete={handleDelete}
-                />
-
-                <UserAvatar
-                    avatar={
-                        avatarPreview || `http://localhost:8888/${user.avatar}`
-                    }
-                    onDrop={onDrop}
-                    isEditing={isEditing}
-                />
-                <UserForm
-                    user={user}
-                    isEditing={isEditing}
-                    editedUser={editedUser || {}}
-                    onInputChange={(field, value) =>
-                        setEditedUser((prev) => ({
-                            ...prev,
-                            [field]: value,
-                        }))
-                    }
-                    errors={errors}
-                    validations={validations}
-                />
+                <div className="flex gap-4 items-center ">
+                    <div className=" h-full items-center flex flex-col justify-center">
+                        <Card className="card-border">
+                            <UserActions
+                                isEditing={isEditing}
+                                onSave={handleSave}
+                                onEditToggle={handleEditToggle}
+                                onDelete={handleDelete}
+                            />
+                            <UserAvatar
+                                avatar={
+                                    avatarPreview ||
+                                    `http://localhost:8888/${user.avatar}`
+                                }
+                                onDrop={onDrop}
+                                isEditing={isEditing}
+                            />
+                        </Card>
+                    </div>
+                    <div>
+                        <UserForm
+                            user={user}
+                            isEditing={isEditing}
+                            editedUser={editedUser || {}}
+                            onInputChange={(field, value) =>
+                                setEditedUser((prev) => ({
+                                    ...prev,
+                                    [field]: value,
+                                }))
+                            }
+                            errors={errors}
+                            validations={validations}
+                        />
+                    </div>
+                </div>
             </Space>
         </div>
     )
