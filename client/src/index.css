@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&display=swap');
 
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
@@ -22,7 +22,7 @@
     }
 
     .ant-menu-submenu-selected {
-        @apply !bg-[#caf0f8] !text-black !border-b-8 border !border-black !rounded-3xl !-ml-6 !mr-4 p-3 my-2;
+        @apply !bg-[#caf0f8] !text-black !border-b-8 border !border-black !rounded-3xl -ml-5 mr-4 p-3 my-2;
     }
 
     .ant-menu-submenu-title {
@@ -39,5 +39,17 @@
 
     .ant-menu-item-active {
         @apply !bg-[#caf0f8] !text-black border-b-8 border border-black rounded-3xl -left-4 p-7;
+    }
+
+    .ant-form-item-required {
+        @apply !bg-[#caf0f8] !text-black font-semibold !rounded-md !text-xl;
+    }
+
+    .ant-btn {
+        @apply !bg-[#90e0ef] !border-black !rounded-3xl !font-semibold !text-black transition-transform transform hover:scale-125 hover:border-b-4;
+    }
+
+    .ant-layout-sider {
+        @apply !rounded-e-3xl !border-b-4 !border-black;
     }
 }

@@ -11,7 +11,7 @@ const Register: React.FC = () => {
 
     return (
         <RegisterLayout>
-            <Card className="w-full max-w-6xl p-6 ">
+            <Card className="w-full max-w-6xl card-border">
                 <div className="flex flex-col md:flex-row items-center justify-center w-full">
                     <div className="w-full md:w-1/2 mb-8 md:mb-0">
                         <RegisterBanner />

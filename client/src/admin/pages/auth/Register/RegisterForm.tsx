@@ -54,16 +54,14 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ from }) => {
     return (
         <Form
             name="register"
-            labelCol={{ span: 8 }}
-            wrapperCol={{ span: 16 }}
             style={{
                 width: 500,
-                paddingTop: '200px',
                 paddingRight: '50px',
             }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
-            autoComplete="off"
+            autoComplete="on"
+            layout="vertical"
         >
             <Form.Item<FieldType>
                 label="Full Name"
@@ -132,7 +130,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ from }) => {
                 <Input.Password />
             </Form.Item>
 
-            <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+            <Form.Item>
                 <Button
                     type="primary"
                     htmlType="submit"

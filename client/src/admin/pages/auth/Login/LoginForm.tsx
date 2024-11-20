@@ -34,18 +34,15 @@ const LoginForm: React.FC<LoginFormProps> = ({ from }) => {
 
     return (
         <Form
-            name="basic"
-            labelCol={{ span: 8 }}
-            wrapperCol={{ span: 16 }}
             style={{
                 width: 500,
-                paddingTop: '200px',
-                paddingRight: '50px',
+                paddingRight: '90px',
             }}
             initialValues={{ remember: true }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="on"
+            layout="vertical"
         >
             <Form.Item<FieldType>
                 label="Email"
@@ -87,6 +84,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ from }) => {
                     htmlType="submit"
                     loading={state.loading}
                     disabled={state.loading}
+                    className="btn-hover"
                 >
                     Submit
                 </Button>

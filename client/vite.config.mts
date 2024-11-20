@@ -1,8 +1,19 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
+import tailwindcss from 'tailwindcss'
+import autoprefixer from 'autoprefixer'
 
 export default defineConfig({
+    //! Cấu hình cho tailwindcss
+    css: {
+        preprocessorOptions: {
+            css: {},
+        },
+        postcss: {
+            plugins: [tailwindcss, autoprefixer],
+        },
+    },
     plugins: [react()],
     resolve: {
         alias: {

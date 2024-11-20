@@ -1,5 +1,4 @@
 import './index.css'
-
 import React from 'react'
 import ClientRoutes from './client/routes/ClientRoutes'
 import AdminRoutes from './admin/routes/AdminRoutes'
@@ -10,7 +9,7 @@ import { ProductContextProvider } from './contexts/ProductContext'
 import { CategoryContextProvider } from './contexts/CategoryContext'
 import { ThemeProvider } from './contexts/ThemeContext.js'
 import { ApiProvider } from './contexts/ApiContext'
-import { Api } from '@mui/icons-material'
+import { ConfigProvider } from 'antd/lib'
 
 const App = () => (
     <React.StrictMode>
@@ -19,18 +18,26 @@ const App = () => (
                 <AuthContextProvider>
                     <ProductContextProvider>
                         <CategoryContextProvider>
-                            <Router>
-                                <Routes>
-                                    <Route
-                                        path="/*"
-                                        element={<ClientRoutes />}
-                                    />
-                                    <Route
-                                        path="admin/*"
-                                        element={<AdminRoutes />}
-                                    />
-                                </Routes>
-                            </Router>
+                            <ConfigProvider
+                                theme={{
+                                    token: {
+                                        fontFamily: "'Karla', sans-serif",
+                                    },
+                                }}
+                            >
+                                <Router>
+                                    <Routes>
+                                        <Route
+                                            path="/*"
+                                            element={<ClientRoutes />}
+                                        />
+                                        <Route
+                                            path="admin/*"
+                                            element={<AdminRoutes />}
+                                        />
+                                    </Routes>
+                                </Router>
+                            </ConfigProvider>
                         </CategoryContextProvider>
                     </ProductContextProvider>
                 </AuthContextProvider>

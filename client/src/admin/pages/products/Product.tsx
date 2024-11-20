@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { Product } from '../../../interfaces/Product'
 import useProductActions from '../../../hooks/Product/useProductActions'
-import { Button, Space, Badge, Input, Table } from 'antd/lib'
+import { Button, Space, Badge, Input, Table, Card } from 'antd/lib'
 import { ColumnsType } from 'antd/lib/table'
 import type { SearchProps } from 'antd/lib/input/'
 
@@ -47,7 +47,6 @@ export default function Products() {
             title: 'Name',
             dataIndex: 'name',
             key: 'name',
-            defaultSortOrder: 'ascend',
             sorter: (a, b) => (a.name ?? '').localeCompare(b.name ?? ''),
             render: (_, { name, _id }) => (
                 <Link to={`/admin/products/${_id}`}>{name}</Link>
@@ -64,12 +63,6 @@ export default function Products() {
             dataIndex: 'price',
             key: 'price',
             sorter: (a, b) => a.price - b.price,
-        },
-        {
-            title: 'Stock',
-            dataIndex: 'stock',
-            key: 'stock',
-            sorter: (a, b) => a.stock - b.stock,
         },
         {
             title: 'Status',
@@ -90,7 +83,7 @@ export default function Products() {
             key: 'action',
             render: (_, record) => (
                 <div>
-                    <Space>
+                    <Space wrap>
                         <Button
                             color="primary"
                             variant="outlined"
@@ -149,10 +142,23 @@ export default function Products() {
                     />
                 </Space>
             </div>
-            <Table
-                dataSource={filteredData.length ? filteredData : products}
-                columns={columns}
-            />
+            <Card className="card-border">
+                <Table
+                    bordered
+                    size="large"
+                    tableLayout="fixed"
+                    rowClassName={'cursor-pointer'}
+                    className="border-black border rounded-lg"
+                    columns={columns}
+                    dataSource={filteredData.length ? filteredData : products}
+                    locale={{
+                        emptyText:
+                            filteredData.length === 0
+                                ? 'Không có từ khóa trùng khớp'
+                                : 'Không có dữ liệu',
+                    }}
+                />
+            </Card>
         </>
     )
 }

@@ -74,20 +74,20 @@ export default function Users() {
                 <Link to={`/admin/users/${_id}`}>{name}</Link>
             ),
         },
-        {
-            title: 'Role',
-            dataIndex: 'role',
-            key: 'role',
-            render: (_, { role }) => {
-                let color = role === 'admin' ? 'red' : 'green'
-                return (
-                    <Tag color={color} key={role}>
-                        {role.toUpperCase()}
-                    </Tag>
-                )
-            },
-            sorter: (a, b) => a.role.localeCompare(b.role),
-        },
+        // {
+        //     title: 'Role',
+        //     dataIndex: 'role',
+        //     key: 'role',
+        //     render: (_, { role }) => {
+        //         let color = role === 'admin' ? 'red' : 'green'
+        //         return (
+        //             <Tag color={color} key={role}>
+        //                 {role.toUpperCase()}
+        //             </Tag>
+        //         )
+        //     },
+        //     sorter: (a, b) => a.role.localeCompare(b.role),
+        // },
         {
             title: 'Email',
             dataIndex: 'email',
@@ -196,7 +196,7 @@ export default function Users() {
                 color="#f3f3f3"
             >
                 <Table
-                    bordered
+                    size="large"
                     tableLayout="fixed"
                     rowClassName={'cursor-pointer'}
                     className="border-black border rounded-lg"

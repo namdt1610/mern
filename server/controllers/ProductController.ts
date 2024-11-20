@@ -5,9 +5,8 @@ import Product from '../models/ProductModel'
 // GET all products
 const getAllProducts = async (req: Request, res: Response): Promise<void> => {
     try {
-        const products = await Product.find({}).sort({ createdAt: -1 })
-        const totalProducts = await Product.countDocuments()
-        res.status(200).json({ products, totalProducts })
+        const products = await Product.find({}).sort({ name: 1 })
+        res.status(200).json(products)
     } catch (error) {
         res.status(500).json({
             message: 'Server Error: Unable to get products',

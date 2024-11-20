@@ -17,7 +17,7 @@ import { Outlet, Link, useLocation } from 'react-router-dom'
 import Breadcrumb from '../ui/breadcrumb'
 import Footer from '../ui/Footer'
 import useAuthApi from '../../hooks/Auth/useAuthApiBeta'
-import UserInfoCard from '../../components/admin/UserInfo'
+import UserInfoCard from '../admin/UserInfoCard'
 
 const { Content, Sider } = Layout
 
@@ -80,24 +80,22 @@ export default function LayoutApp() {
             label: <Link to="/admin/products">Products</Link>,
             children: [
                 {
-                    key: '2-1',
+                    key: '/admin/products',
                     label: <Link to="/admin/products">All Products</Link>,
                 },
                 {
-                    key: '2-2',
+                    key: '/admin/products/new',
                     label: (
-                        <Link to="/admin/products/create">Add New Product</Link>
+                        <Link to="/admin/products/new">Add New Product</Link>
                     ),
                 },
                 {
-                    key: '2-3',
-                    label: (
-                        <Link to="/admin/products/categories">Categories</Link>
-                    ),
+                    key: '/admin/categories',
+                    label: <Link to="/admin/categories">Categories</Link>,
                 },
                 {
-                    key: '2-4',
-                    label: <Link to="/admin/products/brands">Brands</Link>,
+                    key: '/admin/brands',
+                    label: <Link to="/admin/brands">Brands</Link>,
                 },
             ],
         },
