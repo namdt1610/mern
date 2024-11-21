@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ChevronDown } from 'lucide-react'
 
 const LeftColumn = () => {
     const [openDropdowns, setOpenDropdowns] = useState({
@@ -30,7 +29,6 @@ const LeftColumn = () => {
                 <input type="checkbox" />
                 <div className="collapse-title text-xl font-medium flex justify-between items-center">
                         Size
-                        <ChevronDown />
                 </div>
                 <div className="collapse-content flex flex-wrap">
                     {sizes.map((size) => (

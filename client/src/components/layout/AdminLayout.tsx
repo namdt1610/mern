@@ -49,7 +49,7 @@ export default function LayoutApp() {
                           {
                               key: '/admin/dashboard',
                               label: (
-                                  <Link to="/admin/dashboard/overview">
+                                  <Link to="/admin/dashboard">
                                       Overview
                                   </Link>
                               ),

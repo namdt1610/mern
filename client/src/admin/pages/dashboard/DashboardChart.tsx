@@ -5,7 +5,7 @@ import { Line } from '@ant-design/charts';
 const DashboardChart: React.FC = () => {
     const data = [
         { month: 'Jan', value: 50 },
-        { month: 'Feb', value: 75 },
+        { month: 'Feb', value: 75 },    
         { month: 'Mar', value: 100 },
         { month: 'Apr', value: 120 },
     ];

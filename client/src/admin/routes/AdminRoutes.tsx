@@ -4,7 +4,7 @@ import Home from '../pages/home/index'
 import Layout from '../../components/layout/AdminLayout'
 import Error from '../pages/result/404'
 
-import Dashboard from '../pages/dashboard/index'
+import Dashboard from '../pages/dashboard/AdminDashboard'
 
 import Product from '../pages/products/Product'
 import CreateProduct from '../pages/products/ProductNew'
@@ -21,7 +21,7 @@ import Login from '../pages/auth/Login/Login'
 import Register from '../pages/auth/Register/Register'
 import ProtectedRoute from '../../components/auth/ProtectedRoute'
 
-//! Sau này nhớ tách file này ra thành pages
+//! Sau này nhớ tách file này ra thành folder pages
 
 export default function AdminRoutes() {
     return (
@@ -33,7 +33,7 @@ export default function AdminRoutes() {
                     <Route index element={<Home />} />
 
                     <Route
-                        path="dashboard/overview"
+                        path="dashboard"
                         element={
                             <ProtectedRoute>
                                 <Dashboard />

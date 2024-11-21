@@ -1,8 +1,8 @@
-import React from 'react';
-import { Row, Col } from 'antd';
-import DashboardStats from '../components/DashboardStats';
-import DashboardChart from '../components/DashboardChart';
-import RecentActivityTable from '../components/RecentActivityTable';
+import React from 'react'
+import { Row, Col } from 'antd/'
+import DashboardStats from './DashboardStats'
+import DashboardChart from './DashboardChart'
+import RecentActivityTable from './RecentActivityTable'
 
 const AdminDashboard: React.FC = () => {
     return (
@@ -18,7 +18,7 @@ const AdminDashboard: React.FC = () => {
                 </Col>
             </Row>
         </div>
-    );
-};
+    )
+}
 
-export default AdminDashboard;
+export default AdminDashboard

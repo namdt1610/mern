@@ -3,24 +3,29 @@ import { Navigate, Link } from 'react-router-dom'
 import Cookies from 'js-cookie'
 import { Button, Typography, Space } from 'antd/lib'
 import { WarningOutlined } from '@ant-design/icons'
+import { jwtDecode } from 'jwt-decode'
 
-const ProtectedRoute = ({ children }) => {
+interface DecodedToken {
+    role?: string;
+    exp?: number;
+    [key: string]: any; // Nếu token chứa thêm các trường khác
+}
+
+const ProtectedRoute = ({ children }:{ children: JSX.Element }) => {
     // Lấy token từ cookie
     const token = Cookies.get('user')
 
     // Kiểm tra token có tồn tại và đúng định dạng JWT không
-    if (token && token.split('.').length === 3) {
-        try {
-            // Giải mã JWT để lấy thông tin role
-            const decodedToken = JSON.parse(atob(token.split('.')[1]))
-            const userRole = decodedToken?.role // Giả sử role lưu trong JWT
+    console.log('Token:', token);
 
-            // Chỉ cho phép người dùng có role là 'admin' vào trang admin
-            if (userRole === 'admin') {
+    if (token) {
+        try {
+            const decodedToken = jwtDecode<DecodedToken>(token)
+            if (decodedToken?.role === 'admin') {
                 return children
             }
         } catch (error) {
-            console.error('Lỗi giải mã token:', error)
+            console.error('Invalid token:', error)
         }
     }
 

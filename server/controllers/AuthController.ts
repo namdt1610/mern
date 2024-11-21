@@ -63,10 +63,11 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         )
 
         res.cookie('user', token, {
-            maxAge: 24 * 60 * 60 * 1000,
+            maxAge: 1 * 60 * 60 * 1000,
         })
+        // console.log('Token:', token);
 
-        res.status(200).json({ user, token })
+        res.status(200).json({ message: 'Login successful', token })
     } catch (error) {
         console.error('Lỗi khi đăng nhập:', error)
         res.status(500).json({ message: 'Could not log in user' })
