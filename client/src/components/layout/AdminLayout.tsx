@@ -49,9 +49,7 @@ export default function LayoutApp() {
                           {
                               key: '/admin/dashboard',
                               label: (
-                                  <Link to="/admin/dashboard">
-                                      Overview
-                                  </Link>
+                                  <Link to="/admin/dashboard">Overview</Link>
                               ),
                           },
                           {
@@ -194,11 +192,12 @@ export default function LayoutApp() {
                     style={{ background: '#f3f3f3', border: '1px solid' }}
                 >
                     <div className="items-center justify-center flex flex-col pt-4">
-                        <img
+                        {/* <img
                             src="/img/logo_dtn.png"
                             alt="logo"
                             className="w-16"
-                        />
+                            loading="lazy"
+                        /> */}
                         <Button
                             type="text"
                             icon={

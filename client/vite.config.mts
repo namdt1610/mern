@@ -5,6 +5,11 @@ import tailwindcss from 'tailwindcss'
 import autoprefixer from 'autoprefixer'
 
 export default defineConfig({
+    build: {
+        outDir: 'build',
+        minify: 'esbuild', // Hoặc 'esbuild' nếu cần tốc độ nhanh hơn
+        sourcemap: true, // Nếu bạn cần sourcemaps cho việc debug
+    },
     //! Cấu hình cho tailwindcss
     css: {
         preprocessorOptions: {
@@ -17,8 +22,8 @@ export default defineConfig({
     plugins: [react()],
     resolve: {
         alias: {
-            '@': path.resolve(__dirname, 'src'),
-            '@hooks': path.resolve(__dirname, 'src/hooks'),
+            '@': path.resolve(__dirname, './'),
+            '@hooks': path.resolve(__dirname, './client/src/hooks'),
         },
     },
     define: {
@@ -32,8 +37,5 @@ export default defineConfig({
                 secure: false,
             },
         },
-    },
-    build: {
-        outDir: 'build',
     },
 })

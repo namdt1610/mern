@@ -1,2 +1,5 @@
 npm prune // remove all deprecated packages
 npm update --save 
+
+Tên thư mục thì viết thường
+Tên tệp thì viết Hoa PascalCase

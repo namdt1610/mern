@@ -85,6 +85,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ from }) => {
                     loading={state.loading}
                     disabled={state.loading}
                     className="btn-hover"
+                    size="large"
                 >
                     Submit
                 </Button>

@@ -1,11 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&display=swap'); */
 
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
 @layer components {
-    .card-border {
+    /* .card-border {
         @apply bg-[#f3f3f3] border-b-8 border-black rounded-3xl;
     }
 
@@ -42,7 +42,7 @@
     }
 
     .ant-form-item-required {
-        @apply !bg-[#caf0f8] !text-black font-semibold !rounded-md !text-xl;
+        @apply !bg-[#caf0f8] !text-black font-semibold !rounded-md;
     }
 
     .ant-btn {
@@ -51,5 +51,5 @@
 
     .ant-layout-sider {
         @apply !rounded-e-3xl !border-b-4 !border-black;
-    }
+    } */
 }

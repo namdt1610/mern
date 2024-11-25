@@ -16,16 +16,7 @@
         "baseUrl": ".",
         "paths": {
             "@/*": ["src/*"],
-            "@components/*": ["src/components/*"],
-            "@config/*": ["src/config/*"],
-            "@interfaces/*": ["src/interfaces/*"],
-            "@services/*": ["src/services/*"],
-            "@utils/*": ["src/utils/*"],
-            "@admin/*": ["src/admin/*"],
-            "@client/*": ["src/client/*"],
-            "@contexts/*": ["src/contexts/*"],
-            "@hooks/*": ["src/hooks/*"],
-            "@api/*": ["src/api/*"]
+            "@hooks/*": ["src/hooks/*"]
         },
         "noImplicitAny": true,
         "noImplicitThis": true,

@@ -41,13 +41,18 @@ const Breadcrumb = () => {
 
                     return isLast ? (
                         <li key={name}>
-                            <span className="underline text-2xl inline-flex items-center gap-2">
+                            <span>
                                 {breadcrumbLabel}
                             </span>
                         </li>
                     ) : (
                         <li key={name}>
-                            <Link to={routeTo} className='bg-[#caf0f8] text-2xl'>{breadcrumbLabel}</Link>
+                            <Link
+                                to={routeTo}
+                                className="bg-[#caf0f8] text-2xl"
+                            >
+                                {breadcrumbLabel}
+                            </Link>
                         </li>
                     )
                 })}

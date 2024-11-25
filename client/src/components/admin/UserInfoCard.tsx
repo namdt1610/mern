@@ -34,16 +34,11 @@ const UserInfoCard = () => {
                 </div>
             ) : (
                 <div className="flex items-center justify-end">
-                    <Space>
-                        <p className="text-xl">
-                            Login to see your profile information
-                        </p>
-                        <Link to={'/admin/login'}>
-                            <Button className="text-xl" type="link">
-                                Login
-                            </Button>
-                        </Link>
-                    </Space>
+                    <Link to={'/admin/login'}>
+                        <Button className="text-xl" type="link">
+                            Login
+                        </Button>
+                    </Link>
                 </div>
             )}
         </Card>
