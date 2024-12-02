@@ -18,10 +18,14 @@ const LoginForm: React.FC<LoginFormProps> = ({ from }) => {
                 password: values.password,
             }).unwrap()
             message.success('Login successfully!')
-            navigate(from || '/dashboard') // Điều hướng sau khi đăng nhập thành công
+            navigate(from ?? '/dashboard') // Điều hướng sau khi đăng nhập thành công
         } catch (err) {
-            message.error('Login fail!')
-            console.error('Login fail:', err)
+            if ('data' in err) {
+                message.error(err.data?.message || 'Login fail!')
+            } else {
+                message.error('Login fail! Please try again.')
+            }
+            console.error('Login error:', err)
         }
     }
 
@@ -77,6 +81,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ from }) => {
                     size="large"
                     loading={isLoading} // Thêm loading khi đang gọi API
                     className="btn-hover"
+                    style={{ width: '100%' }}
                 >
                     Submit
                 </Button>

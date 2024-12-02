@@ -1,15 +1,15 @@
-// src/store.ts
+// src/store/index.ts
 import { configureStore } from '@reduxjs/toolkit'
 import { authApi } from '../services/auth'
 
-export const store = configureStore({
+const store = configureStore({
     reducer: {
-        [authApi.reducerPath]: authApi.reducer, // Thêm reducer của authApi
+        [authApi.reducerPath]: authApi.reducer,
     },
-    // Thêm middleware của RTK Query để hỗ trợ caching, invalidation, polling, và các tính năng khác
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware().concat(authApi.middleware),
 })
 
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
+export default store

@@ -22,8 +22,9 @@ export default defineConfig({
     plugins: [react()],
     resolve: {
         alias: {
-            '@': path.resolve(__dirname, './'),
-            '@hooks': path.resolve(__dirname, './client/src/hooks'),
+            '@': path.resolve(__dirname, 'src/'),
+            hooks: path.resolve(__dirname, 'src/hooks'),
+            services: path.resolve(__dirname, 'src/services'),
         },
     },
     define: {

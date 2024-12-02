@@ -8,9 +8,9 @@ import { ProductContextProvider } from './contexts/ProductContext'
 import { CategoryContextProvider } from './contexts/CategoryContext'
 import { ThemeProvider } from './contexts/ThemeContext.js'
 import { ApiProvider } from './contexts/ApiContext'
-import { ConfigProvider } from 'antd/'
+import { ConfigProvider } from 'antd'
 import { Provider } from 'react-redux'
-import store from './store/index.js'
+import store from './store/index'
 
 const App = () => (
     <React.StrictMode>

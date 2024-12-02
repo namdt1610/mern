@@ -64,7 +64,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
         res.cookie('user', token, {
             maxAge: 1 * 60 * 60 * 1000,
-            httpOnly: true,
+            httpOnly: false,
             secure: true,
             sameSite: 'strict',
             path: '/',

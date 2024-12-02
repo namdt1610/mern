@@ -1,12 +1,8 @@
-import React, { Suspense, useEffect } from 'react'
+import React, { Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { Spin } from 'antd'
 import ProtectedRoute from '../../components/auth/ProtectedRoute'
 import routesConfig from './routesConfig'
-import Cookies from 'js-cookie'
-import { setUser } from '../../features/authSlice'
-import { useDispatch } from 'react-redux'
-import { jwtDecode } from 'jwt-decode'
 
 // Kiểu của payload trong token
 interface DecodedToken {
@@ -16,37 +12,6 @@ interface DecodedToken {
 }
 
 export default function AdminRoutes() {
-    const dispatch = useDispatch()
-
-    useEffect(() => {
-        const token = Cookies.get('user') // Lấy token từ cookie
-        if (token) {
-            try {
-                const decoded: DecodedToken = jwtDecode(token) // Giải mã token
-                if (decoded) {
-                    // Lưu thông tin user vào Redux store
-                    dispatch(
-                        setUser({
-                            user: {
-                                _id: decoded.id,
-                                email: decoded.email,
-                                role: decoded.role,
-                                avatar: '',
-                                name: '',
-                                status: 'active',
-                                createdAt: new Date().toISOString(),
-                                updatedAt: new Date().toISOString(),
-                            },
-                            token,
-                        })
-                    )
-                }
-            } catch (error) {
-                console.error('Token is invalid or expired', error)
-            }
-        }
-    }, [dispatch])
-
     const renderRoutes = (routes: typeof routesConfig) =>
         routes.map(
             (

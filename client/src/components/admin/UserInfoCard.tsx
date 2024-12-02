@@ -1,53 +1,39 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { Card, Image, Button, Space } from 'antd/'
-import { useSelector, useDispatch } from 'react-redux'
-import { RootState } from '../../store' // Điều chỉnh nếu cấu trúc thư mục khác
-import useAuthApi from '../../hooks/Auth/useAuthApiBeta'
+// UserInfoCard.tsx
+import React, { useMemo } from 'react'
+import { Card, Image, Typography, Spin } from 'antd'
+import { decodeToken, DecodedToken } from '../../utils/jwtDecode'
+import Cookies from 'js-cookie'
+
+const { Title, Text } = Typography
 
 const UserInfoCard = () => {
-    // Lấy thông tin người dùng từ Redux
-    const user = useSelector((state: RootState) => state.auth.user)
-    const dispatch = useDispatch()
-    const { logout } = useAuthApi()
+    const decodedUser = useMemo(() => {
+        const token = Cookies.get('user')
+        if (!token) return null
+        return decodeToken(token)
+    }, [])
 
-    const onLogout = () => {
-        logout({})
-        // Sau khi logout, bạn có thể dispatch để cập nhật lại state Redux (nếu cần)
-        // dispatch(logoutUser())
-    }
-
-    // Kiểm tra nếu user có thông tin đăng nhập hợp lệ
-    const isLoggedIn = Boolean(user?._id)
+    if (!decodedUser) return <Spin tip="Loading user info..." />
 
     return (
-        <Card className="card-border-color">
-            {isLoggedIn ? (
-                <div className="flex items-center justify-end">
-                    <Space>
-                        <h1>Hello, {user.name}</h1>
-                        <Image
-                            src={
-                                user.avatar
-                                    ? `http://localhost:8888/${user.avatar}`
-                                    : '/img/meerkat.png'
-                            }
-                            alt={user.name}
-                            width={50}
-                            className="rounded-full border border-black"
-                        />
-                        <Button onClick={onLogout}>Logout</Button>
-                    </Space>
+        <Card>
+            <div className="flex justify-start">
+                <Image
+                    width={100}
+                    src={
+                        decodedUser?.avatar ||
+                        'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
+                    }
+                    alt="User avatar"
+                />
+                <div className="justify-center flex-col items-center">
+                    <Title level={2}>
+                        Welcome, {decodedUser?.name || 'User'}
+                    </Title>
+                    <Text type="secondary">{decodedUser?.email}</Text>
+                    <Text type="secondary">Role: {decodedUser?.role}</Text>
                 </div>
-            ) : (
-                <div className="flex items-center justify-end">
-                    <Link to={'/admin/login'}>
-                        <Button className="text-xl" type="link">
-                            Login
-                        </Button>
-                    </Link>
-                </div>
-            )}
+            </div>
         </Card>
     )
 }
