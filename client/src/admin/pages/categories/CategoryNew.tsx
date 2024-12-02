@@ -1,40 +1,37 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import useCategoryActions from '../../../hooks/Auth/useCategoryActions'
-import { Category } from '../../../interfaces/Category'
-import { Button, Input, Form } from 'antd/lib'
+import { Button, Input, Form, message, Card, FormProps } from 'antd/lib'
+type FieldType = {
+    name: string
+}
 
-const CategoryNewForm = () => {
+type CategoryFormProps = {
+    from: string
+}
+const CategoryNewForm: React.FC<CategoryFormProps> = () => {
     const [form] = Form.useForm()
-    const navigate = useNavigate()
     const { createCategory } = useCategoryActions()
 
-    const [categoryData, setCategoryData] = useState<Category>({
-        name: '',
-    })
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target
-        setCategoryData((prev) => ({
-            ...prev,
-            [name]: value,
-        }))
+    const onFinish: FormProps<FieldType>['onFinish'] = async (values: any) => {
+        await createCategory(values)
+        form.resetFields()
     }
 
-    const handleSubmit = async () => {
-        try {
-            await createCategory(categoryData)
-            form.resetFields()
-            navigate('/categories')
-        } catch (error) {
-            console.error('Error creating category:', error)
-        }
+    const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (
+        errorInfo
+    ) => {
+        message.error('Failed to create category')
+        console.log('Failed:', errorInfo)
     }
-
     return (
-        <div className="category-new-form">
-            <h2>Create New Category</h2>
-            <Form form={form} layout="vertical" onFinish={handleSubmit}>
+        <Card className="card-border my-4">
+            <Form
+                form={form}
+                layout="vertical"
+                onFinish={onFinish}
+                onFinishFailed={onFinishFailed}
+            >
                 <Form.Item
                     label="Category Name"
                     name="name"
@@ -45,12 +42,7 @@ const CategoryNewForm = () => {
                         },
                     ]}
                 >
-                    <Input
-                        name="name"
-                        value={categoryData.name}
-                        onChange={handleChange}
-                        placeholder="Enter category name"
-                    />
+                    <Input placeholder="Enter category name" />
                 </Form.Item>
 
                 <Form.Item>
@@ -59,7 +51,7 @@ const CategoryNewForm = () => {
                     </Button>
                 </Form.Item>
             </Form>
-        </div>
+        </Card>
     )
 }
 

@@ -1,8 +1,16 @@
-import React, { createContext, useReducer, ReactNode, Dispatch } from 'react'
+import React, {
+    createContext,
+    useReducer,
+    ReactNode,
+    Dispatch,
+    PropsWithChildren,
+} from 'react'
 import { Product } from '../interfaces/Product'
 
+export {}
+
 export interface State {
-    products: Product[]
+    products: Product[] | null
 }
 
 export interface Action {
@@ -15,15 +23,11 @@ export interface Action {
     payload: any
 }
 
-const initialState: State = {
-    products: [],
-}
-
 export const ProductContext = createContext<{
     state: State
     dispatch: Dispatch<Action>
 }>({
-    state: initialState,
+    state: { products: null },
     dispatch: () => null,
 })
 
@@ -37,7 +41,9 @@ export const productReducer = (state: State, action: Action): State => {
         case 'CREATE_PRODUCT':
             return {
                 ...state,
-                products: [action.payload, ...state.products],
+                products: state.products
+                    ? [action.payload, ...state.products]
+                    : [action.payload],
             }
         case 'GET_PRODUCT':
             return {
@@ -47,30 +53,30 @@ export const productReducer = (state: State, action: Action): State => {
         case 'UPDATE_PRODUCT':
             return {
                 ...state,
-                products: state.products.map((p) =>
-                    p._id === action.payload._id ? action.payload : p
-                ),
+                products:
+                    state.products?.map((p) =>
+                        p._id === action.payload._id ? action.payload : p
+                    ) || null,
             }
         case 'DELETE_PRODUCT':
             return {
                 ...state,
-                products: state.products.filter(
-                    (p) => p._id !== action.payload._id
-                ),
+                products:
+                    state.products?.filter(
+                        (p) => p._id !== action.payload._id
+                    ) || null,
             }
         default:
             return state
     }
 }
 
-interface ProductContextProviderProps {
-    children: ReactNode
-}
-
-export const ProductContextProvider: React.FC<ProductContextProviderProps> = ({
+export const ProductContextProvider: React.FC<PropsWithChildren<{}>> = ({
     children,
 }) => {
-    const [state, dispatch] = useReducer(productReducer, initialState)
+    const [state, dispatch] = useReducer(productReducer, {
+        products: null,
+    })
 
     return (
         <ProductContext.Provider value={{ state, dispatch }}>

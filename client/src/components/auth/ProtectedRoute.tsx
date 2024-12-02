@@ -1,38 +1,41 @@
-import React from 'react'
+// components/ProtectedRoute.tsx
+import React, { PropsWithChildren } from 'react'
 import Cookies from 'js-cookie'
 import { jwtDecode } from 'jwt-decode'
-import Error from '../../admin/pages/result/403'
+import { Navigate } from 'react-router-dom'
 
 interface DecodedToken {
-    role?: string
-    exp?: number
-    [key: string]: any // Nếu token chứa thêm các trường khác
+    role: string
+    exp: number
 }
 
-const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
-    // Lấy token từ cookie
+const ProtectedRoute: React.FC<PropsWithChildren> = ({
+    children,
+}: {
+    children: JSX.Element
+}) => {
     const token = Cookies.get('user')
-
-    // Kiểm tra token có tồn tại và đúng định dạng JWT không
-    console.log('Token:', token)
+    console.log(token)
 
     if (token) {
         try {
-            const decodedToken = jwtDecode<DecodedToken>(token)
-            if (decodedToken?.role === 'admin') {
+            const decodedToken: DecodedToken = jwtDecode(token)
+
+            // Kiểm tra nếu token còn hiệu lực và người dùng có quyền admin
+            if (
+                decodedToken.exp > Date.now() / 1000 &&
+                decodedToken.role === 'admin'
+            ) {
                 return children
+            } else {
+                return <Navigate to="/403" />
             }
         } catch (error) {
-            console.error('Invalid token:', error)
+            return <Navigate to="/login" />
         }
     }
 
-    // Nếu không hợp lệ, chuyển hướng về trang login
-    return (
-        <div className="text-center justify-center">
-            <Error />
-        </div>
-    )
+    return <Navigate to="/login" />
 }
 
 export default ProtectedRoute

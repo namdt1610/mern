@@ -6,7 +6,7 @@ import {
     deleteProductApi,
     createProductApi,
     updateProductApi,
-} from '../../api/productApi'
+} from '../../services/productApi'
 
 const useProductActions = () => {
     const { dispatch } = useContext(ProductContext)

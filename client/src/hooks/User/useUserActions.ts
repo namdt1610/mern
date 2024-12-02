@@ -6,7 +6,7 @@ import {
     deleteUserApi,
     createUserApi,
     updateUserApi,
-} from '../../api/userApi'
+} from '../../services/userApi'
 
 const useUserActions = () => {
     const { dispatch } = useContext(UserContext)

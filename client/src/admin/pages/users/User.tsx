@@ -4,7 +4,6 @@ import { User } from '../../../interfaces/User'
 import useUserActions from '../../../hooks/User/useUserActions'
 import { Button, Space, Badge, Input, Table, Modal, Card } from 'antd/lib'
 import { ColumnsType } from 'antd/lib/table'
-import type { SearchProps } from 'antd/lib/input/'
 import { ReloadOutlined, PlusOutlined, ImportOutlined } from '@ant-design/icons'
 import { debounce } from 'lodash'
 
@@ -15,9 +14,9 @@ export default function Users() {
     const [filteredData, setFilteredData] = useState<User[]>([])
 
     const getUsers = async () => {
-        const data = await fetchUsers()
-        setUsers(data.map((user: User) => ({ ...user, key: user._id })))
-        setFilteredData(data)
+        const response = await fetchUsers()
+        setUsers(response.map((user: User) => ({ ...user, key: user._id })))
+        setFilteredData(response)
     }
 
     useEffect(() => {

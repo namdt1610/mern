@@ -28,7 +28,7 @@
         "noPropertyAccessFromIndexSignature": true,
         "noUncheckedIndexedAccess": true,
         "allowImportingTsExtensions": true,
-        // "moduleResolution": "bundler",
+        "moduleResolution": "node",
         "noEmit": true
         // "emitDeclarationOnly": true
     },

@@ -4,26 +4,45 @@ import ClientRoutes from './client/routes/ClientRoutes'
 import AdminRoutes from './admin/routes/AdminRoutes'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
-import { AuthContextProvider } from './contexts/AuthContext.js'
 import { ProductContextProvider } from './contexts/ProductContext'
 import { CategoryContextProvider } from './contexts/CategoryContext'
 import { ThemeProvider } from './contexts/ThemeContext.js'
 import { ApiProvider } from './contexts/ApiContext'
-import { ConfigProvider } from 'antd/lib'
+import { ConfigProvider } from 'antd/'
+import { Provider } from 'react-redux'
+import store from './store/index.js'
 
 const App = () => (
     <React.StrictMode>
         <ApiProvider>
             <ThemeProvider>
-                <AuthContextProvider>
+                <Provider store={store}>
                     <ProductContextProvider>
                         <CategoryContextProvider>
                             <ConfigProvider
                                 theme={{
                                     token: {
                                         fontFamily: "'Karla', sans-serif",
-                                        colorPrimary: '#1890ff',
-                                        
+                                        colorPrimary: '#81C784', // Nút chính (xanh lá cây nhạt)
+                                        colorText: '#333333', // Màu chữ chính (đen)
+                                        colorTextSecondary: '#AAAAAA', // Màu chữ phụ (xám nhạt)
+                                        colorTextDisabled: '#A5A5A5', // Màu chữ disabled (xám sáng)
+                                        borderRadius: 8, // Bo góc
+                                        controlHeight: 40, // Chiều cao nút
+                                        colorBgContainer: '#FFFFFF', // Nền container trắng
+                                    },
+                                    components: {
+                                        Button: {
+                                            colorPrimary: '#81C784', // Nút chính (xanh lá cây nhạt)
+                                            colorBgContainer: '#81C784', // Nền cho container nút
+                                            colorTextLightSolid: '#FFFFFF', // Chữ trên nền nút
+                                            borderRadius: 8, // Bo góc riêng cho nút
+                                            colorPrimaryHover: '#66BB6A', // Màu hover nút chính
+                                        },
+                                        Menu: {
+                                            itemColor: '#333333', // Màu chữ trong menu
+                                            itemSelectedColor: '#7EB3F1', // Màu chữ khi chọn item trong menu
+                                        },
                                     },
                                 }}
                             >
@@ -42,7 +61,7 @@ const App = () => (
                             </ConfigProvider>
                         </CategoryContextProvider>
                     </ProductContextProvider>
-                </AuthContextProvider>
+                </Provider>
             </ThemeProvider>
         </ApiProvider>
     </React.StrictMode>

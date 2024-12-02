@@ -12,19 +12,21 @@ import {
 } from '@ant-design/icons'
 import { Layout, theme, Menu, Button, Card } from 'antd/lib'
 import type { MenuProps } from 'antd/'
-import { AuthContext } from '../../contexts/AuthContext'
-import { Outlet, Link, useLocation } from 'react-router-dom'
-import Breadcrumb from '../ui/breadcrumb'
-import Footer from '../ui/Footer'
-import useAuthApi from '../../hooks/Auth/useAuthApiBeta'
-import UserInfoCard from '../admin/UserInfoCard'
+import { Outlet, Link, useLocation, Navigate } from 'react-router-dom'
+import Breadcrumb from '../../ui/breadcrumb'
+import Footer from '../../ui/Footer'
+import useAuthApi from '../../../hooks/Auth/useAuthApiBeta'
+import UserInfoCard from '../../admin/UserInfoCard'
+import { useSelector, useDispatch } from 'react-redux'
+import { logout } from '../../../features/authSlice'
+import { RootState } from '../../../store'
 
 const { Content, Sider } = Layout
 
 export default function LayoutApp() {
-    const { state } = useContext(AuthContext)
-    const { logout } = useAuthApi()
-    const isLogin = state.user !== null
+    const dispatch = useDispatch()
+    const user = useSelector((state: RootState) => state.auth.user)
+    const isLogin = user !== null
     // console.log('Is user logged in:', isLogin)
     const location = useLocation()
     const currentPath = location.pathname
@@ -35,38 +37,34 @@ export default function LayoutApp() {
     } = theme.useToken()
 
     const onLogout = () => {
-        logout({})
+        dispatch(logout())
+    }
+
+    if (!isLogin) {
+        return <Navigate to="/admin/login" />
     }
 
     const items2: MenuProps['items'] = [
         {
             key: '1',
             icon: <BarChartOutlined />,
-            label: <Link to="/admin/dashboard">Dashboard</Link>,
+            label: <Link to="/admin">Dashboard</Link>,
             children: [
                 ...(isLogin
                     ? [
                           {
-                              key: '/admin/dashboard',
-                              label: (
-                                  <Link to="/admin/dashboard">Overview</Link>
-                              ),
+                              key: '/admin',
+                              label: <Link to="/admin">Overview</Link>,
                           },
                           {
                               key: '1-2',
                               label: (
-                                  <Link to="/admin/dashboard/analytics">
-                                      Analytics
-                                  </Link>
+                                  <Link to="/admin/analytics">Analytics</Link>
                               ),
                           },
                           {
                               key: '1-3',
-                              label: (
-                                  <Link to="/admin/dashboard/reports">
-                                      Reports
-                                  </Link>
-                              ),
+                              label: <Link to="/admin/reports">Reports</Link>,
                           },
                       ]
                     : []),
@@ -90,10 +88,6 @@ export default function LayoutApp() {
                 {
                     key: '/admin/categories',
                     label: <Link to="/admin/categories">Categories</Link>,
-                },
-                {
-                    key: '/admin/brands',
-                    label: <Link to="/admin/brands">Brands</Link>,
                 },
             ],
         },
@@ -192,12 +186,15 @@ export default function LayoutApp() {
                     style={{ background: '#f3f3f3', border: '1px solid' }}
                 >
                     <div className="items-center justify-center flex flex-col pt-4">
-                        {/* <img
-                            src="/img/logo_dtn.png"
-                            alt="logo"
-                            className="w-16"
-                            loading="lazy"
-                        /> */}
+                        <Link to={'/admin/dashboard'}>
+                            <img
+                                src="/img/logo_dtn.png"
+                                alt="logo"
+                                className="w-16 cursor-pointer"
+                                loading="lazy"
+                            />
+                        </Link>
+
                         <Button
                             type="text"
                             icon={

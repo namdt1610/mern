@@ -1,59 +1,102 @@
-import { useContext } from 'react'
-import { CategoryContext } from '../../contexts/CategoryContext'
 import {
     fetchCategoriesApi,
     fetchCategoryByIdApi,
-    deleteCategoryApi,
     createCategoryApi,
     updateCategoryApi,
-} from '../../api/categoryApi'
+    deleteCategoryApi,
+} from '../../services/categoryApi'
+import useApiCall from '../useApiCall'
+import { useCategoryContext } from './useCategoryContext'
+import { message } from 'antd'
+import { useNavigate } from 'react-router-dom'
+
+// hooks/Auth/useCategoryActions.ts
 
 const useCategoryActions = () => {
-    const { dispatch } = useContext(CategoryContext)
+    const { dispatch } = useCategoryContext()
+    const navigate = useNavigate()
 
-    type ActionType =
-        | 'SET_CATEGORIES'
-        | 'CREATE_CATEGORY'
-        | 'GET_CATEGORY'
-        | 'UPDATE_CATEGORY'
-        | 'DELETE_CATEGORY'
-
-    const apiRequest = async (
-        apiFunc: Function,
-        actionType: ActionType,
-        payload?: any
-    ) => {
-        try {
-            const data = await apiFunc(payload)
-            dispatch({ type: actionType, payload: data })
-            return data
-        } catch (error) {
-            console.error(`Error during ${actionType}:`, error)
-            throw error // Optional: throw error if you want to handle it in the calling component
+    const fetchCategories = useApiCall(
+        fetchCategoriesApi,
+        (data) => {
+            dispatch({ type: 'SET_CATEGORIES', payload: data.categories })
+        },
+        (error) => {
+            message.error(
+                error?.response?.data?.message || 'Failed to fetch categories'
+            )
         }
-    }
+    )
 
-    const fetchCategories = async () =>
-        apiRequest(fetchCategoriesApi, 'SET_CATEGORIES')
+    const fetchCategoryById = useApiCall(
+        fetchCategoryByIdApi,
+        (data) => {
+            dispatch({ type: 'GET_CATEGORY', payload: data.category })
+        },
+        (error) => {
+            message.error(
+                error?.response?.data?.message || 'Failed to fetch category'
+            )
+        }
+    )
 
-    const fetchCategoryById = async (id: string) =>
-        apiRequest(() => fetchCategoryByIdApi(id), 'GET_CATEGORY')
+    const createCategory = useApiCall(
+        createCategoryApi,
+        (data) => {
+            message.loading('Creating category...', 0)
+            dispatch({ type: 'CREATE_CATEGORY', payload: data.category })
+            setTimeout(() => {
+                message.destroy()
+                message.success('Category created successfully', 1)
+            }, 1000)
+        },
+        (error) => {
+            message.error(
+                error?.response?.data?.message || 'Category creation failed'
+            )
+        }
+    )
 
-    const deleteCategory = async (id: string) =>
-        apiRequest(() => deleteCategoryApi(id), 'DELETE_CATEGORY')
+    const updateCategory = useApiCall(
+        updateCategoryApi,
+        (data) => {
+            message.loading('Updating category...', 0)
+            dispatch({ type: 'UPDATE_CATEGORY', payload: data.category })
+            setTimeout(() => {
+                message.destroy()
+                message.success('Category updated successfully', 1)
+            }, 1000)
+        },
+        (error) => {
+            message.error(
+                error?.response?.data?.message || 'Category update failed'
+            )
+        }
+    )
 
-    const createCategory = async (categoryData: object) =>
-        apiRequest(() => createCategoryApi(categoryData), 'CREATE_CATEGORY')
-
-    const updateCategory = async (id: string, name: string) =>
-        apiRequest(() => updateCategoryApi(id, name), 'UPDATE_CATEGORY')
+    const deleteCategory = useApiCall(
+        deleteCategoryApi,
+        (data) => {
+            message.loading('Deleting category...', 0)
+            dispatch({ type: 'DELETE_CATEGORY', payload: data.categoryId })
+            setTimeout(() => {
+                message.destroy()
+                message.success('Category deleted successfully', 1)
+            }, 1000)
+        },
+        (error) => {
+            message.error(
+                error?.response?.data?.message || 'Category deletion failed'
+            )
+        }
+    )
 
     return {
         fetchCategories,
         fetchCategoryById,
-        deleteCategory,
         createCategory,
         updateCategory,
+        deleteCategory,
     }
 }
 

@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import Navbar from './Navbar'
 import { Link } from 'react-router-dom'
 import { useThemeContext } from '../../../hooks/useThemeContext'
 import { useAuthContext } from '../../../hooks/Auth/useAuthContext'
@@ -100,7 +99,6 @@ const Header = () => {
                     </div>
                 </nav>
             </div>
-            <Navbar />
         </>
     )
 }

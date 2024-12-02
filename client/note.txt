@@ -1,5 +1,36 @@
 npm prune // remove all deprecated packages
 npm update --save 
 
+ExpressJS
+npm install jsonwebtoken
+npm install bcryptjs
+npm install express-validator
+npm install multer
+npm install cors
+npm install dotenv
+npm install stripe
+npm install paypal-rest-sdk
+
+ReactJS
+npm install react-router-dom
+npm install @reduxjs/toolkit react-redux
+npm install axios 
+npm install @tanstack/react-query
+npm install formik
+npm install tailwindcss
+npm install antd
+npm install react-hot-toast
+
+NodeJS:
+npm install --save-dev nodemon
+npm install morgan
+npm install helmet
+
+Others:
+npm install cloudinary
+npm install socket.io
+npm install i18next react-i18next
+
+
 Tên thư mục thì viết thường
 Tên tệp thì viết Hoa PascalCase

@@ -1,25 +1,88 @@
-import React, { lazy, Suspense } from 'react'
+import React, { Suspense, useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
-import Layout from '../../components/layout/AdminLayout'
-import Error from '../pages/result/404'
+import { Spin } from 'antd'
 import ProtectedRoute from '../../components/auth/ProtectedRoute'
-import { Spin } from 'antd/'
+import routesConfig from './routesConfig'
+import Cookies from 'js-cookie'
+import { setUser } from '../../features/authSlice'
+import { useDispatch } from 'react-redux'
+import { jwtDecode } from 'jwt-decode'
 
-const Dashboard = lazy(() => import('../pages/dashboard/AdminDashboard'))
-const Product = lazy(() => import('../pages/products/Product'))
-const CreateProduct = lazy(() => import('../pages/products/ProductNew'))
-const ProductDetails = lazy(() => import('../pages/products/ProductDetails'))
-const Category = lazy(() => import('../pages/categories/Category'))
-const CategoryDetails = lazy(
-    () => import('../pages/categories/CategoryDetails')
-)
-const CategoryNew = lazy(() => import('../pages/categories/CategoryNew'))
-const Users = lazy(() => import('../pages/users/User'))
-const UserDetail = lazy(() => import('../pages/users/UserDetails'))
-const Login = lazy(() => import('../pages/auth/Login/Login'))
-const Register = lazy(() => import('../pages/auth/Register/Register'))
+// Kiểu của payload trong token
+interface DecodedToken {
+    email: string
+    id: string
+    role: string
+}
 
 export default function AdminRoutes() {
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        const token = Cookies.get('user') // Lấy token từ cookie
+        if (token) {
+            try {
+                const decoded: DecodedToken = jwtDecode(token) // Giải mã token
+                if (decoded) {
+                    // Lưu thông tin user vào Redux store
+                    dispatch(
+                        setUser({
+                            user: {
+                                _id: decoded.id,
+                                email: decoded.email,
+                                role: decoded.role,
+                                avatar: '',
+                                name: '',
+                                status: 'active',
+                                createdAt: new Date().toISOString(),
+                                updatedAt: new Date().toISOString(),
+                            },
+                            token,
+                        })
+                    )
+                }
+            } catch (error) {
+                console.error('Token is invalid or expired', error)
+            }
+        }
+    }, [dispatch])
+
+    const renderRoutes = (routes: typeof routesConfig) =>
+        routes.map(
+            (
+                {
+                    path,
+                    element: Element,
+                    children,
+                    protected: isProtected,
+                    index,
+                },
+                idx
+            ) => {
+                const routeElement = isProtected ? (
+                    <ProtectedRoute>
+                        <Element />
+                    </ProtectedRoute>
+                ) : (
+                    <Element />
+                )
+
+                return children ? (
+                    <Route key={idx} path={path} element={routeElement}>
+                        {renderRoutes(children)}{' '}
+                        {/* Đệ quy để render các route con */}
+                    </Route>
+                ) : (
+                    <Route
+                        key={idx}
+                        path={path}
+                        element={routeElement}
+                        index={index}
+                    />
+                )
+            }
+        )
+
     return (
         <Suspense
             fallback={
@@ -28,38 +91,7 @@ export default function AdminRoutes() {
                 </div>
             }
         >
-            <Routes>
-                <Route path="login" element={<Login />} />
-                <Route path="register" element={<Register />} />
-                <Route path="/" element={<Layout />}>
-                    <Route index element={<Dashboard />} />
-
-                    <Route
-                        path="dashboard"
-                        element={
-                            <ProtectedRoute>
-                                <Dashboard />
-                            </ProtectedRoute>
-                        }
-                    />
-
-                    <Route path="products" element={<Product />} />
-                    <Route path="products/:id" element={<ProductDetails />} />
-                    <Route path="products/new" element={<CreateProduct />} />
-
-                    <Route path="categories" element={<Category />} />
-                    <Route
-                        path="categories/:id"
-                        element={<CategoryDetails />}
-                    />
-                    <Route path="categories/new" element={<CategoryNew />} />
-
-                    <Route path="users" element={<Users />} />
-                    <Route path="users/:id" element={<UserDetail />} />
-
-                    <Route path="*" element={<Error />} />
-                </Route>
-            </Routes>
+            <Routes>{renderRoutes(routesConfig)}</Routes>
         </Suspense>
     )
 }

@@ -1,20 +1,33 @@
-import React from 'react'
-import { Row, Col } from 'antd/'
-import DashboardStats from './DashboardStats'
-import DashboardChart from './DashboardChart'
-import RecentActivityTable from './RecentActivityTable'
+import React, { lazy, Suspense } from 'react'
+import { Row, Col, Spin } from 'antd/'
+
+const DashboardStats = lazy(() => import('./DashboardStats'))
+const DashboardChart = lazy(() => import('./DashboardChart'))
+const RecentActivityTable = lazy(() => import('./RecentActivityTable'))
 
 const AdminDashboard: React.FC = () => {
     return (
         <div style={{ padding: 16 }}>
             <h1 style={{ marginBottom: 16 }}>Dashboard</h1>
-            <DashboardStats />
+            <Suspense
+                fallback={
+                    <div className="min-w-screen min-h-screen flex items-center justify-center">
+                        <Spin size="large" />
+                    </div>
+                }
+            >
+                <DashboardStats />
+            </Suspense>
             <Row gutter={[16, 16]} style={{ marginTop: 16 }}>
                 <Col span={16}>
-                    <DashboardChart />
+                    <Suspense fallback={<Spin size="large" />}>
+                        <DashboardChart />
+                    </Suspense>
                 </Col>
                 <Col span={8}>
-                    <RecentActivityTable />
+                    <Suspense fallback={<Spin size="large" />}>
+                        <RecentActivityTable />
+                    </Suspense>
                 </Col>
             </Row>
         </div>

@@ -1,21 +1,14 @@
 import React, { useEffect, useContext } from 'react'
 import { Link } from 'react-router-dom'
 import Loading from '../../../components/loading'
-import { fetchProducts } from '../../../hooks/useProductActions'
-import { ProductContext } from '../../../context/ProductContext'
+import useProductActions from '../../../hooks/product/useProductActions'
+import { ProductContext } from '../../../contexts/ProductContext'
 
 const Men = () => {
-    const { state, dispatch } = useContext(ProductContext)
+    const { state } = useContext(ProductContext)
+    const p = state.products
 
-    useEffect(() => {
-        fetchProducts(dispatch)
-    }, [dispatch])
-
-    const products = state.products || []
-
-    if (products.length === 0) {
-        return <div className="text-center">Không có sản phẩm nào.</div>
-    }
+    useEffect(() => {}, [])
 
     const genders = ['Male', 'Female', 'Kids']
     const sizes = ['36', '37', '38', '39', '40', '41', '42', '43', '44', '45']
@@ -32,7 +25,6 @@ const Men = () => {
 
     return (
         <>
-            {state.loading && <Loading />}
             <div className="main-content gap-2">
                 <div className="breadcrumb flex m-2">
                     <a href="/" className="no-underline text-black">
@@ -57,10 +49,10 @@ const Men = () => {
                     </select>
                 </div>
                 <div className="grid grid-cols-3 gap-3">
-                    {products.map((product) => (
+                    {p.map((product) => (
                         <Link
                             to={`/${product._id}`}
-                            key={product.id}
+                            key={product._id}
                             className="no-underline p-2 rounded-lg shadow-lg bg-gray-100 min-h-48 transform transition-transform duration-300 hover:scale-105 cursor-pointer"
                         >
                             <div className="h-48 bg-gray-200 mb-2 rounded-lg shadow-lg">
@@ -85,7 +77,7 @@ const Men = () => {
             <div className="side-bar-right bg-gray-100 w-1/4">
                 <ul className="mt-4">
                     <li className="py-2">
-                        <Link>
+                        <Link to={'/'}>
                             <picture></picture>
                         </Link>
                     </li>

@@ -4,9 +4,8 @@ import Category from '../models/categoryModel'
 // GET all categories
 const getAllCategories = async (req: Request, res: Response) => {
     try {
-        const categories = await Category.find({}).sort({ name: 1 })
-        const totalCategories = await Category.countDocuments()
-        res.status(200).json({ success: true, categories, totalCategories })
+        const categories = await Category.find().sort({ name: 1 })
+        res.status(200).json(categories)
     } catch (error) {
         res.status(500).json({
             success: false,

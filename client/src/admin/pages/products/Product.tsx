@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { Product } from '../../../interfaces/Product'
-import useProductActions from '../../../hooks/Product/useProductActions'
+import useProductActions from '../../../hooks/product/useProductActions'
 import { Button, Space, Badge, Input, Table, Card } from 'antd/lib'
 import { ColumnsType } from 'antd/lib/table'
 import type { SearchProps } from 'antd/lib/input/'

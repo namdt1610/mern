@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
-import User from '../models/UserModel' // Mô hình User
+import User from '../models/UserModel'
 
 interface UserRequest extends Request {
     userId?: string
@@ -64,8 +64,13 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
         res.cookie('user', token, {
             maxAge: 1 * 60 * 60 * 1000,
+            httpOnly: true,
+            secure: true,
+            sameSite: 'strict',
+            path: '/',
         })
-        // console.log('Token:', token);
+        console.log('Cookie:', res.getHeaders())
+        console.log('Token:', token)
 
         res.status(200).json({ message: 'Login successful', token })
     } catch (error) {

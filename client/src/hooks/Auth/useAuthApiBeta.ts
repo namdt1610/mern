@@ -1,12 +1,12 @@
+import { useSelector } from 'react-redux'
 // hooks/useAuthApi.ts
-import { loginApi, registerApi, logoutApi } from '../../api/authApi'
+import { loginApi, registerApi, logoutApi } from '../../services/auth'
 import useApiCall from '../useApiCall'
-import { useAuthContext } from './useAuthContext'
-import { message } from 'antd'
+import { message } from 'antd/'
 import { useNavigate } from 'react-router-dom'
 
 const useAuthApi = () => {
-    const { dispatch } = useAuthContext()
+    const { state } = useSelector((state: any) => state.auth)
     const navigate = useNavigate()
 
     const login = useApiCall(

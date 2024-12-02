@@ -1,4 +1,4 @@
-import { loginApi, registerApi, logoutApi } from '../../api/authApi'
+import { loginApi, registerApi, logoutApi } from '../../services/auth'
 import { useAuthContext } from './useAuthContext'
 import { useState } from 'react'
 

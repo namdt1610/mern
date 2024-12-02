@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Form, Input, Button, message, Upload, Card } from 'antd/lib'
 import { UploadOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
-import useProductActions from '../../../hooks/Product/useProductActions'
+import useProductActions from '../../../hooks/product/useProductActions'
 
 const ProductNew: React.FC = () => {
     const [form] = Form.useForm()
@@ -22,18 +22,19 @@ const ProductNew: React.FC = () => {
         try {
             await createProduct(formData)
             message.success('Product created successfully')
-            navigate('/admin/products')
+            navigate('/admin/products/new')
         } catch (error) {
             message.error('Error occurred while creating product')
         }
     }
 
+    // Upload images
     const handleUploadChange = ({ fileList }: any) => {
         setFileList(fileList)
     }
 
     return (
-        <Card className='card-border my-4'>
+        <Card className="card-border my-4">
             <Form form={form} layout="vertical" onFinish={handleFinish}>
                 <Form.Item
                     name="name"

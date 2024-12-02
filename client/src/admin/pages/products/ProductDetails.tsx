@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Card, message, Spin, Space } from 'antd/lib'
-import useProductActions from '../../../hooks/Product/useProductActions'
+import useProductActions from '../../../hooks/product/useProductActions'
 import { Product } from '../../../interfaces/Product'
 import ProductAvatar from './ProductDetailsImage'
 import ProductActions from './ProductDetailsActions'
