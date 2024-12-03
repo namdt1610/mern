@@ -1,35 +1,44 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { User } from '../../../interfaces/User'
-import useUserActions from '../../../hooks/User/useUserActions'
+import { User } from 'interfaces/User'
 import { Button, Space, Badge, Input, Table, Modal, Card } from 'antd/lib'
 import { ColumnsType } from 'antd/lib/table'
 import { ReloadOutlined, PlusOutlined, ImportOutlined } from '@ant-design/icons'
 import { debounce } from 'lodash'
-import { useGetUsersQuery } from 'services/User'
+import { useGetUsersQuery, useDeleteUserMutation } from 'services/UserApi'
+import LoadingError from 'components/LoadingError'
+import { message } from 'antd'
 
 export default function Users() {
-    const { fetchUsers } = useUserActions()
-    const navigate = useNavigate()
-    // const [users, setUsers] = useState<User[]>([])
-    const [filteredData, setFilteredData] = useState<User[]>([])
-    // Fetch danh sách users
-    const { data: users, error, isLoading } = useGetUsersQuery()
-
-    // const getUsers = async () => {
-    //     const response = await fetchUsers()
-    //     setUsers(response.map((user: User) => ({ ...user, key: user._id })))
-    //     setFilteredData(response)
-    // }
-
-    // useEffect(() => {
-    //     getUsers()
-    // }, [])
-
+    // Interface cho record
     interface ActionRecord extends User {
         _id: string
     }
 
+    const navigate = useNavigate()
+    const [deleteUser] = useDeleteUserMutation()
+    const [filteredData, setFilteredData] = useState<User[]>([])
+    const { data: users, error, isLoading, refetch } = useGetUsersQuery()
+
+    // Lọc dữ liệu
+    useEffect(() => {
+        if (users) setFilteredData(users)
+    }, [users])
+
+    // Tìm kiếm
+    const onSearch = useMemo(() => {
+        return debounce((value: string) => {
+            const lowercasedValue = value.toLowerCase()
+            const filtered = users?.filter((user) =>
+                ['name', 'email', 'phone', 'status'].some((key) =>
+                    user[key]?.toLowerCase()?.includes(lowercasedValue)
+                )
+            )
+            setFilteredData(filtered ?? [])
+        }, 300)
+    }, [users])
+
+    // Render actions dùng useCallback vì truyền vào Table
     const renderActions = useCallback(
         (_: unknown, record: ActionRecord): JSX.Element => (
             <Space size={'middle'} wrap>
@@ -54,6 +63,8 @@ export default function Users() {
         []
     )
 
+    // Dùng useMemo để tránh re-render vì columns là danh sách tĩnh
+    //(nếu không dùng useMemo thì mỗi lần re - render Users thì columns sẽ được tạo mới)
     const columns: ColumnsType<User> = useMemo(
         () => [
             {
@@ -82,20 +93,6 @@ export default function Users() {
                     <Link to={`/admin/users/${_id}`}>{name}</Link>
                 ),
             },
-            // {
-            //     title: 'Role',
-            //     dataIndex: 'role',
-            //     key: 'role',
-            //     render: (_, { role }) => {
-            //         let color = role === 'admin' ? 'red' : 'green'
-            //         return (
-            //             <Tag color={color} key={role}>
-            //                 {role.toUpperCase()}
-            //             </Tag>
-            //         )
-            //     },
-            //     sorter: (a, b) => a.role.localeCompare(b.role),
-            // },
             {
                 title: 'Email',
                 dataIndex: 'email',
@@ -131,42 +128,47 @@ export default function Users() {
         []
     )
 
-    const handleView = (id: string) => {
-        navigate(`/admin/users/${id}`)
+    // Xử lý loading và error
+    if (isLoading || error) {
+        return (
+            <LoadingError
+                isLoading={isLoading}
+                error={error}
+                refetch={refetch}
+            />
+        )
     }
 
+    // Xóa user
     const handleDelete = (userId: string) => {
         Modal.confirm({
             title: 'Are you sure?',
             content: 'Do you really want to delete this user?',
             okText: 'Yes',
             cancelText: 'No',
-            onOk: () => {
-                console.log('Delete user ID:', userId)
+            onOk: async () => {
+                deleteUser(userId)
+                    .then(() => {
+                        message.success('User deleted successfully!')
+                    })
+                    .catch((error) => {
+                        const errorMessage =
+                            error?.data?.message || 'Failed to delete user!'
+                        message.error(errorMessage)
+                        console.error('Delete error:', error)
+                    })
             },
         })
     }
 
-    const onSearch = useMemo(
-        () =>
-            debounce((value: string) => {
-                const lowercasedValue = value.toLowerCase()
-                if (value === '') {
-                    setFilteredData(users)
-                } else {
-                    const filtered = users.filter((user) =>
-                        ['name', 'email', 'role', 'phone', 'status'].some(
-                            (key) =>
-                                user[key]
-                                    ?.toLowerCase()
-                                    .includes(lowercasedValue)
-                        )
-                    )
-                    setFilteredData(filtered)
-                }
-            }, 300),
-        [users]
-    )
+    const handleRefresh = () => {
+        refetch()
+        setFilteredData(users) // Hoặc gọi lại API tùy nhu cầu
+    }
+
+    const handleView = (id: string) => {
+        navigate(`/admin/users/${id}`)
+    }
 
     const { Search } = Input
 
@@ -193,7 +195,7 @@ export default function Users() {
                     <Button
                         size="large"
                         className="btn-border btn-hover"
-                        onClick={window.location.reload}
+                        onClick={() => handleRefresh()}
                         icon={<ReloadOutlined />}
                     >
                         Refresh
@@ -202,6 +204,7 @@ export default function Users() {
                         size="large"
                         placeholder="input search text"
                         allowClear
+                        enterButton="Search"
                         onSearch={onSearch}
                         style={{ width: 'auto' }}
                     />
@@ -213,6 +216,7 @@ export default function Users() {
                 color="#f3f3f3"
             >
                 <Table
+                    rowKey={(record) => record._id}
                     size="large"
                     tableLayout="fixed"
                     rowClassName={'cursor-pointer'}
@@ -220,10 +224,11 @@ export default function Users() {
                     dataSource={filteredData}
                     columns={columns}
                     locale={{
-                        emptyText:
-                            filteredData.length === 0
-                                ? 'Không có từ khóa trùng khớp'
-                                : 'Không có dữ liệu',
+                        emptyText: !users
+                            ? 'Đang tải dữ liệu...'
+                            : filteredData.length === 0
+                            ? 'Không có từ khóa trùng khớp'
+                            : 'Không có dữ liệu',
                     }}
                 />
             </Card>

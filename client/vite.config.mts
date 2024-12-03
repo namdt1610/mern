@@ -25,6 +25,8 @@ export default defineConfig({
             '@': path.resolve(__dirname, 'src/'),
             hooks: path.resolve(__dirname, 'src/hooks'),
             services: path.resolve(__dirname, 'src/services'),
+            components: path.resolve(__dirname, 'src/components'),
+            
         },
     },
     define: {

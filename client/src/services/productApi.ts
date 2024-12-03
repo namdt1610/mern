@@ -1,58 +1,52 @@
-import axiosInstance from './axiosInstance'
-import { productApi } from './apiConfig'
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { Product } from 'interfaces/Product' // Định nghĩa kiểu Product
 
-export const fetchProductsApi = async () => {
-    try {
-        const response = await axiosInstance.get(productApi.base)
-        return response.data
-    } catch (error) {
-        console.error('Lỗi khi lấy sản phẩm:', error)
-        throw error
-    }
-}
+export const productApi = createApi({
+    reducerPath: 'productApi',
+    baseQuery: fetchBaseQuery({
+        baseUrl: 'http://localhost:8888/api', // API backend URL
+        credentials: 'include',
+        prepareHeaders: (headers) => {
+            headers.set('Content-Type', 'application/json')
+            return headers
+        },
+    }),
+    endpoints: (builder) => ({
+        // Lấy danh sách sản phẩm
+        getProducts: builder.query<Product[], void>({
+            query: () => '/products',
+        }),
 
-export const fetchProductByIdApi = async (id) => {
-    if (!id) throw new Error('ID không hợp lệ')
-    try {
-        const response = await axiosInstance.get(productApi.getById(id))
-        return response.data
-    } catch (error) {
-        console.error(`Lỗi khi lấy sản phẩm với ID ${id}:`, error)
-        throw error
-    }
-}
+        // Lấy chi tiết sản phẩm theo ID
+        getProductById: builder.query<Product, string>({
+            query: (id) => `/products/${id}`,
+        }),
 
-export const createProductApi = async (productData) => {
-    try {
-        const response = await axiosInstance.post(productApi.base, productData)
-        return response.data
-    } catch (error) {
-        console.error('Lỗi khi tạo sản phẩm mới:', error)
-        throw error
-    }
-}
+        // Cập nhật sản phẩm
+        updateProduct: builder.mutation<
+            Product,
+            Partial<Product> & { id: string }
+        >({
+            query: ({ id, ...data }) => ({
+                url: `/products/${id}`,
+                method: 'PUT',
+                body: data,
+            }),
+        }),
 
-export const updateProductApi = async (id, updatedData) => {
-    if (!id) throw new Error('ID không hợp lệ')
-    try {
-        const response = await axiosInstance.put(
-            productApi.getById(id),
-            updatedData
-        )
-        return response.data
-    } catch (error) {
-        console.error(`Lỗi khi cập nhật sản phẩm với ID ${id}:`, error)
-        throw error
-    }
-}
+        // Xóa sản phẩm
+        deleteProduct: builder.mutation<void, string>({
+            query: (id) => ({
+                url: `/products/${id}`,
+                method: 'DELETE',
+            }),
+        }),
+    }),
+})
 
-export const deleteProductApi = async (id) => {
-    if (!id) throw new Error('ID không hợp lệ')
-    try {
-        const response = await axiosInstance.delete(productApi.getById(id))
-        return response.data
-    } catch (error) {
-        console.error(`Lỗi khi xóa sản phẩm với ID ${id}:`, error)
-        throw error
-    }
-}
+export const {
+    useGetProductsQuery,
+    useGetProductByIdQuery,
+    useUpdateProductMutation,
+    useDeleteProductMutation,
+} = productApi

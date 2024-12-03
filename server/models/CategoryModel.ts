@@ -1,6 +1,6 @@
 import exp from 'constants'
 
-const mongoose = require('mongoose')
+import mongoose from 'mongoose'
 const schema = mongoose.Schema
 
 const categorySchema = new schema({

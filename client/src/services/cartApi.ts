@@ -1,58 +1,56 @@
-import axiosInstance from './axiosInstance'
-import { cartApi } from './apiConfig'
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { CartItem } from 'interfaces/CartItem' // Định nghĩa kiểu CartItem
 
-export const fetchCartApi = async () => {
-    try {
-        const response = await axiosInstance.get(cartApi.base)
-        return response.data
-    } catch (error) {
-        console.error('Lỗi khi lấy sản phẩm:', error)
-        throw error
-    }
-}
+export const cartApi = createApi({
+    reducerPath: 'cartApi',
+    baseQuery: fetchBaseQuery({
+        baseUrl: 'http://localhost:8888/api', // API backend URL
+        credentials: 'include',
+        prepareHeaders: (headers) => {
+            headers.set('Content-Type', 'application/json')
+            return headers
+        },
+    }),
+    endpoints: (builder) => ({
+        // Lấy danh sách sản phẩm trong giỏ hàng
+        getCartItems: builder.query<CartItem[], void>({
+            query: () => '/cart',
+        }),
 
-export const fetchcartByIdApi = async (id) => {
-    if (!id) throw new Error('ID không hợp lệ')
-    try {
-        const response = await axiosInstance.get(cartApi.getById(id))
-        return response.data
-    } catch (error) {
-        console.error(`Lỗi khi lấy sản phẩm với ID ${id}:`, error)
-        throw error
-    }
-}
+        // Thêm sản phẩm vào giỏ hàng
+        addToCart: builder.mutation<void, CartItem>({
+            query: (item) => ({
+                url: '/cart',
+                method: 'POST',
+                body: item,
+            }),
+        }),
 
-export const createcartApi = async (cartData) => {
-    try {
-        const response = await axiosInstance.post(cartApi.base, cartData)
-        return response.data
-    } catch (error) {
-        console.error('Lỗi khi tạo sản phẩm mới:', error)
-        throw error
-    }
-}
+        // Cập nhật số lượng sản phẩm trong giỏ hàng
+        updateCartItem: builder.mutation<
+            void,
+            { id: string; quantity: number }
+        >({
+            query: ({ id, quantity }) => ({
+                url: `/cart/${id}`,
+                method: 'PUT',
+                body: { quantity },
+            }),
+        }),
 
-export const updatecartApi = async (id, updatedData) => {
-    if (!id) throw new Error('ID không hợp lệ')
-    try {
-        const response = await axiosInstance.put(
-            cartApi.getById(id),
-            updatedData
-        )
-        return response.data
-    } catch (error) {
-        console.error(`Lỗi khi cập nhật sản phẩm với ID ${id}:`, error)
-        throw error
-    }
-}
+        // Xóa sản phẩm khỏi giỏ hàng
+        removeCartItem: builder.mutation<void, string>({
+            query: (id) => ({
+                url: `/cart/${id}`,
+                method: 'DELETE',
+            }),
+        }),
+    }),
+})
 
-export const deletecartApi = async (id) => {
-    if (!id) throw new Error('ID không hợp lệ')
-    try {
-        const response = await axiosInstance.delete(cartApi.getById(id))
-        return response.data
-    } catch (error) {
-        console.error(`Lỗi khi xóa sản phẩm với ID ${id}:`, error)
-        throw error
-    }
-}
+export const {
+    useGetCartItemsQuery,
+    useAddToCartMutation,
+    useUpdateCartItemMutation,
+    useRemoveCartItemMutation,
+} = cartApi

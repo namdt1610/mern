@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from 'react'
 import { Link } from 'react-router-dom'
-import Loading from '../../../components/loading'
+import Loading from '../../../components/LoadingError'
 import useProductActions from '../../../hooks/product/useProductActions'
 import { ProductContext } from '../../../contexts/ProductContext'
 

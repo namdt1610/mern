@@ -1,6 +1,7 @@
 import React, { Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import routesConfig, { RouteConfig } from './routesConfig'
+import LoadingError from 'components/LoadingError'
 
 export default function AdminRoutes() {
     const renderRoutes = (routes: RouteConfig[]) =>
@@ -19,5 +20,9 @@ export default function AdminRoutes() {
             )
         })
 
-    return <Routes>{renderRoutes(routesConfig)}</Routes>
+    return (
+        <Suspense fallback={<LoadingError isLoading={true} error={null} />}>
+            <Routes>{renderRoutes(routesConfig)}</Routes>
+        </Suspense>
+    )
 }

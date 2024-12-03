@@ -20,7 +20,7 @@ const authRoutes: RouteConfig[] = [
 
 const adminRoutes: RouteConfig = {
     path: '/',
-    element: lazy(() => import('../../components/layout/admin/AdminLayout')),
+    element: lazy(() => import('../../components/admin/layout/AdminLayout')),
     protected: true,
     requiredRole: 'admin',
     children: [
@@ -61,6 +61,7 @@ const adminRoutes: RouteConfig = {
             path: 'users/:id',
             element: lazy(() => import('../pages/users/UserDetails')),
         },
+        { path: '*', element: lazy(() => import('../pages/result/404')) },
     ],
 }
 

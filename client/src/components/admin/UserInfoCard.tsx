@@ -1,27 +1,30 @@
 // UserInfoCard.tsx
 import React, { useMemo } from 'react'
-import { Card, Image, Typography, Spin, Button } from 'antd'
-import { decodeToken, DecodedToken } from '../../utils/jwtDecode'
-import { useLogoutMutation } from 'services/auth'
+import { Card, Image, Typography, Button } from 'antd'
+import { decodeToken } from '../../utils/jwtDecode'
+import { useLogoutMutation } from 'services/AuthApi'
 import Cookies from 'js-cookie'
+import { useNavigate } from 'react-router-dom'
 
 const { Title, Text } = Typography
 
 const UserInfoCard = () => {
+    const navigate = useNavigate()
+    const [logout] = useLogoutMutation()
+
     const decodedUser = useMemo(() => {
         const token = Cookies.get('user')
-        if (!token) return null
+        if (!token) {
+            return null
+        }
         return decodeToken(token)
     }, [])
 
-    if (!decodedUser) return <Spin tip="Loading user info..." />
-
-    const [logout] = useLogoutMutation()
     const onLogout = async () => {
         try {
             await logout()
             Cookies.remove('user')
-            window.location.href = '/admin/login'
+            navigate('/admin/login')
         } catch (err) {
             console.error('Logout error:', err)
         }

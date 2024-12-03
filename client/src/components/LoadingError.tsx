@@ -1,0 +1,51 @@
+// LoadingError.tsx
+import React from 'react'
+import { Spin, Result, Button } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons'
+
+interface LoadingErrorProps {
+    isLoading: boolean
+    error: any
+    refetch?: () => void
+}
+
+const LoadingError: React.FC<LoadingErrorProps> = ({
+    isLoading,
+    error,
+    refetch,
+}) => {
+    if (isLoading) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <Spin
+                    indicator={
+                        <LoadingOutlined style={{ fontSize: 48 }} spin />
+                    }
+                />
+            </div>
+        )
+    }
+
+    if (error) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <Result
+                    status="error"
+                    title="Có lỗi xảy ra!"
+                    subTitle="Vui lòng thử lại sau."
+                    extra={
+                        refetch && (
+                            <Button type="primary" onClick={refetch}>
+                                Thử lại
+                            </Button>
+                        )
+                    }
+                />
+            </div>
+        )
+    }
+
+    return null
+}
+
+export default LoadingError

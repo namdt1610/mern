@@ -8,13 +8,9 @@ interface UserRequest extends Request {
         id: string
         role: string
     }
-    userId?: string
-    userRole?: string
-    headers: {
-        authorization?: string
-    }
 }
 
+// Đăng ký
 export const signup = async (req: Request, res: Response): Promise<void> => {
     const { email, username, password } = req.body
 
@@ -40,6 +36,7 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
     }
 }
 
+// Đăng nhập
 export const login = async (req: Request, res: Response): Promise<void> => {
     const { email, password } = req.body
 
@@ -68,11 +65,11 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         )
 
         res.cookie('user', token, {
-            maxAge: 1 * 60 * 60 * 1000,
-            httpOnly: false,
-            secure: true,
-            sameSite: 'strict',
-            path: '/',
+            maxAge: 1 * 60 * 60 * 1000, // 1 hour
+            httpOnly: false, // Cho phép frontend đọc cookie
+            secure: true, // Chỉ gửi cookie qua HTTPS
+            sameSite: 'strict', // Ngăn chặn request từ các domain khác
+            path: '/', // Cookie có hiệu lực trên toàn bộ website
         })
         console.log('Cookie:', res.getHeaders())
         console.log('Token:', token)
@@ -84,11 +81,13 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     }
 }
 
+// Đăng xuất
 export const logout = (req: Request, res: Response): void => {
     res.clearCookie('user')
     res.status(200).json({ message: 'Logged out' })
 }
 
+// Middleware xác thực token
 export const verifyToken = (
     req: UserRequest,
     res: Response,
@@ -98,7 +97,7 @@ export const verifyToken = (
     console.log('Token:', token)
 
     if (!token) {
-        res.status(401).json({ message: 'No token provided' })
+        res.status(401).json({ message: 'You have not logged in yet!' })
         return
     }
 
@@ -125,7 +124,7 @@ export const checkRole = (roles: string[]) => {
         const userRole = req.user?.role
 
         if (!userRole || !roles.includes(userRole)) {
-            console.log('Forbidden, no permission') 
+            console.log('Forbidden, no permission')
             res.status(403).json({
                 message:
                     'Forbidden: You do not have permission to access this resource.',
@@ -137,6 +136,7 @@ export const checkRole = (roles: string[]) => {
     }
 }
 
+// Refresh token
 export const refreshToken = (req: Request, res: Response): void => {
     const oldToken = req.headers.authorization?.split(' ')[1]
     if (!oldToken) {
