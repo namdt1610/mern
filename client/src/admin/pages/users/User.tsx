@@ -6,22 +6,25 @@ import { Button, Space, Badge, Input, Table, Modal, Card } from 'antd/lib'
 import { ColumnsType } from 'antd/lib/table'
 import { ReloadOutlined, PlusOutlined, ImportOutlined } from '@ant-design/icons'
 import { debounce } from 'lodash'
+import { useGetUsersQuery } from 'services/User'
 
 export default function Users() {
     const { fetchUsers } = useUserActions()
     const navigate = useNavigate()
-    const [users, setUsers] = useState<User[]>([])
+    // const [users, setUsers] = useState<User[]>([])
     const [filteredData, setFilteredData] = useState<User[]>([])
+    // Fetch danh sách users
+    const { data: users, error, isLoading } = useGetUsersQuery()
 
-    const getUsers = async () => {
-        const response = await fetchUsers()
-        setUsers(response.map((user: User) => ({ ...user, key: user._id })))
-        setFilteredData(response)
-    }
+    // const getUsers = async () => {
+    //     const response = await fetchUsers()
+    //     setUsers(response.map((user: User) => ({ ...user, key: user._id })))
+    //     setFilteredData(response)
+    // }
 
-    useEffect(() => {
-        getUsers()
-    }, [])
+    // useEffect(() => {
+    //     getUsers()
+    // }, [])
 
     interface ActionRecord extends User {
         _id: string
@@ -190,7 +193,7 @@ export default function Users() {
                     <Button
                         size="large"
                         className="btn-border btn-hover"
-                        onClick={() => getUsers()}
+                        onClick={window.location.reload}
                         icon={<ReloadOutlined />}
                     >
                         Refresh

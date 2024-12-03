@@ -1,9 +1,15 @@
-// server.ts
 import express from 'express'
 import path from 'path'
 import cors from 'cors'
+import morgan from 'morgan'
+import cookieParser from 'cookie-parser'
+//* server.ts
 
 const app = express()
+
+app.use(morgan('dev'))
+
+app.use(cookieParser())
 
 const corsOptions = {
     origin: 'http://localhost:5173',

@@ -1,23 +1,19 @@
-// middlewares/isAuthenticated.ts
-import jwt from 'jsonwebtoken'
+import { Request, Response, NextFunction } from 'express'
 
-const isAuthenticated = async (req, res, next) => {
-    const token = req.headers.authorization?.split(' ')[1]
+// Middleware kiểm tra quyền truy cập dựa trên role
+export const checkRole = (roles: string[]) => {
+    return (req: Request, res: Response, next: NextFunction) => {
+        const userRole = req.cookies['role'] // Lấy role từ cookie (giả sử cookie lưu role của người dùng)
 
-    if (!token) return res.status(401).json({ message: 'Unauthorized' })
-
-    try {
-        const decoded = await jwt.verify(token, 'dangtrannam')
-        req.user = decoded
-
-        // if (req.user.role !== 'admin') {
-        //     return res.status(403).json({ message: 'Forbidden' })
-        // }
+        if (!userRole || !roles.includes(userRole)) {
+            return res
+                .status(403)
+                .json({
+                    message:
+                        'Forbidden: You do not have permission to access this resource.',
+                })
+        }
 
         next()
-    } catch (err) {
-        return res.status(401).json({ message: 'Unauthorized' })
     }
 }
-
-export default isAuthenticated

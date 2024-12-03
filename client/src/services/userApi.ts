@@ -2,6 +2,7 @@
 import axiosInstance from './axiosInstance'
 import { userApi } from './apiConfig'
 import { User } from '../interfaces/User'
+import { message } from 'antd'
 
 export const fetchUsersApi = async () => {
     try {
@@ -20,6 +21,7 @@ export const fetchUserByIdApi = async (id: string) => {
         return response.data
     } catch (error) {
         console.error(`Lỗi khi lấy user với ID ${id}:`, error)
+        message.error('Không tìm thấy user')
         throw error
     }
 }

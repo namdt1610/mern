@@ -1,21 +1,26 @@
 import Cookies from 'js-cookie'
 import { DecodedToken, decodeToken } from './jwtDecode'
+//* utils/auth.ts
 
 // Lấy thông tin người dùng từ cookie
 export const getUserFromCookie = (): DecodedToken | null => {
     const token = Cookies.get('user')
     if (token) {
-        return decodeToken(token)
+        try {
+            return decodeToken(token) // Giải mã token và trả về thông tin người dùng
+        } catch (e) {
+            console.error('Error decoding token:', e)
+            return null
+        }
     }
     return null
 }
 
-// Lưu thông tin người dùng vào cookie
-export const setUserCookie = (user: DecodedToken, token: string) => {
-    Cookies.set('user', token, { expires: 7 }) // Đặt token vào cookie và kéo dài thời gian hết hạn
-}
-
-// Xóa cookie khi đăng xuất
-export const removeUserCookie = () => {
-    Cookies.remove('user')
+// Lấy role người dùng từ cookie
+export const getUserRoleFromCookie = (): string | null => {
+    const user = getUserFromCookie()
+    if (user) {
+        return user.role
+    }
+    return null
 }

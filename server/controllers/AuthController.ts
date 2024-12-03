@@ -4,7 +4,12 @@ import bcrypt from 'bcryptjs'
 import User from '../models/UserModel'
 
 interface UserRequest extends Request {
+    user?: {
+        id: string
+        role: string
+    }
     userId?: string
+    userRole?: string
     headers: {
         authorization?: string
     }
@@ -89,7 +94,7 @@ export const verifyToken = (
     res: Response,
     next: NextFunction
 ): void => {
-    const token = req.headers.authorization?.split(' ')[1]
+    const token = req.cookies.user
     console.log('Token:', token)
 
     if (!token) {
@@ -100,11 +105,35 @@ export const verifyToken = (
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as {
             id: string
+            role: string
         }
-        req.userId = decoded.id
+        req.user = {
+            id: decoded.id,
+            role: decoded.role,
+        }
         next()
     } catch (error) {
         res.status(403).json({ message: 'Invalid token' })
+        return
+    }
+}
+
+// Middleware phân quyền theo role
+export const checkRole = (roles: string[]) => {
+    return (req: UserRequest, res: Response, next: NextFunction): void => {
+        console.log('User Role:', req.user?.role)
+        const userRole = req.user?.role
+
+        if (!userRole || !roles.includes(userRole)) {
+            console.log('Forbidden, no permission') 
+            res.status(403).json({
+                message:
+                    'Forbidden: You do not have permission to access this resource.',
+            })
+            return
+        }
+        console.log('Role is valid, continuing...')
+        next() // Nếu role hợp lệ, tiếp tục xử lý request
     }
 }
 

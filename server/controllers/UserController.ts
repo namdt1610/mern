@@ -1,4 +1,4 @@
-import { Request, Response } from 'express'
+import { Request, Response, NextFunction } from 'express'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import User from '../models/UserModel'
@@ -30,6 +30,7 @@ export const getUserById = async (
         res.status(200).json(user)
     } catch (error) {
         res.status(500).json({ message: 'Could not fetch user' })
+        return
     }
 }
 

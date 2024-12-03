@@ -12,3 +12,10 @@ export interface User {
     createdAt: string
     updatedAt: string
 }
+
+export interface CreateUserRequest {
+    username: string
+    email: string
+    password: string
+    role?: string
+}

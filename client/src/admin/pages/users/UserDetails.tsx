@@ -22,10 +22,15 @@ const UserDetail: React.FC = () => {
 
     useEffect(() => {
         const getUser = async () => {
-            const fetchedUser = await fetchUserById(id)
-            setUser(fetchedUser)
-            setEditedUser(fetchedUser)
-            setAvatarPreview(`http://localhost:8888/${fetchedUser.avatar}`)
+            try {
+                const fetchedUser = await fetchUserById(id)
+                setUser(fetchedUser)
+                setEditedUser(fetchedUser)
+                setAvatarPreview(`http://localhost:8888/${fetchedUser.avatar}`)
+            } catch (error) {
+                console.error('Error during fetch:', error)
+                setLoading(false)
+            }
         }
         getUser()
     }, [id])
@@ -124,8 +129,19 @@ const UserDetail: React.FC = () => {
         }
     }
 
-    if (!user) {
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState<string | null>(null)
+
+    if (loading) {
         return <Spin size="large" fullscreen />
+    }
+
+    if (error) {
+        return <div>{error}</div>
+    }
+
+    if (!user) {
+        return <div>Không tìm thấy người dùng</div>
     }
 
     return (
