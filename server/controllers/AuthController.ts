@@ -7,6 +7,7 @@ interface UserRequest extends Request {
     user?: {
         id: string
         role: string
+        name: string
     }
 }
 
@@ -59,7 +60,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         }
 
         const token = jwt.sign(
-            { id: user._id, role: user.role },
+            { id: user._id, role: user.role, name: user.username },
             process.env.JWT_SECRET as string,
             { expiresIn: '1h' }
         )
@@ -105,10 +106,12 @@ export const verifyToken = (
         const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as {
             id: string
             role: string
+            name: string
         }
         req.user = {
             id: decoded.id,
             role: decoded.role,
+            name: decoded.name,
         }
         next()
     } catch (error) {

@@ -4,7 +4,7 @@ export interface DecodedToken {
     _id: string
     email: string
     role: string
-    name?: string
+    name: string
     avatar?: string
     status?: string
     createdAt?: string

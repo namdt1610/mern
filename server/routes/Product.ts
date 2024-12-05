@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { upload } from '../middlewares/multerConfig'
+import { upload } from '../middlewares/multer-config'
 import {
     createProduct,
     getAllProducts,

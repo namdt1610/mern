@@ -1,7 +1,7 @@
 import express from 'express'
 import * as ac from '../controllers/AuthController'
 import * as userController from '../controllers/UserController'
-import { upload } from '../middlewares/multerConfig'
+import { upload } from '../middlewares/multer-config'
 
 const router = express.Router()
 
@@ -16,7 +16,7 @@ router.get(
 router.put(
     '/:id',
     ac.verifyToken,
-    ac.checkRole(['admin']),
+    // ac.checkRole(['admin']),
     upload.single('avatar'),
     userController.updateUser
 )

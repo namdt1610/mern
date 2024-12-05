@@ -18,7 +18,7 @@ const UserDetail: React.FC = () => {
     const navigate = useNavigate()
 
     const { data: user, isLoading, isError, refetch } = useGetUserByIdQuery(id)
-    console.log('Current user:', user)
+    // console.log('Current user:', user)
     const [updateUser] = useUpdateUserMutation()
     const [deleteUser] = useDeleteUserMutation()
     const [uploadAvatar] = useUploadAvatarMutation()

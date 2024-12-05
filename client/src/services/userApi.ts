@@ -6,8 +6,13 @@ export const userApi = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: 'http://localhost:8888/api', // API backend URL
         credentials: 'include',
-        prepareHeaders: (headers) => {
-            headers.set('Content-Type', 'application/json')
+        prepareHeaders: (headers, { getState }) => {
+            // Tránh việc thiết lập Content-Type cho FormData
+            const isFileUpload =
+                headers.get('Content-Type') === 'multipart/form-data'
+            if (!isFileUpload) {
+                headers.set('Content-Type', 'application/json')
+            }
             return headers
         },
     }),

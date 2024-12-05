@@ -39,16 +39,9 @@ export const updateUser = async (
     res: Response
 ): Promise<void> => {
     const { id } = req.params
-    const { email, password, name, role, status, phone, address, avatar } =
-        req.body
+    const { email, password, name, role, status, phone, address } = req.body
 
     try {
-        // Chỉ hash mật khẩu nếu có sự thay đổi
-        let updatedPassword
-        if (password) {
-            updatedPassword = await bcrypt.hash(password, 12)
-        }
-
         // Chuẩn bị dữ liệu cập nhật, bỏ qua những thuộc tính không thay đổi
         const updatedData: any = {
             email,
@@ -57,8 +50,13 @@ export const updateUser = async (
             status,
             phone,
             address,
-            ...(updatedPassword && { password: updatedPassword }),
             ...(req.file && { avatar: req.file.path }),
+        }
+
+        // Chỉ hash mật khẩu nếu có sự thay đổi
+        if (password) {
+            const updatedPassword = await bcrypt.hash(password, 12)
+            updatedData.password = updatedPassword
         }
 
         // Cập nhật thông tin người dùng

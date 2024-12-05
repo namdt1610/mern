@@ -1,5 +1,5 @@
 import multer from 'multer'
-import { Request } from 'express'
+import { Request, Response } from 'express'
 
 const storage = multer.diskStorage({
     destination: (
@@ -19,7 +19,6 @@ const storage = multer.diskStorage({
     },
 })
 
-// Khởi tạo Multer với cấu hình đã định nghĩa
 const upload = multer({ storage })
 
 export { upload }

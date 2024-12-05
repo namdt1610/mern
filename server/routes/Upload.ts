@@ -1,23 +1,24 @@
-// Upload.ts
+import { Request, Response, Router } from 'express'
+import { upload } from '../middlewares/multer-config' // Đảm bảo bạn đã import multer configuration
 
-import express, { Response, Request } from 'express'
-import { upload } from '../middlewares/multerConfig' // Cấu hình multer
-import path from 'path'
+const router = Router()
 
-const router = express.Router()
-
-// Route xử lý upload ảnh
+// API upload avatar
 router.post(
-    '/upload-avatar',
+    '/api/upload-avatar',
     upload.single('avatar'),
     (req: Request, res: Response): void => {
         if (!req.file) {
-             res.status(400).json({ message: 'No file uploaded' })
-             return
+            res.status(400).json({ message: 'No file uploaded' })
+            return
         }
-        // Tạo URL để trả về file đã tải lên
-        const fileUrl = `/uploads/${req.file.filename}`
-        res.status(200).json({ avatarUrl: fileUrl })
+
+        // Tiến hành xử lý file, ví dụ lưu đường dẫn vào cơ sở dữ liệu
+        const filePath = req.file.path
+        res.status(200).json({
+            message: 'File uploaded successfully',
+            filePath,
+        })
     }
 )
 

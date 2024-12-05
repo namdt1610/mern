@@ -38,8 +38,9 @@ import authRoutes from './routes/Auth'
 import userRoutes from './routes/User'
 import categoryRoutes from './routes/Category'
 import productRoutes from './routes/Product'
+import uploadRoutes from './routes/Upload'
 
-app.use('/api', authRoutes)
+app.use('/api', authRoutes, uploadRoutes)
 app.use('/api/users', userRoutes)
 app.use('/api/products', productRoutes)
 app.use('/api/categories', categoryRoutes)
