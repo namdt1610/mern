@@ -18,8 +18,10 @@ import {
     HomeOutlined,
     UserOutlined,
     CrownOutlined,
+    KeyOutlined,
 } from '@ant-design/icons'
-import { User } from '../../../interfaces/User'
+import { User } from 'interfaces/User'
+import { getUserRoleFromCookie } from 'utils/auth'
 
 interface UserFormProps {
     user: User
@@ -38,11 +40,27 @@ const UserForm: React.FC<UserFormProps> = ({
     errors,
     validations,
 }) => {
+    const userRole = getUserRoleFromCookie()
     return (
         <>
             <Space direction="vertical" size="large">
-                <Card title="Main informations" className='card-border'>
+                <Card title="Main informations" className="card-border">
                     <Descriptions layout="vertical">
+                        <Descriptions.Item label="Id">
+                            {isEditing ? (
+                                <Input
+                                    disabled
+                                    prefix={<KeyOutlined />}
+                                    size="large"
+                                    value={editedUser._id || ''}
+                                    onChange={(e) =>
+                                        onInputChange('_id', e.target.value)
+                                    }
+                                />
+                            ) : (
+                                user._id
+                            )}
+                        </Descriptions.Item>
                         <Descriptions.Item label="Name">
                             {isEditing ? (
                                 <Input
@@ -124,7 +142,7 @@ const UserForm: React.FC<UserFormProps> = ({
                         </Descriptions.Item>
                     </Descriptions>
                 </Card>
-                <Card title="Contact informations" className='card-border'>
+                <Card title="Contact informations" className="card-border">
                     <Descriptions layout="vertical">
                         <Descriptions.Item label="Email">
                             {isEditing ? (
@@ -171,8 +189,8 @@ const UserForm: React.FC<UserFormProps> = ({
                                         )
                                     }
                                 />
-                            ) : user.role === 'admin' ? (
-                                user.password
+                            ) : userRole === 'admin' ? (
+                                '*'.repeat(8)
                             ) : (
                                 'You do not have permission to view this field'
                             )}
@@ -223,7 +241,7 @@ const UserForm: React.FC<UserFormProps> = ({
                     </Descriptions>
                 </Card>
 
-                <Card title="Recent activities" className='card-border'>
+                <Card title="Recent activities" className="card-border">
                     <Descriptions layout="vertical">
                         <Descriptions.Item label="Created at">
                             {user.createdAt}

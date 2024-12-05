@@ -1,64 +1,51 @@
 import React from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Breadcrumb, Typography } from 'antd'
+import { useLocation, useNavigate } from 'react-router-dom'
 
-const Breadcrumb = () => {
+const { Title, Text } = Typography
+
+const MyBreadcrumb: React.FC = () => {
     const location = useLocation()
+    const navigate = useNavigate()
 
-    // Tạo một map để định nghĩa tên cho các phần của URL
-    const breadcrumbNameMap = {
-        '/admin': 'Home',
-        '/admin/dashboard': 'Dashboard',
-        '/admin/products': 'Product Management',
-        '/admin/products/create': 'Add Product',
-        '/admin/products/edit': 'Edit Product',
-        '/admin/categories': 'Category Management',
-        '/admin/categories/create': 'Add Category',
-        '/admin/categories/edit': 'Edit Category',
-        '/admin/orders': 'Order Management',
-        '/admin/users': 'User Management',
-        '/admin/settings': 'Settings',
-        '/admin/users/add': 'Add User',
-        '/admin/users/edit': 'Edit User',
-    }
+    const pathnames = location.pathname.split('/').filter((x) => x) // Tách các path từ URL
+    const breadcrumbItems = pathnames.map((path, index) => {
+        const routePath = `/${pathnames.slice(0, index + 1).join('/')}` // Tạo link cho breadcrumb
+        const isLastItem = index === pathnames.length - 1 // Kiểm tra xem đây có phải là phần tử cuối cùng
 
-    // Tách đường dẫn hiện tại thành mảng
-    const pathnames = location.pathname.split('/').filter((x) => x)
+        // Logic để xác định tên cho từng mục breadcrumb dựa trên URL
+        let breadcrumbName = ''
+        switch (path) {
+            case 'admin':
+                breadcrumbName = 'Admin'
+                break
+            case 'products':
+                breadcrumbName = 'Products'
+                break
+            case 'categories':
+                breadcrumbName = 'Categories'
+                break
+            case 'product-details':
+                breadcrumbName = 'Product Details'
+                break
+            default:
+                breadcrumbName = path.charAt(0).toUpperCase() + path.slice(1)
+        }
+
+        return (
+            <Breadcrumb.Item
+                className="cursor-pointer hover:underline"
+                key={routePath}
+                onClick={() => !isLastItem && navigate(routePath)} // Chỉ cho phép điều hướng nếu không phải là mục cuối cùng
+            >
+                {isLastItem ? breadcrumbName : <Text>{breadcrumbName}</Text>}
+            </Breadcrumb.Item>
+        )
+    })
 
     return (
-        <div className="breadcrumbs text-sm py-1">
-            <ul>
-                {/* Breadcrumb "Home" luôn xuất hiện */}
-
-                {pathnames.map((name, index) => {
-                    // Tạo URL cho các breadcrumb
-                    const routeTo = `/${pathnames
-                        .slice(0, index + 1)
-                        .join('/')}`
-                    const isLast = index === pathnames.length - 1
-
-                    // Kiểm tra xem đường dẫn có trong map không
-                    const breadcrumbLabel = breadcrumbNameMap[routeTo] || name
-
-                    return isLast ? (
-                        <li key={name}>
-                            <span>
-                                {breadcrumbLabel}
-                            </span>
-                        </li>
-                    ) : (
-                        <li key={name}>
-                            <Link
-                                to={routeTo}
-                                className="bg-[#caf0f8] text-2xl"
-                            >
-                                {breadcrumbLabel}
-                            </Link>
-                        </li>
-                    )
-                })}
-            </ul>
-        </div>
+        <Breadcrumb style={{ margin: '16px 0' }}>{breadcrumbItems}</Breadcrumb>
     )
 }
 
-export default Breadcrumb
+export default MyBreadcrumb

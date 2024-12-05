@@ -10,7 +10,7 @@ router.get('/', userController.getAllUsers)
 router.get(
     '/:id',
     ac.verifyToken,
-    ac.checkRole(['user']),
+    ac.checkRole(['admin', 'user']),
     userController.getUserById
 )
 router.put(

@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import useCategoryActions from '../../../hooks/Auth/useCategoryActions'
+import { useAddCategoryMutation } from 'services/CategoryApi'
 import { Button, Input, Form, message, Card, FormProps } from 'antd/lib'
+
 type FieldType = {
     name: string
 }
@@ -11,27 +12,30 @@ type CategoryFormProps = {
 }
 const CategoryNewForm: React.FC<CategoryFormProps> = () => {
     const [form] = Form.useForm()
-    const { createCategory } = useCategoryActions()
+    const navigate = useNavigate()
+    const [createCategory, isLoading] = useAddCategoryMutation()
 
     const onFinish: FormProps<FieldType>['onFinish'] = async (values: any) => {
-        await createCategory(values)
-        form.resetFields()
+        createCategory(values)
+            .then(() => {
+                message.success('Category created successfully')
+                form.resetFields()
+            })
+            .catch((error) => {
+                if (error?.data?.message) {
+                    message.error(error.data.message)
+                } else {
+                    message.error(
+                        'Failed to create category. Please try again.'
+                    )
+                }
+                console.error('Error from backend:', error)
+            })
     }
 
-    const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (
-        errorInfo
-    ) => {
-        message.error('Failed to create category')
-        console.log('Failed:', errorInfo)
-    }
     return (
         <Card className="card-border my-4">
-            <Form
-                form={form}
-                layout="vertical"
-                onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
-            >
+            <Form form={form} layout="vertical" onFinish={onFinish}>
                 <Form.Item
                     label="Category Name"
                     name="name"

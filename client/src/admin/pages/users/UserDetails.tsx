@@ -1,190 +1,147 @@
-// UserDetail.tsx
-
-import React, { useEffect, useState } from 'react'
-import useUserActions from '../../../hooks/User/useUserActions'
-import { useParams } from 'react-router-dom'
-import { User } from '../../../interfaces/User'
-import UserAvatar from './UserDetailsAvatar'
+import React, { useState, useEffect } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
+import {
+    useGetUserByIdQuery,
+    useUpdateUserMutation,
+    useDeleteUserMutation,
+    useUploadAvatarMutation,
+} from 'services/UserApi'
+import { Card, Space, message, Empty, Form } from 'antd'
+import LoadingError from 'components/LoadingError'
 import UserActions from './UserDetailsActions'
+import UserAvatar from './UserDetailsAvatar'
 import UserForm from './UserDetailsForm'
-import * as formatUtils from '../../utils/format.utils'
-import { Card, message, Spin, Space } from 'antd/lib'
+import { User } from 'interfaces/User'
 
 const UserDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>()
-    const { fetchUserById, updateUser, deleteUser } = useUserActions()
-    const [user, setUser] = useState<User | null>(null)
+    const navigate = useNavigate()
+
+    const { data: user, isLoading, isError, refetch } = useGetUserByIdQuery(id)
+    console.log('Current user:', user)
+    const [updateUser] = useUpdateUserMutation()
+    const [deleteUser] = useDeleteUserMutation()
+    const [uploadAvatar] = useUploadAvatarMutation()
+
     const [isEditing, setIsEditing] = useState(false)
-    const [editedUser, setEditedUser] = useState<Partial<User> | null>(null)
-    const [avatarPreview, setAvatarPreview] = useState<string | null>(null)
-    const [errors, setErrors] = useState({ email: '', phone: '' })
-    const [validations, setValidations] = useState({ email: true, phone: true })
+    const [editedUser, setEditedUser] = useState<Partial<User>>({})
+    const [avatarPreview, setAvatarPreview] = useState<string | undefined>(
+        user?.avatar
+    )
+
+    const [avatarFile, setAvatarFile] = useState<File | null>(null)
 
     useEffect(() => {
-        const getUser = async () => {
-            try {
-                const fetchedUser = await fetchUserById(id)
-                setUser(fetchedUser)
-                setEditedUser(fetchedUser)
-                setAvatarPreview(`http://localhost:8888/${fetchedUser.avatar}`)
-            } catch (error) {
-                console.error('Error during fetch:', error)
-                setLoading(false)
-            }
+        if (user) {
+            setEditedUser(user)
+            setAvatarPreview(
+                user.avatar ? `http://localhost:8888/${user.avatar}` : ''
+            )
         }
-        getUser()
-    }, [id])
-
-    const onDrop = (acceptedFiles: File[]) => {
-        const file = acceptedFiles[0]
-        const previewUrl = URL.createObjectURL(file)
-        setAvatarPreview(previewUrl)
-    }
-
-    const validateFields = () => {
-        const newValidations = {
-            email: formatUtils.isValidEmail(editedUser?.email || ''),
-            phone: formatUtils.isValidPhoneNumber(editedUser?.phone || ''),
-        }
-        setValidations(newValidations)
-        return Object.values(newValidations).every((value) => value === true)
-    }
+    }, [user])
 
     const handleSave = async () => {
-        const newErrors = { email: '', phone: '' }
-
-        if (!formatUtils.isValidEmail(editedUser?.email || '')) {
-            message.warning('Check your email format')
-            newErrors.email =
-                'Invalid email format (example: yourname@email.com)'
-        }
-
-        if (!formatUtils.isValidPhoneNumber(editedUser?.phone || '')) {
-            message.warning('Check your phone number format')
-            newErrors.phone = 'Invalid phone number format'
-        }
-
-        if (newErrors.email || newErrors.phone) {
-            setErrors(newErrors)
-            return
-        }
-
         try {
-            if (!validateFields()) {
-                message.warning('Please check your input fields')
-                return
+            // Partial<User> có nghĩa là tất cả các thuộc tính trong User trở thành tùy chọn.
+            // Đảm bảo _id có trong updatedData
+            const updatedData: Partial<User> = { ...editedUser }
+            console.log('upadteData:', updatedData)
+
+            // Nếu có thay đổi avatar, thêm vào dữ liệu cập nhật
+            if (avatarFile) {
+                const formData = new FormData()
+                formData.append('avatar', avatarFile)
+
+                // Gọi API upload avatar
+                const response = await uploadAvatar(formData).unwrap()
+                updatedData.avatar = response.avatarUrl // Lấy URL từ response và gán vào updatedData
+            } else {
+                updatedData.avatar = user.avatar // Giữ avatar cũ nếu không thay đổi
             }
 
-            const formData = new FormData()
-            for (const key in editedUser) {
-                formData.append(key, editedUser[key])
+            // Gửi dữ liệu cập nhật tới API
+            await updateUser({ id: id, ...updatedData }).unwrap()
+            message.success('User updated successfully')
+            setIsEditing(false)
+        } catch (error: any) {
+            console.error('Error updating user:', error)
+
+            if (error?.data?.message) {
+                message.error(`Error: ${error.data.message}`) // Hiển thị thông báo từ backend
+            } else {
+                message.error('Failed to update user. Please try again.')
             }
-
-            if (avatarPreview) {
-                const fileInput = document.querySelector('input[type="file"]')
-                if ((fileInput as HTMLInputElement)?.files[0]) {
-                    formData.append(
-                        'avatar',
-                        (fileInput as HTMLInputElement).files[0]
-                    )
-                }
-            }
-
-            formData.forEach((value, key) => {
-                console.log(key + ': ' + value)
-            })
-
-            const loadingMessage = message.loading('Saving...', 0) // Thời gian không giới hạn
-
-            setTimeout(async () => {
-                try {
-                    const updatedUser = await updateUser(id, formData)
-                    setUser(updatedUser)
-                    setIsEditing(false)
-                    loadingMessage() // Đóng thông báo loading
-                    message.success('User updated successfully')
-                } catch (error) {
-                    console.error('Error during save:', error)
-                    loadingMessage() // Đóng thông báo loading
-                    message.error('Error occurred while saving')
-                }
-            }, 1000)
-        } catch (error) {
-            console.error('Error during save:', error)
         }
     }
 
     const handleEditToggle = () => {
-        setIsEditing(!isEditing)
+        setIsEditing((prev) => !prev)
     }
 
     const handleDelete = async () => {
         try {
-            await deleteUser(id)
+            await deleteUser(id!).unwrap()
             message.success('User deleted successfully')
-            console.log('User deleted successfully')
-            window.location.href = '/admin/users'
-        } catch (error) {
-            console.error('Error during delete:', error)
+            navigate('/admin/users')
+        } catch (error: any) {
+            const errorMessage = error?.message || 'Failed to update user.'
+            message.error(errorMessage)
         }
     }
 
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState<string | null>(null)
-
-    if (loading) {
-        return <Spin size="large" fullscreen />
+    const handleAvatarChange = (file: File) => {
+        if (avatarPreview) {
+            URL.revokeObjectURL(avatarPreview) // Giải phóng URL cũ
+        }
+        const previewUrl = URL.createObjectURL(file)
+        setAvatarPreview(previewUrl)
+        setAvatarFile(file)
     }
 
-    if (error) {
-        return <div>{error}</div>
-    }
-
-    if (!user) {
-        return <div>Không tìm thấy người dùng</div>
-    }
+    if (isLoading)
+        return (
+            <LoadingError
+                isLoading={isLoading}
+                error={null}
+                refetch={refetch}
+            />
+        )
+    if (isError || !user) return <Empty description="User not found" />
 
     return (
-        <div className="py-4">
-            <Space
-                className="flex items-center justify-center"
-                direction="vertical"
-                size="large"
-            >
-                <div className="flex gap-4 items-center ">
-                    <div className=" h-full items-center flex flex-col justify-center">
-                        <Card className="card-border">
-                            <UserActions
-                                isEditing={isEditing}
-                                onSave={handleSave}
-                                onEditToggle={handleEditToggle}
-                                onDelete={handleDelete}
-                            />
-                            <UserAvatar
-                                avatar={
-                                    avatarPreview ||
-                                    `http://localhost:8888/${user.avatar}`
-                                }
-                                onDrop={onDrop}
-                                isEditing={isEditing}
-                            />
-                        </Card>
-                    </div>
-                    <div>
-                        <UserForm
-                            user={user}
+        <div>
+            <Space direction="vertical" size="large">
+                <div className="flex gap-4">
+                    <Card>
+                        <UserActions
                             isEditing={isEditing}
-                            editedUser={editedUser || {}}
-                            onInputChange={(field, value) =>
-                                setEditedUser((prev) => ({
-                                    ...prev,
-                                    [field]: value,
-                                }))
-                            }
-                            errors={errors}
-                            validations={validations}
+                            onSave={handleSave}
+                            onEditToggle={handleEditToggle}
+                            onDelete={handleDelete}
+                            onRefetch={() => refetch}
                         />
-                    </div>
+                        <UserAvatar
+                            avatar={
+                                avatarPreview ||
+                                `http://localhost:8888${user.avatar}`
+                            }
+                            onAvatarChange={handleAvatarChange}
+                            isEditing={isEditing}
+                        />
+                    </Card>
+                    <UserForm
+                        user={user}
+                        isEditing={isEditing}
+                        editedUser={editedUser}
+                        onInputChange={(field, value) =>
+                            setEditedUser((prev) => ({
+                                ...prev,
+                                [field]: value,
+                            }))
+                        }
+                        errors={{ email: '', phone: '' }}
+                        validations={{ email: true, phone: true }}
+                    />
                 </div>
             </Space>
         </div>

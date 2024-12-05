@@ -1,32 +1,25 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { Button, Space, Input, Table, Modal, Card } from 'antd/lib'
+import { Button, Space, Input, Table, Modal, Card, message } from 'antd/lib'
 import { ColumnsType } from 'antd/lib/table'
 import { ReloadOutlined, PlusOutlined, ImportOutlined } from '@ant-design/icons'
 import { debounce } from 'lodash'
-import { Category } from '../../../interfaces/Category'
-import useCategoryActions from '../../../hooks/Auth/useCategoryActions'
+import { Category } from 'interfaces/Category'
+import {
+    useGetCategoriesQuery,
+    useDeleteCategoryMutation,
+} from 'services/CategoryApi'
 
 export default function Categories() {
-    const { fetchCategories } = useCategoryActions()
     const navigate = useNavigate()
-    const [categories, setCategories] = useState<Category[]>([])
     const [filteredData, setFilteredData] = useState<Category[]>([])
+    const { data: cates, error, isLoading, refetch } = useGetCategoriesQuery()
+    const [deleteCategory] = useDeleteCategoryMutation()
 
-    const getCategories = async () => {
-        const response = await fetchCategories()
-        setCategories(
-            response.map((category: Category) => ({
-                ...category,
-                key: category._id,
-            }))
-        )
-        setFilteredData(response)
-    }
-
+    // Lọc dữ liệu
     useEffect(() => {
-        getCategories()
-    }, [])
+        if (cates) setFilteredData(cates)
+    }, [cates])
 
     const handleView = (id: string) => {
         navigate(`/admin/categories/${id}`)
@@ -39,37 +32,51 @@ export default function Categories() {
             okText: 'Yes',
             cancelText: 'No',
             onOk: () => {
-                console.log('Delete category ID:', categoryId)
+                deleteCategory(categoryId)
+                    .then(() => {
+                        message.success('Category deleted successfully')
+                        refetch()
+                    }
+                ).catch((error) => {
+                    if (error?.data?.message) {
+                        message.error(error.data.message)
+                    } else {
+                        message.error('Failed to delete category. Please try again.')
+                    }
+                    console.error('Error from backend:', error)
+                }
+            )
             },
         })
     }
 
+    // Tìm kiếm
     const onSearch = useMemo(
         () =>
             debounce((value: string) => {
                 const lowercasedValue = value.toLowerCase()
                 if (value === '') {
-                    setFilteredData(categories)
+                    setFilteredData(cates)
                 } else {
-                    const filtered = categories.filter((category) =>
-                        category.name?.toLowerCase().includes(lowercasedValue)
+                    const filtered = cates.filter((cate) =>
+                        cate.name?.toLowerCase().includes(lowercasedValue)
                     )
                     setFilteredData(filtered)
                 }
             }, 300),
-        [categories]
+        [cates]
     )
 
     const { Search } = Input
 
     const renderActions = useCallback(
-        (_: unknown, record: Category): JSX.Element => (
+        (_: unknown, cates: Category): JSX.Element => (
             <Space size={'middle'} wrap>
                 <Button
                     color="primary"
                     variant="outlined"
                     className="btn-border btn-hover"
-                    onClick={() => handleView(record._id)}
+                    onClick={() => handleView(cates._id)}
                 >
                     View
                 </Button>
@@ -77,7 +84,7 @@ export default function Categories() {
                     color="danger"
                     variant="outlined"
                     className="btn-border btn-hover"
-                    onClick={() => handleDelete(record._id)}
+                    onClick={() => handleDelete(cates._id)}
                 >
                     Delete
                 </Button>
@@ -129,7 +136,7 @@ export default function Categories() {
                     <Button
                         size="large"
                         className="btn-border btn-hover"
-                        onClick={() => getCategories()}
+                        onClick={() => refetch()}
                         icon={<ReloadOutlined />}
                     >
                         Refresh
@@ -149,6 +156,7 @@ export default function Categories() {
                 color="#f3f3f3"
             >
                 <Table
+                    rowKey={(record) => record._id}
                     size="large"
                     tableLayout="fixed"
                     rowClassName={'cursor-pointer'}

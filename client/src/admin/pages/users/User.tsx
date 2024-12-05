@@ -1,13 +1,21 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
 import { User } from 'interfaces/User'
-import { Button, Space, Badge, Input, Table, Modal, Card } from 'antd/lib'
+import { debounce } from 'lodash'
+import { useNavigate, Link } from 'react-router-dom'
+import {
+    Button,
+    Space,
+    Badge,
+    Input,
+    Table,
+    Modal,
+    Card,
+    message,
+} from 'antd/lib'
 import { ColumnsType } from 'antd/lib/table'
 import { ReloadOutlined, PlusOutlined, ImportOutlined } from '@ant-design/icons'
-import { debounce } from 'lodash'
 import { useGetUsersQuery, useDeleteUserMutation } from 'services/UserApi'
 import LoadingError from 'components/LoadingError'
-import { message } from 'antd'
 
 export default function Users() {
     // Interface cho record
@@ -127,18 +135,7 @@ export default function Users() {
         ],
         []
     )
-
-    // Xử lý loading và error
-    if (isLoading || error) {
-        return (
-            <LoadingError
-                isLoading={isLoading}
-                error={error}
-                refetch={refetch}
-            />
-        )
-    }
-
+    
     // Xóa user
     const handleDelete = (userId: string) => {
         Modal.confirm({
@@ -171,6 +168,17 @@ export default function Users() {
     }
 
     const { Search } = Input
+
+    // Xử lý loading và error
+    if (isLoading || error) {
+        return (
+            <LoadingError
+                isLoading={isLoading}
+                error={error}
+                refetch={refetch}
+            />
+        )
+    }
 
     return (
         <>

@@ -1,118 +1,188 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import { Button, Space, Typography, Descriptions, Input } from 'antd/lib'
-import { Category } from '../../../interfaces/Category'
-import useCategoryActions from '../../../hooks/Auth/useCategoryActions'
+import React, { useState } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
+import {
+    useGetCategoryByIdQuery,
+    useUpdateCategoryMutation,
+} from 'services/CategoryApi'
+import {
+    Card,
+    Typography,
+    Button,
+    Space,
+    Empty,
+    Input,
+    Form,
+    message,
+    Select,
+    Row,
+    Col,
+} from 'antd'
+import LoadingError from 'components/LoadingError'
 
-const { Title } = Typography
+const { Title, Text } = Typography
 
-export default function CategoryDetails() {
-    const { id } = useParams<{ id: string }>()
-    const { fetchCategoryById, deleteCategory, updateCategory } =
-        useCategoryActions()
-    const [category, setCategory] = useState<Category | null>(null)
-    const [isEditing, setIsEditing] = useState(false)
-    const [categoryData, setCategoryData] = useState<Category | null>(null)
+const CategoryDetails: React.FC = () => {
+    const { id } = useParams<{ id: string }>() // Lấy id từ URL
     const navigate = useNavigate()
 
-    useEffect(() => {
-        const getCategory = async () => {
-            if (id) {
-                const data = await fetchCategoryById(id)
-                setCategory(data)
-                setCategoryData(data)
-            }
-        }
-        getCategory()
-    }, [id])
+    // Lấy thông tin category từ API
+    const {
+        data: category,
+        isLoading,
+        isError,
+        refetch,
+    } = useGetCategoryByIdQuery(id || '')
 
-    const handleDelete = async () => {
-        if (id) {
-            await deleteCategory(id)
-            navigate('/admin/categories')
-        }
-    }
+    // Mutation cập nhật category
+    const [updateCategory, error] = useUpdateCategoryMutation()
+    const [isEditing, setIsEditing] = useState(false) // Trạng thái chỉnh sửa
+    const [form] = Form.useForm()
 
-    const handleEdit = () => {
-        setIsEditing(true)
-    }
-
-    const handleCancelEdit = () => {
-        setIsEditing(false)
-        setCategoryData(category) // Restore original data if canceled
-    }
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setCategoryData({
-            ...categoryData,
-            name: e.target.value,
-        })
-    }
-
-    const handleSave = async () => {
-        if (categoryData) {
-            await updateCategory(id, categoryData.name)
+    const handleSave = async (values: any) => {
+        console.log('Category updated:', values)
+        try {
+            // Gửi request cập nhật category
+            await updateCategory({ id, data: values }).unwrap()
+            message.success('Category updated successfully')
             setIsEditing(false)
-            setCategory(categoryData)
+        } catch (error: any) {
+            // Kiểm tra lỗi trả về từ backend và hiển thị thông báo phù hợp
+            if (error?.data?.message) {
+                message.error(error.data.message) // Hiển thị thông báo lỗi từ backend
+            } else {
+                message.error('Failed to update category. Please try again.') // Lỗi chung
+            }
+            console.error('Error from backend:', error) // Log chi tiết lỗi
         }
+    }
+
+    const handleCancel = () => {
+        setIsEditing(false)
+        form.resetFields()
+    }
+
+    if (isLoading || isError) {
+        return (
+            <LoadingError
+                isLoading={isLoading}
+                error={error}
+                refetch={refetch}
+            />
+        )
+    }
+
+    if (isError || !category) {
+        return <Empty description="Category not found" />
     }
 
     return (
-        <>
-            {category ? (
-                <>
-                    <div className="my-4">
-                        <Space>
-                            {isEditing ? (
-                                <>
-                                    <Button onClick={handleSave} type="primary">
-                                        Save
-                                    </Button>
-                                    <Button
-                                        onClick={handleCancelEdit}
-                                        type="default"
-                                    >
-                                        Cancel
-                                    </Button>
-                                </>
-                            ) : (
-                                <>
-                                    <Button onClick={handleEdit} type="primary">
-                                        Edit
-                                    </Button>
-                                    <Button
-                                        onClick={handleDelete}
-                                        type="primary"
-                                    >
-                                        Delete
-                                    </Button>
-                                </>
-                            )}
-                        </Space>
-                    </div>
-                    <Title level={2}>{category.name}</Title>
-                    <Descriptions
-                        title="Category Details"
-                        layout="vertical"
-                        bordered
+        <Card title={`Category Details - ${category?.name}`} className="my-4">
+            {isEditing ? (
+                <Form
+                    form={form}
+                    layout="vertical"
+                    onFinish={handleSave}
+                    initialValues={category} // Ensure form starts with current category data
+                >
+                    <Form.Item
+                        label="Category Name"
+                        name="name"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please enter category name',
+                            },
+                        ]}
                     >
-                        <Descriptions.Item label="Name">
-                            {isEditing ? (
-                                <Input
-                                    name="name"
-                                    value={categoryData?.name}
-                                    onChange={handleChange}
-                                />
-                            ) : (
-                                category.name
-                            )}
-                        </Descriptions.Item>
-                        {/* Add more fields if necessary */}
-                    </Descriptions>
-                </>
+                        <Input />
+                    </Form.Item>
+
+                    <Row gutter={16}>
+                        <Col span={12}>
+                            <Form.Item
+                                label="Status"
+                                name="isActive"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Please select status',
+                                    },
+                                ]}
+                            >
+                                <Select>
+                                    <Select.Option value={true}>
+                                        Active
+                                    </Select.Option>
+                                    <Select.Option value={false}>
+                                        Disabled
+                                    </Select.Option>
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item
+                                label="Products Count"
+                                name="productsCount"
+                            >
+                                <Input disabled type="number" />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+
+                    <Space>
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            loading={isLoading}
+                        >
+                            Save
+                        </Button>
+                        <Button onClick={handleCancel}>Cancel</Button>
+                    </Space>
+                </Form>
             ) : (
-                <div>Loading...</div>
+                <Space
+                    direction="vertical"
+                    size="large"
+                    style={{ width: '100%' }}
+                >
+                    <div>
+                        <Title level={5}>Name:</Title>
+                        <Text>{category?.name}</Text>
+                    </div>
+
+                    <Row gutter={16}>
+                        <Col span={12}>
+                            <div>
+                                <Title level={5}>Status:</Title>
+                                <Text>
+                                    {category?.isActive ? 'Active' : 'Disabled'}
+                                </Text>
+                            </div>
+                        </Col>
+                        <Col span={12}>
+                            <div>
+                                <Title level={5}>Products Count:</Title>
+                                <Text>{category?.productsCount || 0}</Text>
+                            </div>
+                        </Col>
+                    </Row>
+
+                    <Space>
+                        <Button
+                            type="primary"
+                            onClick={() => setIsEditing(true)}
+                        >
+                            Edit
+                        </Button>
+                        <Button onClick={() => navigate('/admin/categories')}>
+                            Back
+                        </Button>
+                    </Space>
+                </Space>
             )}
-        </>
+        </Card>
     )
 }
+
+export default CategoryDetails

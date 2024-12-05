@@ -1,13 +1,23 @@
-import exp from 'constants'
+import mongoose, { Document, Schema } from 'mongoose'
+const schema = Schema
 
-import mongoose from 'mongoose'
-const schema = mongoose.Schema
+export interface ICategory extends Document {
+    name: string
+}
 
 const categorySchema = new schema({
     name: {
         type: String,
         unique: true,
         required: true,
+    },
+    productsCount: {
+        type: Number,
+        default: 0,
+    },
+    isActive: {
+        type: Boolean,
+        default: true,
     },
 })
 

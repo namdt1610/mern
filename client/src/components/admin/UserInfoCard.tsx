@@ -1,10 +1,11 @@
 // UserInfoCard.tsx
 import React, { useMemo } from 'react'
-import { Card, Image, Typography, Button } from 'antd'
+import { Card, Typography, Button, Row, Col, Avatar } from 'antd'
 import { decodeToken } from '../../utils/jwtDecode'
 import { useLogoutMutation } from 'services/AuthApi'
 import Cookies from 'js-cookie'
 import { useNavigate } from 'react-router-dom'
+import { AntDesignOutlined } from '@ant-design/icons'
 
 const { Title, Text } = Typography
 
@@ -32,26 +33,37 @@ const UserInfoCard = () => {
 
     return (
         <Card>
-            <div className="flex justify-start">
-                <Image
-                    width={100}
-                    src={
-                        decodedUser?.avatar ||
-                        'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
-                    }
-                    alt="User avatar"
-                />
-                <div className="justify-center flex-col items-center">
+            <Row gutter={30} align={'middle'} justify={'center'}>
+                <Col>
+                    <Avatar
+                        size={{
+                            xs: 24,
+                            sm: 32,
+                            md: 40,
+                            lg: 64,
+                            xl: 80,
+                            xxl: 100,
+                        }}
+                        icon={
+                            decodedUser?.avatar ? (
+                                decodedUser.avatar
+                            ) : (
+                                <AntDesignOutlined />
+                            )
+                        }
+                    />
+                </Col>
+                <Col>
                     <Title level={2}>
                         Welcome, {decodedUser?.name || 'User'}
                     </Title>
                     <Text type="secondary">{decodedUser?.email}</Text>
-                    <Text type="secondary">Role: {decodedUser?.role}</Text>
-                </div>
-                <div>
+                    <Text type="secondary">{decodedUser?.role}</Text>
+                </Col>
+                <Col>
                     <Button onClick={onLogout}>Logout</Button>
-                </div>
-            </div>
+                </Col>
+            </Row>
         </Card>
     )
 }

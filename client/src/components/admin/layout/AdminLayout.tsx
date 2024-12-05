@@ -23,7 +23,7 @@ import {
 import { Layout, theme, Menu, Button, Card } from 'antd/lib'
 import type { MenuProps } from 'antd/'
 import { Outlet, Link, useLocation } from 'react-router-dom'
-import Breadcrumb from '../../ui/breadcrumb'
+import Breadcrumb from '../../ui/Breadcrumb'
 import Footer from '../../ui/Footer'
 import UserInfoCard from '../../admin/UserInfoCard'
 

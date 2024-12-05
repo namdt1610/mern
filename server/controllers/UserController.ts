@@ -71,21 +71,6 @@ export const updateUser = async (
             return
         }
 
-        // Tạo lại JWT token chỉ khi thông tin người dùng thay đổi
-        const token = jwt.sign(
-            { id: updatedUser._id, role: updatedUser.role },
-            process.env.JWT_SECRET as string,
-            { expiresIn: '1h' }
-        )
-
-        // Lưu token vào cookie
-        res.cookie('user', token, {
-            // httpOnly: true, // Đảm bảo cookie chỉ có thể truy cập từ server
-            //secure: process.env.NODE_ENV === 'production', // Chỉ cho phép cookie khi kết nối https
-            secure: false,
-            maxAge: 3600 * 1000, // Thời gian hết hạn token (1h)
-        })
-
         // Trả về thông tin người dùng đã cập nhật
         res.status(200).json(updatedUser.toJSON())
     } catch (error) {

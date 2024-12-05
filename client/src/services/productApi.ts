@@ -22,6 +22,15 @@ export const productApi = createApi({
             query: (id) => `/products/${id}`,
         }),
 
+        // Thêm sản phẩm mới
+        addProduct: builder.mutation<Product, Partial<Product>>({
+            query: (data) => ({
+                url: '/products',
+                method: 'POST',
+                body: data,
+            }),
+        }),
+
         // Cập nhật sản phẩm
         updateProduct: builder.mutation<
             Product,
@@ -47,6 +56,7 @@ export const productApi = createApi({
 export const {
     useGetProductsQuery,
     useGetProductByIdQuery,
+    useAddProductMutation,
     useUpdateProductMutation,
     useDeleteProductMutation,
 } = productApi

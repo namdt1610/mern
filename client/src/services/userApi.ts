@@ -22,6 +22,15 @@ export const userApi = createApi({
             query: (id) => `/users/${id}`,
         }),
 
+        // Tạo user mới
+        createUser: builder.mutation<User, Partial<User>>({
+            query: (data) => ({
+                url: '/users',
+                method: 'POST',
+                body: data,
+            }),
+        }),
+
         // Cập nhật user
         updateUser: builder.mutation<User, Partial<User> & { id: string }>({
             query: ({ id, ...data }) => ({
@@ -38,12 +47,23 @@ export const userApi = createApi({
                 method: 'DELETE',
             }),
         }),
+
+        // Tải avatar lên
+        uploadAvatar: builder.mutation<{ avatarUrl: string }, FormData>({
+            query: (formData) => ({
+                url: '/upload-avatar',
+                method: 'POST',
+                body: formData,
+            }),
+        }),
     }),
 })
 
 export const {
     useGetUsersQuery,
     useGetUserByIdQuery,
+    useCreateUserMutation,
     useUpdateUserMutation,
     useDeleteUserMutation,
+    useUploadAvatarMutation,
 } = userApi

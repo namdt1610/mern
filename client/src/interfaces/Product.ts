@@ -11,4 +11,5 @@ export interface Product {
     stock: number
     status: string
     sku: string
+    isActive: boolean
 }

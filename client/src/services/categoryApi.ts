@@ -38,7 +38,7 @@ export const categoryApi = createApi({
         >({
             query: ({ id, data }) => ({
                 url: `/categories/${id}`,
-                method: 'PUT',
+                method: 'PATCH',
                 body: data,
             }),
         }),

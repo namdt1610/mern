@@ -1,4 +1,4 @@
-// src/interfaces/User.interface.ts
+// interfaces/User.ts
 export interface User {
     _id: string
     avatar: string

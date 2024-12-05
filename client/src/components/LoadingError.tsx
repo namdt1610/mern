@@ -18,6 +18,8 @@ const LoadingError: React.FC<LoadingErrorProps> = ({
         return (
             <div className="flex justify-center items-center h-screen">
                 <Spin
+                    fullscreen
+                    tip="Loading..."
                     indicator={
                         <LoadingOutlined style={{ fontSize: 48 }} spin />
                     }

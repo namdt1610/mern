@@ -6,6 +6,7 @@ import {
     DeleteOutlined,
     SaveOutlined,
     BackwardOutlined,
+    ReloadOutlined,
 } from '@ant-design/icons'
 
 interface UserActionsProps {
@@ -13,6 +14,7 @@ interface UserActionsProps {
     onSave: () => void
     onEditToggle: () => void
     onDelete: () => void
+    onRefetch: () => void
 }
 
 const UserActions: React.FC<UserActionsProps> = ({
@@ -20,10 +22,20 @@ const UserActions: React.FC<UserActionsProps> = ({
     onSave,
     onEditToggle,
     onDelete,
+    onRefetch,
 }) => {
     return (
         <Card className="items-center justify-center flex card-border">
             <Space>
+                <Button
+                    color="primary"
+                    variant="outlined"
+                    size="large"
+                    icon={<ReloadOutlined />}
+                    onClick={onRefetch}
+                >
+                    Refresh
+                </Button>
                 <Button
                     color="primary"
                     variant="outlined"

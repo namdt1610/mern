@@ -7,16 +7,18 @@ import cookieParser from 'cookie-parser'
 
 const app = express()
 
+app.use(express.json())
+
 app.use(morgan('dev'))
 
 app.use(cookieParser())
 
 const corsOptions = {
     origin: 'http://localhost:5173',
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
-    optionsSuccessStatus: 200
+    optionsSuccessStatus: 200,
 }
 
 // Apply middlewares in correct order
@@ -43,12 +45,19 @@ app.use('/api/products', productRoutes)
 app.use('/api/categories', categoryRoutes)
 
 // Global error handler
-app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
-    console.error(err.stack)
-    res.status(500).json({
-        status: 'error',
-        message: 'Internal server error'
-    })
-})
+app.use(
+    (
+        err: Error,
+        req: express.Request,
+        res: express.Response,
+        next: express.NextFunction
+    ) => {
+        console.error(err.stack)
+        res.status(500).json({
+            status: 'error',
+            message: 'Internal server error',
+        })
+    }
+)
 
 export default app

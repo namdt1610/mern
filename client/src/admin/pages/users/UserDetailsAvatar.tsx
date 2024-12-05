@@ -1,55 +1,68 @@
-// userDetail/UserAvatar.tsx
-import { Card } from 'antd/lib'
 import React from 'react'
-import { useDropzone } from 'react-dropzone'
+import { Upload, Avatar, message, Card } from 'antd'
+import { PlusOutlined } from '@ant-design/icons'
 
 interface UserAvatarProps {
     avatar: string
-    onDrop: (files: File[]) => void
+    onAvatarChange: (file: File) => void
     isEditing: boolean
 }
 
 const UserAvatar: React.FC<UserAvatarProps> = ({
     avatar,
-    onDrop,
+    onAvatarChange,
     isEditing,
 }) => {
-    const { getRootProps, getInputProps } = useDropzone({
-        onDrop,
-        accept: { 'image/*': ['.jpeg', '.jpg', '.png'] },
-    })
+    const handleBeforeUpload = (file: File) => {
+        const isImage = file.type.startsWith('image/')
+        if (!isImage) {
+            message.error('You can only upload image files!')
+            return false
+        }
+        const isSmallEnough = file.size / 1024 / 1024 < 2 // < 2MB
+        if (!isSmallEnough) {
+            message.error('Image must be smaller than 2MB!')
+            return false
+        }
+        return true
+    }
+
+    const handleChange = (info: any) => {
+        if (info.file.status === 'done' || info.file.originFileObj) {
+            const file = info.file.originFileObj || info.file
+            const previewUrl = URL.createObjectURL(file)
+            onAvatarChange(file) // Gửi file về `UserDetail`
+        }
+    }
 
     return (
-        <Card className='card-border rounded-full'>
+        <Card className="card-border text-center">
             {isEditing ? (
-                <div
-                    {...getRootProps()}
-                    style={{
-                        border: '2px dashed #ccc',
-                        padding: '20px',
-                        textAlign: 'center',
-                        cursor: 'pointer',
-                    }}
+                <Upload
+                    name="avatar"
+                    listType="picture-card"
+                    showUploadList={false}
+                    beforeUpload={handleBeforeUpload}
+                    onChange={handleChange}
                 >
-                    <input {...getInputProps()} />
-                    <img
-                        src={avatar}
-                        alt="Avatar Preview"
-                        style={{ width: 300, height: 300 }}
-                        className="rounded-full object-cover"
-                    />
-                    <p>Drag or click to change the avatar</p>
-                </div>
+                    <div>
+                        {avatar ? (
+                            <Avatar
+                                src={avatar}
+                                size={200}
+                                className="rounded-full"
+                            />
+                        ) : (
+                            <PlusOutlined />
+                        )}
+                        <div style={{ marginTop: 8 }}>Change Avatar</div>
+                    </div>
+                </Upload>
             ) : (
-                <img
+                <Avatar
                     src={avatar}
-                    alt="avatar"
-                    style={{
-                        minWidth: 300,
-                        minHeight: 300,
-                        borderRadius: '100%',
-                        objectFit: 'cover',
-                    }}
+                    size={200}
+                    className="rounded-full object-cover"
                 />
             )}
         </Card>

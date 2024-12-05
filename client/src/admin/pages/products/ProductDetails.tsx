@@ -1,172 +1,196 @@
-import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { Card, message, Spin, Space } from 'antd/lib'
-import useProductActions from '../../../hooks/product/useProductActions'
-import { Product } from '../../../interfaces/Product'
-import ProductAvatar from './ProductDetailsImage'
-import ProductActions from './ProductDetailsActions'
-import ProductForm from './ProductDetailsForm'
-import * as formatUtils from '../../utils/format.utils'
+import React, { useState } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
+import {
+    useGetProductByIdQuery,
+    useUpdateProductMutation,
+} from 'services/ProductApi' // Giả sử API này trả về dữ liệu sản phẩm
+import {
+    Card,
+    Typography,
+    Spin,
+    Button,
+    Space,
+    Empty,
+    Input,
+    Form,
+    message,
+    Image,
+    Upload,
+    UploadProps,
+} from 'antd'
+import { RcFile } from 'antd/es/upload'
+import LoadingError from 'components/LoadingError'
 
-const ProductDetail: React.FC = () => {
-    const { id } = useParams<{ id: string }>()
-    const { fetchProductById, updateProduct, deleteProduct } =
-        useProductActions()
-    const [product, setProduct] = useState<Product | null>(null)
-    const [isEditing, setIsEditing] = useState(false)
-    const [editedProduct, setEditedProduct] = useState<Partial<Product> | null>(
-        null
-    )
-    const [avatarPreview, setAvatarPreview] = useState<string | null>(null)
-    const [errors, setErrors] = useState({ name: '', price: '', sku: '' })
-    const [validations, setValidations] = useState({
-        name: true,
-        price: true,
-        sku: true,
-    })
+const { Title, Text } = Typography
 
-    useEffect(() => {
-        const getProduct = async () => {
-            const fetchedProduct = await fetchProductById(id)
-            setProduct(fetchedProduct)
-            setEditedProduct(fetchedProduct)
-            setAvatarPreview(`http://localhost:8888/${fetchedProduct.avatar}`)
-        }
-        getProduct()
-    }, [id])
+const ProductDetails: React.FC = () => {
+    const { id } = useParams<{ id: string }>() // Lấy id từ URL
+    const navigate = useNavigate()
 
-    const onDrop = (acceptedFiles: File[]) => {
-        const file = acceptedFiles[0]
-        const previewUrl = URL.createObjectURL(file)
-        setAvatarPreview(previewUrl)
-    }
+    // Gọi API để lấy thông tin sản phẩm
+    const {
+        data: product,
+        isLoading,
+        isError,
+        refetch,
+    } = useGetProductByIdQuery(id || '')
+    const [updateProduct, { isLoading: isUpdating }] =
+        useUpdateProductMutation()
 
-    const validateFields = () => {
-        const newValidations = {
-            name: editedProduct?.name ? true : false,
-            price: formatUtils.isValidPrice(String(editedProduct?.price || '')),
-            sku: editedProduct?.sku ? true : false,
-        }
-        setValidations(newValidations)
-        return Object.values(newValidations).every((value) => value === true)
-    }
+    const [isEditing, setIsEditing] = useState(false) // Trạng thái chỉnh sửa
+    const [form] = Form.useForm()
 
-    const handleSave = async () => {
-        const newErrors = { name: '', price: '', sku: '' }
-
-        if (!editedProduct?.name) {
-            message.warning('Name is required')
-            newErrors.name = 'Name is required'
-        }
-
-        if (!formatUtils.isValidPrice(String(editedProduct?.price || ''))) {
-            message.warning('Check your price format')
-            newErrors.price = 'Invalid price format'
-        }
-
-        if (newErrors.name || newErrors.price || newErrors.sku) {
-            setErrors(newErrors)
-            return
-        }
-
+    const handleSave = async (values: any) => {
         try {
-            if (!validateFields()) {
-                message.warning('Please check your input fields')
-                return
-            }
-
-            const formData = new FormData()
-            for (const key in editedProduct) {
-                formData.append(key, editedProduct[key])
-            }
-
-            if (avatarPreview) {
-                const fileInput = document.querySelector('input[type="file"]')
-                if ((fileInput as HTMLInputElement)?.files[0]) {
-                    formData.append(
-                        'avatar',
-                        (fileInput as HTMLInputElement).files[0]
-                    )
-                }
-            }
-
-            const loadingMessage = message.loading('Saving...', 0)
-
-            setTimeout(async () => {
-                try {
-                    const updatedProduct = await updateProduct(id, formData)
-                    setProduct(updatedProduct)
-                    setIsEditing(false)
-                    loadingMessage()
-                    message.success('Product updated successfully')
-                } catch (error) {
-                    console.error('Error during save:', error)
-                    loadingMessage()
-                    message.error('Error occurred while saving')
-                }
-            }, 1000)
-        } catch (error) {
-            console.error('Error during save:', error)
+            // Gửi request cập nhật sản phẩm, bao gồm cả ảnh nếu có thay đổi
+            await updateProduct({ id, ...values }).unwrap()
+            message.success('Product updated successfully')
+            setIsEditing(false)
+        } catch (error: any) {
+            message.error('Failed to update product. Please try again.')
+            console.error('Error from backend:', error)
         }
     }
 
-    const handleEditToggle = () => {
-        setIsEditing(!isEditing)
+    const handleCancel = () => {
+        setIsEditing(false)
+        form.resetFields()
     }
 
-    const handleDelete = async () => {
-        try {
-            await deleteProduct(id)
-            message.success('Product deleted successfully')
-            console.log('Product deleted successfully')
-            window.location.href = '/admin/products'
-        } catch (error) {
-            console.error('Error during delete:', error)
+    const handleImageChange: UploadProps['onChange'] = (info) => {
+        if (info.file.status === 'done') {
+            message.success(`${info.file.name} file uploaded successfully`)
+        } else if (info.file.status === 'error') {
+            message.error(`${info.file.name} file upload failed.`)
         }
     }
 
-    if (!product) {
-        return <Spin size="large" fullscreen />
+    if (isLoading || isUpdating) {
+        return <Spin size="large" tip="Loading..." />
+    }
+
+    if (isError || !product) {
+        return <Empty description="Product not found" />
     }
 
     return (
-        <div>
-            <Space
-                className="flex items-center justify-center"
-                direction="vertical"
-                size="large"
-            >
-                <ProductActions
-                    isEditing={isEditing}
-                    onSave={handleSave}
-                    onEditToggle={handleEditToggle}
-                    onDelete={handleDelete}
-                />
+        <Card title={`Product Details - ${product?.name}`} className="my-4">
+            {isEditing ? (
+                <Form
+                    form={form}
+                    layout="vertical"
+                    onFinish={handleSave}
+                    initialValues={product} // Đảm bảo form bắt đầu với dữ liệu sản phẩm hiện tại
+                >
+                    <Form.Item
+                        label="Product Name"
+                        name="name"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please enter product name',
+                            },
+                        ]}
+                    >
+                        <Input />
+                    </Form.Item>
 
-                <ProductAvatar
-                    image={
-                        avatarPreview ||
-                        `http://localhost:8888/${product.image}`
-                    }
-                    onDrop={onDrop}
-                    isEditing={isEditing}
-                />
-                <ProductForm
-                    product={product}
-                    isEditing={isEditing}
-                    editedProduct={editedProduct || {}}
-                    onInputChange={(field, value) =>
-                        setEditedProduct((prev) => ({
-                            ...prev,
-                            [field]: value,
-                        }))
-                    }
-                    errors={errors}
-                    validations={validations}
-                />
-            </Space>
-        </div>
+                    <Form.Item label="Price" name="price">
+                        <Input type="number" />
+                    </Form.Item>
+
+                    <Form.Item label="Status" name="isActive">
+                        <Input type="checkbox" />
+                    </Form.Item>
+
+                    {/* Upload hình ảnh */}
+                    <Form.Item label="Image" name="imageUrl">
+                        <Upload
+                            name="file"
+                            action="/upload" // Địa chỉ API để upload hình ảnh (điều chỉnh theo API của bạn)
+                            listType="picture-card"
+                            onChange={handleImageChange}
+                            showUploadList={false} // Nếu bạn không muốn hiển thị danh sách ảnh đã tải lên
+                            beforeUpload={(file: RcFile) => {
+                                // Kiểm tra loại file trước khi upload
+                                const isImage = file.type.startsWith('image/')
+                                if (!isImage) {
+                                    message.error(
+                                        'You can only upload image files!'
+                                    )
+                                }
+                                return isImage
+                            }}
+                        >
+                            {product?.imageUrl ? (
+                                <Image
+                                    src={product?.imageUrl}
+                                    alt={product?.name}
+                                    width={100}
+                                />
+                            ) : (
+                                <div>+ Upload</div>
+                            )}
+                        </Upload>
+                    </Form.Item>
+
+                    <Space>
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            loading={isUpdating}
+                        >
+                            Save
+                        </Button>
+                        <Button onClick={handleCancel}>Cancel</Button>
+                    </Space>
+                </Form>
+            ) : (
+                <Space
+                    direction="vertical"
+                    size="large"
+                    style={{ width: '100%' }}
+                >
+                    <div>
+                        <Title level={5}>Name:</Title>
+                        <Text>{product?.name}</Text>
+                    </div>
+
+                    <div>
+                        <Title level={5}>Price:</Title>
+                        <Text>{product?.price}</Text>
+                    </div>
+
+                    <div>
+                        <Title level={5}>Status:</Title>
+                        <Text>{product?.isActive ? 'Active' : 'Inactive'}</Text>
+                    </div>
+
+                    {/* Hiển thị hình ảnh sản phẩm */}
+                    <div>
+                        <Title level={5}>Image:</Title>
+                        <Image
+                            width={200}
+                            src={product?.imageUrl}
+                            alt={product?.name}
+                        />
+                    </div>
+
+                    <Space>
+                        <Button
+                            type="primary"
+                            onClick={() => setIsEditing(true)}
+                        >
+                            Edit
+                        </Button>
+                        <Button onClick={() => navigate('/admin/products')}>
+                            Back
+                        </Button>
+                    </Space>
+                </Space>
+            )}
+        </Card>
     )
 }
 
-export default ProductDetail
+export default ProductDetails

@@ -1,164 +1,121 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
-import { Product } from '../../../interfaces/Product'
-import useProductActions from '../../../hooks/product/useProductActions'
-import { Button, Space, Badge, Input, Table, Card } from 'antd/lib'
-import { ColumnsType } from 'antd/lib/table'
-import type { SearchProps } from 'antd/lib/input/'
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import {
+    useGetProductsQuery,
+    useDeleteProductMutation,
+} from 'services/ProductApi'
+import {
+    Card,
+    Table,
+    Button,
+    Space,
+    Popconfirm,
+    message,
+    Spin,
+    Typography,
+} from 'antd'
+import { PlusOutlined, DeleteOutlined } from '@ant-design/icons'
+import LoadingError from 'components/LoadingError'
+import { Product } from 'interfaces/Product'
 
-export default function Products() {
-    const { fetchProducts } = useProductActions()
+const { Title } = Typography
+
+const ProductPage: React.FC = () => {
     const navigate = useNavigate()
-    const [products, setProducts] = useState<Product[]>([])
-    const [filteredData, setFilteredData] = useState<Product[]>([])
 
-    useEffect(() => {
-        const getProducts = async () => {
-            const data = await fetchProducts()
-            setProducts(
-                data.map((product: Product) => ({
-                    ...product,
-                    key: product._id,
-                }))
-            )
+    // Fetching product data using RTK Query
+    const {
+        data: products,
+        isLoading,
+        isError,
+        refetch,
+    } = useGetProductsQuery()
+    const [deleteProduct] = useDeleteProductMutation()
+
+    // Handle delete product
+    const handleDelete = async (_id: string) => {
+        try {
+            await deleteProduct(_id).unwrap()
+            message.success('Product deleted successfully')
+            refetch()
+        } catch (error) {
+            message.error('Failed to delete product. Please try again.')
         }
+    }
 
-        getProducts()
-    }, [])
+    if (isLoading) {
+        return <Spin tip="Loading products..." />
+    }
 
-    const columns: ColumnsType<Product> = [
+    if (isError) {
+        return (
+            <LoadingError
+                isLoading={isLoading}
+                error={isError}
+                refetch={refetch}
+            />
+        )
+    }
+
+    const columns = [
         {
-            title: 'Image',
-            dataIndex: 'image',
-            key: 'image',
-            render: (image) => (
-                <img
-                    src={
-                        image
-                            ? `http://localhost:8888/${image}`
-                            : '/img/default.png'
-                    }
-                    alt="Product"
-                    className="w-20 h-20 object-cover"
-                />
-            ),
-        },
-        {
-            title: 'Name',
+            title: 'Product Name',
             dataIndex: 'name',
             key: 'name',
-            sorter: (a, b) => (a.name ?? '').localeCompare(b.name ?? ''),
-            render: (_, { name, _id }) => (
-                <Link to={`/admin/products/${_id}`}>{name}</Link>
-            ),
-        },
-        {
-            title: 'Category',
-            dataIndex: 'category',
-            key: 'category',
-            sorter: (a, b) => a.category.localeCompare(b.category),
         },
         {
             title: 'Price',
             dataIndex: 'price',
             key: 'price',
-            sorter: (a, b) => a.price - b.price,
         },
         {
-            title: 'Status',
-            dataIndex: 'status',
-            key: 'status',
-            render: (status) => (
-                <Badge
-                    className="capitalize"
-                    status="processing"
-                    color={status === 'available' ? 'green' : 'red'}
-                    text={status}
-                ></Badge>
-            ),
-            sorter: (a, b) => a.status.localeCompare(b.status),
-        },
-        {
-            title: 'Action',
-            key: 'action',
-            render: (_, record) => (
-                <div>
-                    <Space wrap>
-                        <Button
-                            color="primary"
-                            variant="outlined"
-                            onClick={() => handleView(record._id)}
-                        >
-                            View
-                        </Button>
-                        <Button
-                            color="danger"
-                            variant="outlined"
-                            onClick={() => handleDelete(record._id)}
-                        >
+            title: 'Actions',
+            key: 'actions',
+            render: (_, record: Product) => (
+                <Space size="middle">
+                    <Button
+                        type="link"
+                        onClick={() => navigate(`/admin/products/${record._id}`)} // Navigate to the product details page
+                    >
+                        Edit
+                    </Button>
+                    <Popconfirm
+                        title="Are you sure you want to delete this product?"
+                        onConfirm={() => handleDelete(record._id)}
+                    >
+                        <Button icon={<DeleteOutlined />} danger>
                             Delete
                         </Button>
-                    </Space>
-                </div>
+                    </Popconfirm>
+                </Space>
             ),
         },
     ]
 
-    const handleView = (id: string) => {
-        navigate(`/admin/products/${id}`)
-    }
-
-    const handleDelete = (productId: string) => {
-        console.log('Delete product ID:', productId)
-    }
-
-    const onSearch: SearchProps['onSearch'] = (value) => {
-        console.log('Search:', value)
-        const lowercasedValue = value.toLowerCase()
-        const filtered = products.filter(
-            (product) =>
-                product.name?.toLowerCase().includes(lowercasedValue) ||
-                product.category?.toLowerCase().includes(lowercasedValue) ||
-                product.price.toString().includes(lowercasedValue) ||
-                product.stock.toString().includes(lowercasedValue) ||
-                product.status?.toLowerCase().includes(lowercasedValue)
-        )
-        setFilteredData(filtered)
-    }
-
-    const { Search } = Input
-
     return (
         <>
-            <div className="my-4">
-                <Space>
-                    <Button>New</Button>
-                    <Button>Import</Button>
-                    <Search
-                        placeholder="input search text"
-                        allowClear
-                        onSearch={onSearch}
-                        style={{ width: 200 }}
-                    />
-                </Space>
-            </div>
-            <Card className="card-border">
+            <Card
+                title="Product List"
+                extra={
+                    <Button
+                        type="primary"
+                        icon={<PlusOutlined />}
+                        onClick={() => navigate('/admin/products/new')} // Navigate to the add product page
+                    >
+                        Add Product
+                    </Button>
+                }
+                className="my-4"
+            >
                 <Table
-                    bordered
-                    size="large"
-                    tableLayout="fixed"
-                    rowClassName={'cursor-pointer'}
-                    className="border-black border rounded-lg"
                     columns={columns}
-                    dataSource={filteredData.length ? filteredData : products}
-                    locale={{
-                        emptyText:
-                            filteredData.length === 0
-                                ? 'Không có từ khóa trùng khớp'
-                                : 'Không có dữ liệu',
-                    }}
+                    dataSource={products}
+                    rowKey="_id"
+                    pagination={{ pageSize: 10 }}
                 />
             </Card>
         </>
     )
 }
+
+export default ProductPage

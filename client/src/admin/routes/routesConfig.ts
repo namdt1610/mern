@@ -54,6 +54,14 @@ const adminRoutes: RouteConfig = {
             element: lazy(() => import('../pages/categories/CategoryNew')),
         },
         {
+            path: 'categories/reports',
+            element: lazy(() => import('../pages/categories/CategoryReports')),
+        },
+        {
+            path: 'customers',
+            element: lazy(() => import('../pages/customers/Customer')),
+        },
+        {
             path: 'users',
             element: lazy(() => import('../pages/users/User')),
         },
