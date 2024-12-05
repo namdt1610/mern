@@ -1,30 +1,18 @@
 import express from 'express'
 import * as ac from '../controllers/AuthController'
-import * as userController from '../controllers/UserController'
-import { upload } from '../middlewares/multer-config'
+import * as uc from '../controllers/UserController'
 
 const router = express.Router()
 
 // User routes (yêu cầu xác thực)
-router.get('/', userController.getAllUsers)
+router.get('/', uc.getAllUsers)
 router.get(
     '/:id',
     ac.verifyToken,
     ac.checkRole(['admin', 'user']),
-    userController.getUserById
+    uc.getUserById
 )
-router.put(
-    '/:id',
-    ac.verifyToken,
-    // ac.checkRole(['admin']),
-    upload.single('avatar'),
-    userController.updateUser
-)
-router.delete(
-    '/:id',
-    ac.verifyToken,
-    ac.checkRole(['admin']),
-    userController.deleteUser
-)
+router.put('/:id', ac.verifyToken, ac.checkRole(['admin']), uc.updateUser)
+router.delete('/:id', ac.verifyToken, ac.checkRole(['admin']), uc.deleteUser)
 
 export default router

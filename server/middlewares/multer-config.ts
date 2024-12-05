@@ -1,24 +1,29 @@
-import multer from 'multer'
-import { Request, Response } from 'express'
+// src/config/multerConfig.ts
 
-const storage = multer.diskStorage({
-    destination: (
-        req: Request,
-        file: Express.Multer.File,
-        cb: (error: Error | null, destination: string) => void
-    ) => {
-        cb(null, 'uploads/') // Đường dẫn đến thư mục lưu trữ
+import multer, { StorageEngine } from 'multer'
+import path from 'path'
+import fs from 'fs'
+
+// Cấu hình lưu trữ tệp
+const storage: StorageEngine = multer.diskStorage({
+    destination: (req, file, cb) => {
+        const uploadDir = './uploads'
+        // Tạo thư mục uploads nếu chưa tồn tại
+        if (!fs.existsSync(uploadDir)) {
+            fs.mkdirSync(uploadDir)
+        }
+        cb(null, uploadDir) // Chỉ định thư mục lưu tệp
     },
-    filename: (
-        req: Request,
-        file: Express.Multer.File,
-        cb: (error: Error | null, filename: string) => void
-    ) => {
-        // Tạo tên tệp duy nhất bằng cách thêm timestamp vào tên gốc
-        cb(null, `${Date.now()}-${file.originalname}`)
+    filename: (req, file, cb) => {
+        // Tạo tên tệp duy nhất để tránh trùng lặp
+        cb(null, Date.now() + path.extname(file.originalname))
     },
 })
 
-const upload = multer({ storage })
+// Cấu hình Multer với giới hạn kích thước tệp là 2MB
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 2 * 1024 * 1024 }, // Giới hạn 2MB
+})
 
-export { upload }
+export default upload

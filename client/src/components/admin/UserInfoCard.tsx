@@ -20,7 +20,7 @@ const UserInfoCard = () => {
         }
         return (decodeToken(token))   
     }, [])
-    console.log(decodedUser);
+    // console.log(decodedUser);
     
 
     const onLogout = async () => {

@@ -56,7 +56,7 @@ export const userApi = createApi({
         // Tải avatar lên
         uploadAvatar: builder.mutation<{ avatarUrl: string }, FormData>({
             query: (formData) => ({
-                url: '/upload-avatar',
+                url: '/upload',
                 method: 'POST',
                 body: formData,
             }),

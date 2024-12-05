@@ -1,5 +1,4 @@
 import { Router } from 'express'
-import { upload } from '../middlewares/multer-config'
 import {
     createProduct,
     getAllProducts,
@@ -12,8 +11,8 @@ const router = Router()
 
 router.get('/', getAllProducts)
 router.get('/:id', getProductById)
-router.post('/', upload.single('imageUrl'), createProduct)
+router.post('/', createProduct)
 router.delete('/:id', deleteProduct)
-router.patch('/:id', upload.single('imageUrl'), updateProduct)
+router.patch('/:id', updateProduct)
 
 export default router

@@ -1,66 +1,94 @@
-import React from 'react'
-import { Upload, Avatar, message, Card } from 'antd'
+import React, { useState } from 'react'
+import { Upload, Avatar, message, Card, Button } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
+import { useUploadAvatarMutation } from 'services/UserApi'
 
 interface UserAvatarProps {
     avatar: string
-    onAvatarChange: (file: File) => void
     isEditing: boolean
+    onAvatarChange: (file: File) => void
 }
 
 const UserAvatar: React.FC<UserAvatarProps> = ({
     avatar,
-    onAvatarChange,
     isEditing,
+    onAvatarChange,
 }) => {
-    const handleBeforeUpload = (file: File) => {
-        const isImage = file.type.startsWith('image/')
-        if (!isImage) {
-            message.error('You can only upload image files!')
-            return false
+    const [previewAvatar, setPreviewAvatar] = useState<string | undefined>(
+        avatar
+    )
+    const [uploadAvatar] = useUploadAvatarMutation()
+    const [file, setFile] = useState<File | null>(null)
+
+    const handleFileChange = (info: any) => {
+        const { status, originFileObj } = info.file
+
+        if (status === 'done') {
+            message.success('Upload thành công')
+        } else if (status === 'error') {
+            message.error('Đã có lỗi xảy ra trong quá trình tải lên')
         }
-        const isSmallEnough = file.size / 1024 / 1024 < 2 // < 2MB
-        if (!isSmallEnough) {
-            message.error('Image must be smaller than 2MB!')
-            return false
+
+        if (originFileObj) {
+            setFile(originFileObj) // Lưu file đã chọn
         }
-        return true
     }
 
-    const handleChange = (info: any) => {
-        if (info.file.status === 'done' || info.file.originFileObj) {
-            const file = info.file.originFileObj || info.file
-            const previewUrl = URL.createObjectURL(file)
-            onAvatarChange(file) // Gửi file về `UserDetail`
+    const handleUpload = () => {
+        if (!file) {
+            message.error('Vui lòng chọn ảnh trước khi upload')
+            return
         }
+
+        const formData = new FormData()
+        formData.append('avatar', file)
+
+        uploadAvatar(formData)
+            .unwrap() // unwrap để nhận giá trị trả về
+            .then((response) => {
+                const avatarUrl = response.avatarUrl
+                message.success('Upload avatar thành công')
+                // Xử lý URL avatar mới như cập nhật state hoặc gửi về server
+            })
+            .catch((error) => {
+                message.error('Upload avatar thất bại')
+            })
     }
 
     return (
         <Card className="card-border text-center">
             {isEditing ? (
-                <Upload
-                    name="avatar"
-                    listType="picture-card"
-                    showUploadList={false}
-                    beforeUpload={handleBeforeUpload}
-                    onChange={handleChange}
-                >
-                    <div>
-                        {avatar ? (
-                            <Avatar
-                                src={avatar}
-                                size={200}
-                                className="rounded-full"
-                            />
-                        ) : (
-                            <PlusOutlined />
-                        )}
-                        <div style={{ marginTop: 8 }}>Change Avatar</div>
-                    </div>
-                </Upload>
+                <>
+                    <Upload
+                        name="avatar"
+                        listType="picture-card"
+                        showUploadList={false}
+                        beforeUpload={() => false}
+                        onChange={handleFileChange}
+                        action="http://localhost:8888/api/upload" // URL API upload ảnh
+                    >
+                        <div>
+                            {previewAvatar ? (
+                                <Avatar
+                                    src={previewAvatar}
+                                    size={200}
+                                    className="rounded-full"
+                                />
+                            ) : (
+                                <PlusOutlined />
+                            )}
+                            <div style={{ marginTop: 8 }}>
+                                Thay đổi ảnh đại diện
+                            </div>
+                        </div>
+                    </Upload>
+                    <Button onClick={handleUpload} disabled={!file}>
+                        Upload Avatar
+                    </Button>
+                </>
             ) : (
                 <Avatar
-                    src={avatar}
+                    src={previewAvatar}
                     size={200}
                     className="rounded-full object-cover"
                 />

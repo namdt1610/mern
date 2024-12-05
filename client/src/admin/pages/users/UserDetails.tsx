@@ -21,7 +21,7 @@ const UserDetail: React.FC = () => {
     // console.log('Current user:', user)
     const [updateUser] = useUpdateUserMutation()
     const [deleteUser] = useDeleteUserMutation()
-    const [uploadAvatar] = useUploadAvatarMutation()
+    const [uploadAvatarToServer] = useUploadAvatarMutation()
 
     const [isEditing, setIsEditing] = useState(false)
     const [editedUser, setEditedUser] = useState<Partial<User>>({})
@@ -39,40 +39,52 @@ const UserDetail: React.FC = () => {
             )
         }
     }, [user])
-
+    // Lưu avatar mới
+    const handleAvatarChange = (file: File) => {
+        setAvatarFile(file)
+    }
     const handleSave = async () => {
         try {
-            // Partial<User> có nghĩa là tất cả các thuộc tính trong User trở thành tùy chọn.
-            // Đảm bảo _id có trong updatedData
             const updatedData: Partial<User> = { ...editedUser }
-            console.log('upadteData:', updatedData)
 
-            // Nếu có thay đổi avatar, thêm vào dữ liệu cập nhật
+            // Kiểm tra nếu có thay đổi avatar (người dùng đã chọn ảnh mới)
             if (avatarFile) {
                 const formData = new FormData()
-                formData.append('avatar', avatarFile)
+                formData.append('avatar', avatarFile) // Thêm file ảnh vào formData
 
-                // Gọi API upload avatar
-                const response = await uploadAvatar(formData).unwrap()
-                updatedData.avatar = response.avatarUrl // Lấy URL từ response và gán vào updatedData
+                // Hiển thị thông báo đang tải ảnh lên
+                message.loading({
+                    content: 'Uploading avatar...',
+                    key: 'avatarUpload',
+                })
+
+                // Gọi API upload ảnh, nhận lại URL của ảnh mới
+                const response = await uploadAvatarToServer(formData).unwrap()
+
+                // Lấy URL ảnh từ phản hồi của API và cập nhật vào dữ liệu người dùng
+                updatedData.avatar = response.avatarUrl // URL của ảnh mới
+
+                // Thông báo upload thành công
+                message.success({
+                    content: 'Avatar uploaded!',
+                    key: 'avatarUpload',
+                })
             } else {
-                updatedData.avatar = user.avatar // Giữ avatar cũ nếu không thay đổi
+                updatedData.avatar = user.avatar // Nếu không có ảnh mới, giữ lại ảnh cũ
             }
 
-            // Gửi dữ liệu cập nhật tới API
+            // Cập nhật thông tin người dùng (bao gồm cả avatar nếu có thay đổi)
             await updateUser({ id: id, ...updatedData }).unwrap()
+
+            // Thông báo cập nhật thành công
             message.success('User updated successfully')
-            setIsEditing(false)
+            setIsEditing(false) // Tắt chế độ chỉnh sửa
         } catch (error: any) {
             console.error('Error updating user:', error)
-
-            if (error?.data?.message) {
-                message.error(`Error: ${error.data.message}`) // Hiển thị thông báo từ backend
-            } else {
-                message.error('Failed to update user. Please try again.')
-            }
+            message.error('Failed to update user. Please try again.')
         }
     }
+
 
     const handleEditToggle = () => {
         setIsEditing((prev) => !prev)
@@ -87,15 +99,6 @@ const UserDetail: React.FC = () => {
             const errorMessage = error?.message || 'Failed to update user.'
             message.error(errorMessage)
         }
-    }
-
-    const handleAvatarChange = (file: File) => {
-        if (avatarPreview) {
-            URL.revokeObjectURL(avatarPreview) // Giải phóng URL cũ
-        }
-        const previewUrl = URL.createObjectURL(file)
-        setAvatarPreview(previewUrl)
-        setAvatarFile(file)
     }
 
     if (isLoading)
@@ -121,11 +124,11 @@ const UserDetail: React.FC = () => {
                             onRefetch={() => refetch}
                         />
                         <UserAvatar
+                            onAvatarChange={handleAvatarChange}
                             avatar={
                                 avatarPreview ||
                                 `http://localhost:8888${user.avatar}`
                             }
-                            onAvatarChange={handleAvatarChange}
                             isEditing={isEditing}
                         />
                     </Card>
