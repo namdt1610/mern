@@ -327,7 +327,7 @@ export default function LayoutApp() {
         <>
             <Layout>
                 <Sider
-                    width={'250'}
+                    width={'auto'}
                     trigger={null}
                     collapsible
                     collapsed={collapsed}

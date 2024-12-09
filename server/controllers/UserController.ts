@@ -38,7 +38,8 @@ export const updateUser = async (
     res: Response
 ): Promise<void> => {
     const { id } = req.params
-    const { email, password, name, role, status, phone, address } = req.body
+    const { email, password, name, role, status, phone, address, avatar } =
+        req.body
 
     try {
         // Chuẩn bị dữ liệu cập nhật, bỏ qua những thuộc tính không thay đổi
@@ -49,7 +50,7 @@ export const updateUser = async (
             status,
             phone,
             address,
-            ...(req.file && { avatar: req.file.path }),
+            avatar,
         }
 
         // Chỉ hash mật khẩu nếu có sự thay đổi

@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { User } from 'interfaces/User' // Định nghĩa kiểu User
+import { User } from '@/types/User' // Định nghĩa kiểu User
 
 export const userApi = createApi({
     reducerPath: 'userApi',

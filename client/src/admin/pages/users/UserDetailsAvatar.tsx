@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
-import { Upload, Avatar, message, Card, Button } from 'antd'
+import { Upload, Avatar, message, Card } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
-import { useUploadAvatarMutation } from 'services/UserApi'
 
 interface UserAvatarProps {
-    avatar: string
-    isEditing: boolean
-    onAvatarChange: (file: File) => void
+    avatar: string // URL ảnh ban đầu (có thể null nếu chưa có avatar)
+    isEditing: boolean // Trạng thái đang chỉnh sửa
+    onAvatarChange: (avatarUrl: string) => void // Callback gửi URL lên component cha
 }
 
 const UserAvatar: React.FC<UserAvatarProps> = ({
@@ -14,79 +13,81 @@ const UserAvatar: React.FC<UserAvatarProps> = ({
     isEditing,
     onAvatarChange,
 }) => {
-    const [previewAvatar, setPreviewAvatar] = useState<string | undefined>(
-        avatar
-    )
-    const [uploadAvatar] = useUploadAvatarMutation()
-    const [file, setFile] = useState<File | null>(null)
+    const [previewAvatar, setPreviewAvatar] = useState<string>(avatar) // State lưu URL preview ảnh
 
-    const handleFileChange = (info: any) => {
-        const { status, originFileObj } = info.file
-
-        if (status === 'done') {
-            message.success('Upload thành công')
-        } else if (status === 'error') {
-            message.error('Đã có lỗi xảy ra trong quá trình tải lên')
+    // Kiểm tra file trước khi upload
+    const handleBeforeUpload = (file: File) => {
+        const isImage = file.type.startsWith('image/')
+        if (!isImage) {
+            message.error('Bạn chỉ có thể upload file hình ảnh!')
+            return false
         }
-
-        if (originFileObj) {
-            setFile(originFileObj) // Lưu file đã chọn
+        const isSmallEnough = file.size / 1024 / 1024 < 2 // Dung lượng dưới 10MB
+        if (!isSmallEnough) {
+            message.error('Ảnh phải nhỏ hơn 2MB!')
+            return false
         }
+        return true
     }
 
-    const handleUpload = () => {
-        if (!file) {
-            message.error('Vui lòng chọn ảnh trước khi upload')
-            return
+    // Xử lý khi thay đổi file
+    const handleChange = (info: any) => {
+        const { status, originFileObj } = info.file
+        console.log('File info:', info.file)
+
+        const previewUrl = URL.createObjectURL(originFileObj)
+        if (originFileObj) {
+            // Tạo preview từ file ảnh được chọn
+            setPreviewAvatar(previewUrl) // Cập nhật preview ảnh
         }
 
-        const formData = new FormData()
-        formData.append('avatar', file)
+        if (status === 'done') {
+            const response = info.file.response // API trả về URL của ảnh đã upload
+            if (response && response.file.avatarUrl) {
+                // Test
+                message.success('Upload ảnh thành công!')
+                console.log('Phản hồi từ API:', info.file.response)
+                console.log(response.file.avatarUrl)
+                
+                // setPreviewAvatar(response.avatarUrl) // Hiển thị ảnh từ server
+                onAvatarChange(response.file.avatarUrl) // Gửi URL lên component cha
+            }
+        }
 
-        uploadAvatar(formData)
-            .unwrap() // unwrap để nhận giá trị trả về
-            .then((response) => {
-                const avatarUrl = response.avatarUrl
-                message.success('Upload avatar thành công')
-                // Xử lý URL avatar mới như cập nhật state hoặc gửi về server
-            })
-            .catch((error) => {
-                message.error('Upload avatar thất bại')
-            })
+        if (status === 'error') {
+            message.error('Upload ảnh thất bại!')
+        }
     }
 
     return (
         <Card className="card-border text-center">
             {isEditing ? (
-                <>
-                    <Upload
-                        name="avatar"
-                        listType="picture-card"
-                        showUploadList={false}
-                        beforeUpload={() => false}
-                        onChange={handleFileChange}
-                        action="http://localhost:8888/api/upload" // URL API upload ảnh
-                    >
-                        <div>
-                            {previewAvatar ? (
-                                <Avatar
-                                    src={previewAvatar}
-                                    size={200}
-                                    className="rounded-full"
-                                />
-                            ) : (
-                                <PlusOutlined />
-                            )}
-                            <div style={{ marginTop: 8 }}>
-                                Thay đổi ảnh đại diện
-                            </div>
+                <Upload
+                    name="avatar"
+                    listType="picture"
+                    showUploadList={false} // Không hiển thị danh sách ảnh
+                    beforeUpload={handleBeforeUpload} // Kiểm tra file
+                    onChange={handleChange} // Xử lý sự kiện thay đổi file
+                    action="http://localhost:8888/api/upload" // URL API upload
+                >
+                    <div>
+                        {previewAvatar ? (
+                            // Hiển thị preview ảnh
+                            <Avatar
+                                src={previewAvatar}
+                                size={300}
+                                className="rounded-full"
+                            />
+                        ) : (
+                            <PlusOutlined />
+                        )}
+                        <div style={{ marginTop: 8 }}>
+                            Thay đổi ảnh đại diện
                         </div>
-                    </Upload>
-                    <Button onClick={handleUpload} disabled={!file}>
-                        Upload Avatar
-                    </Button>
-                </>
+                    </div>
+                </Upload>
             ) : (
+                // Hiển thị avatar khi không ở chế độ chỉnh sửa
                 <Avatar
                     src={previewAvatar}
                     size={200}

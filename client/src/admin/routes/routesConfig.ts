@@ -41,6 +41,7 @@ const adminRoutes: RouteConfig = {
             path: 'products/new',
             element: lazy(() => import('../pages/products/ProductNew')),
         },
+        //* Category routes
         {
             path: 'categories',
             element: lazy(() => import('../pages/categories/Category')),
@@ -57,10 +58,30 @@ const adminRoutes: RouteConfig = {
             path: 'categories/reports',
             element: lazy(() => import('../pages/categories/CategoryReports')),
         },
+        //* Customer routes
         {
             path: 'customers',
             element: lazy(() => import('../pages/customers/Customer')),
         },
+        //* Inventory routes
+        {
+            path: 'inventory',
+            element: lazy(() => import('../pages/inventory/Inventory')),
+        },
+        //* Order routes
+        {
+            path: 'orders',
+            element: lazy(() => import('../pages/orders/Order')),
+        },
+        {
+            path: 'orders/:id',
+            element: lazy(() => import('../pages/orders/OrderDetails')),
+        },
+        {
+            path: 'orders/new',
+            element: lazy(() => import('../pages/orders/OrderNew')),
+        },
+        //* User routes
         {
             path: 'users',
             element: lazy(() => import('../pages/users/User')),

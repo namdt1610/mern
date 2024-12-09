@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import {
     useGetCategoryByIdQuery,
     useUpdateCategoryMutation,
-} from 'services/CategoryApi'
+} from '@/services/CategoryApi'
 import {
     Card,
     Typography,

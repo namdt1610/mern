@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { Promotion } from 'interfaces/Promotion'
+import { Promotion } from '@/types/Promotion'
 
 export const promotionApi = createApi({
     reducerPath: 'promotionApi',

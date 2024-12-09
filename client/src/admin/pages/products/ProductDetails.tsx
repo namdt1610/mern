@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import {
     useGetProductByIdQuery,
     useUpdateProductMutation,
-} from 'services/ProductApi' // Giả sử API này trả về dữ liệu sản phẩm
+} from '@/services/ProductApi' // Giả sử API này trả về dữ liệu sản phẩm
 import {
     Card,
     Typography,

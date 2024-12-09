@@ -1,13 +1,15 @@
 // UserActions.tsx
 
 import React from 'react'
-import { Button, Card, Space } from 'antd/lib'
+import { Button, Card, Space, Grid } from 'antd'
 import {
     DeleteOutlined,
     SaveOutlined,
     BackwardOutlined,
     ReloadOutlined,
 } from '@ant-design/icons'
+
+const { useBreakpoint } = Grid
 
 interface UserActionsProps {
     isEditing: boolean
@@ -24,22 +26,22 @@ const UserActions: React.FC<UserActionsProps> = ({
     onDelete,
     onRefetch,
 }) => {
+    const screens = useBreakpoint()
+
     return (
         <Card className="items-center justify-center flex card-border">
-            <Space>
+            <Space wrap direction={screens.xs ? 'vertical' : 'horizontal'}>
                 <Button
-                    color="primary"
-                    variant="outlined"
-                    size="large"
+                    type="primary"
+                    size="middle"
                     icon={<ReloadOutlined />}
                     onClick={onRefetch}
                 >
                     Refresh
                 </Button>
                 <Button
-                    color="primary"
-                    variant="outlined"
-                    size="large"
+                    type="primary"
+                    size="middle"
                     icon={<SaveOutlined />}
                     onClick={isEditing ? onSave : onEditToggle}
                 >
@@ -47,9 +49,8 @@ const UserActions: React.FC<UserActionsProps> = ({
                 </Button>
                 {isEditing && (
                     <Button
-                        color="default"
-                        size="large"
-                        variant="outlined"
+                        type="default"
+                        size="middle"
                         icon={<BackwardOutlined />}
                         onClick={onEditToggle}
                     >
@@ -58,8 +59,7 @@ const UserActions: React.FC<UserActionsProps> = ({
                 )}
                 <Button
                     color="danger"
-                    variant="outlined"
-                    size="large"
+                    size="middle"
                     icon={<DeleteOutlined />}
                     onClick={onDelete}
                 >

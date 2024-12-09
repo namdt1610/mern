@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import useUserActions from '../../../hooks/User/useUserActions'
 import { useParams } from 'react-router-dom'
-import { User } from '../../../interfaces/User'
+import { User } from '../../../types/User'
 import UserAvatar from '../users/UserDetailsAvatar'
 import * as formatUtils from '../../utils/format.utils'
 import {

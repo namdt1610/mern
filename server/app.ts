@@ -5,6 +5,7 @@ import morgan from 'morgan'
 import cookieParser from 'cookie-parser'
 import fs from 'fs'
 import upload from './middlewares/multer-config'
+import sharp from 'sharp'
 
 //* server.ts
 
@@ -48,19 +49,69 @@ app.use((req, res, next) => {
 })
 
 // Route để tải lên ảnh
+// app.post(
+//     '/api/upload',
+//     upload.single('avatar'),
+//     (req: Request, res: Response): void => {
+//         if (!req.file) {
+//             res.status(400).json({ message: 'No file uploaded' })
+//             return
+//         }
+//         const avatarUrl = `/uploads/${req.file.filename}` // Tạo URL từ filename
+//         res.json({
+//             message: 'File uploaded successfully!',
+//             file: {
+//                 avatarUrl, // Trả về avatarUrl
+//             },
+//         })
+//     }
+// )
+
 app.post(
     '/api/upload',
     upload.single('avatar'),
     (req: Request, res: Response): void => {
         if (!req.file) {
-            res.status(400).json({ message: 'No file uploaded.' })
+            res.status(400).json({ message: 'No file uploaded' })
+            return
         }
 
-        // Trả về thông tin tệp đã tải lên
-        res.json({
-            message: 'File uploaded successfully!',
-            file: req.file, // Thông tin tệp đã tải lên
-        })
+        const filePath = path.join(__dirname, 'uploads', req.file.filename) // Đảm bảo tạo đường dẫn tuyệt đối
+        const webpFilePath = filePath.replace(path.extname(filePath), '.webp') // Đổi đuôi thành .webp
+
+        // Sử dụng sharp để chuyển đổi ảnh sang WebP
+        sharp(filePath)
+            .webp({ quality: 80 })
+            .toFile(webpFilePath, (err, info) => {
+                if (err) {
+                    console.error('Error during image conversion:', err)
+                    return res.status(500).json({
+                        message: 'Error converting image',
+                        error: err.message, // Thêm chi tiết lỗi
+                    })
+                }
+
+                // Nếu thành công, xóa ảnh gốc
+                fs.unlink(filePath, (unlinkErr) => {
+                    if (unlinkErr) {
+                        console.error(
+                            'Error deleting original image:',
+                            unlinkErr
+                        )
+                        return res.status(500).json({
+                            message: 'Failed to delete original image',
+                            error: unlinkErr.message, // Thêm chi tiết lỗi
+                        })
+                    }
+
+                    // Trả về URL của ảnh WebP
+                    const avatarUrl = `/uploads/${path.basename(webpFilePath)}`
+                    res.json({
+                        message: 'File uploaded and converted successfully!',
+                        file: { avatarUrl },
+                    })
+                })
+            })
     }
 )
 
@@ -69,11 +120,15 @@ import authRoutes from './routes/Auth'
 import userRoutes from './routes/User'
 import categoryRoutes from './routes/Category'
 import productRoutes from './routes/Product'
+import inventoryRoutes from './routes/InventoryRoute'
+import orderRoutes from './routes/OrderRoute'
 
 app.use('/api', authRoutes)
 app.use('/api/users', userRoutes)
 app.use('/api/products', productRoutes)
 app.use('/api/categories', categoryRoutes)
+app.use('/api/inventory', inventoryRoutes)
+app.use('/api/orders', orderRoutes)
 
 // Global error handler
 app.use(

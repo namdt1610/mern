@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { Order } from 'interfaces/Order' // Định nghĩa kiểu Order
+import { Order } from '@/types/Order' // Định nghĩa kiểu Order
 
 export const orderApi = createApi({
     reducerPath: 'orderApi',

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAddCategoryMutation } from 'services/CategoryApi'
+import { useAddCategoryMutation } from '@/services/CategoryApi'
 import { Button, Input, Form, message, Card, FormProps } from 'antd/lib'
 
 type FieldType = {

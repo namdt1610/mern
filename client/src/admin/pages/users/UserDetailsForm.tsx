@@ -20,7 +20,7 @@ import {
     CrownOutlined,
     KeyOutlined,
 } from '@ant-design/icons'
-import { User } from 'interfaces/User'
+import { User } from '@/types/User'
 import { getUserRoleFromCookie } from 'utils/auth'
 
 interface UserFormProps {

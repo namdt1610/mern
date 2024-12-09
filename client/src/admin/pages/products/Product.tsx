@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import {
     useGetProductsQuery,
     useDeleteProductMutation,
-} from 'services/ProductApi'
+} from '@/services/ProductApi'
 import {
     Card,
     Table,
@@ -16,7 +16,7 @@ import {
 } from 'antd'
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons'
 import LoadingError from 'components/LoadingError'
-import { Product } from 'interfaces/Product'
+import { Product } from '@/types/Product'
 
 const { Title } = Typography
 
@@ -75,7 +75,9 @@ const ProductPage: React.FC = () => {
                 <Space size="middle">
                     <Button
                         type="link"
-                        onClick={() => navigate(`/admin/products/${record._id}`)} // Navigate to the product details page
+                        onClick={() =>
+                            navigate(`/admin/products/${record._id}`)
+                        } // Navigate to the product details page
                     >
                         Edit
                     </Button>

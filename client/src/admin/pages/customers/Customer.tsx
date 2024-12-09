@@ -13,7 +13,7 @@ import {
     useGetCustomersQuery,
     useDeleteCustomerMutation,
 } from 'services/CustomerApi' // Sửa thành đường dẫn API của bạn
-import { Customer } from 'interfaces/Customer' // Định nghĩa kiểu dữ liệu Customer
+import { Customer } from '@/types/Customer' // Định nghĩa kiểu dữ liệu Customer
 
 const { Title } = Typography
 const { Search } = Input

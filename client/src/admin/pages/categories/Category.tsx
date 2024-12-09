@@ -4,11 +4,11 @@ import { Button, Space, Input, Table, Modal, Card, message } from 'antd/lib'
 import { ColumnsType } from 'antd/lib/table'
 import { ReloadOutlined, PlusOutlined, ImportOutlined } from '@ant-design/icons'
 import { debounce } from 'lodash'
-import { Category } from 'interfaces/Category'
+import { Category } from '@/types/Category'
 import {
     useGetCategoriesQuery,
     useDeleteCategoryMutation,
-} from 'services/CategoryApi'
+} from '@/services/CategoryApi'
 
 export default function Categories() {
     const navigate = useNavigate()
@@ -36,16 +36,17 @@ export default function Categories() {
                     .then(() => {
                         message.success('Category deleted successfully')
                         refetch()
-                    }
-                ).catch((error) => {
-                    if (error?.data?.message) {
-                        message.error(error.data.message)
-                    } else {
-                        message.error('Failed to delete category. Please try again.')
-                    }
-                    console.error('Error from backend:', error)
-                }
-            )
+                    })
+                    .catch((error) => {
+                        if (error?.data?.message) {
+                            message.error(error.data.message)
+                        } else {
+                            message.error(
+                                'Failed to delete category. Please try again.'
+                            )
+                        }
+                        console.error('Error from backend:', error)
+                    })
             },
         })
     }

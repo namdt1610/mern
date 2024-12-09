@@ -1,5 +1,5 @@
 import React from 'react'
-import { useGetCategoriesQuery } from 'services/CategoryApi'
+import { useGetCategoriesQuery } from '@/services/CategoryApi'
 import { Table, Card, Row, Col, Statistic, Spin, Empty } from 'antd'
 
 const CategoryReports: React.FC = () => {

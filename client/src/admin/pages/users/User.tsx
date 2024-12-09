@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react'
-import { User } from 'interfaces/User'
+import { User } from '@/types/User'
 import { debounce } from 'lodash'
 import { useNavigate, Link } from 'react-router-dom'
 import {
@@ -14,7 +14,7 @@ import {
 } from 'antd/lib'
 import { ColumnsType } from 'antd/lib/table'
 import { ReloadOutlined, PlusOutlined, ImportOutlined } from '@ant-design/icons'
-import { useGetUsersQuery, useDeleteUserMutation } from 'services/UserApi'
+import { useGetUsersQuery, useDeleteUserMutation } from '@/services/UserApi'
 import LoadingError from 'components/LoadingError'
 
 export default function Users() {
@@ -83,7 +83,7 @@ export default function Users() {
                     <img
                         src={
                             avatar
-                                ? `http://localhost:8888/${avatar}`
+                                ? `http://localhost:8888${avatar}`
                                 : '/img/meerkat.png'
                         }
                         alt="Avatar"
@@ -135,7 +135,7 @@ export default function Users() {
         ],
         []
     )
-    
+
     // Xóa user
     const handleDelete = (userId: string) => {
         Modal.confirm({
