@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { Product } from '@/types/Product' // Định nghĩa kiểu Product
+import { Product } from '@share' // Định nghĩa kiểu Product
 
 export const productApi = createApi({
     reducerPath: 'productApi',
@@ -50,6 +50,14 @@ export const productApi = createApi({
                 method: 'DELETE',
             }),
         }),
+
+        // Tăng số lượt click cho sản phẩm
+        updateClickCount: builder.mutation<Product, string>({
+            query: (productId) => ({
+                url: `products/${productId}/click`,
+                method: 'PATCH',
+            }),
+        }),
     }),
 })
 
@@ -59,4 +67,5 @@ export const {
     useAddProductMutation,
     useUpdateProductMutation,
     useDeleteProductMutation,
+    useUpdateClickCountMutation,
 } = productApi

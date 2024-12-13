@@ -5,6 +5,7 @@ import Footer from '../Footer'
 import Hero from '../Hero'
 import MainContent from '../MainContent'
 import Content from '../Content'
+import BackToTop from 'components/BackToTop'
 
 export default function LandingLayout() {
     return (
@@ -16,6 +17,7 @@ export default function LandingLayout() {
                 <Content />
             </Main>
             <Footer />
+            <BackToTop />
         </div>
     )
 }

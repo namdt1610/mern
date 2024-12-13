@@ -1,45 +1,9 @@
 {
+    "extends": "../tsconfig.base.json",
     "compilerOptions": {
-        "target": "es6",
-        "module": "esnext",
-        "strict": true,
-        "esModuleInterop": true,
-        "skipLibCheck": true,
-        "forceConsistentCasingInFileNames": true,
-        "allowSyntheticDefaultImports": true,
-        "sourceMap": true,
-        // "declaration": true,
-        "declarationMap": true,
-        "composite": true,
-        // "outDir": "./dist",
-        "rootDir": "./src",
-        "baseUrl": ".",
-        "paths": {
-            "@/*": ["src/*"],
-            "@hooks/*": ["src/hooks/*"]
-        },
-        "noImplicitAny": true,
-        "noImplicitThis": true,
-        "noImplicitReturns": true,
-        "noFallthroughCasesInSwitch": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "noImplicitOverride": true,
-        "noPropertyAccessFromIndexSignature": true,
-        "noUncheckedIndexedAccess": true,
-        "allowImportingTsExtensions": true,
-        "moduleResolution": "node",
-        "noEmit": true
-        // "emitDeclarationOnly": true
+        "outDir": "./dist",
+        "rootDir": "../"
     },
-    "include": ["src"],
-    "exclude": ["node_modules"],
-    "references": [
-        {
-            "path": "./src/tsconfig.app.json"
-        },
-        {
-            "path": "./src/tsconfig.node.json"
-        }
-    ]
+    "include": ["src/**/*", "../shared"],
+    "exclude": ["node_modules"]
 }

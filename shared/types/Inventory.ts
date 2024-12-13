@@ -3,7 +3,7 @@ export interface Inventory {
     name: string
     price: number
     description: string
-    image: string
+    imageUrl: string
     category: string
     createdAt: Date
     updatedAt: Date

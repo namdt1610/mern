@@ -12,4 +12,5 @@ export interface Product {
     status: string
     sku: string
     isActive: boolean
+    sold: number
 }

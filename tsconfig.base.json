@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "jsx": "react",
+        "target": "es6",
+        "module": "esnext",
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "allowSyntheticDefaultImports": true,
+        "sourceMap": true,
+        "declarationMap": true,
+        "composite": true,
+        "moduleResolution": "node",
+        "noEmit": true,
+        "rootDir": "./",
+        "baseUrl": ".",
+        "paths": {
+            "@/*": ["client/src/*"],
+            "@shared/*": ["./shared/*"]
+        }
+    },
+    "include": ["client/src/**/*", "shared/**/*", "server/src/**/*"]
+}

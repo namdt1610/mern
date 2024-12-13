@@ -1,5 +1,7 @@
 import mongoose from 'mongoose'
 
+// import { IProduct } from '../types/IProduct'
+
 const Schema = mongoose.Schema
 
 const productSchema = new Schema(
@@ -27,7 +29,15 @@ const productSchema = new Schema(
         stock: {
             type: Schema.Types.ObjectId,
             ref: 'Stock',
-            required: true,
+            // required: true,
+        },
+        clickCount: {
+            type: Number,
+            default: 0,
+        },
+        sold: {
+            type: Number,
+            default: 0,
         },
     },
     { timestamps: true }

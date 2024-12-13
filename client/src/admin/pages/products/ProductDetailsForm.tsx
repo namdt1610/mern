@@ -1,6 +1,6 @@
 import React from 'react'
 import { Card, Input, Select, Space, Descriptions } from 'antd/lib'
-import { Product } from '../../../types/Product'
+import { Product } from '@shared/types/Product'
 import {
     UserOutlined,
     DollarOutlined,

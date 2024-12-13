@@ -15,8 +15,8 @@ import {
     Typography,
 } from 'antd'
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons'
-import LoadingError from 'components/LoadingError'
-import { Product } from '@/types/Product'
+import LoadingError from '@/components/LoadingError'
+import { Product } from '@shared/types/Product'
 
 const { Title } = Typography
 
@@ -57,7 +57,14 @@ const ProductPage: React.FC = () => {
         )
     }
 
-    const columns = [
+    interface ColumnType {
+        title: string
+        dataIndex?: string
+        key: string
+        render?: (_: any, record: Product) => JSX.Element
+    }
+
+    const columns: ColumnType[] = [
         {
             title: 'Product Name',
             dataIndex: 'name',

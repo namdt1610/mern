@@ -108,6 +108,29 @@ const updateProduct = async (req: Request, res: Response): Promise<void> => {
     res.status(200).json(product)
 }
 
+// Update click count
+export const updateClickCount = async (req: Request, res: Response): Promise<void> => {
+    const { id } = req.params
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        res.status(404).json({ error: 'Invalid product id' })
+        return
+    }
+
+    const product = await Product.findById(id)
+
+    if (!product) {
+        res.status(404).json({ error: `Product with id ${id} not found` })
+        return
+    }
+
+    product.clickCount += 1
+    await product.save()
+
+    res.status(200).json(product)
+
+}
+
 export {
     createProduct,
     getAllProducts,

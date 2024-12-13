@@ -68,6 +68,14 @@ const adminRoutes: RouteConfig = {
             path: 'inventory',
             element: lazy(() => import('../pages/inventory/Inventory')),
         },
+        {
+            path: 'inventory/:id',
+            element: lazy(() => import('../pages/inventory/InventoryDetails')),
+        },
+        {
+            path: 'inventory/new',
+            element: lazy(() => import('../pages/inventory/InventoryNew')),
+        },
         //* Order routes
         {
             path: 'orders',
@@ -81,6 +89,22 @@ const adminRoutes: RouteConfig = {
             path: 'orders/new',
             element: lazy(() => import('../pages/orders/OrderNew')),
         },
+        //* Payment methods routes
+        {
+            path: 'payment-methods',
+            element: lazy(() => import('../pages/payments/PaymentMethods')),
+        },
+        {
+            path: 'payment-methods/:id',
+            element: lazy(
+                () => import('../pages/payments/PaymentMethodsDetails')
+            ),
+        },
+        {
+            path: 'payment-methods/new',
+            element: lazy(() => import('../pages/payments/PaymentMethodsNew')),
+        },
+
         //* User routes
         {
             path: 'users',

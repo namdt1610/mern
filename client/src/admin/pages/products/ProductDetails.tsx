@@ -19,7 +19,7 @@ import {
     UploadProps,
 } from 'antd'
 import { RcFile } from 'antd/es/upload'
-import LoadingError from 'components/LoadingError'
+import LoadingError from '@/components/LoadingError'
 
 const { Title, Text } = Typography
 
@@ -157,6 +157,14 @@ const ProductDetails: React.FC = () => {
                     </div>
 
                     <div>
+                        <Title level={5}>Click:</Title>
+                        <Text>{product?.clickCount}</Text>
+                    </div>
+                    <div>
+                        <Title level={5}>Click:</Title>
+                        <Text>{product?.sold}</Text>
+                    </div>
+                    <div>
                         <Title level={5}>Price:</Title>
                         <Text>{product?.price}</Text>
                     </div>
@@ -185,6 +193,9 @@ const ProductDetails: React.FC = () => {
                         </Button>
                         <Button onClick={() => navigate('/admin/products')}>
                             Back
+                        </Button>
+                        <Button type="dashed" onClick={() => refetch()}>
+                            Refresh
                         </Button>
                     </Space>
                 </Space>

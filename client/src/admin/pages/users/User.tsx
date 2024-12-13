@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react'
-import { User } from '@/types/User'
+import { User } from '@shared/types/User'
 import { debounce } from 'lodash'
 import { useNavigate, Link } from 'react-router-dom'
 import {
@@ -15,7 +15,7 @@ import {
 import { ColumnsType } from 'antd/lib/table'
 import { ReloadOutlined, PlusOutlined, ImportOutlined } from '@ant-design/icons'
 import { useGetUsersQuery, useDeleteUserMutation } from '@/services/UserApi'
-import LoadingError from 'components/LoadingError'
+import LoadingError from '@/components/LoadingError'
 
 export default function Users() {
     // Interface cho record
