@@ -39,6 +39,13 @@ const productSchema = new Schema(
             type: Number,
             default: 0,
         },
+        isActive: {
+            type: Boolean,
+            default: false,
+        },
+        author: {
+            type: String,
+        },
     },
     { timestamps: true }
 )

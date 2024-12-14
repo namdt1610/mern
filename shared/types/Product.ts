@@ -13,4 +13,5 @@ export interface Product {
     sku: string
     isActive: boolean
     sold: number
+    author: string
 }

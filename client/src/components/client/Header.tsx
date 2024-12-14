@@ -21,25 +21,25 @@ const items = [
     {
         key: '2',
         label: 'Book',
-        link: '/book',
+        link: '/books',
         icon: <BookFilled />,
     },
     {
         key: '3',
         label: 'Ebook',
-        link: '/ebook',
+        link: '/ebooks',
         icon: <BookOutlined />,
     },
     {
         key: '4',
         label: 'Audio Book',
-        link: '/audio-book',
+        link: '/audio-books',
         icon: <AudioOutlined />,
     },
     {
         key: '5',
         label: 'Podcast',
-        link: '/podcast',
+        link: '/podcasts',
         icon: <AudioFilled />,
     },
 ]
@@ -102,7 +102,6 @@ const Index = () => {
                 <Menu
                     theme="light"
                     mode="horizontal"
-                    defaultSelectedKeys={['2']}
                     onClick={handleMenuClick} // Thêm sự kiện onClick
                     items={items}
                     style={{

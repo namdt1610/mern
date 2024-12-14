@@ -3,7 +3,7 @@ import { Button } from 'antd'
 import {
     useGetProductsQuery,
     useUpdateClickCountMutation,
-} from 'services/ProductApi'
+} from '@/services/ProductApi'
 import InfiniteScroll from 'react-infinite-scroll-component'
 
 export default function MainContent() {
