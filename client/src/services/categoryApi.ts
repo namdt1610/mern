@@ -1,5 +1,5 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { Category } from '@shared/types/Category' // Định nghĩa kiểu Category
+import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
+import {Category} from '@shared/types/Category' // Định nghĩa kiểu Category
 
 export const categoryApi = createApi({
     reducerPath: 'categoryApi',

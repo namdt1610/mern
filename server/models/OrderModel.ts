@@ -1,5 +1,5 @@
-import mongoose, { Schema } from 'mongoose'
-import { IOrder } from '../types/Order'
+import mongoose, {Schema} from 'mongoose'
+import {IOrder} from '../types/Order'
 
 const orderSchema = new Schema<IOrder>(
     {

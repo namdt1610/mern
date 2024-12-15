@@ -1,11 +1,8 @@
 import React from 'react';
-import { Card, Table, Button, Space, Tag } from 'antd';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { 
-      useGetPaymentMethodsQuery,
-      useDeletePaymentMethodMutation 
-} from 'services/PaymentMethod';
-import { PaymentMethod } from 'types/PaymentMethod';
+import {Button, Card, Space, Table} from 'antd';
+import {DeleteOutlined, EditOutlined} from '@ant-design/icons';
+import {useDeletePaymentMethodMutation, useGetPaymentMethodsQuery} from 'services/PaymentMethod';
+import {PaymentMethod} from 'types/PaymentMethod';
 
 const PaymentMethods: React.FC = () => {
       const { data: paymentMethods, isLoading } = useGetPaymentMethodsQuery();

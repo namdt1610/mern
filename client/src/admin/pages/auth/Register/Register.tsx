@@ -2,8 +2,8 @@ import React from 'react'
 import RegisterForm from './RegisterForm'
 import RegisterBanner from './RegisterBanner'
 import RegisterLayout from './RegisterLayout'
-import { useLocation } from 'react-router-dom'
-import { Card } from 'antd/lib'
+import {useLocation} from 'react-router-dom'
+import {Card} from 'antd/lib'
 
 const Register: React.FC = () => {
     const location = useLocation()

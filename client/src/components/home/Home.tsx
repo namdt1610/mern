@@ -1,5 +1,5 @@
 import React from 'react'
-import { images, bannerSideImages } from './Imports'
+import {bannerSideImages, images} from './Imports'
 import Featured from './Featured'
 import Categories from './Categories'
 import Slideshow from './Slideshow'

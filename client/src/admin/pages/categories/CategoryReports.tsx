@@ -1,6 +1,6 @@
 import React from 'react'
-import { useGetCategoriesQuery } from '@/services/CategoryApi'
-import { Table, Card, Row, Col, Statistic, Spin, Empty } from 'antd'
+import {useGetCategoriesQuery} from '@/services/CategoryApi'
+import {Card, Col, Empty, Row, Spin, Statistic, Table} from 'antd'
 
 const CategoryReports: React.FC = () => {
     const { data: categories = [], isLoading } = useGetCategoriesQuery() // Lấy danh sách từ API

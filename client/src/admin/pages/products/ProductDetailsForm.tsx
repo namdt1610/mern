@@ -1,11 +1,7 @@
 import React from 'react'
-import { Card, Input, Select, Space, Descriptions } from 'antd/lib'
-import { Product } from '@shared/types/Product'
-import {
-    UserOutlined,
-    DollarOutlined,
-    BarcodeOutlined,
-} from '@ant-design/icons'
+import {Card, Descriptions, Input, Select, Space} from 'antd/lib'
+import {Product} from '@shared/types/Product'
+import {BarcodeOutlined, DollarOutlined, UserOutlined,} from '@ant-design/icons'
 
 interface ProductFormProps {
     product: Product

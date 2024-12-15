@@ -1,8 +1,8 @@
 import React from 'react'
-import { Card } from 'antd/lib'
+import {Card} from 'antd/lib'
 import LoginForm from './LoginForm'
 import LoginBanner from './LoginBanner'
-import { useLocation } from 'react-router-dom'
+import {useLocation} from 'react-router-dom'
 import LoginLayout from './LoginLayout'
 
 const Login: React.FC = () => {

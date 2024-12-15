@@ -1,6 +1,6 @@
 import React from 'react';
-import { Form, Input, InputNumber, Button, Card, Space } from 'antd';
-import { Order } from 'types/Order';
+import {Button, Card, Form, Input, InputNumber, Space} from 'antd';
+import {Order} from 'types/Order';
 
 const OrderNewForm: React.FC = () => {
       const [form] = Form.useForm();

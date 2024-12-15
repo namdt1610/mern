@@ -1,22 +1,10 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import {
-    useGetProductsQuery,
-    useDeleteProductMutation,
-} from '@/services/ProductApi'
-import {
-    Card,
-    Table,
-    Button,
-    Space,
-    Popconfirm,
-    message,
-    Spin,
-    Typography,
-} from 'antd'
-import { PlusOutlined, DeleteOutlined } from '@ant-design/icons'
+import React from 'react'
+import {useNavigate} from 'react-router-dom'
+import {useDeleteProductMutation, useGetProductsQuery,} from '@/services/ProductApi'
+import {Button, Card, message, Popconfirm, Space, Spin, Table, Typography,} from 'antd'
+import {DeleteOutlined, PlusOutlined} from '@ant-design/icons'
 import LoadingError from '@/components/LoadingError'
-import { Product } from '@shared/types/Product'
+import {Product} from '@shared/types/Product'
 
 const { Title } = Typography
 

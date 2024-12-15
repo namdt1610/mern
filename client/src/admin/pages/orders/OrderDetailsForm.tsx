@@ -1,6 +1,6 @@
 import React from 'react'
-import { Card, Descriptions } from 'antd'
-import { Order } from 'types/Order'
+import {Card, Descriptions} from 'antd'
+import {Order} from 'types/Order'
 
 interface OrderDetailsFormProps {
       order: Order

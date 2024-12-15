@@ -1,9 +1,6 @@
-import React, { useState, useEffect } from 'react'
-import { Button } from 'antd'
-import {
-    useGetProductsQuery,
-    useUpdateClickCountMutation,
-} from '@/services/ProductApi'
+import React, {useEffect, useState} from 'react'
+import {Button} from 'antd'
+import {useGetProductsQuery, useUpdateClickCountMutation,} from '@/services/ProductApi'
 import InfiniteScroll from 'react-infinite-scroll-component'
 
 export default function MainContent() {

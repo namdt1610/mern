@@ -1,5 +1,5 @@
-import { Request, Response } from 'express'
-import Inventory, { IInventory } from '../models/InventoryModel'
+import {Request, Response} from 'express'
+import Inventory, {IInventory} from '../models/InventoryModel'
 
 class InventoryController {
     // Create new inventory item

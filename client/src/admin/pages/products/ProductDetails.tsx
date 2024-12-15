@@ -1,25 +1,8 @@
-import React, { useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
-import {
-    useGetProductByIdQuery,
-    useUpdateProductMutation,
-} from '@/services/ProductApi' // Giả sử API này trả về dữ liệu sản phẩm
-import {
-    Card,
-    Typography,
-    Spin,
-    Button,
-    Space,
-    Empty,
-    Input,
-    Form,
-    message,
-    Image,
-    Upload,
-    UploadProps,
-} from 'antd'
-import { RcFile } from 'antd/es/upload'
-import LoadingError from '@/components/LoadingError'
+import React, {useState} from 'react'
+import {useNavigate, useParams} from 'react-router-dom'
+import {useGetProductByIdQuery, useUpdateProductMutation,} from '@/services/ProductApi' // Giả sử API này trả về dữ liệu sản phẩm
+import {Button, Card, Empty, Form, Image, Input, message, Space, Spin, Typography, Upload, UploadProps,} from 'antd'
+import {RcFile} from 'antd/es/upload'
 
 const { Title, Text } = Typography
 

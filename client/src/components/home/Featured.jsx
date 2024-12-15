@@ -1,5 +1,6 @@
-import { Link } from 'react-router-dom'
-import { featuredSection } from './Imports'
+import {Link} from 'react-router-dom'
+import {featuredSection} from './Imports'
+
 const Featured = () => {
     return (
         <>

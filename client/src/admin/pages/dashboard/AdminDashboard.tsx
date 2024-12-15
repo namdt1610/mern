@@ -1,5 +1,5 @@
-import React, { lazy, Suspense } from 'react'
-import { Row, Col, Spin } from 'antd/'
+import React, {lazy, Suspense} from 'react'
+import {Col, Row, Spin} from 'antd/'
 
 const DashboardStats = lazy(() => import('./DashboardStats'))
 const DashboardChart = lazy(() => import('./DashboardChart'))

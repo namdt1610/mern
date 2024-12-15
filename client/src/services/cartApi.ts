@@ -1,5 +1,5 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { CartItem } from 'interfaces/CartItem' // Định nghĩa kiểu CartItem
+import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
+import {CartItem} from 'interfaces/CartItem' // Định nghĩa kiểu CartItem
 
 export const cartApi = createApi({
     reducerPath: 'cartApi',

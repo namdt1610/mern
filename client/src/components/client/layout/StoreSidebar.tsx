@@ -1,7 +1,7 @@
-import React, { useState, useRef } from 'react'
-import { Menu, Skeleton, Empty, Button } from 'antd'
-import { AppstoreOutlined } from '@ant-design/icons'
-import { useGetCategoriesQuery } from '@/services/CategoryApi'
+import React, {useRef, useState} from 'react'
+import {Empty, Menu, Skeleton} from 'antd'
+import {AppstoreOutlined} from '@ant-design/icons'
+import {useGetCategoriesQuery} from '@/services/CategoryApi'
 
 interface SidebarProps {
     onCategoryChange: (category: string) => void

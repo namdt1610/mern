@@ -1,11 +1,6 @@
 import React from 'react'
-import { Button, Card, Space, Grid } from 'antd'
-import {
-      DeleteOutlined,
-      SaveOutlined,
-      BackwardOutlined,
-      ReloadOutlined,
-} from '@ant-design/icons'
+import {Button, Card, Grid, Space} from 'antd'
+import {BackwardOutlined, DeleteOutlined, ReloadOutlined, SaveOutlined,} from '@ant-design/icons'
 
 const { useBreakpoint } = Grid
 

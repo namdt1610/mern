@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express'
+import express, {Request, Response} from 'express'
 import path from 'path'
 import cors from 'cors'
 import morgan from 'morgan'
@@ -6,6 +6,13 @@ import cookieParser from 'cookie-parser'
 import fs from 'fs'
 import upload from './middlewares/multer-config'
 import sharp from 'sharp'
+// Routes
+import authRoutes from './routes/Auth'
+import userRoutes from './routes/User'
+import categoryRoutes from './routes/Category'
+import productRoutes from './routes/Product'
+import inventoryRoutes from './routes/InventoryRoute'
+import orderRoutes from './routes/OrderRoute'
 
 //* server.ts
 
@@ -114,14 +121,6 @@ app.post(
             })
     }
 )
-
-// Routes
-import authRoutes from './routes/Auth'
-import userRoutes from './routes/User'
-import categoryRoutes from './routes/Category'
-import productRoutes from './routes/Product'
-import inventoryRoutes from './routes/InventoryRoute'
-import orderRoutes from './routes/OrderRoute'
 
 app.use('/api', authRoutes)
 app.use('/api/users', userRoutes)

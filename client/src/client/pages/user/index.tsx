@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react'
-import useUserActions from '@/hooks/User/useUserActions'
+import React from 'react'
 import Sidebar from '../../../components/user/Sidebar'
 
 const User = () => {

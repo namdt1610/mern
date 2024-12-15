@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, Row, Col, Statistic } from 'antd/'
+import {Card, Col, Row, Statistic} from 'antd/'
 
 const DashboardStats: React.FC = () => {
     const stats = [

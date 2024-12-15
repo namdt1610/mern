@@ -1,11 +1,11 @@
 // UserInfoCard.tsx
-import React, { useMemo } from 'react'
-import { Card, Typography, Button, Row, Col, Avatar } from 'antd'
-import { decodeToken } from '@/utils/jwtDecode'
-import { useLogoutMutation } from '@/services/AuthApi'
+import React, {useMemo} from 'react'
+import {Avatar, Button, Card, Col, Row, Typography} from 'antd'
+import {decodeToken} from '@/utils/jwtDecode'
+import {useLogoutMutation} from '@/services/AuthApi'
 import Cookies from 'js-cookie'
-import { useNavigate } from 'react-router-dom'
-import { AntDesignOutlined } from '@ant-design/icons'
+import {useNavigate} from 'react-router-dom'
+import {AntDesignOutlined} from '@ant-design/icons'
 
 const { Title, Text } = Typography
 

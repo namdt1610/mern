@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
-import { Form, Input, Button, message, Upload, Card } from 'antd/lib'
-import { UploadOutlined } from '@ant-design/icons'
-import { useNavigate } from 'react-router-dom'
+import React, {useState} from 'react'
+import {Button, Card, Form, Input, message, Upload} from 'antd/lib'
+import {UploadOutlined} from '@ant-design/icons'
+import {useNavigate} from 'react-router-dom'
 import useProductActions from '../../../hooks/product/useProductActions'
 
 const ProductNew: React.FC = () => {

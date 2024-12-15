@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
-import { Upload, message, Card } from 'antd'
-import { PlusOutlined } from '@ant-design/icons'
+import React, {useState} from 'react'
+import {Card, message, Upload} from 'antd'
+import {PlusOutlined} from '@ant-design/icons'
 
 interface ProductImageProps {
       image: string

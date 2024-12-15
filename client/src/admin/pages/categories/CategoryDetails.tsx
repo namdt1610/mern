@@ -1,22 +1,7 @@
-import React, { useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
-import {
-    useGetCategoryByIdQuery,
-    useUpdateCategoryMutation,
-} from '@/services/CategoryApi'
-import {
-    Card,
-    Typography,
-    Button,
-    Space,
-    Empty,
-    Input,
-    Form,
-    message,
-    Select,
-    Row,
-    Col,
-} from 'antd'
+import React, {useState} from 'react'
+import {useNavigate, useParams} from 'react-router-dom'
+import {useGetCategoryByIdQuery, useUpdateCategoryMutation,} from '@/services/CategoryApi'
+import {Button, Card, Col, Empty, Form, Input, message, Row, Select, Space, Typography,} from 'antd'
 import LoadingError from 'components/LoadingError'
 
 const { Title, Text } = Typography

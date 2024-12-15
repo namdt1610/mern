@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express'
+import {NextFunction, Request, Response} from 'express'
 
 // Middleware kiểm tra quyền truy cập dựa trên role
 export const checkRole = (roles: string[]) => {

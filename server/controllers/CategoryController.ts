@@ -1,4 +1,4 @@
-import { Request, Response } from 'express'
+import {Request, Response} from 'express'
 import Category from '../models/categoryModel'
 
 // GET all categories

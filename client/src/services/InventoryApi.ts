@@ -1,5 +1,5 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { InventoryItem } from '@/types/InventoryItem' // Định nghĩa kiểu InventoryItem
+import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
+import {InventoryItem} from '@/types/InventoryItem' // Định nghĩa kiểu InventoryItem
 
 export const inventoryApi = createApi({
     reducerPath: 'inventoryApi',

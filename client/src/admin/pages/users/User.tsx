@@ -1,20 +1,11 @@
-import React, { useEffect, useState, useMemo, useCallback } from 'react'
-import { User } from '@shared/types/User'
-import { debounce } from 'lodash'
-import { useNavigate, Link } from 'react-router-dom'
-import {
-    Button,
-    Space,
-    Badge,
-    Input,
-    Table,
-    Modal,
-    Card,
-    message,
-} from 'antd/lib'
-import { ColumnsType } from 'antd/lib/table'
-import { ReloadOutlined, PlusOutlined, ImportOutlined } from '@ant-design/icons'
-import { useGetUsersQuery, useDeleteUserMutation } from '@/services/UserApi'
+import React, {useCallback, useEffect, useMemo, useState} from 'react'
+import {User} from '@shared/types/User'
+import {debounce} from 'lodash'
+import {Link, useNavigate} from 'react-router-dom'
+import {Badge, Button, Card, Input, message, Modal, Space, Table,} from 'antd/lib'
+import {ColumnsType} from 'antd/lib/table'
+import {ImportOutlined, PlusOutlined, ReloadOutlined} from '@ant-design/icons'
+import {useDeleteUserMutation, useGetUsersQuery} from '@/services/UserApi'
 import LoadingError from '@/components/LoadingError'
 
 export default function Users() {

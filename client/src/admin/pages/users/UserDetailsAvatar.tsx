@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
-import { Upload, Avatar, message, Card } from 'antd'
-import { PlusOutlined } from '@ant-design/icons'
+import React, {useState} from 'react'
+import {Avatar, Card, message, Upload} from 'antd'
+import {PlusOutlined} from '@ant-design/icons'
 
 interface UserAvatarProps {
     avatar: string // URL ảnh ban đầu (có thể null nếu chưa có avatar)

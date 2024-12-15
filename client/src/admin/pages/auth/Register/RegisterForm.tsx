@@ -1,9 +1,9 @@
 import React from 'react'
-import type { FormProps } from 'antd/lib'
-import { Button, Form, Input, message } from 'antd/lib'
+import type {FormProps} from 'antd/lib'
+import {Button, Form, Input, message} from 'antd/lib'
 import useAuthApi from '../../../../hooks/Auth/useAuthApiBeta'
-import { useNavigate } from 'react-router-dom'
-import { useApiContext } from '../../../../contexts/ApiContext'
+import {useNavigate} from 'react-router-dom'
+import {useApiContext} from '../../../../contexts/ApiContext'
 
 type FieldType = {
     email: string

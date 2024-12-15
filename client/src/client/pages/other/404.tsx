@@ -1,4 +1,5 @@
 import React from 'react'
+
 const ErrorPage = () => {
     return (
         <div className="min-h-screen flex flex-grow items-center justify-center bg-gray-50">

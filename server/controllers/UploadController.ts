@@ -1,5 +1,5 @@
-import { Request, Response } from 'express'
-import { upload } from '../middlewares/multer-config' // Đảm bảo bạn đã import multer configuration
+import {Request, Response} from 'express'
+import {upload} from '../middlewares/multer-config' // Đảm bảo bạn đã import multer configuration
 
 // API upload avatar
 export const uploadImage = async (

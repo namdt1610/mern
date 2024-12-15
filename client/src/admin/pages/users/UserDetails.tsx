@@ -1,16 +1,12 @@
-import React, { useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
-import {
-    useGetUserByIdQuery,
-    useUpdateUserMutation,
-    useDeleteUserMutation,
-} from '@/services/UserApi'
-import { Card, Space, message, Empty, Row, Col } from 'antd'
+import React, {useEffect, useState} from 'react'
+import {useNavigate, useParams} from 'react-router-dom'
+import {useDeleteUserMutation, useGetUserByIdQuery, useUpdateUserMutation,} from '@/services/UserApi'
+import {Col, Empty, message, Row, Space} from 'antd'
 import LoadingError from 'components/LoadingError'
 import UserActions from './UserDetailsActions'
 import UserAvatar from './UserDetailsAvatar'
 import UserForm from './UserDetailsForm'
-import { User } from '@/types/User'
+import {User} from '@/types/User'
 
 const UserDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>()

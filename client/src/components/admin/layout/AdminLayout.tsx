@@ -1,28 +1,25 @@
 // AdminLayout.tsx
-import React, { useState } from 'react'
+import React, {useState} from 'react'
 import {
-    LaptopOutlined,
-    NotificationOutlined,
-    UserOutlined,
-    LoginOutlined,
-    LogoutOutlined,
     BarChartOutlined,
-    MenuUnfoldOutlined,
-    MenuFoldOutlined,
-    MenuOutlined,
-    CustomerServiceOutlined,
-    StockOutlined,
-    OrderedListOutlined,
-    PayCircleOutlined,
     BookOutlined,
     BoxPlotOutlined,
+    CustomerServiceOutlined,
     GiftOutlined,
-    StarOutlined,
     HomeOutlined,
+    LoginOutlined,
+    LogoutOutlined,
+    MenuFoldOutlined,
+    MenuOutlined,
+    MenuUnfoldOutlined,
+    OrderedListOutlined,
+    PayCircleOutlined,
+    StarOutlined,
+    UserOutlined,
 } from '@ant-design/icons'
-import { Layout, theme, Menu, Button, Card } from 'antd/lib'
-import type { MenuProps } from 'antd/'
-import { Outlet, Link, useLocation } from 'react-router-dom'
+import {Button, Card, Layout, Menu, theme} from 'antd/lib'
+import type {MenuProps} from 'antd/'
+import {Link, Outlet, useLocation} from 'react-router-dom'
 import Breadcrumb from '../../ui/Breadcrumb'
 import Footer from '../../ui/Footer'
 import UserInfoCard from '../../admin/UserInfoCard'

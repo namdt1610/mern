@@ -1,5 +1,5 @@
-import { categoriesSection } from './Imports'
-import { Link } from 'react-router-dom'
+import {categoriesSection} from './Imports'
+import {Link} from 'react-router-dom'
 
 const Categories = () => {
     return (

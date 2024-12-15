@@ -1,7 +1,7 @@
-import React, { Suspense, lazy } from 'react'
-import { Routes, Route } from 'react-router-dom'
+import React, {lazy, Suspense} from 'react'
+import {Route, Routes} from 'react-router-dom'
 import ProtectedRoute from '../../components/auth/ProtectedRoute'
-import { Spin } from 'antd'
+import {Spin} from 'antd'
 
 const Login = lazy(() => import('../pages/auth/Login'))
 const Signup = lazy(() => import('../pages/auth/Register'))

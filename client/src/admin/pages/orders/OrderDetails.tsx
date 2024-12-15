@@ -1,10 +1,9 @@
 import React from 'react'
-import { useParams } from 'react-router-dom'
-import { Card, Descriptions, Table, Badge, Space, Button } from 'antd'
-import { useGetOrderByIdQuery } from 'services/OrderApi'
+import {useNavigate, useParams} from 'react-router-dom'
+import {Badge, Button, Card, Descriptions, Space, Table} from 'antd'
+import {useGetOrderByIdQuery} from 'services/OrderApi'
 import LoadingError from 'components/LoadingError'
-import { ArrowLeftOutlined } from '@ant-design/icons'
-import { useNavigate } from 'react-router-dom'
+import {ArrowLeftOutlined} from '@ant-design/icons'
 
 export default function OrderDetails() {
       const { id } = useParams()

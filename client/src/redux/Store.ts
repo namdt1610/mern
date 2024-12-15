@@ -1,14 +1,14 @@
 // src/store/index.ts
-import { configureStore } from '@reduxjs/toolkit'
-import { authApi } from '@/services/AuthApi'
-import { userApi } from '@/services/UserApi'
-import { categoryApi } from '@/services/CategoryApi'
-import { productApi } from '@/services/ProductApi'
-import { orderApi } from '@/services/OrderApi'
-import { cartApi } from '@/services/CartApi'
-import { inventoryApi } from '@/services/InventoryApi'
-import { customerApi } from '@/services/CustomerApi'
-import { paymentMethodApi } from '@/services/PaymentMethod'
+import {configureStore} from '@reduxjs/toolkit'
+import {authApi} from '@/services/AuthApi'
+import {userApi} from '@/services/UserApi'
+import {categoryApi} from '@/services/CategoryApi'
+import {productApi} from '@/services/ProductApi'
+import {orderApi} from '@/services/OrderApi'
+import {cartApi} from '@/services/CartApi'
+import {inventoryApi} from '@/services/InventoryApi'
+import {customerApi} from '@/services/CustomerApi'
+import {paymentMethodApi} from '@/services/PaymentMethod'
 
 const store = configureStore({
     reducer: {

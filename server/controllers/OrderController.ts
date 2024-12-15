@@ -1,4 +1,4 @@
-import { Request, Response } from 'express'
+import {Request, Response} from 'express'
 import Order from '../models/OrderModel'
 
 export const OrderController = {

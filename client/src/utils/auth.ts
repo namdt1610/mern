@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie'
-import { DecodedToken, decodeToken } from './jwtDecode'
+import {DecodedToken, decodeToken} from './jwtDecode'
 //* utils/auth.ts
 
 // Lấy thông tin người dùng từ cookie

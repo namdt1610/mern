@@ -1,6 +1,6 @@
 import React from 'react';
-import { Breadcrumb } from 'react-bootstrap';
-import { Link, useLocation } from 'react-router-dom';
+import {Breadcrumb} from 'react-bootstrap';
+import {Link, useLocation} from 'react-router-dom';
 
 function BreadcrumbExample() {
   const location = useLocation();

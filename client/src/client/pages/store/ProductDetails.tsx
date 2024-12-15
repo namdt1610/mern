@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
-import { useGetProductByIdQuery } from '@/services/ProductApi'
-import { Card, Typography, Button, Spin, List, Input, Empty } from 'antd'
+import React, {useEffect, useState} from 'react'
+import {useNavigate, useParams} from 'react-router-dom'
+import {useGetProductByIdQuery} from '@/services/ProductApi'
+import {Button, Card, Empty, Input, List, Spin, Typography} from 'antd'
 import MainLayout from '@/components/client/layout/MainLayout'
 
 const { Title, Text } = Typography

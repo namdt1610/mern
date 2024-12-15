@@ -1,6 +1,6 @@
 // src/config/multerConfig.ts
 
-import multer, { StorageEngine } from 'multer'
+import multer, {StorageEngine} from 'multer'
 import path from 'path'
 import fs from 'fs'
 

@@ -1,17 +1,8 @@
-import React, { useState } from 'react'
-import { useGetProductsQuery } from '@/services/ProductApi'
-import { useGetCategoriesQuery } from '@/services/CategoryApi'
-import {
-    Input,
-    Select,
-    Card,
-    Row,
-    Col,
-    Button,
-    Skeleton,
-    Pagination,
-} from 'antd'
-import { useNavigate } from 'react-router-dom'
+import React, {useState} from 'react'
+import {useGetProductsQuery} from '@/services/ProductApi'
+import {useGetCategoriesQuery} from '@/services/CategoryApi'
+import {Button, Card, Col, Input, Pagination, Row, Select, Skeleton,} from 'antd'
+import {useNavigate} from 'react-router-dom'
 
 const { Search } = Input
 const { Option } = Select

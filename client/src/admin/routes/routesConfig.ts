@@ -1,4 +1,5 @@
-import { lazy, LazyExoticComponent } from 'react'
+import {lazy, LazyExoticComponent} from 'react'
+
 //* routes/routesConfig.ts
 
 export interface RouteConfig {

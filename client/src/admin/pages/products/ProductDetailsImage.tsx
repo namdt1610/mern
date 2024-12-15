@@ -1,5 +1,5 @@
 import React from 'react'
-import { useDropzone } from 'react-dropzone'
+import {useDropzone} from 'react-dropzone'
 
 interface ProductDetailsImageProps {
     image: string

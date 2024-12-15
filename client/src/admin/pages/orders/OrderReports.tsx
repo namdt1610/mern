@@ -1,7 +1,7 @@
 import React from 'react';
-import { Card, Row, Col, Statistic, Table } from 'antd';
-import { useGetOrdersQuery } from 'services/OrderApi';
-import { DollarOutlined, ShoppingCartOutlined, CheckCircleOutlined, ClockCircleOutlined } from '@ant-design/icons';
+import {Card, Col, Row, Statistic, Table} from 'antd';
+import {useGetOrdersQuery} from 'services/OrderApi';
+import {CheckCircleOutlined, ClockCircleOutlined, DollarOutlined, ShoppingCartOutlined} from '@ant-design/icons';
 import LoadingError from 'components/LoadingError';
 
 export default function OrderReports() {

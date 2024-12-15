@@ -1,6 +1,6 @@
-import React, { Suspense } from 'react'
-import { Route, Routes } from 'react-router-dom'
-import routesConfig, { RouteConfig } from './routesConfig'
+import React, {Suspense} from 'react'
+import {Route, Routes} from 'react-router-dom'
+import routesConfig, {RouteConfig} from './routesConfig'
 import LoadingError from '@/components/LoadingError'
 
 export default function AdminRoutes() {

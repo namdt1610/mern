@@ -1,5 +1,4 @@
 // @types/express/index.d.ts
-import { Request } from 'express'
 
 // Mở rộng Request để thêm thuộc tính `user`
 declare global {

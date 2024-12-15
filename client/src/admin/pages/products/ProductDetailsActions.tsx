@@ -1,12 +1,8 @@
 // ProductDetailsActions.tsx
 
 import React from 'react'
-import { Button, Space } from 'antd/lib'
-import {
-    DeleteOutlined,
-    SaveOutlined,
-    BackwardOutlined,
-} from '@ant-design/icons'
+import {Button, Space} from 'antd/lib'
+import {BackwardOutlined, DeleteOutlined, SaveOutlined,} from '@ant-design/icons'
 
 interface ProductActionsProps {
     isEditing: boolean

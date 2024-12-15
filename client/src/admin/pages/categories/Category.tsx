@@ -1,14 +1,11 @@
-import React, { useEffect, useState, useMemo, useCallback } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
-import { Button, Space, Input, Table, Modal, Card, message } from 'antd/lib'
-import { ColumnsType } from 'antd/lib/table'
-import { ReloadOutlined, PlusOutlined, ImportOutlined } from '@ant-design/icons'
-import { debounce } from 'lodash'
-import { Category } from '@shared/types/Category'
-import {
-    useGetCategoriesQuery,
-    useDeleteCategoryMutation,
-} from '@/services/CategoryApi'
+import React, {useCallback, useEffect, useMemo, useState} from 'react'
+import {Link, useNavigate} from 'react-router-dom'
+import {Button, Card, Input, message, Modal, Space, Table} from 'antd/lib'
+import {ColumnsType} from 'antd/lib/table'
+import {ImportOutlined, PlusOutlined, ReloadOutlined} from '@ant-design/icons'
+import {debounce} from 'lodash'
+import {Category} from '@shared/types/Category'
+import {useDeleteCategoryMutation, useGetCategoriesQuery,} from '@/services/CategoryApi'
 
 export default function Categories() {
     const navigate = useNavigate()

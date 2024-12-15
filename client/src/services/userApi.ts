@@ -1,12 +1,12 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { User } from 'types/User' // Định nghĩa kiểu User
+import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
+import {User} from '@shared/types/User'
 
 export const userApi = createApi({
     reducerPath: 'userApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: 'http://localhost:8888/api', // API backend URL
+        baseUrl: 'http://localhost:8888/api',
         credentials: 'include',
-        prepareHeaders: (headers, { getState }) => {
+        prepareHeaders: (headers) => {
             // Tránh việc thiết lập Content-Type cho FormData
             const isFileUpload =
                 headers.get('Content-Type') === 'multipart/form-data'
@@ -17,17 +17,14 @@ export const userApi = createApi({
         },
     }),
     endpoints: (builder) => ({
-        // Lấy danh sách users
         getUsers: builder.query<User[], void>({
             query: () => '/users',
         }),
 
-        // Lấy chi tiết user theo ID
         getUserById: builder.query<User, string>({
             query: (id) => `/users/${id}`,
         }),
 
-        // Tạo user mới
         createUser: builder.mutation<User, Partial<User>>({
             query: (data) => ({
                 url: '/users',
@@ -36,7 +33,6 @@ export const userApi = createApi({
             }),
         }),
 
-        // Cập nhật user
         updateUser: builder.mutation<User, Partial<User> & { id: string }>({
             query: ({ id, ...data }) => ({
                 url: `/users/${id}`,
@@ -45,7 +41,6 @@ export const userApi = createApi({
             }),
         }),
 
-        // Xóa user
         deleteUser: builder.mutation<void, string>({
             query: (id) => ({
                 url: `/users/${id}`,
@@ -53,7 +48,6 @@ export const userApi = createApi({
             }),
         }),
 
-        // Tải avatar lên
         uploadAvatar: builder.mutation<{ avatarUrl: string }, FormData>({
             query: (formData) => ({
                 url: '/upload',

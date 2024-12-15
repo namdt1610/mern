@@ -1,13 +1,7 @@
 import React from 'react'
-import { Input, Descriptions, Card, Space, Select, InputNumber } from 'antd'
-import {
-    TagOutlined,
-    ShopOutlined,
-    DollarOutlined,
-    NumberOutlined,
-    BarcodeOutlined,
-} from '@ant-design/icons'
-import { Inventory } from 'types/Inventory'
+import {Card, Descriptions, Input, InputNumber, Select, Space} from 'antd'
+import {BarcodeOutlined, DollarOutlined, NumberOutlined, ShopOutlined, TagOutlined,} from '@ant-design/icons'
+import {Inventory} from 'types/Inventory'
 
 interface InventoryFormProps {
     product: Inventory

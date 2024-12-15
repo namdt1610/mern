@@ -1,4 +1,4 @@
-import { Request, Response } from 'express'
+import {Request, Response} from 'express'
 import mongoose from 'mongoose'
 import Product from '../models/ProductModel'
 

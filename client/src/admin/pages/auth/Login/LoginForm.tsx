@@ -1,7 +1,7 @@
 import React from 'react'
-import { Button, Checkbox, Form, Input, message } from 'antd'
-import { useNavigate } from 'react-router-dom'
-import { useLoginMutation } from 'services/AuthApi'
+import {Button, Checkbox, Form, Input, message} from 'antd'
+import {useNavigate} from 'react-router-dom'
+import {useLoginMutation} from 'services/AuthApi'
 
 type LoginFormProps = {
     from: string

@@ -1,6 +1,6 @@
 import React from 'react'
-import { Button, Result } from 'antd/'
-import { Link } from 'react-router-dom'
+import {Button, Result} from 'antd/'
+import {Link} from 'react-router-dom'
 
 const App: React.FC = () => (
     <div className="min-w-screen min-h-screen flex items-center justify-center">

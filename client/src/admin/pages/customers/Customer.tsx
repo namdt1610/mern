@@ -1,19 +1,8 @@
-import React, { useState } from 'react'
-import {
-    Table,
-    Button,
-    Input,
-    Space,
-    Popconfirm,
-    message,
-    Typography,
-} from 'antd'
-import { useNavigate } from 'react-router-dom'
-import {
-    useGetCustomersQuery,
-    useDeleteCustomerMutation,
-} from '@/services/CustomerApi' // Sửa thành đường dẫn API của bạn
-import { Customer } from '@shared/types/Customer' // Định nghĩa kiểu dữ liệu Customer
+import React, {useState} from 'react'
+import {Button, Input, message, Popconfirm, Space, Table, Typography,} from 'antd'
+import {useNavigate} from 'react-router-dom'
+import {useDeleteCustomerMutation, useGetCustomersQuery,} from '@/services/CustomerApi' // Sửa thành đường dẫn API của bạn
+import {Customer} from '@shared/types/Customer' // Định nghĩa kiểu dữ liệu Customer
 
 const { Title } = Typography
 const { Search } = Input

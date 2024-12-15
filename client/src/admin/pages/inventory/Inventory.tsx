@@ -1,19 +1,11 @@
-import React, { useEffect, useState, useMemo, useCallback } from 'react'
-import { Product } from 'types/Product' // Tạo interface cho sản phẩm
-import { debounce } from 'lodash'
-import { useNavigate, Link } from 'react-router-dom'
-import { Button, Space, Badge, Input, Table, Modal, Card, message } from 'antd'
-import { ColumnsType } from 'antd/lib/table'
-import {
-    ReloadOutlined,
-    PlusOutlined,
-    ImportOutlined,
-    DeleteOutlined,
-} from '@ant-design/icons'
-import {
-    useGetProductsQuery,
-    useDeleteProductMutation,
-} from 'services/ProductApi' // Dịch vụ API cho sản phẩm
+import React, {useCallback, useEffect, useMemo, useState} from 'react'
+import {Product} from 'types/Product' // Tạo interface cho sản phẩm
+import {debounce} from 'lodash'
+import {Link, useNavigate} from 'react-router-dom'
+import {Badge, Button, Card, Input, message, Modal, Space, Table} from 'antd'
+import {ColumnsType} from 'antd/lib/table'
+import {DeleteOutlined, ImportOutlined, PlusOutlined, ReloadOutlined,} from '@ant-design/icons'
+import {useDeleteProductMutation, useGetProductsQuery,} from 'services/ProductApi' // Dịch vụ API cho sản phẩm
 import LoadingError from 'components/LoadingError'
 
 export default function Inventory() {

@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useAddCategoryMutation } from '@/services/CategoryApi'
-import { Button, Input, Form, message, Card, FormProps } from 'antd/lib'
+import React from 'react'
+import {useNavigate} from 'react-router-dom'
+import {useAddCategoryMutation} from '@/services/CategoryApi'
+import {Button, Card, Form, FormProps, Input, message} from 'antd/lib'
 
 type FieldType = {
     name: string

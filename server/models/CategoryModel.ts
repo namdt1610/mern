@@ -1,4 +1,5 @@
-import mongoose, { Document, Schema } from 'mongoose'
+import mongoose, {Document, Schema} from 'mongoose'
+
 const schema = Schema
 
 export interface ICategory extends Document {

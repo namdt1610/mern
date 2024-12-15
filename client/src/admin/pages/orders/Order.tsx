@@ -1,11 +1,11 @@
-import React, { useEffect, useState, useMemo, useCallback } from 'react'
-import { Order } from 'types/Order' // Interface cho đơn hàng
-import { debounce } from 'lodash'
-import { useNavigate } from 'react-router-dom'
-import { Button, Space, Badge, Input, Table, Modal, Card, message } from 'antd'
-import { ColumnsType } from 'antd/lib/table'
-import { ReloadOutlined, SearchOutlined } from '@ant-design/icons'
-import { useGetOrdersQuery, useDeleteOrderMutation } from 'services/OrderApi' // API của Orders
+import React, {useCallback, useEffect, useMemo, useState} from 'react'
+import {Order} from 'types/Order' // Interface cho đơn hàng
+import {debounce} from 'lodash'
+import {useNavigate} from 'react-router-dom'
+import {Badge, Button, Card, Input, message, Modal, Space, Table} from 'antd'
+import {ColumnsType} from 'antd/lib/table'
+import {ReloadOutlined, SearchOutlined} from '@ant-design/icons'
+import {useDeleteOrderMutation, useGetOrdersQuery} from 'services/OrderApi' // API của Orders
 import LoadingError from 'components/LoadingError'
 
 export default function Orders() {

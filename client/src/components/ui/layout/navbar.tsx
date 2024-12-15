@@ -1,14 +1,9 @@
 import React from 'react'
-import { theme, Layout, Menu } from 'antd/lib'
-import type { MenuProps } from 'antd/'
+import {Layout, Menu, theme} from 'antd/lib'
+import type {MenuProps} from 'antd/'
+import {DesktopOutlined, FileOutlined, PieChartOutlined, TeamOutlined, UserOutlined,} from '@ant-design/icons'
+
 const { Sider } = Layout
-import {
-    DesktopOutlined,
-    FileOutlined,
-    PieChartOutlined,
-    TeamOutlined,
-    UserOutlined,
-} from '@ant-design/icons'
 
 type MenuItem = Required<MenuProps>['items'][number]
 

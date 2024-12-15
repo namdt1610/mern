@@ -1,7 +1,7 @@
 // LoadingError.tsx
 import React from 'react'
-import { Spin, Result, Button } from 'antd'
-import { LoadingOutlined } from '@ant-design/icons'
+import {Button, Result, Spin} from 'antd'
+import {LoadingOutlined} from '@ant-design/icons'
 
 interface LoadingErrorProps {
     isLoading: boolean

@@ -1,8 +1,7 @@
-import React from 'react'
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, {useState} from 'react'
+import {Link} from 'react-router-dom'
 import useAuthApi from '../../../hooks/Auth/useAuthApiBeta'
-import { useApiContext } from '../../../contexts/ApiContext'
+import {useApiContext} from '../../../contexts/ApiContext'
 
 const Login = () => {
     const [email, setEmail] = useState('')
