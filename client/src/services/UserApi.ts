@@ -1,5 +1,5 @@
-import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
-import {User} from '@shared/types/User'
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { User } from '@shared/types/User'
 
 export const userApi = createApi({
     reducerPath: 'userApi',
@@ -33,7 +33,10 @@ export const userApi = createApi({
             }),
         }),
 
-        updateUser: builder.mutation<User, Partial<User> & { id: string }>({
+        updateUser: builder.mutation<
+            User,
+            Partial<User> & { id: string | undefined }
+        >({
             query: ({ id, ...data }) => ({
                 url: `/users/${id}`,
                 method: 'PUT',

@@ -1,19 +1,21 @@
-import React, {useEffect, useState} from 'react'
-import {useNavigate, useParams} from 'react-router-dom'
-import {useDeleteUserMutation, useGetUserByIdQuery, useUpdateUserMutation,} from '@/services/UserApi'
-import {Col, Empty, message, Row, Space} from 'antd'
-import LoadingError from 'components/LoadingError'
+import React, { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import {
+    useDeleteUserMutation,
+    useGetUserByIdQuery,
+    useUpdateUserMutation,
+} from '@/services/UserApi'
+import { Col, Empty, message, Row, Space } from 'antd'
+import LoadingError from '@/components/LoadingError'
 import UserActions from './UserDetailsActions'
 import UserAvatar from './UserDetailsAvatar'
 import UserForm from './UserDetailsForm'
-import {User} from '@/types/User'
+import { User } from 'shared/types/User'
 
 const UserDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>()
     const navigate = useNavigate()
-
-    const { data: user, isLoading, isError, refetch } = useGetUserByIdQuery(id)
-    // console.log('Current user:', user)
+    const { data: user, isLoading, isError, refetch } = useGetUserByIdQuery(id!)
     const [updateUser] = useUpdateUserMutation()
     const [deleteUser] = useDeleteUserMutation()
 
@@ -37,9 +39,7 @@ const UserDetail: React.FC = () => {
             ...prev,
             avatar: avatarUrl,
         }))
-        // console.log('Avatar Url from UserDetailsAvatar:', avatarUrl)
     }
-    // console.log('Before updating:', editedUser)
 
     const handleSave = async () => {
         try {

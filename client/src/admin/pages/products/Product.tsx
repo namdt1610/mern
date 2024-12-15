@@ -1,12 +1,10 @@
 import React from 'react'
 import {useNavigate} from 'react-router-dom'
 import {useDeleteProductMutation, useGetProductsQuery,} from '@/services/ProductApi'
-import {Button, Card, message, Popconfirm, Space, Spin, Table, Typography,} from 'antd'
+import {Button, Card, message, Popconfirm, Space, Spin, Table,} from 'antd'
 import {DeleteOutlined, PlusOutlined} from '@ant-design/icons'
 import LoadingError from '@/components/LoadingError'
 import {Product} from '@shared/types/Product'
-
-const { Title } = Typography
 
 const ProductPage: React.FC = () => {
     const navigate = useNavigate()

@@ -1,12 +1,20 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react'
-import {Product} from 'types/Product' // Tạo interface cho sản phẩm
-import {debounce} from 'lodash'
-import {Link, useNavigate} from 'react-router-dom'
-import {Badge, Button, Card, Input, message, Modal, Space, Table} from 'antd'
-import {ColumnsType} from 'antd/lib/table'
-import {DeleteOutlined, ImportOutlined, PlusOutlined, ReloadOutlined,} from '@ant-design/icons'
-import {useDeleteProductMutation, useGetProductsQuery,} from 'services/ProductApi' // Dịch vụ API cho sản phẩm
-import LoadingError from 'components/LoadingError'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { Product } from '@shared/types/Product' // Tạo interface cho sản phẩm
+import { debounce } from 'lodash'
+import { Link, useNavigate } from 'react-router-dom'
+import { Badge, Button, Card, Input, message, Modal, Space, Table } from 'antd'
+import { ColumnsType } from 'antd/lib/table'
+import {
+    DeleteOutlined,
+    ImportOutlined,
+    PlusOutlined,
+    ReloadOutlined,
+} from '@ant-design/icons'
+import {
+    useDeleteProductMutation,
+    useGetProductsQuery,
+} from '@/services/ProductApi' // Dịch vụ API cho sản phẩm
+import LoadingError from '@/components/LoadingError'
 
 export default function Inventory() {
     // Interface cho record sản phẩm
@@ -30,7 +38,7 @@ export default function Inventory() {
             const lowercasedValue = value.toLowerCase()
             const filtered = products?.filter((product) =>
                 ['name', 'sku', 'category', 'status'].some((key) =>
-                    product[key]?.toLowerCase()?.includes(lowercasedValue)
+                    (product as any)[key]?.toLowerCase()?.includes(lowercasedValue)
                 )
             )
             setFilteredData(filtered ?? [])
@@ -157,7 +165,7 @@ export default function Inventory() {
 
     const handleRefresh = () => {
         refetch()
-        setFilteredData(products)
+        if (products) setFilteredData(products)
     }
 
     const handleView = (id: string) => {

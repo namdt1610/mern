@@ -1,11 +1,20 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react'
-import {User} from '@shared/types/User'
-import {debounce} from 'lodash'
-import {Link, useNavigate} from 'react-router-dom'
-import {Badge, Button, Card, Input, message, Modal, Space, Table,} from 'antd/lib'
-import {ColumnsType} from 'antd/lib/table'
-import {ImportOutlined, PlusOutlined, ReloadOutlined} from '@ant-design/icons'
-import {useDeleteUserMutation, useGetUsersQuery} from '@/services/UserApi'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { User } from '@shared/types/User'
+import { debounce } from 'lodash'
+import { Link, useNavigate } from 'react-router-dom'
+import {
+    Badge,
+    Button,
+    Card,
+    Input,
+    message,
+    Modal,
+    Space,
+    Table,
+} from 'antd/lib'
+import { ColumnsType } from 'antd/lib/table'
+import { ImportOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons'
+import { useDeleteUserMutation, useGetUsersQuery } from '@/services/UserApi'
 import LoadingError from '@/components/LoadingError'
 
 export default function Users() {
@@ -13,7 +22,6 @@ export default function Users() {
     interface ActionRecord extends User {
         _id: string
     }
-
     const navigate = useNavigate()
     const [deleteUser] = useDeleteUserMutation()
     const [filteredData, setFilteredData] = useState<User[]>([])
@@ -24,18 +32,43 @@ export default function Users() {
         if (users) setFilteredData(users)
     }, [users])
 
+    const normalizeString = (str: any) => {
+        if (typeof str !== 'string') {
+            return ''
+        }
+        if (str == '') {
+            setFilteredData(users ?? [])
+        }
+        return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    }
     // Tìm kiếm
     const onSearch = useMemo(() => {
         return debounce((value: string) => {
-            const lowercasedValue = value.toLowerCase()
+            const normalizedValue = normalizeString(value.toLowerCase())
             const filtered = users?.filter((user) =>
-                ['name', 'email', 'phone', 'status'].some((key) =>
-                    user[key]?.toLowerCase()?.includes(lowercasedValue)
+                (['name', 'email', 'phone', 'status'] as (keyof User)[]).some(
+                    (key) =>
+                        normalizeString(user[key]?.toLowerCase()).includes(
+                            normalizedValue
+                        )
                 )
             )
             setFilteredData(filtered ?? [])
-        }, 300)
+        }, 1000)
     }, [users])
+
+    const handleSearch = (value: string) => {
+        const normalizedValue = normalizeString(value.toLowerCase())
+        const filtered = users?.filter((user) =>
+            (['name', 'email', 'phone', 'status'] as (keyof User)[]).some(
+                (key) =>
+                    normalizeString(user[key]?.toLowerCase()).includes(
+                        normalizedValue
+                    )
+            )
+        )
+        setFilteredData(filtered ?? [])
+    }
 
     // Render actions dùng useCallback vì truyền vào Table
     const renderActions = useCallback(
@@ -151,7 +184,7 @@ export default function Users() {
 
     const handleRefresh = () => {
         refetch()
-        setFilteredData(users) // Hoặc gọi lại API tùy nhu cầu
+        if (users) setFilteredData(users) // Hoặc gọi lại API tùy nhu cầu
     }
 
     const handleView = (id: string) => {
@@ -203,9 +236,11 @@ export default function Users() {
                         size="large"
                         placeholder="input search text"
                         allowClear
-                        enterButton="Search"
-                        onSearch={onSearch}
                         style={{ width: 'auto' }}
+                        onInput={(e: React.FormEvent<HTMLInputElement>) =>
+                            handleSearch(e.currentTarget.value)
+                        }
+                        onClear={() => handleSearch('')}
                     />
                 </Space>
             </Card>

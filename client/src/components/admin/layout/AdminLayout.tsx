@@ -20,8 +20,6 @@ import {
 import {Button, Card, Layout, Menu, theme} from 'antd/lib'
 import type {MenuProps} from 'antd/'
 import {Link, Outlet, useLocation} from 'react-router-dom'
-import Breadcrumb from '../../ui/Breadcrumb'
-import Footer from '../../ui/Footer'
 import UserInfoCard from '../../admin/UserInfoCard'
 
 const { Content, Sider } = Layout
@@ -384,7 +382,6 @@ export default function LayoutApp() {
                     >
                         <div className="grid grid-cols-2 gap-4 ">
                             <Card className="card-border-color h-full">
-                                <Breadcrumb />
                             </Card>
                             <UserInfoCard />
                         </div>
@@ -393,7 +390,6 @@ export default function LayoutApp() {
                     </Content>
                 </Layout>
             </Layout>
-            <Footer />
         </>
     )
 }

@@ -1,8 +1,8 @@
 import React from 'react';
 import {Button, Card, Space, Table} from 'antd';
 import {DeleteOutlined, EditOutlined} from '@ant-design/icons';
-import {useDeletePaymentMethodMutation, useGetPaymentMethodsQuery} from 'services/PaymentMethod';
-import {PaymentMethod} from 'types/PaymentMethod';
+import {useDeletePaymentMethodMutation, useGetPaymentMethodsQuery} from '@/services/PaymentMethod';
+import {PaymentMethod} from '@shared/types/PaymentMethod';
 
 const PaymentMethods: React.FC = () => {
       const { data: paymentMethods, isLoading } = useGetPaymentMethodsQuery();
