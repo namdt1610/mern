@@ -1,13 +1,14 @@
-import {jwtDecode} from 'jwt-decode'
+import { User } from '@shared/types/User'
+import { jwtDecode } from 'jwt-decode'
 
-export interface DecodedToken {
+export interface DecodedToken extends User {
     _id: string
     email: string
     role: string
     name: string
     avatar?: string
     status?: string
-    createdAt?: string
+    createdAt: string
     updatedAt?: string
 }
 

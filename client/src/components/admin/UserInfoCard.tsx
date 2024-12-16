@@ -1,11 +1,11 @@
 // UserInfoCard.tsx
-import React, {useMemo} from 'react'
-import {Avatar, Button, Card, Col, Row, Typography} from 'antd'
-import {decodeToken} from '@/utils/jwtDecode'
-import {useLogoutMutation} from '@/services/AuthApi'
+import React, { useMemo } from 'react'
+import { Avatar, Button, Card, Col, Row, Typography } from 'antd'
+import { decodeToken } from '@/utils/jwtDecode'
+import { useLogoutMutation } from '@/services/AuthApi'
 import Cookies from 'js-cookie'
-import {useNavigate} from 'react-router-dom'
-import {AntDesignOutlined} from '@ant-design/icons'
+import { useNavigate } from 'react-router-dom'
+import { AntDesignOutlined } from '@ant-design/icons'
 
 const { Title, Text } = Typography
 
@@ -18,10 +18,9 @@ const UserInfoCard = () => {
         if (!token) {
             return null
         }
-        return (decodeToken(token))   
+        return decodeToken(token)
     }, [])
-    // console.log(decodedUser);
-    
+    console.log(decodedUser);
 
     const onLogout = async () => {
         try {
@@ -58,7 +57,6 @@ const UserInfoCard = () => {
                 <Col>
                     <Title level={2}>
                         Welcome, {decodedUser?.name || 'User'}
-                        {decodedUser?.name}
                     </Title>
                     <Text type="secondary">{decodedUser?.email}</Text>
                     <Text type="secondary">{decodedUser?.role}</Text>

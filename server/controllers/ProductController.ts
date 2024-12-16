@@ -1,4 +1,4 @@
-import {Request, Response} from 'express'
+import { Request, Response } from 'express'
 import mongoose from 'mongoose'
 import Product from '../models/ProductModel'
 
@@ -35,32 +35,48 @@ const getProductById = async (req: Request, res: Response): Promise<void> => {
 
 // POST a product
 const createProduct = async (req: Request, res: Response): Promise<void> => {
-    const { name, description, price } = req.body
-    const imageUrl = req.file ? `/uploads${req.file.filename}` : null
+    const { name, category, description, price } = req.body
+    const imageUrl = req.body?.filename ? `/uploads${req.body.filename}` : null
 
-    let emptyFields: string[] = []
-
-    if (!name) emptyFields.push('name')
-    if (!description) emptyFields.push('description')
-    if (!price) emptyFields.push('price')
-    if (!imageUrl) emptyFields.push('imageUrl')
-
-    if (emptyFields.length > 0) {
+    // Kiểm tra sản phẩm đã tồn tại
+    if (await Product.findOne({ name })) {
         res.status(400).json({
-            error: `Please provide ${emptyFields.join(', ')}`,
+            message: 'Validation error',
+            errors: { name: 'Product already exists' },
         })
         return
     }
+
+    // Kiểm tra các trường bị thiếu
+    let errors: Record<string, string> = {}
+    if (!name) errors.name = 'Name is required'
+    if (!category) errors.category = 'Category is required'
+    if (!description) errors.description = 'Description is required'
+    if (!price) errors.price = 'Price is required'
+
+    if (Object.keys(errors).length > 0) {
+        res.status(400).json({
+            message: 'Validation error',
+            errors,
+        })
+        return
+    }
+
+    // Tạo sản phẩm mới
     try {
         const product = await Product.create({
             name,
+            category,
             description,
             price,
             imageUrl,
         })
         res.status(201).json(product)
     } catch (error) {
-        res.status(400).json({ error: (error as Error).message })
+        res.status(500).json({
+            message: 'Server error',
+            errors: { general: (error as Error).message },
+        })
     }
 }
 
@@ -109,7 +125,10 @@ const updateProduct = async (req: Request, res: Response): Promise<void> => {
 }
 
 // Update click count
-export const updateClickCount = async (req: Request, res: Response): Promise<void> => {
+export const updateClickCount = async (
+    req: Request,
+    res: Response
+): Promise<void> => {
     const { id } = req.params
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -128,7 +147,6 @@ export const updateClickCount = async (req: Request, res: Response): Promise<voi
     await product.save()
 
     res.status(200).json(product)
-
 }
 
 export {

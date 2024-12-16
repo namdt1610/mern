@@ -1,18 +1,9 @@
-const mongoose = require('mongoose')
-const bcrypt = require('bcryptjs')
-const validator = require('validator')
-const schema = mongoose.Schema
+import { User } from '../../shared/types/User'
+import mongoose from 'mongoose'
+import bcrypt from 'bcryptjs'
+import validator from 'validator'
 
-export interface IUser extends Document {
-    email: string
-    password: string
-    name: string
-    role: string
-    status: string
-    phone: string
-    address: string
-    avatar?: string
-}
+const schema = mongoose.Schema
 
 const userSchema = new schema(
     {
@@ -43,8 +34,7 @@ const userSchema = new schema(
         },
         password: {
             type: String,
-            required: false,
-            default: null,
+            required: true,
         },
         role: {
             type: String,

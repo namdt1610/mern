@@ -1,4 +1,4 @@
-import {lazy, LazyExoticComponent} from 'react'
+import { lazy, LazyExoticComponent } from 'react'
 
 //* routes/routesConfig.ts
 
@@ -114,6 +114,10 @@ const adminRoutes: RouteConfig = {
         {
             path: 'users/:id',
             element: lazy(() => import('../pages/users/UserDetails')),
+        },
+        {
+            path: 'users/reports',
+            element: lazy(() => import('../pages/users/UserReports')),
         },
         { path: '*', element: lazy(() => import('../pages/result/404')) },
     ],

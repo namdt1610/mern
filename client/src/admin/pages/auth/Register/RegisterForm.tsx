@@ -1,9 +1,8 @@
 import React from 'react'
-import type {FormProps} from 'antd/lib'
-import {Button, Form, Input, message} from 'antd/lib'
-import useAuthApi from '../../../../hooks/Auth/useAuthApiBeta'
-import {useNavigate} from 'react-router-dom'
-import {useApiContext} from '../../../../contexts/ApiContext'
+import type { FormProps } from 'antd/lib'
+import { Button, Form, Input, message } from 'antd/lib'
+import { useRegisterMutation } from '@/services/AuthApi'
+import { useNavigate } from 'react-router-dom'
 
 type FieldType = {
     email: string
@@ -18,8 +17,7 @@ type RegisterFormProps = {
 
 const RegisterForm: React.FC<RegisterFormProps> = ({ from }) => {
     const navigate = useNavigate()
-    const { register } = useAuthApi()
-    const { state } = useApiContext()
+    const [register, { isLoading, isError }] = useRegisterMutation()
 
     const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
         onRegister(values)
@@ -42,10 +40,10 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ from }) => {
             await register({
                 email: values.email,
                 password: values.password,
-                fullName: values.fullName,
+                name: values.fullName,
             })
             message.success('Registration successful')
-            navigate(from || '/admin/login')
+            navigate('/admin/login')
         } catch (error: any) {
             message.error(error?.message || 'Failed to register')
         }
@@ -134,8 +132,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ from }) => {
                 <Button
                     type="primary"
                     htmlType="submit"
-                    loading={state.loading}
-                    disabled={state.loading}
+                    loading={isLoading}
+                    disabled={isError}
                 >
                     Register
                 </Button>
@@ -143,8 +141,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ from }) => {
                 <Button
                     onClick={() => navigate('/admin/login')}
                     type="primary"
-                    loading={state.loading}
-                    disabled={state.loading}
+                    loading={isLoading}
+                    disabled={isError}
                 >
                     Login
                 </Button>

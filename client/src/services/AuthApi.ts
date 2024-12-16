@@ -1,4 +1,4 @@
-import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const authApi = createApi({
     reducerPath: 'authApi',
@@ -18,7 +18,10 @@ export const authApi = createApi({
                 body: credentials,
             }),
         }),
-        register: builder.mutation<any, { email: string; password: string }>({
+        register: builder.mutation<
+            any,
+            { name: string; email: string; password: string }
+        >({
             query: (credentials) => ({
                 url: '/register',
                 method: 'POST',

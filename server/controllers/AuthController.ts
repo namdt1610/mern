@@ -1,4 +1,4 @@
-import {NextFunction, Request, Response} from 'express'
+import { NextFunction, Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import User from '../models/UserModel'
@@ -13,7 +13,7 @@ interface UserRequest extends Request {
 
 // Đăng ký
 export const signup = async (req: Request, res: Response): Promise<void> => {
-    const { email, username, password } = req.body
+    const { name, email, password } = req.body
 
     try {
         const existingUser = await User.findOne({ email })
@@ -23,15 +23,10 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
         }
 
         const hashedPassword = await bcrypt.hash(password, 12)
-        const newUser = new User({ email, username, password: hashedPassword })
+        const newUser = new User({ name, email, password: hashedPassword })
         await newUser.save()
 
-        const token = jwt.sign(
-            { id: newUser._id },
-            process.env.JWT_SECRET as string,
-            { expiresIn: '1h' }
-        )
-        res.status(201).json({ user: newUser, token })
+        res.status(201).json({ user: newUser })
     } catch (error) {
         res.status(500).json({ message: 'Could not register user' })
     }
@@ -53,14 +48,15 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         console.log('Password from request:', password)
         console.log('Password from database (hashed):', user.password)
 
-        const isMatch = await bcrypt.compare(password, user.password)
+        const isMatch = bcrypt.compare(password, user.password)
         if (!isMatch) {
             res.status(401).json({ message: 'Invalid password' })
             return
         }
+        console.log('User name before signing token:', user.name)
 
         const token = jwt.sign(
-            { id: user._id, role: user.role, name: user.username },
+            { id: user._id, role: user.role, name: user.name },
             process.env.JWT_SECRET as string,
             { expiresIn: '1h' }
         )

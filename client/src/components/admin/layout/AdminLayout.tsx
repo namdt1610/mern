@@ -1,5 +1,5 @@
 // AdminLayout.tsx
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import {
     BarChartOutlined,
     BookOutlined,
@@ -17,9 +17,9 @@ import {
     StarOutlined,
     UserOutlined,
 } from '@ant-design/icons'
-import {Button, Card, Layout, Menu, theme} from 'antd/lib'
-import type {MenuProps} from 'antd/'
-import {Link, Outlet, useLocation} from 'react-router-dom'
+import { Button, Card, Layout, Menu, theme } from 'antd/lib'
+import type { MenuProps } from 'antd/'
+import { Link, Outlet, useLocation } from 'react-router-dom'
 import UserInfoCard from '../../admin/UserInfoCard'
 
 const { Content, Sider } = Layout
@@ -292,16 +292,8 @@ export default function LayoutApp() {
                     label: <Link to="/admin/users">All Users</Link>,
                 },
                 {
-                    key: 'user-role',
-                    label: <Link to="/admin/users/roles">User Roles</Link>,
-                },
-                {
-                    key: 'user-permission',
-                    label: <Link to="/users/permissions">Permissions</Link>,
-                },
-                {
                     key: 'user-reports',
-                    label: <Link to="/users/reports">User Reports</Link>,
+                    label: <Link to="/admin/users/reports">User Reports</Link>,
                 },
             ],
         },
@@ -381,8 +373,7 @@ export default function LayoutApp() {
                         }}
                     >
                         <div className="grid grid-cols-2 gap-4 ">
-                            <Card className="card-border-color h-full">
-                            </Card>
+                            <Card className="card-border-color h-full"></Card>
                             <UserInfoCard />
                         </div>
 
