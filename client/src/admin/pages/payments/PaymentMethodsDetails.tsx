@@ -1,8 +1,8 @@
 import React from 'react'
 import {useNavigate, useParams} from 'react-router-dom'
-import {useGetPaymentMethodsQuery, useUpdatePaymentMethodMutation,} from 'services/PaymentMethod'
+import {useGetPaymentMethodsQuery, useUpdatePaymentMethodMutation,} from '@/services/PaymentMethod'
 import {Button, Form, Input, Spin} from 'antd'
-import {PaymentMethod} from 'types/PaymentMethod'
+import {PaymentMethod} from 'shared/types/PaymentMethod'
 
 const PaymentMethodsDetails = () => {
     const { id } = useParams()

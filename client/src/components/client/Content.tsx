@@ -1,7 +1,10 @@
-import {Button} from 'antd/'
+import { Button } from 'antd/'
 import React from 'react'
+import { useGetCategoriesQuery } from '@/services/CategoryApi'
 
 export default function Content() {
+    const { data: categories, isLoading, error } = useGetCategoriesQuery()
+    if (!categories) return null
     return (
         <div>
             {/* Content Section */}
@@ -11,20 +14,13 @@ export default function Content() {
                 </h2>
                 <div className="grid grid-cols-3 gap-6">
                     {/* Danh mục */}
-                    {[
-                        'Fiction',
-                        'Non-Fiction',
-                        'Science',
-                        'History',
-                        'Biography',
-                        'Mystery',
-                    ].map((category, index) => (
+                    {categories.map((category, index) => (
                         <Button
                             type="primary"
                             key={index}
                             className="p-6 rounded-lg shadow-md text-center hover:scale-105 transition-transform duration-300"
                         >
-                            <p className="text-xl font-bold">{category}</p>
+                            <p className="text-xl font-bold">{category.name}</p>
                         </Button>
                     ))}
                 </div>

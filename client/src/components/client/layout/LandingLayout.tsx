@@ -13,8 +13,8 @@ export default function LandingLayout() {
             <Header />
             <Main>
                 <Hero />
-                <MainContent />
                 <Content />
+                <MainContent />
             </Main>
             <Footer />
             <BackToTop />
