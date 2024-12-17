@@ -1,5 +1,5 @@
-import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
-import {Order} from '@/types/Order' // Định nghĩa kiểu Order
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { Order, CreateOrderRequest } from 'shared/types/Order' // Định nghĩa kiểu Order
 
 export const orderApi = createApi({
     reducerPath: 'orderApi',
@@ -11,24 +11,30 @@ export const orderApi = createApi({
             return headers
         },
     }),
+    tagTypes: ['Order'],
     endpoints: (builder) => ({
         // Lấy danh sách đơn hàng
         getOrders: builder.query<Order[], void>({
             query: () => '/orders',
+            providesTags: ['Order'],
         }),
 
         // Lấy chi tiết đơn hàng theo ID
         getOrderById: builder.query<Order, string>({
-            query: (id) => `/orders/${id}`,
+            query: (userId) => `/orders/${userId}`,
+            providesTags: (result, error, orderId) => [
+                { type: 'Order', id: orderId },
+            ],
         }),
 
         // Tạo đơn hàng mới
-        createOrder: builder.mutation<Order, Order>({
+        createOrder: builder.mutation<Order, CreateOrderRequest>({
             query: (order) => ({
                 url: '/orders',
                 method: 'POST',
                 body: order,
             }),
+            invalidatesTags: ['Order'],
         }),
 
         // Cập nhật trạng thái đơn hàng
@@ -41,6 +47,7 @@ export const orderApi = createApi({
                 method: 'PUT',
                 body: { status },
             }),
+            invalidatesTags: ['Order'],
         }),
 
         // Xóa đơn hàng
@@ -49,6 +56,7 @@ export const orderApi = createApi({
                 url: `/orders/${id}`,
                 method: 'DELETE',
             }),
+            invalidatesTags: ['Order'],
         }),
     }),
 })

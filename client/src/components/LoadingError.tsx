@@ -1,19 +1,41 @@
 // LoadingError.tsx
 import React from 'react'
-import {Button, Result, Spin} from 'antd'
-import {LoadingOutlined} from '@ant-design/icons'
+import { Button, Result, Spin } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons'
 
 interface LoadingErrorProps {
+    title: string
+    isLogin: boolean
     isLoading: boolean
-    error: any
+    isError: any
     refetch?: () => void
 }
 
 const LoadingError: React.FC<LoadingErrorProps> = ({
+    title,
+    isLogin,
     isLoading,
-    error,
+    isError,
     refetch,
 }) => {
+    if (!isLogin)
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <Result
+                    status="403"
+                    title="403"
+                    subTitle="Sorry, you must log in to access this page."
+                    extra={
+                        <Button
+                            type="primary"
+                            onClick={() => window.location.replace('/login')}
+                        >
+                            Login
+                        </Button>
+                    }
+                />
+            </div>
+        )
     if (isLoading) {
         return (
             <div className="flex justify-center items-center h-screen">
@@ -28,12 +50,12 @@ const LoadingError: React.FC<LoadingErrorProps> = ({
         )
     }
 
-    if (error) {
+    if (isError) {
         return (
             <div className="flex justify-center items-center h-screen">
                 <Result
                     status="error"
-                    title="Có lỗi xảy ra!"
+                    title={title || 'Đã xảy ra lỗi'}
                     subTitle="Vui lòng thử lại sau."
                     extra={
                         refetch && (

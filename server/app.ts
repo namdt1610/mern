@@ -1,4 +1,4 @@
-import express, {Request, Response} from 'express'
+import express, { Request, Response } from 'express'
 import path from 'path'
 import cors from 'cors'
 import morgan from 'morgan'
@@ -13,6 +13,7 @@ import categoryRoutes from './routes/Category'
 import productRoutes from './routes/Product'
 import inventoryRoutes from './routes/InventoryRoute'
 import orderRoutes from './routes/OrderRoute'
+import cartRoutes from './routes/CartRoute'
 
 //* server.ts
 
@@ -128,6 +129,7 @@ app.use('/api/products', productRoutes)
 app.use('/api/categories', categoryRoutes)
 app.use('/api/inventory', inventoryRoutes)
 app.use('/api/orders', orderRoutes)
+app.use('/api/cart', cartRoutes)    
 
 // Global error handler
 app.use(

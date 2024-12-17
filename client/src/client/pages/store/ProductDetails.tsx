@@ -1,15 +1,36 @@
-import React, {useEffect, useState} from 'react'
-import {useNavigate, useParams} from 'react-router-dom'
-import {useGetProductByIdQuery} from '@/services/ProductApi'
-import {Button, Card, Empty, Input, List, Spin, Typography} from 'antd'
+import React, { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useGetProductByIdQuery } from '@/services/ProductApi'
+import { useAddToCartMutation } from '@/services/CartApi'
+import { useSelector } from 'react-redux'
+import { RootState } from '@/redux/Store'
+import { useGetUserIdFromCookie } from '@/utils/useGetToken'
+
+import {
+    Button,
+    Card,
+    Empty,
+    Input,
+    InputNumber,
+    List,
+    Spin,
+    Typography,
+} from 'antd'
 import MainLayout from '@/components/client/layout/MainLayout'
+import toast from 'react-hot-toast'
 
 const { Title, Text } = Typography
 const { TextArea } = Input
 
 const BookDetail: React.FC = () => {
+    const userId = useGetUserIdFromCookie()
+    console.log('User ID:', userId)
+
     const id: string = useParams<{ id: string }>().id ?? ''
+    console.log('Product ID:', id)
+
     const { data: book, isLoading, refetch } = useGetProductByIdQuery(id)
+    const [addToCart] = useAddToCartMutation()
     const nav = useNavigate()
 
     const [inCart, setInCart] = useState(false)
@@ -18,6 +39,16 @@ const BookDetail: React.FC = () => {
         Array<{ author: string; content: string }>
     >([])
     const [newComment, setNewComment] = useState('')
+
+    const [quantity, setQuantity] = useState(1)
+
+    const handleChange = (value: number | null) => {
+        if (value) setQuantity(value)
+    }
+
+    const handleIncrease = () => setQuantity((prev) => prev + 1)
+    const handleDecrease = () =>
+        setQuantity((prev) => (prev > 1 ? prev - 1 : 1))
 
     useEffect(() => {
         if (book) {
@@ -34,9 +65,26 @@ const BookDetail: React.FC = () => {
         //   setComments(data)
     }
 
-    const handleAddToCart = () => {
-        setInCart(true)
-        // Handle logic to add to cart (e.g., call API to add product to user's cart)
+    const handleAddToCart = async () => {
+        // setInCart(true)
+        if (!userId) {
+            toast.error('Please log in to add to cart')
+            throw new Error('User not logged in')
+        }
+        if (!id) {
+            console.error('Book not found')
+            throw new Error('Book not found')
+        }
+        console.log(id)
+
+        try {
+            await addToCart({
+                userId,
+                item: { product_id: id, quantity: 1 },
+            }).unwrap()
+        } catch (error) {
+            toast.error('Failed to add to cart')
+        }
     }
 
     const handleAddToFavorites = () => {
@@ -89,11 +137,40 @@ const BookDetail: React.FC = () => {
                                 </>
                             }
                         />
+                        {!book.stock ? (
+                            <>
+                                <Text type="success">In Stock</Text>
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: 8,
+                                    }}
+                                >
+                                    <Button
+                                        onClick={handleDecrease}
+                                        disabled={book.stock <= 1}
+                                    >
+                                        -
+                                    </Button>
+                                    <InputNumber
+                                        min={1}
+                                        value={quantity}
+                                        onChange={handleChange}
+                                        style={{ width: 70 }}
+                                    />
+
+                                    <Button onClick={handleIncrease}>+</Button>
+                                </div>
+                            </>
+                        ) : (
+                            <Text type="danger">Out of Stock</Text>
+                        )}
                         <Button
                             type="primary"
                             style={{ marginTop: '16px' }}
                             onClick={handleAddToCart}
-                            disabled={inCart}
+                            // disabled={book.stock}
                         >
                             {inCart ? 'Added to Cart' : 'Add to Cart'}
                         </Button>

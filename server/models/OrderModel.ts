@@ -1,7 +1,7 @@
-import mongoose, {Schema} from 'mongoose'
-import {IOrder} from '../types/Order'
+import mongoose, { Schema } from 'mongoose'
+import { Order } from '../../shared/types/Order'
 
-const orderSchema = new Schema<IOrder>(
+const orderSchema = new Schema<Order>(
     {
         user: {
             type: String,
@@ -10,11 +10,10 @@ const orderSchema = new Schema<IOrder>(
         },
         orderItems: [
             {
+                product: { type: String, required: true, ref: 'Product' },
                 name: { type: String, required: true },
                 quantity: { type: Number, required: true },
-                image: { type: String, required: true },
                 price: { type: Number, required: true },
-                product: { type: String, required: true, ref: 'Product' },
             },
         ],
         shippingAddress: {
@@ -75,6 +74,6 @@ const orderSchema = new Schema<IOrder>(
     }
 )
 
-const Order = mongoose.model<IOrder>('Order', orderSchema)
+const Order = mongoose.model<Order>('Order', orderSchema)
 
 export default Order

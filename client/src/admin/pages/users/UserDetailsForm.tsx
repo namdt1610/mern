@@ -1,7 +1,16 @@
 // UserForm.tsx
 
 import React from 'react'
-import {Alert, Badge, Button, Card, Descriptions, Input, Select, Space,} from 'antd/lib'
+import {
+    Alert,
+    Badge,
+    Button,
+    Card,
+    Descriptions,
+    Input,
+    Select,
+    Space,
+} from 'antd/lib'
 import {
     CrownOutlined,
     HomeOutlined,
@@ -11,8 +20,8 @@ import {
     PhoneOutlined,
     UserOutlined,
 } from '@ant-design/icons'
-import {User} from '@shared/types/User'
-import {getUserRoleFromCookie} from '@/utils/auth'
+import { User } from '@shared/types/User'
+import { getUserRoleFromCookie } from '@/utils/useGetToken'
 
 interface UserFormProps {
     user: User

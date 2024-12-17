@@ -1,5 +1,5 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
-import {Payment} from '@/types/Payment'
+import {Payment} from 'shared/types/Payment'
 
 export const paymentApi = createApi({
     reducerPath: 'paymentApi',

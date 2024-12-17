@@ -2,13 +2,17 @@ import './index.css'
 import React from 'react'
 import ClientRoutes from './client/routes/ClientRoutes'
 import AdminRoutes from './admin/routes/AdminRoutes'
-import {createRoot} from 'react-dom/client'
-import {BrowserRouter as Router, Route, Routes} from 'react-router-dom'
-import {ConfigProvider} from 'antd'
-import {Provider} from 'react-redux'
+import { createRoot } from 'react-dom/client'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import { ConfigProvider } from 'antd'
+import { Provider } from 'react-redux'
 import store from '@/redux/Store'
+import App from './App'
 
-const App = () => (
+const container = document.getElementById('root') as HTMLElement
+const root = createRoot(container)
+
+root.render(
     <React.StrictMode>
         <Provider store={store}>
             <ConfigProvider
@@ -39,16 +43,9 @@ const App = () => (
                 }}
             >
                 <Router>
-                    <Routes>
-                        <Route path="/*" element={<ClientRoutes/>}/>
-                        <Route path="admin/*" element={<AdminRoutes/>}/>
-                    </Routes>
+                    <App />
                 </Router>
             </ConfigProvider>
         </Provider>
     </React.StrictMode>
 )
-
-const container = document.getElementById('root') as HTMLElement
-const root = createRoot(container)
-root.render(<App/>)

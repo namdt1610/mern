@@ -1,9 +1,22 @@
-import React, {useEffect, useState} from 'react'
-import {Button, Layout, Menu} from 'antd/'
-import {AudioFilled, AudioOutlined, BookFilled, BookOutlined, HomeOutlined,} from '@ant-design/icons'
-import {Link, useNavigate} from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Button, Layout, Menu } from 'antd/'
+import {
+    AudioFilled,
+    AudioOutlined,
+    BookFilled,
+    BookOutlined,
+    HomeOutlined,
+    ShoppingCartOutlined,
+} from '@ant-design/icons'
+import { Link, useNavigate } from 'react-router-dom'
+import { getUserFromCookie } from '@/utils/useGetToken'
 
 const { Header } = Layout
+const user = getUserFromCookie()
+console.log(user)
+
+const userId = user?._id || null
+console.log('userId', userId)
 
 const items = [
     {
@@ -35,6 +48,12 @@ const items = [
         label: 'Podcast',
         link: '/podcasts',
         icon: <AudioFilled />,
+    },
+    {
+        key: 'cart',
+        label: 'Cart',
+        link: `/cart/${userId}`,    
+        icon: <ShoppingCartOutlined />,
     },
 ]
 

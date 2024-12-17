@@ -1,5 +1,39 @@
+export interface OrderItems {
+    product: string
+    name: string
+    quantity: number
+    price: number
+}
+
 export interface Order {
     _id: string
+    user: string
+    orderItems: OrderItems[]
+    shippingAddress: {
+        address: string
+        city: string
+        postalCode: string
+        country: string
+    }
+    paymentMethod: string
+    paymentResult?: {
+        _id?: string
+        status?: string
+        update_time?: string
+        email_address?: string
+    } | null
+    itemsPrice: number
+    taxPrice: number
+    shippingPrice: number
+    totalPrice: number
+    isPaid: boolean
+    paidAt?: Date
+    isDelivered: boolean
+    deliveredAt?: Date
+    createdAt: Date
+}
+
+export interface CreateOrderRequest {
     user: string
     orderItems: Array<{
         name: string
@@ -15,19 +49,8 @@ export interface Order {
         country: string
     }
     paymentMethod: string
-    paymentResult?: {
-        id: string
-        status: string
-        update_time: string
-        email_address: string
-    }
     itemsPrice: number
     taxPrice: number
     shippingPrice: number
     totalPrice: number
-    isPaid: boolean
-    paidAt?: Date
-    isDelivered: boolean
-    deliveredAt?: Date
-    createdAt: Date
 }

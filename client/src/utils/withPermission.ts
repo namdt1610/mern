@@ -1,6 +1,6 @@
 import React from 'react'
-import {useNavigate} from 'react-router-dom'
-import {getUserRoleFromCookie} from './auth' // Hàm lấy role người dùng, ví dụ từ token
+import { useNavigate } from 'react-router-dom'
+import { getUserRoleFromCookie } from './useGetToken' // Hàm lấy role người dùng, ví dụ từ token
 //* utils/withPermission.ts
 
 interface WithPermissionProps {

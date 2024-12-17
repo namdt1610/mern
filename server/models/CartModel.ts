@@ -1,21 +1,23 @@
 import mongoose from 'mongoose'
+import { Cart } from '../../shared/types/Cart'
 
 const Schema = mongoose.Schema
 
-const cartSchema = new Schema(
+const cartSchema = new Schema<Cart>(
     {
-        user_id: {
-            type: Schema.Types.ObjectId,
+        user: {
+            type: String,
             ref: 'User',
             required: true,
         },
         products: [
             {
                 product: {
-                    type: Schema.Types.ObjectId,
+                    type: String,
                     ref: 'Product',
                     required: true,
                 },
+
                 quantity: {
                     type: Number,
                     required: true,
@@ -23,6 +25,11 @@ const cartSchema = new Schema(
                 },
             },
         ],
+        totalQuantity: {
+            type: Number,
+            required: true,
+            default: 0,
+        },
         totalPrice: {
             type: Number,
             required: true,

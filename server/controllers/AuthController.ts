@@ -5,7 +5,7 @@ import User from '../models/UserModel'
 
 interface UserRequest extends Request {
     user?: {
-        id: string
+        _id: string
         role: string
         name: string
     }
@@ -56,7 +56,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         console.log('User name before signing token:', user.name)
 
         const token = jwt.sign(
-            { id: user._id, role: user.role, name: user.name },
+            { _id: user._id, role: user.role, name: user.name },
             process.env.JWT_SECRET as string,
             { expiresIn: '1h' }
         )
@@ -100,12 +100,12 @@ export const verifyToken = (
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as {
-            id: string
+            _id: string
             role: string
             name: string
         }
         req.user = {
-            id: decoded.id,
+            _id: decoded._id,
             role: decoded.role,
             name: decoded.name,
         }

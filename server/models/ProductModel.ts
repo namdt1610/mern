@@ -46,6 +46,10 @@ const productSchema = new Schema(
         author: {
             type: String,
         },
+        sku: {
+            type: String,
+        },
+        
     },
     { timestamps: true }
 )
