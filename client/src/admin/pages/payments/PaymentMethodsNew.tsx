@@ -1,8 +1,8 @@
 import React from 'react'
 import {useNavigate} from 'react-router-dom'
-import {useAddPaymentMethodMutation} from 'services/PaymentMethod'
+import {useAddPaymentMethodMutation} from '@/services/PaymentMethod'
 import {Button, Form, Input} from 'antd'
-import {PaymentMethod} from 'types/PaymentMethod'
+import {PaymentMethod} from 'shared/types/PaymentMethod'
 
 const PaymentMethodsNew = () => {
       const navigate = useNavigate()

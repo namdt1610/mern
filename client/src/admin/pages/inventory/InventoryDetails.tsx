@@ -1,9 +1,13 @@
 import React, {useEffect, useState} from 'react'
 import {useNavigate, useParams} from 'react-router-dom'
-import {useDeleteProductMutation, useGetProductByIdQuery, useUpdateProductMutation,} from 'services/ProductApi'
+import {
+    useDeleteProductMutation,
+    useGetProductByIdQuery,
+    useUpdateProductMutation,
+} from '@/services/ProductApi'
 import {Col, Empty, message, Row, Space} from 'antd'
-import LoadingError from 'components/LoadingError'
-import {Inventory} from 'types/Inventory'
+import LoadingError from '@/components/LoadingError'
+import {Inventory} from 'shared/types/Inventory'
 
 // Sub-components (you'll need to create these)
 import ProductActions from './InventoryDetailsActions'

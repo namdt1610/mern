@@ -149,7 +149,7 @@ export default function Users() {
                         text={status}
                     ></Badge>
                 ),
-                sorter: (a, b) => a.status.localeCompare(b.status),
+                sorter: (a, b) => a.status?.localeCompare(b.status ?? ''),
             },
             {
                 title: 'Action',
@@ -197,8 +197,10 @@ export default function Users() {
     if (isLoading || error) {
         return (
             <LoadingError
+                isLogin={!user}
                 isLoading={isLoading}
-                error={error}
+                isError={error}
+                
                 refetch={refetch}
             />
         )

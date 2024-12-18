@@ -1,8 +1,8 @@
 import React from 'react'
 import {useNavigate, useParams} from 'react-router-dom'
 import {Badge, Button, Card, Descriptions, Space, Table} from 'antd'
-import {useGetOrderByIdQuery} from 'services/OrderApi'
-import LoadingError from 'components/LoadingError'
+import {useGetOrderByIdQuery} from '@/services/OrderApi'
+import LoadingError from '@/components/LoadingError'
 import {ArrowLeftOutlined} from '@ant-design/icons'
 
 export default function OrderDetails() {
