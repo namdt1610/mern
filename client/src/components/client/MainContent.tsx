@@ -1,6 +1,9 @@
-import React, {useEffect, useState} from 'react'
-import {Button} from 'antd'
-import {useGetProductsQuery, useUpdateClickCountMutation,} from '@/services/ProductApi'
+import React, { useEffect, useState } from 'react'
+import { Button } from 'antd'
+import {
+    useGetProductsQuery,
+    useUpdateClickCountMutation,
+} from '@/services/ProductApi'
 import InfiniteScroll from 'react-infinite-scroll-component'
 
 export default function MainContent() {
@@ -9,7 +12,7 @@ export default function MainContent() {
     const [displayedProducts, setDisplayedProducts] = useState<any[]>([])
     const [hasMore, setHasMore] = useState(true)
     const itemsPerLoad = 8 // Number of items to load each time
-
+    const tempImg = '/public/img/bia1_thuong.webp'
     useEffect(() => {
         if (products) {
             setDisplayedProducts(products.slice(0, itemsPerLoad))
@@ -67,8 +70,12 @@ export default function MainContent() {
                                 className="p-4 bg-gray-100 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
                             >
                                 <img
-                                    className="rounded-lg w-full h-48 object-cover mb-4"
-                                    src={product.imageUrl}
+                                    className="rounded-lg object-cover mb-4"
+                                    src={
+                                        !product.imageUrl
+                                            ? `localhost:8888${product.imageUrl}`
+                                            : tempImg
+                                    }
                                     alt={product.name}
                                 />
                                 <h3 className="text-lg font-semibold text-gray-800">

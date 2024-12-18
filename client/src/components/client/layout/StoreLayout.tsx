@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import Header from '../Header'
 import Main from '../Main'
 import Footer from '../Footer'
-import MainContent from '@/client/pages/store/ListAllProduct'
+import MainContent from '@/client/pages/store/BookList'
 import BackToTop from '@/components/BackToTop'
 import Sidebar from './StoreSidebar'
 

@@ -6,6 +6,7 @@ import {
     BookFilled,
     BookOutlined,
     HomeOutlined,
+    LoginOutlined,
     ShoppingCartOutlined,
 } from '@ant-design/icons'
 import { Link, useNavigate } from 'react-router-dom'
@@ -49,13 +50,37 @@ const items = [
         link: '/podcasts',
         icon: <AudioFilled />,
     },
-    {
-        key: 'cart',
-        label: 'Cart',
-        link: `/cart/${userId}`,    
-        icon: <ShoppingCartOutlined />,
-    },
 ]
+
+const accountItems = userId
+    ? [
+          {
+              key: '6',
+              label: 'Cart',
+              link: `/cart/${userId}`,
+              icon: <ShoppingCartOutlined />,
+          },
+          {
+              key: '7',
+              label: 'Logout',
+              link: '/logout',
+              icon: <LoginOutlined />,
+          },
+      ]
+    : [
+          {
+              key: '8',
+              label: 'Login',
+              link: '/login',
+              icon: <LoginOutlined />,
+          },
+          {
+              key: '9',
+              label: 'Register',
+              link: '/register',
+              icon: <LoginOutlined />,
+          },
+      ]
 
 const Index = () => {
     const navigate = useNavigate()
@@ -64,22 +89,13 @@ const Index = () => {
 
     // Hàm xử lý điều hướng khi click vào menu item
     const handleMenuClick = (e: { key: string }) => {
-        const selectedItem = items.find((item) => item.key === e.key)
+        const allItems = [...items, ...accountItems] // Kết hợp cả 2 danh sách
+        const selectedItem = allItems.find((item) => item.key === e.key)
+        // console.log('Clicked item:', selectedItem)
         if (selectedItem?.link) {
             navigate(selectedItem.link) // Điều hướng tới link của item
         }
     }
-
-    // Hàm đăng xuất
-    const handleLogout = () => {
-        setIsLoggedIn(false)
-    }
-
-    // Hàm đăng nhập
-    const handleLogin = () => {
-        navigate('/login')
-    }
-
     useEffect(() => {
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 10) // Nếu cuộn xuống > 10px
@@ -91,7 +107,7 @@ const Index = () => {
 
     return (
         <Header
-            className={`sticky top-0 z-10 transition-all duration-300 ${
+            className={`sticky top-0 z-50 transition-all duration-300 ${
                 isScrolled
                     ? 'bg-white shadow-md backdrop-blur-md'
                     : 'bg-transparent'
@@ -100,9 +116,11 @@ const Index = () => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
+                padding: '0 20px',
             }}
         >
-            <div style={{ display: 'flex', alignItems: 'center' }}>
+            {/* Logo */}
+            <div style={{ flex: 'none' }}>
                 <Link to={'/'}>
                     <img
                         className="w-16 h-16"
@@ -111,31 +129,36 @@ const Index = () => {
                         loading="lazy"
                     />
                 </Link>
+            </div>
 
+            {/* Menu chính */}
+            <div style={{ flex: 1, margin: '0 20px', maxWidth: '70%' }}>
                 <Menu
                     theme="light"
                     mode="horizontal"
-                    onClick={handleMenuClick} // Thêm sự kiện onClick
+                    onClick={handleMenuClick}
                     items={items}
                     style={{
-                        flex: 1,
-                        minWidth: 0,
                         backgroundColor: 'transparent',
+                        borderBottom: 'none',
                     }}
                 />
             </div>
 
-            {/* Nút Login / Logout */}
-            <div>
-                {isLoggedIn ? (
-                    <Button onClick={handleLogout} type="primary" danger>
-                        Logout
-                    </Button>
-                ) : (
-                    <Button onClick={handleLogin} type="primary">
-                        Login
-                    </Button>
-                )}
+            {/* Menu tài khoản */}
+            <div style={{ flex: 1 }}>
+                <Menu
+                    theme="light"
+                    mode="horizontal"
+                    items={accountItems}
+                    onClick={handleMenuClick}
+                    style={{
+                        backgroundColor: 'transparent',
+                        borderBottom: 'none',
+                        alignItems: 'end',
+                        justifyContent: 'flex-end',
+                    }}
+                />
             </div>
         </Header>
     )

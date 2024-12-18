@@ -1,8 +1,17 @@
-import React, {useState} from 'react'
-import {useGetProductsQuery} from '@/services/ProductApi'
-import {useGetCategoriesQuery} from '@/services/CategoryApi'
-import {Button, Card, Col, Input, Pagination, Row, Select, Skeleton,} from 'antd'
-import {useNavigate} from 'react-router-dom'
+import React, { useState } from 'react'
+import { useGetProductsQuery } from '@/services/ProductApi'
+import { useGetCategoriesQuery } from '@/services/CategoryApi'
+import {
+    Button,
+    Card,
+    Col,
+    Input,
+    Pagination,
+    Row,
+    Select,
+    Skeleton,
+} from 'antd'
+import { useNavigate } from 'react-router-dom'
 
 const { Search } = Input
 const { Option } = Select
@@ -22,7 +31,7 @@ const ListAllProduct: React.FC<ListAllProductProps> = ({
     const [currentPage, setCurrentPage] = useState(1)
     const itemsPerPage = 16
     const nav = useNavigate()
-
+    const tempImg = '/public/img/bia1_thuong.webp'
     const handleSearch = (value: string) => {
         setSearchTerm(value)
         setCurrentPage(1)
@@ -72,7 +81,11 @@ const ListAllProduct: React.FC<ListAllProductProps> = ({
                 <Col span={8}>
                     <Search
                         placeholder="Search products"
-                        onSearch={handleSearch}
+                        allowClear
+                        onInput={(e: React.FormEvent<HTMLInputElement>) =>
+                            handleSearch(e.currentTarget.value)
+                        }
+                        onClear={() => handleSearch('')}
                         enterButton
                     />
                 </Col>
@@ -121,15 +134,16 @@ const ListAllProduct: React.FC<ListAllProductProps> = ({
                                       <img
                                           alt={product.name}
                                           src={
-                                              `localhost:8888${product.imageUrl}` ||
-                                              `/client/public/img/beethoven.webp`
+                                              !product.imageUrl
+                                                  ? `localhost:8888${product.imageUrl}`
+                                                  : tempImg
                                           }
                                       />
                                   }
                               >
                                   <Card.Meta
                                       title={product.name}
-                                      description={`$${product.price}`}
+                                      description={`${product.price} đ`}
                                   />
                                   <Button
                                       onClick={() => nav(`/${product._id}`)}

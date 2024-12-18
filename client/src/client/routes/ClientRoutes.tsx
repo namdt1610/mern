@@ -3,10 +3,10 @@ import { Route, Routes } from 'react-router-dom'
 import ProtectedRoute from '../../components/auth/ProtectedRoute'
 import { Spin } from 'antd'
 
-const Login = lazy(() => import('../pages/auth/Login/Login'))
+const Login = lazy(() => import('../pages/auth/Login/LoginClientPage'))
 const Signup = lazy(() => import('../pages/auth/Register/Register'))
 const HomePage = lazy(() => import('../pages/home/HomePage'))
-const Store = lazy(() => import('../pages/store/StoreIndex'))
+const Store = lazy(() => import('../pages/store/StorePage'))
 const ErrorPage = lazy(() => import('../pages/other/404'))
 const CheckoutPage = lazy(() => import('../pages/checkout/CheckoutPage'))
 const User = lazy(() => import('../pages/user/index'))

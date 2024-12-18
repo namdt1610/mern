@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import {
     Form,
     Input,
@@ -7,15 +7,18 @@ import {
     List,
     Divider,
     Typography,
-    Empty,
     Select,
     Radio,
+    message,
+    Flex,
+    Image,
 } from 'antd'
 import { useGetUserIdFromCookie } from '@/utils/useGetToken'
 import { useGetCartQuery } from '@/services/CartApi'
 import { useCreateOrderMutation } from '@/services/OrderApi'
-import { useGetPaymentMethodsQuery } from '@/services/PaymentMethod'
-import { Cart, CartDetails } from '@shared/types/Cart'
+import { useGetPaymentMethodsQuery } from '@/services/PaymentMethodApi'
+import { useGetBanksQuery } from '@/services/VietQrApi'
+import { CartDetails } from '@shared/types/Cart'
 import LoadingError from '@/components/LoadingError'
 import MainLayout from '@/components/client/layout/MainLayout'
 
@@ -23,9 +26,18 @@ const CheckoutPage: React.FC = () => {
     const userId = useGetUserIdFromCookie()
     const { data: cart } = useGetCartQuery(userId!)
     const [createOrder, { isLoading, isError }] = useCreateOrderMutation()
-    const { data: paymentMethods } = useGetPaymentMethodsQuery()
+    // const { data: paymentMethods } = useGetPaymentMethodsQuery()
     const [isSubmitting, setIsSubmitting] = useState(false)
+    const { data: banks, error, isLoading: isBanksLoading } = useGetBanksQuery()
+
     const [form] = Form.useForm()
+    const [paymentMethod, setPaymentMethod] = useState<string>('COD')
+    const [qrCode, setQrCode] = useState<string | null>(null)
+    const [bankCode, setBankCode] = useState<string | null>(null)
+    const [amount, setAmount] = useState<number>(0)
+
+    //! Debug
+    // console.log(banks)
 
     if (!cart) {
         return (
@@ -39,6 +51,69 @@ const CheckoutPage: React.FC = () => {
                 />
             </MainLayout>
         )
+    }
+
+    if (!banks) {
+        return (
+            <MainLayout>
+                <LoadingError
+                    isLogin={userId !== ''}
+                    isError={error !== undefined}
+                    isLoading={isBanksLoading}
+                    refetch={undefined}
+                    title={'Tải danh sách ngân hàng thất bại'}
+                />
+            </MainLayout>
+        )
+    }
+
+    const handlePaymentMethodChange = (e: any) => {
+        setPaymentMethod(e.target.value)
+        if (e.target.value === 'QRCode') {
+            setAmount(cart?.totalPrice || 0)
+            handleGenerateQrCode()
+        }
+    }
+
+    const handleGenerateQrCode = async () => {
+        console.log('Generate QR code:', amount)
+
+        // if (amount <= 0) return
+
+        const requestBody = {
+            accountNo: '0764872970', // Số tài khoản
+            accountName: 'DANG TRAN NAM', // Tên tài khoản
+            acqId: '970422', // ID thu nhận
+            addInfo: 'CHUYEN KHOAN QUA NGAN HANG', // Thông tin bổ sung
+            amount: amount.toString(),
+            template: 'print', // Loại template
+        }
+
+        try {
+            const response = await fetch('https://api.vietqr.io/v2/generate', {
+                method: 'POST',
+                headers: {
+                    'x-client-id': '<CLIENT_ID_HERE>', // Thay CLIENT_ID_HERE bằng ID của bạn
+                    'x-api-key': '<API_KEY_HERE>', // Thay API_KEY_HERE bằng API key của bạn
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestBody),
+            })
+
+            if (!response.ok) {
+                throw new Error('Failed to generate QR code')
+            }
+
+            const result = await response.json()
+            // console.log('response:', result.data.qrDataURL)
+            setQrCode(result.data.qrDataURL)
+            // console.log('QR Code: ', qrCode)
+
+            message.success('Mã QR đã được tạo thành công!')
+        } catch (err) {
+            console.error('Error generating QR code:', err)
+            message.error('Lỗi tạo mã QR. Vui lòng thử lại.')
+        }
     }
 
     const handleCheckout = async () => {
@@ -118,7 +193,11 @@ const CheckoutPage: React.FC = () => {
                 </Card>
 
                 <Card title="Thông tin giao hàng" style={{ marginTop: 20 }}>
-                    <Form layout="vertical" onFinish={handleCheckout}>
+                    <Form
+                        form={form}
+                        layout="vertical"
+                        onFinish={handleCheckout}
+                    >
                         <Form.Item
                             label="Họ và tên"
                             name="name"
@@ -170,29 +249,86 @@ const CheckoutPage: React.FC = () => {
                                 },
                             ]}
                         >
-                            <Form.Item>
-                                <Radio.Group>
-                                    <Radio value="COD">COD</Radio>
-                                    <Radio value="BankTransfer">
-                                        Chuyển khoản
-                                    </Radio>
-                                </Radio.Group>
-                            </Form.Item>
-                            {form.getFieldValue('paymentMethod') ===
-                                'BankTransfer' && (
-                                <Select placeholder="Chuyển khoản ngân hàng">
-                                    {paymentMethods?.map((method) => (
+                            <Radio.Group onChange={handlePaymentMethodChange}>
+                                <Radio value="{'COD'}">COD</Radio>
+                                <Radio value={'QRCode'}>QR Code</Radio>
+                                <Radio value={'Momo'}>Momo</Radio>
+                                <Radio value={'ZaloPay'}>ZaloPay</Radio>
+                                <Radio value={'VN Pay'}>VN Pay</Radio>
+                                <Radio value={'Visa'}>Visa</Radio>
+                            </Radio.Group>
+                        </Form.Item>
+                        {form.getFieldValue('paymentMethod') === 'QRCode' && (
+                            <Flex>
+                                <h4>Mã QR của bạn:</h4>
+                                {qrCode ? (
+                                    <Image src={qrCode} alt="QR Code" />
+                                ) : (
+                                    <p>Invalid QR code string</p>
+                                )}
+                            </Flex>
+                        )}
+                        <div
+                            className={`transition-all duration-500 overflow-hidden ${
+                                form.getFieldValue('paymentMethod') === 'Visa'
+                                    ? 'max-h-full opacity-100'
+                                    : 'max-h-0 opacity-0'
+                            }`}
+                        >
+                            <Form.Item
+                                label="Chọn ngân hàng"
+                                name="bankMethod"
+                                rules={[
+                                    {
+                                        required:
+                                            form.getFieldValue(
+                                                'paymentMethod'
+                                            ) === 'Visa',
+                                        message: 'Vui lòng chọn ngân hàng!',
+                                    },
+                                ]}
+                            >
+                                <Select placeholder="Chọn ngân hàng">
+                                    {banks.data.map((bank: any) => (
                                         <Select.Option
-                                            key={method._id}
-                                            value={method._id}
+                                            key={bank.code}
+                                            value={bank.code}
                                         >
-                                            {method.name}
+                                            {bank.name}
                                         </Select.Option>
                                     ))}
-                                    Chọn phương thức thanh toán
                                 </Select>
-                            )}
-                        </Form.Item>
+                            </Form.Item>
+                            <Form.Item>
+                                <Input
+                                    placeholder="Nhập số thẻ"
+                                    prefix={<i className="fab fa-cc-visa"></i>}
+                                    accept="number"
+                                />
+                            </Form.Item>
+                            <Form.Item>
+                                <Input
+                                    placeholder="Nhập tên chủ thẻ"
+                                    accept="text"
+                                />
+                            </Form.Item>
+                            <Form.Item>
+                                <Input
+                                    placeholder="Nhập ngày hết hạn"
+                                    accept="text"
+                                />
+                            </Form.Item>
+                            <Form.Item>
+                                <Input
+                                    placeholder="Nhập mã CVV"
+                                    accept="number"
+                                />
+                            </Form.Item>
+                            <Form.Item>
+                                <Input placeholder="Nhập OTP" accept="number" />
+                            </Form.Item>
+                        </div>
+
                         <Button
                             type="primary"
                             htmlType="submit"

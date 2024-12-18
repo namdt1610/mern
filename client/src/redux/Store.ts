@@ -8,7 +8,8 @@ import { orderApi } from '@/services/OrderApi'
 import { cartApi } from '@/services/CartApi'
 import { inventoryApi } from '@/services/InventoryApi'
 import { customerApi } from '@/services/CustomerApi'
-import { paymentMethodApi } from '@/services/PaymentMethod'
+import { paymentMethodApi } from '@/services/PaymentMethodApi'
+import { vietQrApi } from '@/services/VietQrApi'
 import userReducer from './userSlice'
 
 const store = configureStore({
@@ -23,6 +24,7 @@ const store = configureStore({
         [inventoryApi.reducerPath]: inventoryApi.reducer,
         [customerApi.reducerPath]: customerApi.reducer,
         [paymentMethodApi.reducerPath]: paymentMethodApi.reducer,
+        [vietQrApi.reducerPath]: vietQrApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware().concat(
@@ -34,7 +36,8 @@ const store = configureStore({
             cartApi.middleware,
             inventoryApi.middleware,
             customerApi.middleware,
-            paymentMethodApi.middleware
+            paymentMethodApi.middleware,
+            vietQrApi.middleware
         ),
 })
 
