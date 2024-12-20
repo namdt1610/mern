@@ -1,7 +1,7 @@
 import React from 'react'
 import {Button, Card, message, Space} from 'antd'
 import {CheckOutlined} from '@ant-design/icons'
-import {useUpdateOrderStatusMutation} from 'services/OrderApi'
+import {useUpdateOrderStatusMutation} from '@/services/OrderApi'
 
 interface OrderDetailsActionsProps {
       orderId: string

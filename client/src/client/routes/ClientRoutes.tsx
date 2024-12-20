@@ -3,6 +3,8 @@ import { Route, Routes } from 'react-router-dom'
 import ProtectedRoute from '../../components/auth/ProtectedRoute'
 import { Spin } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
+import OrderStatusPage from '../pages/order/OrderStatusPage'
+import OrderDetailsPage from '../pages/order/OrderDetailsPage'
 
 const LoginPage = lazy(() => import('../pages/auth/Login/LoginClientPage'))
 const RegisterPage = lazy(() => import('../pages/auth/Register/Register'))
@@ -13,6 +15,7 @@ const CheckoutPage = lazy(() => import('../pages/checkout/CheckoutPage'))
 const User = lazy(() => import('../pages/user/index'))
 const BookDetailsPage = lazy(() => import('../pages/store/ProductDetails'))
 const CartPage = lazy(() => import('../pages/cart/CartPage'))
+const OrderPage = lazy(() => import('../pages/order/OrderStatusPage'))
 
 export default function ClientRoutes() {
     return (
@@ -34,7 +37,7 @@ export default function ClientRoutes() {
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/" element={<HomePage />} />
                 <Route path="books" element={<StorePage />} />
-                
+
                 <Route path="/:id" element={<BookDetailsPage />} />
                 <Route path="/cart/:id" element={<>{<CartPage />}</>} />
                 <Route
@@ -45,6 +48,8 @@ export default function ClientRoutes() {
                         </>
                     }
                 />
+                <Route path="/orders" element={<OrderStatusPage />} />
+                <Route path="/order/:id" element={<OrderDetailsPage />} />
                 <Route
                     path="/user"
                     element={

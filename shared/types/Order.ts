@@ -1,5 +1,6 @@
 export interface OrderItems {
     product: string
+    image: string
     name: string
     quantity: number
     price: number
@@ -11,9 +12,9 @@ export interface Order {
     orderItems: OrderItems[]
     shippingAddress: {
         address: string
-        city: string
-        postalCode: string
-        country: string
+        ward: string
+        district: string
+        province: string
     }
     paymentMethod: string
     paymentResult?: {
@@ -44,9 +45,9 @@ export interface CreateOrderRequest {
     }>
     shippingAddress: {
         address: string
-        city: string
-        postalCode: string
-        country: string
+        ward: string
+        district: string
+        province: string
     }
     paymentMethod: string
     itemsPrice: number

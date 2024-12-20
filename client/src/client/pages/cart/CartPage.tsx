@@ -1,13 +1,12 @@
-// components/CartDetail.tsx
-import React, { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
     useGetCartQuery,
     useUpdateCartItemMutation,
     useRemoveCartItemMutation,
 } from '@/services/CartApi'
 import { getUserFromCookie } from '@/utils/useGetToken'
-import { Button, Empty, List, Typography, Table, InputNumber, Flex } from 'antd'
+import { Button, Empty, Typography, Table, InputNumber, Flex } from 'antd'
 import { DeleteOutlined } from '@ant-design/icons'
 import MainLayout from '@/components/client/layout/MainLayout'
 import LoadingError from '@/components/LoadingError'

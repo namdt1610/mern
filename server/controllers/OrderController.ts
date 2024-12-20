@@ -1,10 +1,11 @@
-import {Request, Response} from 'express'
+import { Request, Response } from 'express'
 import Order from '../models/OrderModel'
 
 export const OrderController = {
     // Create a new order
     createOrder: async (req: Request, res: Response) => {
         try {
+            console.log(req.body)
             const newOrder = new Order(req.body)
             const savedOrder = await newOrder.save()
             res.status(201).json(savedOrder)
@@ -21,19 +22,27 @@ export const OrderController = {
             res.status(200).json(orders)
         } catch (error) {
             res.status(500).json({ message: 'Error fetching orders', error })
+            return
         }
     },
 
     // Get order by ID
     getOrderById: async (req: Request, res: Response): Promise<void> => {
         try {
-            const order = await Order.findById(req.params.id)
+            console.log('Order ID: ', req.params.id)
+            const order = await Order.findById(req.params.id).populate({
+                path: 'user',
+                select: 'name phone',
+            })
+            console.log('Oder: ', order)
             if (!order) {
                 res.status(404).json({ message: 'Order not found' })
+                return
             }
             res.status(200).json(order)
         } catch (error) {
             res.status(500).json({ message: 'Error fetching order', error })
+            return
         }
     },
 

@@ -7,20 +7,16 @@ import { setUserId } from '../redux/userSlice'
 
 // Lấy userId từ cookie rồi dispatch vào store
 export const useGetUserIdFromCookie = () => {
-    const dispatch = useDispatch()
     const token = Cookies.get('user')
     if (token) {
         try {
             const user = decodeToken(token)
-            dispatch(setUserId(user!._id))
-            localStorage.setItem('userId', user!._id)
             return user!._id
         } catch (e) {
             console.error('Error decoding token:', e)
             return null
         }
     }
-    return localStorage.getItem('userId')
 }
 
 // Lấy thông tin người dùng từ cookie

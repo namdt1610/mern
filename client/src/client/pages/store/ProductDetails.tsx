@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useGetProductByIdQuery } from '@/services/ProductApi'
 import { useAddToCartMutation } from '@/services/CartApi'
-import { useSelector } from 'react-redux'
-import { RootState } from '@/redux/Store'
 import { useGetUserIdFromCookie } from '@/utils/useGetToken'
 
 import {
@@ -13,8 +11,14 @@ import {
     Input,
     InputNumber,
     List,
+    message,
     Spin,
     Typography,
+    Row,
+    Col,
+    Divider,
+    Rate,
+    Tooltip,
 } from 'antd'
 import MainLayout from '@/components/client/layout/MainLayout'
 import toast from 'react-hot-toast'
@@ -66,7 +70,6 @@ const BookDetail: React.FC = () => {
     }
 
     const handleAddToCart = async () => {
-        // setInCart(true)
         if (!userId) {
             toast.error('Please log in to add to cart')
             throw new Error('User not logged in')
@@ -75,13 +78,14 @@ const BookDetail: React.FC = () => {
             console.error('Book not found')
             throw new Error('Book not found')
         }
-        console.log(id)
 
         try {
             await addToCart({
                 userId,
                 item: { product_id: id, quantity: 1 },
             }).unwrap()
+            message.success('Added to cart')
+            setInCart(true)
         } catch (error) {
             toast.error('Failed to add to cart')
         }
@@ -113,113 +117,138 @@ const BookDetail: React.FC = () => {
                 {isLoading ? (
                     <Spin className="flex justify-center items-center h-full" />
                 ) : (
-                    <Card
-                        cover={
-                            <img
-                                alt={book.name}
-                                src={`localhost:8888${book.imageUrl}`}
-                            />
-                        }
-                        style={{ width: 300, margin: '0 auto' }}
-                    >
-                        <Card.Meta
-                            title={<Title level={3}>{book.name}</Title>}
-                            description={
-                                <>
-                                    <Text strong>Author: </Text>
-                                    <Text>{book.author}</Text>
-                                    <br />
-                                    <Text strong>Price: </Text>
-                                    <Text>${book.price}</Text>
-                                    <br />
-                                    <Text strong>Description: </Text>
-                                    <Text>{book.description}</Text>
-                                </>
-                            }
-                        />
-                        {!book.stock ? (
-                            <>
-                                <Text type="success">In Stock</Text>
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: 8,
-                                    }}
-                                >
-                                    <Button
-                                        onClick={handleDecrease}
-                                        disabled={book.stock <= 1}
-                                    >
-                                        -
-                                    </Button>
-                                    <InputNumber
-                                        min={1}
-                                        value={quantity}
-                                        onChange={handleChange}
-                                        style={{ width: 70 }}
+                    <Row gutter={16}>
+                        <Col xs={24} md={12}>
+                            <Card
+                                cover={
+                                    <img
+                                        alt={book.name}
+                                        src={`localhost:8888${book.imageUrl}`}
+                                        style={{
+                                            objectFit: 'cover',
+                                            height: '400px',
+                                            borderRadius: '8px',
+                                        }}
                                     />
-
-                                    <Button onClick={handleIncrease}>+</Button>
-                                </div>
-                            </>
-                        ) : (
-                            <Text type="danger">Out of Stock</Text>
-                        )}
-                        <Button
-                            type="primary"
-                            style={{ marginTop: '16px' }}
-                            onClick={handleAddToCart}
-                            // disabled={book.stock}
-                        >
-                            {inCart ? 'Added to Cart' : 'Add to Cart'}
-                        </Button>
-                        <Button
-                            type="default"
-                            style={{ marginTop: '8px', marginLeft: '8px' }}
-                            onClick={handleAddToFavorites}
-                            disabled={inFavorites}
-                        >
-                            {inFavorites ? 'Favorited' : 'Add to Favorites'}
-                        </Button>
-                        <Button
-                            type="primary"
-                            style={{ marginTop: '16px' }}
-                            onClick={() => nav('/books')}
-                        >
-                            Back to Books
-                        </Button>
-                    </Card>
-                )}
-
-                <div style={{ marginTop: '24px' }}>
-                    <Title level={4}>Comments</Title>
-                    <List
-                        itemLayout="horizontal"
-                        dataSource={comments}
-                        renderItem={(comment) => (
-                            <List.Item>
-                                <List.Item.Meta
-                                    title={comment.author}
-                                    description={comment.content}
+                                }
+                                style={{
+                                    marginBottom: '24px',
+                                    borderRadius: '8px',
+                                }}
+                            >
+                                <Card.Meta
+                                    title={<Title level={3}>{book.name}</Title>}
+                                    description={
+                                        <>
+                                            <Text strong>Author: </Text>
+                                            <Text>{book.author}</Text>
+                                            <br />
+                                            <Text strong>Price: </Text>
+                                            <Text>${book.price}</Text>
+                                            <br />
+                                            <Text strong>Description: </Text>
+                                            <Text>{book.description}</Text>
+                                        </>
+                                    }
                                 />
-                            </List.Item>
-                        )}
-                    />
-                    <Input.TextArea
-                        rows={4}
-                        value={newComment}
-                        onChange={(e) => setNewComment(e.target.value)}
-                        placeholder="Add a comment..."
-                    />
-                    <Button
-                        type="primary"
-                        style={{ marginTop: '8px' }}
-                        onClick={handleNewComment}
-                    >
-                        Add Comment
-                    </Button>
-                </div>
+                                <Divider />
+
+                                {!book.stock ? (
+                                    <>
+                                        <Text type="success">In Stock</Text>
+                                        <div
+                                            style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: 8,
+                                                marginTop: '16px',
+                                            }}
+                                        >
+                                            <Button
+                                                onClick={handleDecrease}
+                                                disabled={book.stock <= 1}
+                                            >
+                                                -
+                                            </Button>
+                                            <InputNumber
+                                                min={1}
+                                                value={quantity}
+                                                onChange={handleChange}
+                                                style={{ width: 70 }}
+                                            />
+                                            <Button onClick={handleIncrease}>
+                                                +
+                                            </Button>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <Text type="danger">Out of Stock</Text>
+                                )}
+                                <Button
+                                    type="primary"
+                                    style={{ marginTop: '16px', width: '100%' }}
+                                    onClick={handleAddToCart}
+                                    disabled={!book.stock}
+                                >
+                                    {inCart ? 'Added to Cart' : 'Add to Cart'}
+                                </Button>
+                                <Button
+                                    type="default"
+                                    style={{
+                                        marginTop: '8px',
+                                        width: '100%',
+                                    }}
+                                    onClick={handleAddToFavorites}
+                                    disabled={inFavorites}
+                                >
+                                    {inFavorites
+                                        ? 'Favorited'
+                                        : 'Add to Favorites'}
+                                </Button>
+                                <Button
+                                    type="primary"
+                                    style={{ marginTop: '16px', width: '100%' }}
+                                    onClick={() => nav('/books')}
+                                >
+                                    Back to Books
+                                </Button>
+                            </Card>
+                        </Col>
+                        <Col xs={24} md={12}>
+                            <div style={{ marginTop: '24px' }}>
+                                <Title level={4}>Comments</Title>
+                                <List
+                                    itemLayout="horizontal"
+                                    dataSource={comments}
+                                    renderItem={(comment) => (
+                                        <List.Item>
+                                            <List.Item.Meta
+                                                title={comment.author}
+                                                description={comment.content}
+                                            />
+                                        </List.Item>
+                                    )}
+                                />
+                                <TextArea
+                                    rows={4}
+                                    value={newComment}
+                                    onChange={(e) =>
+                                        setNewComment(e.target.value)
+                                    }
+                                    placeholder="Add a comment..."
+                                    style={{ marginTop: '16px' }}
+                                />
+                                <Button
+                                    type="primary"
+                                    style={{ marginTop: '8px', width: '100%' }}
+                                    onClick={handleNewComment}
+                                >
+                                    Add Comment
+                                </Button>
+                            </div>
+                        </Col>
+                    </Row>
+                )}
             </div>
         </MainLayout>
     )

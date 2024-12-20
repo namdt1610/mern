@@ -21,6 +21,7 @@ import { useGetBanksQuery } from '@/services/VietQrApi'
 import { CartDetails } from '@shared/types/Cart'
 import LoadingError from '@/components/LoadingError'
 import MainLayout from '@/components/client/layout/MainLayout'
+import { useGetProvincesQuery } from '@/services/OpenApi'
 
 const CheckoutPage: React.FC = () => {
     const userId = useGetUserIdFromCookie()
@@ -29,6 +30,7 @@ const CheckoutPage: React.FC = () => {
     // const { data: paymentMethods } = useGetPaymentMethodsQuery()
     const [isSubmitting, setIsSubmitting] = useState(false)
     const { data: banks, error, isLoading: isBanksLoading } = useGetBanksQuery()
+    const { data: provinces } = useGetProvincesQuery()
 
     const [form] = Form.useForm()
     const [paymentMethod, setPaymentMethod] = useState<string>('COD')
@@ -36,8 +38,15 @@ const CheckoutPage: React.FC = () => {
     const [bankCode, setBankCode] = useState<string | null>(null)
     const [amount, setAmount] = useState<number>(0)
 
+    const [selectedProvince, setSelectedProvince] = useState<string | null>(
+        null
+    )
+    const [districts, setDistricts] = useState<any[]>([])
+    const [wards, setWards] = useState<any[]>([])
+
     //! Debug
     // console.log(banks)
+    console.log(provinces)
 
     if (!cart) {
         return (
@@ -53,7 +62,7 @@ const CheckoutPage: React.FC = () => {
         )
     }
 
-    if (!banks) {
+    if (!banks || !provinces) {
         return (
             <MainLayout>
                 <LoadingError
@@ -61,10 +70,23 @@ const CheckoutPage: React.FC = () => {
                     isError={error !== undefined}
                     isLoading={isBanksLoading}
                     refetch={undefined}
-                    title={'Tải danh sách ngân hàng thất bại'}
+                    title={'Tải thất bại'}
                 />
             </MainLayout>
         )
+    }
+
+    const handleProvinceChange = (value: string) => {
+        const province = provinces.find((p: any) => p.name === value)
+        setSelectedProvince(value)
+        setDistricts(province?.districts || [])
+        setWards([]) // Reset phường/xã khi đổi tỉnh
+        form.setFieldsValue({ district: null, ward: null }) // Xóa các lựa chọn quận/huyện và phường/xã
+    }
+    const handleDistrictChange = (value: string) => {
+        const district = districts.find((d: any) => d.name === value)
+        setWards(district?.wards || [])
+        form.setFieldsValue({ ward: null }) // Xóa lựa chọn phường/xã
     }
 
     const handlePaymentMethodChange = (e: any) => {
@@ -74,7 +96,6 @@ const CheckoutPage: React.FC = () => {
             handleGenerateQrCode()
         }
     }
-
     const handleGenerateQrCode = async () => {
         console.log('Generate QR code:', amount)
 
@@ -119,16 +140,6 @@ const CheckoutPage: React.FC = () => {
     const handleCheckout = async () => {
         setIsSubmitting(true)
         const values = form.getFieldsValue()
-        const {
-            name,
-            phone,
-            address,
-            city,
-            postalCode,
-            country,
-            paymentMethod,
-            bankMethod,
-        } = values
 
         const itemsPrice = cart.products.reduce(
             (acc, item) => acc + item.product.price * item.quantity,
@@ -149,14 +160,22 @@ const CheckoutPage: React.FC = () => {
             await createOrder({
                 user: userId!,
                 orderItems,
-                shippingAddress: values.shippingAddress,
+                shippingAddress: {
+                    address: values.address,
+                    ward: values.ward,
+                    district: values.district,
+                    province: values.province,
+                },
                 paymentMethod: values.paymentMethod,
                 itemsPrice,
                 taxPrice,
                 shippingPrice,
                 totalPrice,
-            })
+            }).unwrap()
+            message.success('Đặt hàng thành công!')
+            setIsSubmitting(false)
         } catch (error) {
+            message.error('Đặt hàng thất bại!')
             console.error('Failed to checkout:', error)
         }
     }
@@ -222,8 +241,81 @@ const CheckoutPage: React.FC = () => {
                             <Input />
                         </Form.Item>
                         <Form.Item
+                            label="Tỉnh/Thành phố"
+                            name="province"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Vui lòng nhập tỉnh/thành phố!',
+                                },
+                            ]}
+                        >
+                            <Select
+                                placeholder="Chọn tỉnh/thành phố"
+                                onChange={handleProvinceChange}
+                            >
+                                {provinces.map((province: any) => (
+                                    <Select.Option
+                                        key={province.code}
+                                        value={province.name}
+                                    >
+                                        {province.name}
+                                    </Select.Option>
+                                ))}
+                            </Select>
+                        </Form.Item>
+                        <Form.Item
+                            label="Quận/Huyện"
+                            name="district"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Vui lòng nhập quận/huyện!',
+                                },
+                            ]}
+                        >
+                            <Select
+                                placeholder="Chọn quận/huyện"
+                                onChange={handleDistrictChange}
+                                disabled={!selectedProvince}
+                            >
+                                {districts.map((district: any) => (
+                                    <Select.Option
+                                        key={district.code}
+                                        value={district.name}
+                                    >
+                                        {district.name}
+                                    </Select.Option>
+                                ))}
+                            </Select>
+                        </Form.Item>
+                        <Form.Item
+                            label="Phường/Xã"
+                            name="ward"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Vui lòng nhập phường/xã!',
+                                },
+                            ]}
+                        >
+                            <Select
+                                placeholder="Chọn phường/xã"
+                                disabled={wards.length === 0}
+                            >
+                                {wards.map((ward: any) => (
+                                    <Select.Option
+                                        key={ward.code}
+                                        value={ward.name}
+                                    >
+                                        {ward.name}
+                                    </Select.Option>
+                                ))}
+                            </Select>
+                        </Form.Item>
+                        <Form.Item
                             label="Địa chỉ giao hàng"
-                            name="shippingAddress"
+                            name="address"
                             rules={[
                                 {
                                     required: true,
@@ -233,7 +325,7 @@ const CheckoutPage: React.FC = () => {
                         >
                             <Input.TextArea />
                         </Form.Item>
-                        
+
                         <Form.Item
                             label="Chọn phương thức thanh toán"
                             name="paymentMethod"
@@ -246,7 +338,7 @@ const CheckoutPage: React.FC = () => {
                             ]}
                         >
                             <Radio.Group onChange={handlePaymentMethodChange}>
-                                <Radio value="{'COD'}">COD</Radio>
+                                <Radio value={'COD'}>COD</Radio>
                                 <Radio value={'QRCode'}>QR Code</Radio>
                                 <Radio value={'Momo'}>Momo</Radio>
                                 <Radio value={'ZaloPay'}>ZaloPay</Radio>

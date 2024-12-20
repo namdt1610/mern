@@ -21,10 +21,8 @@ export const orderApi = createApi({
 
         // Lấy chi tiết đơn hàng theo ID
         getOrderById: builder.query<Order, string>({
-            query: (userId) => `/orders/${userId}`,
-            providesTags: (result, error, orderId) => [
-                { type: 'Order', id: orderId },
-            ],
+            query: (orderId) => `/orders/${orderId}`,
+            providesTags: ['Order'],
         }),
 
         // Tạo đơn hàng mới

@@ -11,14 +11,17 @@ const orderSchema = new Schema<Order>(
         orderItems: [
             {
                 product: { type: String, required: true, ref: 'Product' },
+                image: { type: String },
                 name: { type: String, required: true },
                 quantity: { type: Number, required: true },
                 price: { type: Number, required: true },
             },
         ],
         shippingAddress: {
-            type: String,
-            required: true,
+            address: { type: String, required: true },
+            ward: { type: String, required: true },
+            district: { type: String, required: true },
+            province: { type: String, required: true },
         },
         paymentMethod: {
             type: String,
