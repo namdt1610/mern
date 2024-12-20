@@ -2,15 +2,16 @@ import React, { lazy, Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import ProtectedRoute from '../../components/auth/ProtectedRoute'
 import { Spin } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons'
 
-const Login = lazy(() => import('../pages/auth/Login/LoginClientPage'))
-const Signup = lazy(() => import('../pages/auth/Register/Register'))
+const LoginPage = lazy(() => import('../pages/auth/Login/LoginClientPage'))
+const RegisterPage = lazy(() => import('../pages/auth/Register/Register'))
 const HomePage = lazy(() => import('../pages/home/HomePage'))
-const Store = lazy(() => import('../pages/store/StorePage'))
-const ErrorPage = lazy(() => import('../pages/other/404'))
+const StorePage = lazy(() => import('../pages/store/StorePage'))
+const NotFound = lazy(() => import('../pages/other/404'))
 const CheckoutPage = lazy(() => import('../pages/checkout/CheckoutPage'))
 const User = lazy(() => import('../pages/user/index'))
-const ProductDetails = lazy(() => import('../pages/store/ProductDetails'))
+const BookDetailsPage = lazy(() => import('../pages/store/ProductDetails'))
 const CartPage = lazy(() => import('../pages/cart/CartPage'))
 
 export default function ClientRoutes() {
@@ -18,23 +19,24 @@ export default function ClientRoutes() {
         <Suspense
             fallback={
                 <Spin
+                    delay={500}
                     fullscreen
-                    percent={'auto'}
                     tip={'Loading'}
+                    indicator={
+                        <LoadingOutlined style={{ fontSize: 48 }} spin />
+                    }
                     size="large"
                 ></Spin>
             }
         >
             <Routes>
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Signup />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<RegisterPage />} />
                 <Route path="/" element={<HomePage />} />
-                <Route path="books" element={<Store />} />
-                <Route path="/:id" element={<ProductDetails />} />
-                <Route  
-                    path="/cart/:id"
-                    element={<>{<CartPage />}</>}
-                />
+                <Route path="books" element={<StorePage />} />
+                
+                <Route path="/:id" element={<BookDetailsPage />} />
+                <Route path="/cart/:id" element={<>{<CartPage />}</>} />
                 <Route
                     path="/checkout/:id"
                     element={
@@ -51,7 +53,7 @@ export default function ClientRoutes() {
                         </ProtectedRoute>
                     }
                 />
-                <Route path="/*" element={<ErrorPage />} />
+                <Route path="/*" element={<NotFound />} />
             </Routes>
         </Suspense>
     )

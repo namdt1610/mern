@@ -50,7 +50,7 @@ const CartPage: React.FC = () => {
         }
     }
 
-    if (isLoading) {
+    if (isLoading || isError) {
         return (
             <MainLayout>
                 <LoadingError
@@ -143,7 +143,10 @@ const CartPage: React.FC = () => {
                         </Button>
                     </Empty>
                 )}
-                <Button type="primary" onClick={() => nav(`/checkout/${userId}`)}>
+                <Button
+                    type="primary"
+                    onClick={() => nav(`/checkout/${userId}`)}
+                >
                     Checkout
                 </Button>
                 <Button

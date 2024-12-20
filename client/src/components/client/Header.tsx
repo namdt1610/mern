@@ -19,7 +19,7 @@ console.log(user)
 const userId = user?._id || null
 console.log('userId', userId)
 
-const items = [
+const navItems = [
     {
         key: '1',
         label: 'Home',
@@ -28,25 +28,25 @@ const items = [
     },
     {
         key: '2',
-        label: 'Book',
+        label: 'Books',
         link: '/books',
         icon: <BookFilled />,
     },
     {
         key: '3',
-        label: 'Ebook',
+        label: 'Ebooks',
         link: '/ebooks',
         icon: <BookOutlined />,
     },
     {
         key: '4',
-        label: 'Audio Book',
+        label: 'Audio Books',
         link: '/audio-books',
         icon: <AudioOutlined />,
     },
     {
         key: '5',
-        label: 'Podcast',
+        label: 'Podcasts',
         link: '/podcasts',
         icon: <AudioFilled />,
     },
@@ -89,7 +89,7 @@ const Index = () => {
 
     // Hàm xử lý điều hướng khi click vào menu item
     const handleMenuClick = (e: { key: string }) => {
-        const allItems = [...items, ...accountItems] // Kết hợp cả 2 danh sách
+        const allItems = [...navItems, ...accountItems] // Kết hợp cả 2 danh sách
         const selectedItem = allItems.find((item) => item.key === e.key)
         // console.log('Clicked item:', selectedItem)
         if (selectedItem?.link) {
@@ -137,7 +137,7 @@ const Index = () => {
                     theme="light"
                     mode="horizontal"
                     onClick={handleMenuClick}
-                    items={items}
+                    items={navItems}
                     style={{
                         backgroundColor: 'transparent',
                         borderBottom: 'none',

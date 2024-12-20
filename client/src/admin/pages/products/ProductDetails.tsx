@@ -1,8 +1,26 @@
-import React, {useState} from 'react'
-import {useNavigate, useParams} from 'react-router-dom'
-import {useGetProductByIdQuery, useUpdateProductMutation,} from '@/services/ProductApi' // Giả sử API này trả về dữ liệu sản phẩm
-import {Button, Card, Empty, Form, Image, Input, message, Space, Spin, Typography, Upload, UploadProps,} from 'antd'
-import {RcFile} from 'antd/es/upload'
+import React, { useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import {
+    useGetProductByIdQuery,
+    useUpdateProductMutation,
+} from '@/services/ProductApi' // Giả sử API này trả về dữ liệu sản phẩm
+import { useGetCategoriesQuery } from '@/services/CategoryApi'
+import {
+    Button,
+    Card,
+    Empty,
+    Form,
+    Image,
+    Input,
+    message,
+    Select,
+    Space,
+    Spin,
+    Typography,
+    Upload,
+    UploadProps,
+} from 'antd'
+import { RcFile } from 'antd/es/upload'
 
 const { Title, Text } = Typography
 
@@ -19,6 +37,9 @@ const ProductDetails: React.FC = () => {
     } = useGetProductByIdQuery(id || '')
     const [updateProduct, { isLoading: isUpdating }] =
         useUpdateProductMutation()
+
+    // Gọi API để lấy danh sách category
+    const { data: categories } = useGetCategoriesQuery()
 
     const [isEditing, setIsEditing] = useState(false) // Trạng thái chỉnh sửa
     const [form] = Form.useForm()
@@ -76,6 +97,19 @@ const ProductDetails: React.FC = () => {
                         ]}
                     >
                         <Input />
+                    </Form.Item>
+                    <Form.Item label="Category" name="categoryId">
+                        <Select>
+                            {/* Hiển thị danh sách category */}
+                            {categories?.map((category) => (
+                                <Select.Option
+                                    key={category._id}
+                                    value={category._id}
+                                >
+                                    {category.name}
+                                </Select.Option>
+                            ))}
+                        </Select>
                     </Form.Item>
 
                     <Form.Item label="Price" name="price">
@@ -138,13 +172,16 @@ const ProductDetails: React.FC = () => {
                         <Title level={5}>Name:</Title>
                         <Text>{product?.name}</Text>
                     </div>
-
+                    <div>
+                        <Title level={5}>Category:</Title>
+                        <Text>{product?.category}</Text>
+                    </div>
                     <div>
                         <Title level={5}>Click:</Title>
                         <Text>{product?.clickCount}</Text>
                     </div>
                     <div>
-                        <Title level={5}>Click:</Title>
+                        <Title level={5}>Sold:</Title>
                         <Text>{product?.sold}</Text>
                     </div>
                     <div>

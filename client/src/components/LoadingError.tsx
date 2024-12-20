@@ -43,7 +43,7 @@ const LoadingError: React.FC<LoadingErrorProps> = ({
                     fullscreen
                     tip="Loading..."
                     indicator={
-                        <LoadingOutlined style={{ fontSize: 48 }} spin />
+                        <LoadingOutlined style={{ fontSize: 100 }} spin />
                     }
                 />
             </div>

@@ -1,8 +1,23 @@
-import React, {useState} from 'react'
-import {useNavigate, useParams} from 'react-router-dom'
-import {useGetCategoryByIdQuery, useUpdateCategoryMutation,} from '@/services/CategoryApi'
-import {Button, Card, Col, Empty, Form, Input, message, Row, Select, Space, Typography,} from 'antd'
-import LoadingError from 'components/LoadingError'
+import React, { useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import {
+    useGetCategoryByIdQuery,
+    useUpdateCategoryMutation,
+} from '@/services/CategoryApi'
+import {
+    Button,
+    Card,
+    Col,
+    Empty,
+    Form,
+    Input,
+    message,
+    Row,
+    Select,
+    Space,
+    Typography,
+} from 'antd'
+import LoadingError from '@/components/LoadingError'
 
 const { Title, Text } = Typography
 
@@ -22,7 +37,9 @@ const CategoryDetails: React.FC = () => {
     const [updateCategory, error] = useUpdateCategoryMutation()
     const [isEditing, setIsEditing] = useState(false) // Trạng thái chỉnh sửa
     const [form] = Form.useForm()
-
+    if (!id) {
+        return <Empty description="Category not found" />
+    }
     const handleSave = async (values: any) => {
         console.log('Category updated:', values)
         try {
@@ -50,7 +67,9 @@ const CategoryDetails: React.FC = () => {
         return (
             <LoadingError
                 isLoading={isLoading}
-                error={error}
+                isError={error}
+                isLogin={false}
+                title='Category Details'
                 refetch={refetch}
             />
         )

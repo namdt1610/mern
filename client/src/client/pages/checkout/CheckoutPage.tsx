@@ -149,12 +149,7 @@ const CheckoutPage: React.FC = () => {
             await createOrder({
                 user: userId!,
                 orderItems,
-                shippingAddress: {
-                    address: values.address,
-                    city: values.city,
-                    postalCode: values.postalCode,
-                    country: values.country,
-                },
+                shippingAddress: values.shippingAddress,
                 paymentMethod: values.paymentMethod,
                 itemsPrice,
                 taxPrice,
@@ -228,7 +223,7 @@ const CheckoutPage: React.FC = () => {
                         </Form.Item>
                         <Form.Item
                             label="Địa chỉ giao hàng"
-                            name="address"
+                            name="shippingAddress"
                             rules={[
                                 {
                                     required: true,
@@ -238,6 +233,7 @@ const CheckoutPage: React.FC = () => {
                         >
                             <Input.TextArea />
                         </Form.Item>
+                        
                         <Form.Item
                             label="Chọn phương thức thanh toán"
                             name="paymentMethod"

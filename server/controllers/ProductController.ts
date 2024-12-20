@@ -23,7 +23,7 @@ const getProductById = async (req: Request, res: Response): Promise<void> => {
         res.status(404).json({ error: 'Invalid product id' })
         return
     }
-    const product = await Product.findById(id)
+    const product = await Product.findById(id).populate('category')
 
     if (!product) {
         res.status(404).json({ message: `Product with id ${id} not found` })

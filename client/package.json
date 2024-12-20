@@ -15,6 +15,7 @@
         "react-chartjs-2": "^5.2.0",
         "react-dom": "^18.3.1",
         "react-dropzone": "^14.3.2",
+        "react-fast-marquee": "^1.6.5",
         "react-highlight-words": "^0.20.0",
         "react-hot-toast": "^2.4.1",
         "react-infinite-scroll-component": "^6.1.0",

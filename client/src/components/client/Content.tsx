@@ -16,11 +16,11 @@ export default function Content() {
                     {/* Danh mục */}
                     {categories.map((category, index) => (
                         <Button
+                            onClick={() => console.log('Clicked')}
                             type="primary"
                             key={index}
                             className="p-6 rounded-lg shadow-md text-center hover:scale-105 transition-transform duration-300"
                         >
-                            <p className="text-xl font-bold">{category.name}</p>
                             <p className="text-xl font-bold">{category.name}</p>
                         </Button>
                     ))}
