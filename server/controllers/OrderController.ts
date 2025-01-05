@@ -1,17 +1,67 @@
 import { Request, Response } from 'express'
 import Order from '../models/OrderModel'
+import Inventory from '../models/InventoryModel'
+import InventoryActivity from '../models/InventoryActivityModel'
+import mongoose from 'mongoose'
 
 export const OrderController = {
     // Create a new order
     createOrder: async (req: Request, res: Response) => {
+        const session = await mongoose.startSession()
+        session.startTransaction()
+
         try {
-            console.log(req.body)
-            const newOrder = new Order(req.body)
-            const savedOrder = await newOrder.save()
-            res.status(201).json(savedOrder)
-        } catch (error) {
-            console.log(error)
-            res.status(500).json({ message: 'Error creating order', error })
+            const { items, ...orderData } = req.body
+
+            // Check and update inventory for each item
+            for (const item of items) {
+                const inventory = await Inventory.findOne({
+                    product: item.productId,
+                })
+
+                if (!inventory || inventory.quantity < item.quantity) {
+                    throw new Error(
+                        `Insufficient stock for product ${item.productId}`
+                    )
+                }
+
+                // Decrease stock
+                const previousQuantity = inventory.quantity
+                inventory.quantity -= item.quantity
+
+                // Update status if quantity becomes 0
+                if (inventory.quantity === 0) {
+                    inventory.status = 'out-of-stock'
+                }
+
+                await inventory.save({ session })
+
+                // Log activity
+                await InventoryActivity.create(
+                    [
+                        {
+                            product: item.productId,
+                            action: 'remove',
+                            quantity: item.quantity,
+                            previousQuantity,
+                            newQuantity: inventory.quantity,
+                            updatedBy: 'order-system',
+                        },
+                    ],
+                    { session }
+                )
+            }
+
+            // Create the order
+            const order = await Order.create([orderData], { session })
+
+            await session.commitTransaction()
+            res.status(201).json(order[0])
+        } catch (error: any) {
+            await session.abortTransaction()
+            res.status(400).json({ error: error.message })
+        } finally {
+            session.endSession()
         }
     },
 

@@ -1,117 +1,73 @@
-import React, {useEffect, useState} from 'react'
-import {useNavigate, useParams} from 'react-router-dom'
-import {
-    useDeleteProductMutation,
-    useGetProductByIdQuery,
-    useUpdateProductMutation,
-} from '@/services/ProductApi'
-import {Col, Empty, message, Row, Space} from 'antd'
+import React, { useState, useEffect } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
+import { Card, Row, Col, Space, message } from 'antd'
+import { useGetInventoryByIdQuery, useUpdateInventoryMutation } from '@/services/InventoryApi'
+import DetailsActions from './InventoryDetailsActions'
+import DetailsForm from './InventoryDetailsForm'
 import LoadingError from '@/components/LoadingError'
-import {Inventory} from 'shared/types/Inventory'
-
-// Sub-components (you'll need to create these)
-import ProductActions from './InventoryDetailsActions'
-import ProductImage from './InventoryDetailsImage'
-import ProductForm from './InventoryDetailsForm'
+import { Inventory } from 'shared/types/Inventory'
 
 const InventoryDetails: React.FC = () => {
     const { id } = useParams<{ id: string }>()
     const navigate = useNavigate()
-
-    const {
-        data: product,
+    const [isEditing, setIsEditing] = useState(false)
+    const [editedInventory, setEditedInventory] = useState<Partial<Inventory>>({})
+    
+    const { 
+        data: inventory, 
         isLoading,
         isError,
-        refetch,
-    } = useGetProductByIdQuery(id)
-    const [updateProduct] = useUpdateProductMutation()
-    const [deleteProduct] = useDeleteProductMutation()
-
-    const [isEditing, setIsEditing] = useState(false)
-    const [editedProduct, setEditedProduct] = useState<Partial<Inventory>>({})
-    const [imagePreview, setImagePreview] = useState<string | undefined>(
-        product?.imageUrl
-    )
+        refetch 
+    } = useGetInventoryByIdQuery(id!)
+    
+    const [updateInventory] = useUpdateInventoryMutation()
 
     useEffect(() => {
-        if (product) {
-            setEditedProduct(product)
-            setImagePreview(product.imageUrl)
+        if (inventory) {
+            setEditedInventory(inventory)
         }
-    }, [product])
-
-    const handleImageChange = (imageUrl: string) => {
-        setEditedProduct((prev) => ({
-            ...prev,
-            imageUrl: imageUrl,
-        }))
-    }
+    }, [inventory])
 
     const handleSave = async () => {
         try {
-            await updateProduct({ id, ...editedProduct }).unwrap()
+            await updateInventory({
+                id: id!,
+                data: editedInventory
+            }).unwrap()
+            
+            message.success('Inventory updated successfully')
             setIsEditing(false)
-            message.success('Product updated successfully')
+            refetch()
         } catch (error) {
-            message.error('Failed to update product')
+            message.error('Failed to update inventory')
         }
     }
 
-    const handleEditToggle = () => {
-        setIsEditing((prev) => !prev)
+    if (isLoading || isError) {
+        return <LoadingError isLoading={isLoading} isError={isError} refetch={refetch} isLogin={false} title="Inventory" />
     }
-
-    const handleDelete = async () => {
-        try {
-            await deleteProduct(id!).unwrap()
-            message.success('Product deleted successfully')
-            navigate('/admin/inventory')
-        } catch (error: any) {
-            const errorMessage = error?.message || 'Failed to delete product.'
-            message.error(errorMessage)
-        }
-    }
-
-    if (isLoading)
-        return (
-            <LoadingError
-                isLoading={isLoading}
-                error={null}
-                refetch={refetch}
-            />
-        )
-    if (isError || !product) return <Empty description="Product not found" />
 
     return (
-        <div className="py-4">
+        <div className="p-6">
             <Space direction="vertical" size="large" style={{ width: '100%' }}>
+                <DetailsActions
+                    isEditing={isEditing}
+                    onEdit={() => setIsEditing(true)}
+                    onSave={handleSave}
+                    onCancel={() => setIsEditing(false)}
+                    onRefresh={refetch}
+                />
+                
                 <Row gutter={[16, 16]}>
-                    <Col xs={24} sm={12} md={10} lg={8}>
-                        <ProductActions
+                    <Col xs={24} lg={16}>
+                        <DetailsForm
+                            inventory={inventory!}
                             isEditing={isEditing}
-                            onSave={handleSave}
-                            onEditToggle={handleEditToggle}
-                            onDelete={handleDelete}
-                            onRefetch={refetch}
-                        />
-                        <div className="py-4">
-                            <ProductImage
-                                onImageChange={handleImageChange}
-                                image={imagePreview || product.imageUrl}
-                                isEditing={isEditing}
-                            />
-                        </div>
-                    </Col>
-
-                    <Col xs={24} sm={12} md={14} lg={16}>
-                        <ProductForm
-                            product={product}
-                            isEditing={isEditing}
-                            editedProduct={editedProduct}
-                            onInputChange={(field, value) =>
-                                setEditedProduct((prev) => ({
+                            editedInventory={editedInventory}
+                            onChange={(field, value) => 
+                                setEditedInventory(prev => ({
                                     ...prev,
-                                    [field]: value,
+                                    [field]: value
                                 }))
                             }
                         />

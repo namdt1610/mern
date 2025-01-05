@@ -10,6 +10,7 @@ export interface DecodedToken extends User {
     status?: string
     createdAt: string
     updatedAt?: string
+    exp: number
 }
 
 export const decodeToken = (token: string): DecodedToken | null => {

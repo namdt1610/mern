@@ -1,56 +1,99 @@
-import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
-import {InventoryItem} from '@/types/InventoryItem' // Định nghĩa kiểu InventoryItem
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { Inventory } from 'shared/types/Inventory'
 
 export const inventoryApi = createApi({
     reducerPath: 'inventoryApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: 'http://localhost:8888/api', // API backend URL
+        baseUrl: 'http://localhost:8888/api',
         credentials: 'include',
-        prepareHeaders: (headers) => {
-            headers.set('Content-Type', 'application/json')
-            return headers
-        },
     }),
+    tagTypes: ['Inventory'],
     endpoints: (builder) => ({
-        // Lấy danh sách sản phẩm trong kho
-        getInventoryItems: builder.query<InventoryItem[], void>({
-            query: () => '/inventory',
+        // Add stock
+        addStock: builder.mutation<
+            Inventory,
+            { productId: string; quantity: number; userId: string | null }
+        >({
+            query: ({ productId, quantity, userId }) => ({
+                url: `/inventory/${productId}/add`,
+                method: 'POST',
+                body: { quantity, userId },
+            }),
+            invalidatesTags: ['Inventory'],
         }),
 
-        // Cập nhật số lượng tồn kho của sản phẩm
-        updateInventory: builder.mutation<
-            void,
-            { id: string; quantity: number }
+        // Remove stock
+        removeStock: builder.mutation<
+            Inventory,
+            { productId: string; quantity: number }
         >({
-            query: ({ id, quantity }) => ({
-                url: `/inventory/${id}`,
-                method: 'PUT',
+            query: ({ productId, quantity }) => ({
+                url: `/inventory/${productId}/remove`,
+                method: 'POST',
                 body: { quantity },
             }),
+            invalidatesTags: ['Inventory'],
         }),
 
-        // Thêm sản phẩm vào kho
-        addInventoryItem: builder.mutation<InventoryItem, InventoryItem>({
-            query: (item) => ({
-                url: '/inventory',
-                method: 'POST',
-                body: item,
+        // Update stock
+        updateStock: builder.mutation<
+            Inventory,
+            { productId: string; quantity: number }
+        >({
+            query: ({ productId, quantity }) => ({
+                url: `/inventory/${productId}/stock`,
+                method: 'PATCH',
+                body: { quantity },
             }),
+            invalidatesTags: ['Inventory'],
         }),
 
-        // Xóa sản phẩm khỏi kho
-        removeInventoryItem: builder.mutation<void, string>({
-            query: (id) => ({
+        // Add this new endpoint
+        getAllStock: builder.query<Inventory[], void>({
+            query: () => '/inventory',
+            providesTags: ['Inventory'],
+        }),
+
+        // Add to the existing endpoints
+        getStockActivity: builder.query<any[], [Date, Date] | undefined>({
+            query: (dateRange) => ({
+                url: '/inventory/activity',
+                params: dateRange
+                    ? {
+                          startDate: dateRange[0].toISOString(),
+                          endDate: dateRange[1].toISOString(),
+                      }
+                    : undefined,
+            }),
+            providesTags: ['Inventory'],
+        }),
+
+        // Add to existing endpoints
+        getInventoryById: builder.query<Inventory, string>({
+            query: (id) => `/inventory/${id}`,
+            providesTags: ['Inventory'],
+        }),
+
+        updateInventory: builder.mutation<
+            Inventory,
+            { id: string; data: Partial<Inventory> }
+        >({
+            query: ({ id, data }) => ({
                 url: `/inventory/${id}`,
-                method: 'DELETE',
+                method: 'PUT',
+                body: data,
             }),
+            invalidatesTags: ['Inventory'],
         }),
     }),
 })
 
 export const {
-    useGetInventoryItemsQuery,
+    useGetAllStockQuery,
+    useAddStockMutation,
+    useRemoveStockMutation,
+    useUpdateStockMutation,
+    useGetStockActivityQuery,
+    useGetInventoryByIdQuery,
     useUpdateInventoryMutation,
-    useAddInventoryItemMutation,
-    useRemoveInventoryItemMutation,
 } = inventoryApi

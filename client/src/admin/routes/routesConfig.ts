@@ -2,16 +2,23 @@ import { lazy, LazyExoticComponent } from 'react'
 
 //* routes/routesConfig.ts
 
+type UserRole = 'admin' | 'user'
+
 export interface RouteConfig {
     path: string
     element: LazyExoticComponent<React.ComponentType<any>>
     protected?: boolean
+    requiredRole?: 'admin' | 'user' | 'both'
     children?: RouteConfig[]
     index?: boolean
-    requiredRole?: 'admin' | 'user' | 'both'
+    permissions?: {
+        view: UserRole[]
+        edit?: UserRole[]
+        delete?: UserRole[]
+    }
 }
 
-const authRoutes: RouteConfig[] = [
+export const authRoutes: RouteConfig[] = [
     { path: 'login', element: lazy(() => import('../pages/auth/Login/Login')) },
     {
         path: 'register',
@@ -20,19 +27,32 @@ const authRoutes: RouteConfig[] = [
 ]
 
 const adminRoutes: RouteConfig = {
-    path: '/',
+    path: '',
     element: lazy(() => import('../../components/admin/layout/AdminLayout')),
     protected: true,
-    requiredRole: 'admin',
+    permissions: {
+        view: ['admin', 'user'],
+    },
     children: [
+        //* Dashboard routes
         {
             index: true,
-            element: lazy(() => import('../pages/dashboard/AdminDashboard')),
             path: '',
+            element: lazy(() => import('../pages/dashboard/AdminDashboard')),
+            permissions: {
+                view: ['admin', 'user'],
+                edit: ['admin'],
+            },
         },
+        //* Product routes
         {
             path: 'products',
             element: lazy(() => import('../pages/products/Product')),
+            permissions: {
+                view: ['admin', 'user'],
+                edit: ['admin'],
+                delete: ['admin'],
+            },
         },
         {
             path: 'products/:id',
@@ -48,20 +68,20 @@ const adminRoutes: RouteConfig = {
         },
         //* Category routes
         {
-            path: 'categories',
-            element: lazy(() => import('../pages/categories/Category')),
-        },
-        {
-            path: 'categories/:id',
-            element: lazy(() => import('../pages/categories/CategoryDetails')),
-        },
-        {
             path: 'categories/new',
             element: lazy(() => import('../pages/categories/CategoryNew')),
         },
         {
             path: 'categories/reports',
             element: lazy(() => import('../pages/categories/CategoryReports')),
+        },
+        {
+            path: 'categories/:id',
+            element: lazy(() => import('../pages/categories/CategoryDetails')),
+        },
+        {
+            path: 'categories',
+            element: lazy(() => import('../pages/categories/Category')),
         },
         //* Customer routes
         {
@@ -71,15 +91,24 @@ const adminRoutes: RouteConfig = {
         //* Inventory routes
         {
             path: 'inventory',
-            element: lazy(() => import('../pages/inventory/Inventory')),
+            element: lazy(() => import('../pages/inventory/InventoryPage')),
+            permissions: {
+                view: ['admin', 'user'],
+                edit: ['admin'],
+                delete: ['admin'],
+            },
         },
         {
             path: 'inventory/:id',
             element: lazy(() => import('../pages/inventory/InventoryDetails')),
         },
         {
-            path: 'inventory/new',
-            element: lazy(() => import('../pages/inventory/InventoryNew')),
+            path: 'inventory/stock-in-out',
+            element: lazy(() => import('../pages/inventory/InventoryImport')),
+        },
+        {
+            path: 'inventory/activity',
+            element: lazy(() => import('../pages/inventory/InventoryActivity')),
         },
         //* Order routes
         {
@@ -131,10 +160,5 @@ const fallbackRoutes: RouteConfig[] = [
     { path: '*', element: lazy(() => import('../pages/result/404')) },
 ]
 
-const routesConfig: RouteConfig[] = [
-    ...authRoutes,
-    adminRoutes,
-    ...fallbackRoutes,
-]
+export default adminRoutes
 
-export default routesConfig

@@ -1,102 +1,87 @@
-import React, {useState} from 'react'
-import {Card, message, Upload} from 'antd'
-import {PlusOutlined} from '@ant-design/icons'
+import React from 'react'
+import { Card, Image, Upload, message } from 'antd'
+import { PlusOutlined, LoadingOutlined } from '@ant-design/icons'
+import type { UploadChangeParam } from 'antd/es/upload'
+import type { RcFile, UploadFile } from 'antd/es/upload/interface'
 
-interface ProductImageProps {
-      image: string
-      isEditing: boolean
-      onImageChange: (imageUrl: string) => void
+interface InventoryDetailsImageProps {
+    imageUrl?: string
+    isEditing: boolean
+    onImageChange: (url: string) => void
 }
 
-const ProductImage: React.FC<ProductImageProps> = ({
-      image,
-      isEditing,
-      onImageChange,
+const InventoryDetailsImage: React.FC<InventoryDetailsImageProps> = ({
+    imageUrl,
+    isEditing,
+    onImageChange,
 }) => {
-      const [previewImage, setPreviewImage] = useState<string>(image)
+    const [loading, setLoading] = React.useState(false)
 
-      // Validate file before upload
-      const handleBeforeUpload = (file: File) => {
-            const isImage = file.type.startsWith('image/')
-            if (!isImage) {
-                  message.error('You can only upload image files!')
-                  return false
-            }
-            const isSmallEnough = file.size / 1024 / 1024 < 2 // Less than 2MB
-            if (!isSmallEnough) {
-                  message.error('Image must be smaller than 2MB!')
-                  return false
-            }
-            return true
-      }
+    const beforeUpload = (file: RcFile) => {
+        const isImage = file.type.startsWith('image/')
+        if (!isImage) {
+            message.error('You can only upload image files!')
+            return false
+        }
+        const isLt2M = file.size / 1024 / 1024 < 2
+        if (!isLt2M) {
+            message.error('Image must be smaller than 2MB!')
+            return false
+        }
+        return true
+    }
 
-      // Handle file change
-      const handleChange = (info: any) => {
-            const { status, originFileObj } = info.file
+    const handleChange = async (info: UploadChangeParam<UploadFile>) => {
+        if (info.file.status === 'uploading') {
+            setLoading(true)
+            return
+        }
+        if (info.file.status === 'done') {
+            setLoading(false)
+            onImageChange(info.file.response.url)
+        }
+    }
 
-            if (originFileObj) {
-                  const previewUrl = URL.createObjectURL(originFileObj)
-                  setPreviewImage(previewUrl)
-            }
+    const uploadButton = (
+        <div>
+            {loading ? <LoadingOutlined /> : <PlusOutlined />}
+            <div style={{ marginTop: 8 }}>Upload</div>
+        </div>
+    )
 
-            if (status === 'done') {
-                  const response = info.file.response
-                  if (response && response.file.imageUrl) {
-                        message.success('Image uploaded successfully!')
-                        onImageChange(response.file.imageUrl)
-                  }
-            }
-
-            if (status === 'error') {
-                  message.error('Image upload failed!')
-            }
-      }
-
-      return (
-            <Card className="card-border text-center">
-                  {isEditing ? (
-                        <Upload
-                              name="image"
-                              listType="picture-card"
-                              showUploadList={false}
-                              beforeUpload={handleBeforeUpload}
-                              onChange={handleChange}
-                              action="http://localhost:8888/api/upload"
-                        >
-                              <div>
-                                    {previewImage ? (
-                                          <img
-                                                src={previewImage}
-                                                alt="Product"
-                                                style={{
-                                                      width: '100%',
-                                                      height: '300px',
-                                                      objectFit: 'cover',
-                                                }}
-                                          />
-                                    ) : (
-                                          <div>
-                                                <PlusOutlined />
-                                                <div style={{ marginTop: 8 }}>
-                                                      Upload Product Image
-                                                </div>
-                                          </div>
-                                    )}
-                              </div>
-                        </Upload>
-                  ) : (
-                        <img
-                              src={previewImage || '/img/default-product.png'}
-                              alt="Product"
-                              style={{
-                                    width: '100%',
-                                    height: '300px',
-                                    objectFit: 'cover',
-                              }}
+    return (
+        <Card title="Product Image" className="shadow-md">
+            {isEditing ? (
+                <Upload
+                    name="image"
+                    listType="picture-card"
+                    showUploadList={false}
+                    action="/api/upload"
+                    beforeUpload={beforeUpload}
+                    onChange={handleChange}
+                >
+                    {imageUrl ? (
+                        <Image
+                            src={imageUrl}
+                            alt="Product"
+                            style={{ width: '100%' }}
+                            preview={false}
                         />
-                  )}
-            </Card>
-      )
+                    ) : (
+                        uploadButton
+                    )}
+                </Upload>
+            ) : (
+                imageUrl && (
+                    <Image
+                        src={imageUrl}
+                        alt="Product"
+                        style={{ width: '100%' }}
+                    />
+                )
+            )}
+        </Card>
+    )
 }
 
-export default ProductImage
+export default InventoryDetailsImage

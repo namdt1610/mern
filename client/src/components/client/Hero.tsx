@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Button, Input, Typography } from 'antd/'
-import Marquee from 'react-fast-marquee'
-import '@/styles/HoverEffect.css'
 
 const { Search } = Input
 const { Title, Text } = Typography
@@ -71,7 +69,7 @@ export default function Hero() {
             >
                 <Title level={1}>Best seller of the week</Title>
                 <img
-                    className="rounded-3xl  shadow-lg"
+                    className="rounded-3xl shadow-lg"
                     src="/img/beethoven.webp"
                     alt="Beethoven"
                 />

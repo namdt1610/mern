@@ -1,10 +1,10 @@
 import React from 'react'
-import '../../styles/AuthLayout.css'
 
-const AuthLayout = ({ children }) => {
+const AuthLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     return (
         <div className="auth-layout">
-            <div className="auth-content">{children}</div>
+            {/* Add any layout-specific styling or components here */}
+            {children}
         </div>
     )
 }

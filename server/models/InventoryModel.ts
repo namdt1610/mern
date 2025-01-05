@@ -1,95 +1,59 @@
-import mongoose from 'mongoose'
+import mongoose, { Schema } from 'mongoose'
+import { Product } from '../../shared/types/Product'
 
-const schema = mongoose.Schema
-
-export interface IInventory extends Document {
-      name: string
-      description: string
-      quantity: number
-      price: number
-      category: string
-      status: string
-      sku: string
-      supplier?: string
+interface InventoryDocument extends Document {
+    product: Product['_id']
+    quantity: number
+    status: 'in-stock' | 'out-of-stock' | 'discontinued'
+    lastUpdated: Date
 }
 
-const inventorySchema = new schema(
-      {
-            name: {
-                  type: String,
-                  required: true,
-            },
-            description: {
-                  type: String,
-                  required: false,
-                  default: null,
-            },
-            quantity: {
-                  type: Number,
-                  required: true,
-                  default: 0,
-            },
-            price: {
-                  type: Number,
-                  required: true,
-                  default: 0,
-            },
-            category: {
-                  type: String,
-                  required: true,
-            },
-            status: {
-                  type: String,
-                  enum: ['in-stock', 'out-of-stock', 'discontinued'],
-                  default: 'in-stock',
-            },
-            sku: {
-                  type: String,
-                  required: true,
-                  unique: true,
-            },
-            supplier: {
-                  type: String,
-                  required: false,
-                  default: null,
-            },
-            createAt: {
-                  type: Date,
-                  default: Date.now,
-            },
-            updateAt: {
-                  type: Date,
-                  default: Date.now,
-            },
-      },
-      {
-            timestamps: true,
-      }
+const inventorySchema = new Schema(
+    {
+        product: {
+            type: Schema.Types.ObjectId,
+            ref: 'Product',
+            required: true,
+            unique: true,
+        },
+        quantity: {
+            type: Number,
+            required: true,
+            default: 0,
+            min: 0,
+        },
+        status: {
+            type: String,
+            enum: ['in-stock', 'out-of-stock', 'discontinued'],
+            default: 'out-of-stock',
+        },
+        lastUpdated: {
+            type: Date,
+            default: Date.now,
+        },
+    },
+    {
+        timestamps: true,
+        autoIndex: true,
+    }
 )
 
-// Static method to create new inventory item
-inventorySchema.statics.createItem = async function(itemData: IInventory) {
-      const exists = await this.findOne({ sku: itemData.sku })
-      if (exists) {
-            throw Error('SKU already exists')
-      }
-      
-      const item = await this.create(itemData)
-      return item
-}
+// Drop any existing indexes and recreate only what we need
+inventorySchema.index({ product: 1 }, { unique: true })
 
-// Static method to update stock quantity
-inventorySchema.statics.updateStock = async function(sku: string, quantity: number) {
-      const item = await this.findOne({ sku })
-      if (!item) {
-            throw Error('Item not found')
-      }
+// Update status based on quantity
+inventorySchema.pre('save', function (next) {
+    if (this.quantity > 0) {
+        this.status = 'in-stock'
+    } else {
+        this.status = 'out-of-stock'
+    }
+    this.lastUpdated = new Date()
+    next()
+})
 
-      item.quantity = quantity
-      item.status = quantity > 0 ? 'in-stock' : 'out-of-stock'
-      await item.save()
-      return item
-}
-
-const Inventory = mongoose.model('Inventory', inventorySchema)
+const Inventory = mongoose.model<InventoryDocument>(
+    'Inventory',
+    inventorySchema
+)
 export default Inventory

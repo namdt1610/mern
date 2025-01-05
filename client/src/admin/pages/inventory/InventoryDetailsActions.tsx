@@ -1,70 +1,82 @@
 import React from 'react'
-import {Button, Card, Grid, Space} from 'antd'
-import {BackwardOutlined, DeleteOutlined, ReloadOutlined, SaveOutlined,} from '@ant-design/icons'
+import { Button, Card, Grid, Space, Popconfirm } from 'antd'
+import {
+    EditOutlined,
+    SaveOutlined,
+    CloseOutlined,
+    DeleteOutlined,
+    ReloadOutlined,
+    ArrowLeftOutlined,
+} from '@ant-design/icons'
+import { useNavigate } from 'react-router-dom'
 
 const { useBreakpoint } = Grid
 
-interface InventoryActionsProps {
-      isEditing: boolean
-      onSave: () => void
-      onEditToggle: () => void
-      onDelete: () => void
-      onRefetch: () => void
+interface InventoryDetailsActionsProps {
+    isEditing: boolean
+    onEdit: () => void
+    onSave: () => void
+    onCancel: () => void
+    onRefresh: () => void
 }
 
-const InventoryActions: React.FC<InventoryActionsProps> = ({
-      isEditing,
-      onSave,
-      onEditToggle,
-      onDelete,
-      onRefetch,
+const InventoryDetailsActions: React.FC<InventoryDetailsActionsProps> = ({
+    isEditing,
+    onEdit,
+    onSave,
+    onCancel,
+    onRefresh,
 }) => {
-      const screens = useBreakpoint()
+    const screens = useBreakpoint()
+    const navigate = useNavigate()
 
-      return (
-            <Card className="items-center justify-center flex card-border">
-                  <Space wrap direction={screens.xs ? 'vertical' : 'horizontal'}>
-                        <Button
-                              type="primary"
-                              size="middle"
-                              icon={<ReloadOutlined />}
-                              onClick={onRefetch}
-                              className="btn-border btn-hover"
-                        >
-                              Refresh
-                        </Button>
-                        <Button
-                              type="primary"
-                              size="middle"
-                              icon={<SaveOutlined />}
-                              onClick={isEditing ? onSave : onEditToggle}
-                              className="btn-border btn-hover"
-                        >
-                              {isEditing ? 'Save' : 'Edit'}
-                        </Button>
-                        {isEditing && (
-                              <Button
-                                    type="default"
-                                    size="middle"
-                                    icon={<BackwardOutlined />}
-                                    onClick={onEditToggle}
-                                    className="btn-border btn-hover"
-                              >
-                                    Cancel
-                              </Button>
-                        )}
-                        <Button
-                              danger
-                              size="middle"
-                              icon={<DeleteOutlined />}
-                              onClick={onDelete}
-                              className="btn-border btn-hover"
-                        >
-                              Delete
-                        </Button>
-                  </Space>
-            </Card>
-      )
+    return (
+        <Card className="shadow-md">
+            <Space size="middle" wrap className="w-full justify-between">
+                <Button
+                    icon={<ArrowLeftOutlined />}
+                    onClick={() => navigate('/admin/inventory')}
+                >
+                    Back to List
+                </Button>
+
+                <Space wrap>
+                    <Button icon={<ReloadOutlined />} onClick={onRefresh}>
+                        Refresh
+                    </Button>
+
+                    {isEditing ? (
+                        <>
+                            <Button
+                                type="primary"
+                                icon={<SaveOutlined />}
+                                onClick={onSave}
+                            >
+                                Save Changes
+                            </Button>
+                            <Button
+                                danger
+                                icon={<CloseOutlined />}
+                                onClick={onCancel}
+                            >
+                                Cancel
+                            </Button>
+                        </>
+                    ) : (
+                        <>
+                            <Button
+                                type="primary"
+                                icon={<EditOutlined />}
+                                onClick={onEdit}
+                            >
+                                Edit
+                            </Button>
+                        </>
+                    )}
+                </Space>
+            </Space>
+        </Card>
+    )
 }
 
-export default InventoryActions
+export default InventoryDetailsActions

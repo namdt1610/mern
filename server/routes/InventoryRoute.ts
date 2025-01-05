@@ -3,22 +3,18 @@ import inventoryController from '../controllers/InventoryController'
 
 const router = express.Router()
 
-// Create new inventory item
+// Activity route should come before dynamic routes
+router.get('/activity', inventoryController.getActivities)
+
+// Stock management routes
+router.post('/:productId/add', inventoryController.addStock)
+router.post('/:productId/remove', inventoryController.removeStock)
+
+// Inventory management routes
 router.post('/', inventoryController.createInventory)
-
-// Get all inventory items
 router.get('/', inventoryController.getAllInventory)
-
-// Get single inventory item by SKU
-router.get('/:sku', inventoryController.getInventoryBySku)
-
-// Update inventory item
-router.put('/:sku', inventoryController.updateInventory)
-
-// Update stock quantity
-router.patch('/:sku/stock', inventoryController.updateStock)
-
-// Delete inventory item
-router.delete('/:sku', inventoryController.deleteInventory)
+router.get('/:productId', inventoryController.getInventoryByProductId)
+router.put('/:productId', inventoryController.updateInventory)
+router.delete('/:productId', inventoryController.deleteInventory)
 
 export default router
