@@ -53,6 +53,18 @@ const orderSchema = new Schema<Order>(
             required: true,
             default: 0.0,
         },
+        status: {
+            type: String,
+            required: true,
+            enum: [
+                'pending',
+                'processing',
+                'shipped',
+                'completed',
+                'cancelled',
+            ],
+            default: 'pending',
+        },
         isPaid: {
             type: Boolean,
             required: true,

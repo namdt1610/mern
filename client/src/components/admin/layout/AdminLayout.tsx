@@ -311,28 +311,42 @@ export default function LayoutApp() {
         },
     ]
     return (
-        <>
-            <Layout>
-                <Sider
-                    width={'auto'}
-                    trigger={null}
-                    collapsible
-                    collapsed={collapsed}
-                    onCollapse={(value) => setCollapsed(value)}
-                    breakpoint="lg"
-                    // collapsedWidth="0"
-                    style={{ background: '#f3f3f3', border: '1px solid' }}
-                >
-                    <div className="items-center justify-center flex flex-col pt-4">
+        <Layout>
+            <Sider
+                width={256}
+                trigger={null}
+                collapsible
+                collapsed={collapsed}
+                onCollapse={(value) => setCollapsed(value)}
+                breakpoint="lg"
+                style={{
+                    background: 'rgba(255, 255, 255, 0.8)',
+                    backdropFilter: 'blur(10px)',
+                    borderRight: '1px solid rgba(0, 0, 0, 0.06)',
+                    height: '100vh',
+                    position: 'fixed',
+                    left: 0,
+                    top: 0,
+                    bottom: 0,
+                    zIndex: 100,
+                    transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                }}
+            >
+                <div className="flex flex-col h-full">
+                    <div className="flex items-center justify-between p-4">
                         <Link to={'/admin/dashboard'}>
                             <img
                                 src="/img/logo_dtn.png"
                                 alt="logo"
-                                className="w-16 cursor-pointer"
-                                loading="lazy"
+                                className="w-8 h-8 transition-all duration-200"
+                                style={{
+                                    marginLeft: collapsed ? '8px' : '0',
+                                    transform: collapsed
+                                        ? 'scale(0.8)'
+                                        : 'scale(1)',
+                                }}
                             />
                         </Link>
-
                         <Button
                             type="text"
                             icon={
@@ -343,44 +357,48 @@ export default function LayoutApp() {
                                 )
                             }
                             onClick={() => setCollapsed(!collapsed)}
-                            style={{
-                                fontSize: '16px',
-                                width: 64,
-                                height: 64,
-                            }}
+                            className="transition-all duration-200"
                         />
                     </div>
+
                     <Menu
                         mode="inline"
                         selectedKeys={[currentPath]}
                         defaultOpenKeys={[]}
                         style={{
-                            background: '#f3f3f3',
-                            fontSize: '1.25rem',
-                            minHeight: '100vh',
+                            flex: 1,
+                            border: 'none',
+                            background: 'transparent',
                         }}
                         items={items2}
                     />
-                </Sider>
-                <Layout>
-                    <Content
-                        style={{
-                            padding: 24,
-                            margin: 0,
-                            minHeight: 280,
-                            background: colorBgContainer,
-                            borderRadius: borderRadiusLG,
-                        }}
-                    >
-                        <div className="grid grid-cols-2 gap-4 ">
-                            <Card className="card-border-color h-full"></Card>
-                            <UserInfoCard />
-                        </div>
+                </div>
+            </Sider>
 
-                        <Outlet />
-                    </Content>
-                </Layout>
+            <Layout
+                style={{
+                    marginLeft: collapsed ? 80 : 256,
+                    transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                    minHeight: '100vh',
+                }}
+            >
+                <Content
+                    style={{
+                        padding: 24,
+                        margin: 0,
+                        minHeight: 280,
+                        background: 'rgba(255, 255, 255, 0.8)',
+                        backdropFilter: 'blur(10px)',
+                        borderRadius: 12,
+                    }}
+                >
+                    <div className="grid grid-cols-2 gap-4">
+                        <Card className="card-border-color h-full"></Card>
+                        <UserInfoCard />
+                    </div>
+                    <Outlet />
+                </Content>
             </Layout>
-        </>
+        </Layout>
     )
 }

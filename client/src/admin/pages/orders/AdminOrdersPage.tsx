@@ -1,11 +1,11 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react'
-import {Order} from 'shared/types/Order' // Interface cho đơn hàng
-import {debounce} from 'lodash'
-import {useNavigate} from 'react-router-dom'
-import {Badge, Button, Card, Input, message, Modal, Space, Table} from 'antd'
-import {ColumnsType} from 'antd/lib/table'
-import {ReloadOutlined, SearchOutlined} from '@ant-design/icons'
-import {useDeleteOrderMutation, useGetOrdersQuery} from '@/services/OrderApi' // API của Orders
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { Order } from 'shared/types/Order' // Interface cho đơn hàng
+import { debounce } from 'lodash'
+import { useNavigate } from 'react-router-dom'
+import { Badge, Button, Card, Input, message, Modal, Space, Table } from 'antd/'
+import { ColumnsType } from 'antd/lib/table'
+import { ReloadOutlined, SearchOutlined } from '@ant-design/icons'
+import { useDeleteOrderMutation, useGetOrdersQuery } from '@/services/OrderApi' // API của Orders
 import LoadingError from '@/components/LoadingError'
 
 export default function Orders() {
@@ -30,7 +30,10 @@ export default function Orders() {
             const lowercasedValue = value.toLowerCase()
             const filtered = orders?.filter((order) =>
                 ['_id', 'customerName', 'status'].some((key) =>
-                    order[key]?.toLowerCase()?.includes(lowercasedValue)
+                    order[key as keyof Order]
+                        ?.toString()
+                        ?.toLowerCase()
+                        ?.includes(lowercasedValue)
                 )
             )
             setFilteredData(filtered ?? [])
@@ -73,14 +76,15 @@ export default function Orders() {
             },
             {
                 title: 'Customer Name',
-                dataIndex: 'customerName',
-                key: 'customerName',
+                dataIndex: 'user',
+                key: 'user',
+                render: (user) => user.name,
                 sorter: (a, b) => (a.user ?? '').localeCompare(b.user ?? ''),
             },
             {
-                title: 'Total Amount',
-                dataIndex: 'totalAmount',
-                key: 'totalAmount',
+                title: 'Total Price',
+                dataIndex: 'totalPrice',
+                key: 'totalPrice',
                 render: (amount) => `$${amount}`,
                 sorter: (a, b) => a.totalPrice - b.totalPrice,
             },
@@ -140,7 +144,7 @@ export default function Orders() {
 
     const handleRefresh = () => {
         refetch()
-        setFilteredData(orders)
+        setFilteredData(orders ?? [])
     }
 
     const handleView = (id: string) => {
@@ -154,7 +158,9 @@ export default function Orders() {
         return (
             <LoadingError
                 isLoading={isLoading}
-                error={error}
+                isError={!!error}
+                title="Loading..."
+                isLogin={false}
                 refetch={refetch}
             />
         )

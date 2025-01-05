@@ -1,0 +1,49 @@
+@media print {
+    /* Reset all margins and padding */
+    @page {
+        size: A4;
+        margin: 1cm;
+    }
+
+    /* Hide everything except printable content */
+    body * {
+        visibility: hidden;
+    }
+    
+    .print-only, .print-only * {
+        visibility: visible;
+        display: block !important;
+    }
+
+    /* Table styles */
+    .ant-table {
+        font-size: 12px;
+    }
+
+    .ant-table-thead > tr > th {
+        background-color: #f5f5f5 !important;
+        border-bottom: 2px solid #000 !important;
+    }
+
+    .ant-table-tbody > tr > td {
+        border-bottom: 1px solid #ddd !important;
+    }
+
+    /* Text styles */
+    h1, h2, h3, h4, h5 {
+        margin: 0 !important;
+        color: #000 !important;
+    }
+
+    /* Remove unnecessary elements */
+    .ant-card {
+        box-shadow: none !important;
+        border: none !important;
+    }
+
+    /* Force background colors */
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+}

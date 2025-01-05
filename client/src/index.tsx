@@ -1,9 +1,7 @@
 import './index.css'
 import React from 'react'
-import ClientRoutes from './client/routes/ClientRoutes'
-import AdminRoutes from './admin/routes/AdminRoutes'
 import { createRoot } from 'react-dom/client'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import { BrowserRouter as Router } from 'react-router-dom'
 import { ConfigProvider } from 'antd'
 import { Provider } from 'react-redux'
 import store from '@/redux/Store'
@@ -18,26 +16,122 @@ root.render(
             <ConfigProvider
                 theme={{
                     token: {
-                        fontFamily: "'Karla', sans-serif",
-                        colorPrimary: '#81C784', // Nút chính (xanh lá cây nhạt)
-                        colorText: '#333333', // Màu chữ chính (đen)
-                        colorTextSecondary: '#AAAAAA', // Màu chữ phụ (xám nhạt)
-                        colorTextDisabled: '#A5A5A5', // Màu chữ disabled (xám sáng)
-                        borderRadius: 8, // Bo góc
-                        controlHeight: 40, // Chiều cao nút
-                        colorBgContainer: '#FFFFFF', // Nền container trắng
+                        // Base styles
+                        fontFamily:
+                            '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+                        colorPrimary: '#0071E3',
+                        colorText: '#1D1D1F',
+                        colorTextSecondary: 'rgba(60, 60, 67, 0.6)', // Apple's secondary text
+                        colorBgContainer: 'rgba(255, 255, 255, 0.8)', // Slightly transparent
+                        borderRadius: 10,
+                        controlHeight: 36,
+                        boxShadow: '0 1px 4px rgba(0,0,0,0.05)',
+                        motionDurationMid: '0.2s',
+                        motionEaseInOut: 'cubic-bezier(0.4, 0, 0.2, 1)',
                     },
                     components: {
                         Button: {
-                            colorPrimary: '#81C784', // Nút chính (xanh lá cây nhạt)
-                            colorBgContainer: '#81C784', // Nền cho container nút
-                            colorTextLightSolid: '#FFFFFF', // Chữ trên nền nút
-                            borderRadius: 8, // Bo góc riêng cho nút
-                            colorPrimaryHover: '#66BB6A', // Màu hover nút chính
+                            controlHeight: 36,
+                            borderRadius: 10,
+                            paddingInline: 16,
+                            fontSize: 14,
+                            fontWeight: 500,
+                            colorPrimary: '#0071E3',
+                            colorPrimaryHover: 'rgba(0, 113, 227, 0.9)',
+                            colorPrimaryActive: 'rgba(0, 113, 227, 0.8)',
+                            controlOutline: 'rgba(0, 113, 227, 0.3)',
+                            colorBorder: 'rgba(0, 0, 0, 0.1)',
+                            // Animation
+                            motionDurationMid: '0.1s',
+                            motionEaseInOut: 'cubic-bezier(0.4, 0, 0.2, 1)',
+                        },
+                        Input: {
+                            controlHeight: 36,
+                            borderRadius: 10,
+                            paddingInline: 12,
+                            colorBorder: 'rgba(0, 0, 0, 0.1)',
+                            fontSize: 14,
+                            motionDurationMid: '0.1s',
+                        },
+                        Select: {
+                            controlHeight: 36,
+                            borderRadius: 10,
+                            colorBorder: 'rgba(0, 0, 0, 0.1)',
+                            fontSize: 14,
+                            optionSelectedBg: 'rgba(0, 113, 227, 0.1)',
+                            motionDurationMid: '0.1s',
+                        },
+                        Card: {
+                            borderRadius: 12,
+                            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)',
+                            colorBorderSecondary: 'rgba(0, 0, 0, 0.1)',
+                            motionDurationMid: '0.2s',
+                            // Glass effect
+                            colorBgContainer: 'rgba(255, 255, 255, 0.8)',
+                        },
+                        Table: {
+                            borderRadius: 12,
+                            fontSize: 14,
+                            headerBg: 'rgba(245, 245, 247, 0.8)',
+                            headerColor: '#1D1D1F',
+                            rowHoverBg: 'rgba(245, 245, 247, 0.6)',
+                            headerSplitColor: 'rgba(0, 0, 0, 0.1)',
+                            borderColor: 'rgba(0, 0, 0, 0.1)',
+                            motionDurationMid: '0.1s',
                         },
                         Menu: {
-                            itemColor: '#333333', // Màu chữ trong menu
-                            itemSelectedColor: '#7EB3F1', // Màu chữ khi chọn item trong menu
+                            itemHeight: 36,
+                            itemHoverBg: 'rgba(245, 245, 247, 0.8)',
+                            itemSelectedBg: 'rgba(0, 113, 227, 0.1)',
+                            itemColor: '#1D1D1F',
+                            itemSelectedColor: '#0071E3',
+                            itemHoverColor: '#0071E3',
+                            fontSize: 14,
+                            motionDurationMid: '0.1s',
+                            motionEaseInOut: 'cubic-bezier(0.4, 0, 0.2, 1)',
+                        },
+                        Modal: {
+                            borderRadius: 12,
+                            headerBg: 'rgba(255, 255, 255, 0.8)',
+                            titleFontSize: 18,
+                            paddingLG: 24,
+                            padding: 20,
+                            motionDurationMid: '0.2s',
+                            // Glass effect
+                            contentBg: 'rgba(255, 255, 255, 0.8)',
+                        },
+                        Tabs: {
+                            cardBg: 'rgba(245, 245, 247, 0.8)',
+                            itemSelectedColor: '#0071E3',
+                            itemHoverColor: '#0071E3',
+                            inkBarColor: '#0071E3',
+                            borderRadius: 10,
+                            motionDurationMid: '0.1s',
+                        },
+                        Form: {
+                            labelFontSize: 14,
+                            fontSize: 14,
+                        },
+                        Typography: {
+                            fontSizeHeading1: 40,
+                            fontSizeHeading2: 32,
+                            fontSizeHeading3: 24,
+                            fontSizeHeading4: 20,
+                            fontSizeHeading5: 16,
+                        },
+                        Dropdown: {
+                            motionDurationMid: '0.1s',
+                            controlHeight: 36,
+                            borderRadius: 10,
+                            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)',
+                        },
+                        Message: {
+                            borderRadius: 10,
+                            motionDurationMid: '0.1s',
+                        },
+                        Notification: {
+                            borderRadius: 12,
+                            motionDurationMid: '0.2s',
                         },
                     },
                 }}

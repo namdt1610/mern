@@ -113,15 +113,15 @@ const adminRoutes: RouteConfig = {
         //* Order routes
         {
             path: 'orders',
-            element: lazy(() => import('../pages/orders/Order')),
+            element: lazy(() => import('../pages/orders/AdminOrdersPage')),
         },
         {
             path: 'orders/:id',
-            element: lazy(() => import('../pages/orders/OrderDetails')),
+            element: lazy(() => import('../pages/orders/OrderDetailsPage')),
         },
         {
             path: 'orders/new',
-            element: lazy(() => import('../pages/orders/OrderNew')),
+            element: lazy(() => import('../pages/orders/OrderNewPage')),
         },
         //* Payment methods routes
         {

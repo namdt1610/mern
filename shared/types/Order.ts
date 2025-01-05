@@ -27,6 +27,7 @@ export interface Order {
     taxPrice: number
     shippingPrice: number
     totalPrice: number
+    status: string
     isPaid: boolean
     paidAt?: Date
     isDelivered: boolean

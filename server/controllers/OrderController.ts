@@ -68,7 +68,8 @@ export const OrderController = {
     // Get all orders
     getAllOrders: async (req: Request, res: Response) => {
         try {
-            const orders = await Order.find()
+            const orders = await Order.find().populate('user', 'name')
+            console.log('Orders: ', orders)
             res.status(200).json(orders)
         } catch (error) {
             res.status(500).json({ message: 'Error fetching orders', error })
@@ -82,7 +83,7 @@ export const OrderController = {
             console.log('Order ID: ', req.params.id)
             const order = await Order.findById(req.params.id).populate({
                 path: 'user',
-                select: 'name phone',
+                select: 'name phone email',
             })
             console.log('Oder: ', order)
             if (!order) {

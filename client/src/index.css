@@ -72,3 +72,53 @@
         @apply !rounded-e-3xl !border-b-4 !border-black;
     } */
 }
+
+/* Smooth scrolling */
+* {
+    scroll-behavior: smooth;
+}
+
+/* Transition for all interactive elements */
+button,
+a,
+input,
+select,
+.ant-table-row {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Glass effect for cards and modals */
+.ant-card,
+.ant-modal-content {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+/* Smooth hover transitions */
+.ant-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Active state animation */
+.ant-btn:active {
+    transform: translateY(0);
+}
+
+/* Table row hover effect */
+.ant-table-tbody > tr:hover > td {
+    background-color: rgba(245, 245, 247, 0.8) !important;
+    backdrop-filter: blur(4px);
+}
+
+/* Modal animation */
+.ant-modal {
+    transform-origin: center !important;
+}
+
+/* Message and notification animations */
+.ant-message-notice,
+.ant-notification-notice {
+    opacity: 0.95;
+    backdrop-filter: blur(8px);
+}
