@@ -32,7 +32,7 @@ app.use(cookieParser())
 
 // CORS options
 const corsOptions = {
-    origin: 'http://localhost:5173',
+    origin: ['http://localhost:5173', 'https://mern-psi-nine.vercel.app'],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
     credentials: true,
@@ -130,7 +130,7 @@ app.use('/api/products', productRoutes)
 app.use('/api/categories', categoryRoutes)
 app.use('/api/inventory', inventoryRoutes)
 app.use('/api/orders', orderRoutes)
-app.use('/api/cart', cartRoutes)    
+app.use('/api/cart', cartRoutes)
 app.use('/api/dashboard', dashboardRoutes)
 
 // Global error handler
