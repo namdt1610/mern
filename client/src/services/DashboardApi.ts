@@ -4,47 +4,87 @@ interface DashboardStats {
     totalOrders: number
     totalRevenue: number
     totalUsers: number
+    totalProducts: number
     paidOrders: number
     pendingOrders: number
+    monthlyRevenue: number
 }
 
-interface RevenueData {
-    month: string
-    revenue: number
+interface SalesData {
+    _id: string
+    sales: number
+    orders: number
+}
+
+interface CategoryStats {
+    _id: string
+    name: string
+    productCount: number
+    totalSales: number
+}
+
+interface RecentOrder {
+    _id: string
+    user: {
+        name: string
+        email: string
+    }
+    totalAmount: number
+    status: string
+    createdAt: string
 }
 
 interface TopProduct {
-    productId: string
+    _id: string
     name: string
-    totalSales: number
-    revenue: number
+    price: number
+    soldCount: number
+    clickCount: number
+}
+
+export interface DashboardResponse {
+    stats: DashboardStats
+    recentOrders: RecentOrder[]
+    topProducts: TopProduct[]
+    salesData: SalesData[]
+    categoryStats: CategoryStats[]
 }
 
 export const dashboardApi = createApi({
     reducerPath: 'dashboardApi',
     baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
+    tagTypes: ['Dashboard'],
     endpoints: (builder) => ({
-        getDashboardStats: builder.query<DashboardStats, void>({
+        getDashboardStats: builder.query<DashboardResponse, void>({
             query: () => '/dashboard/stats',
+            providesTags: ['Dashboard'],
         }),
 
-        getMonthlyRevenue: builder.query<RevenueData[], void>({
-            query: () => '/dashboard/revenue/monthly',
+        getRecentActivity: builder.query<
+            {
+                type: string
+                message: string
+                timestamp: string
+                user?: string
+            }[],
+            void
+        >({
+            query: () => '/dashboard/activity',
+            providesTags: ['Dashboard'],
         }),
 
-        getTopProducts: builder.query<TopProduct[], void>({
-            query: () => '/dashboard/products/top',
-        }),
-
-        getRecentActivity: builder.query<any[], void>({
-            query: () => '/dashboard/activity/recent',
+        refreshDashboard: builder.mutation<void, void>({
+            query: () => ({
+                url: '/dashboard/refresh',
+                method: 'POST',
+            }),
+            invalidatesTags: ['Dashboard'],
         }),
     }),
 })
 
 export const {
     useGetDashboardStatsQuery,
-    useGetMonthlyRevenueQuery,
-    useGetTopProductsQuery,
     useGetRecentActivityQuery,
+    useRefreshDashboardMutation,
 } = dashboardApi

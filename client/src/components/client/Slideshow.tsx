@@ -3,13 +3,13 @@ import { LeftOutlined, RightOutlined } from '@ant-design/icons'
 
 const slides = [
     {
-        image: '/img/slide1.jpg',
+        image: '/img/slide1.webp',
         title: 'New Arrivals',
         description: 'Discover our latest collection of books',
         color: 'from-blue-600/50',
     },
     {
-        image: '/img/slide2.jpg',
+        image: '/img/slide2.webp',
         title: 'Best Sellers',
         description: 'Most popular books this month',
         color: 'from-purple-600/50',

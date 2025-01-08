@@ -11,6 +11,7 @@ import { customerApi } from '@/services/CustomerApi'
 import { paymentMethodApi } from '@/services/PaymentMethodApi'
 import { vietQrApi } from '@/services/VietQrApi'
 import { openApi } from '@/services/OpenApi'
+import { dashboardApi } from '@/services/DashboardApi'
 import userReducer from './userSlice'
 
 const store = configureStore({
@@ -27,6 +28,7 @@ const store = configureStore({
         [paymentMethodApi.reducerPath]: paymentMethodApi.reducer,
         [vietQrApi.reducerPath]: vietQrApi.reducer,
         [openApi.reducerPath]: openApi.reducer,
+        [dashboardApi.reducerPath]: dashboardApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware().concat(
@@ -40,7 +42,8 @@ const store = configureStore({
             customerApi.middleware,
             paymentMethodApi.middleware,
             vietQrApi.middleware,
-            openApi.middleware
+            openApi.middleware,
+            dashboardApi.middleware,
         ),
 })
 

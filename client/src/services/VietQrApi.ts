@@ -11,7 +11,7 @@ export interface Bank {
     lookupSupported: number // Có hỗ trợ tra cứu không (1 là có, 0 là không)
 }
 
-interface QrCodeResponse {
+export interface QrCodeResponse {
     accountNo: number
     accountName: string
     acqId: string

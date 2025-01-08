@@ -50,7 +50,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onCategoryChange }) => {
 
     return (
         <motion.div
-            className="w-72 bg-white rounded-xl shadow-sm p-4 h-full"
+            className="w-auto bg-white rounded-xl shadow-sm p-4 h-full"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.3 }}

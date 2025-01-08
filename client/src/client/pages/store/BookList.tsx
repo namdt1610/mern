@@ -82,7 +82,7 @@ const ListAllProduct: React.FC<ListAllProductProps> = ({
     )
 
     return (
-        <div className="min-h-screen bg-gray-50 py-8 ">
+        <div className="min-h-screen bg-gray-50 py-8 rounded-xl">
             <div className="container mx-auto px-4">
                 {/* Filters Section */}
                 <motion.div

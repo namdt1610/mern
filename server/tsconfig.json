@@ -1,8 +1,7 @@
 {
     "extends": "../tsconfig.base.json", // Kế thừa từ file tsconfig.json ở root
     "compilerOptions": {
-        "module": "NodeNext", // Quy định output module được sử dụng
-        "moduleResolution": "NodeNext",
+        "module": "CommonJS", // Quy định output module được sử dụng
         "target": "ES2023", // Target output cho code
         "outDir": "dist", // Đường dẫn output cho thư mục build
         "esModuleInterop": true,
@@ -15,5 +14,5 @@
         }
     },
     // "files": ["src/type.d.ts"], // Các file dùng để defined global type cho dự án
-    "include": ["src/**/*", "index.ts", "../shared/**/*"] // Đường dẫn include cho các file cần build
+    "include": ["src/**/*.ts", "index.ts", "../shared/**/*", "**/*.ts"] // Đường dẫn include cho các file cần build
 }

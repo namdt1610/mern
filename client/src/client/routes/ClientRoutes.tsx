@@ -1,10 +1,10 @@
 import React, { lazy, Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom'
-import ProtectedRoute from '../../components/auth/ProtectedRoute'
 import { Spin } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
 import OrderStatusPage from '../pages/order/OrderStatusPage'
 import OrderDetailsPage from '../pages/order/OrderDetailsPage'
+import PrivateRoute from '@/routes/PrivateRoute'
 
 const LoginPage = lazy(() => import('../pages/auth/Login/LoginClientPage'))
 const RegisterPage = lazy(() => import('../pages/auth/Register/Register'))
@@ -53,9 +53,9 @@ export default function ClientRoutes() {
                 <Route
                     path="/user"
                     element={
-                        <ProtectedRoute>
+                        <PrivateRoute>
                             <User />
-                        </ProtectedRoute>
+                        </PrivateRoute>
                     }
                 />
                 <Route path="/*" element={<NotFound />} />

@@ -14,6 +14,7 @@ import productRoutes from './routes/Product'
 import inventoryRoutes from './routes/InventoryRoute'
 import orderRoutes from './routes/OrderRoute'
 import cartRoutes from './routes/CartRoute'
+import dashboardRoutes from './routes/DashboardRoutes'
 
 //* server.ts
 
@@ -130,6 +131,7 @@ app.use('/api/categories', categoryRoutes)
 app.use('/api/inventory', inventoryRoutes)
 app.use('/api/orders', orderRoutes)
 app.use('/api/cart', cartRoutes)    
+app.use('/api/dashboard', dashboardRoutes)
 
 // Global error handler
 app.use(

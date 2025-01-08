@@ -59,7 +59,7 @@ const StoreRightSidebar = () => {
 
     return (
         <motion.div
-            className="w-72 space-y-6"
+            className="w-96 space-y-6"
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.3 }}
