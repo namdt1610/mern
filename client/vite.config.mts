@@ -6,7 +6,8 @@ import autoprefixer from 'autoprefixer'
 
 export default defineConfig({
     build: {
-        outDir: 'build',
+        outDir: 'dist',
+        emptyOutDir: true,
         minify: 'esbuild', // Hoặc 'esbuild' nếu cần tốc độ nhanh hơn
         sourcemap: true, // Nếu bạn cần sourcemaps cho việc debug
     },
