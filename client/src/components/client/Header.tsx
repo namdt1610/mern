@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Layout, Menu } from 'antd/'
+import { Badge, Button, Dropdown, Layout, Menu } from 'antd'
 import {
     AudioFilled,
     AudioOutlined,
@@ -8,160 +8,196 @@ import {
     HomeOutlined,
     LoginOutlined,
     ShoppingCartOutlined,
+    UserOutlined,
+    MenuOutlined,
+    BellOutlined,
+    SearchOutlined,
 } from '@ant-design/icons'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { getUserFromCookie } from '@/utils/useGetToken'
+import { motion, AnimatePresence } from 'framer-motion'
 
 const { Header } = Layout
-const user = getUserFromCookie()
-console.log(user)
 
-const userId = user?._id || null
-console.log('userId', userId)
-
-const navItems = [
-    {
-        key: '1',
-        label: 'Home',
-        link: '/',
-        icon: <HomeOutlined />,
-    },
-    {
-        key: '2',
-        label: 'Books',
-        link: '/books',
-        icon: <BookFilled />,
-    },
-    {
-        key: '3',
-        label: 'Ebooks',
-        link: '/ebooks',
-        icon: <BookOutlined />,
-    },
-    {
-        key: '4',
-        label: 'Audio Books',
-        link: '/audio-books',
-        icon: <AudioOutlined />,
-    },
-    {
-        key: '5',
-        label: 'Podcasts',
-        link: '/podcasts',
-        icon: <AudioFilled />,
-    },
-]
-
-const accountItems = userId
-    ? [
-          {
-              key: '6',
-              label: 'Cart',
-              link: `/cart/${userId}`,
-              icon: <ShoppingCartOutlined />,
-          },
-          {
-              key: '7',
-              label: 'Logout',
-              link: '/logout',
-              icon: <LoginOutlined />,
-          },
-      ]
-    : [
-          {
-              key: '8',
-              label: 'Login',
-              link: '/login',
-              icon: <LoginOutlined />,
-          },
-          {
-              key: '9',
-              label: 'Register',
-              link: '/register',
-              icon: <LoginOutlined />,
-          },
-      ]
-
-const Index = () => {
+export default function HeaderComponent() {
     const navigate = useNavigate()
-    const [isLoggedIn, setIsLoggedIn] = useState(false) // Trạng thái đăng nhập
+    const location = useLocation()
     const [isScrolled, setIsScrolled] = useState(false)
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
+    const user = getUserFromCookie()
 
-    // Hàm xử lý điều hướng khi click vào menu item
-    const handleMenuClick = (e: { key: string }) => {
-        const allItems = [...navItems, ...accountItems] // Kết hợp cả 2 danh sách
-        const selectedItem = allItems.find((item) => item.key === e.key)
-        // console.log('Clicked item:', selectedItem)
-        if (selectedItem?.link) {
-            navigate(selectedItem.link) // Điều hướng tới link của item
-        }
-    }
     useEffect(() => {
-        const handleScroll = () => {
-            setIsScrolled(window.scrollY > 10) // Nếu cuộn xuống > 10px
-        }
+        const handleScroll = () => setIsScrolled(window.scrollY > 10)
+        const handleResize = () => setIsMobile(window.innerWidth < 768)
 
         window.addEventListener('scroll', handleScroll)
-        return () => window.removeEventListener('scroll', handleScroll)
+        window.addEventListener('resize', handleResize)
+        return () => {
+            window.removeEventListener('scroll', handleScroll)
+            window.removeEventListener('resize', handleResize)
+        }
     }, [])
+
+    const navItems = [
+        { key: 'home', label: 'Home', icon: <HomeOutlined />, link: '/' },
+        { key: 'books', label: 'Books', icon: <BookFilled />, link: '/books' },
+        {
+            key: 'ebooks',
+            label: 'Ebooks',
+            icon: <BookOutlined />,
+            link: '/ebooks',
+        },
+        {
+            key: 'audiobooks',
+            label: 'Audio Books',
+            icon: <AudioOutlined />,
+            link: '/audio-books',
+        },
+        {
+            key: 'podcasts',
+            label: 'Podcasts',
+            icon: <AudioFilled />,
+            link: '/podcasts',
+        },
+    ]
+
+    const userMenuItems = [
+        { key: 'profile', label: 'Profile', icon: <UserOutlined /> },
+        { key: 'orders', label: 'My Orders', icon: <ShoppingCartOutlined /> },
+        { key: 'logout', label: 'Logout', icon: <LoginOutlined /> },
+    ]
+
+    const handleMenuClick = (path: string) => navigate(path)
 
     return (
         <Header
-            className={`sticky top-0 z-50 transition-all duration-300 ${
+            className={`fixed w-full z-50 transition-all duration-300 ${
                 isScrolled
-                    ? 'bg-white shadow-md backdrop-blur-md'
+                    ? 'bg-white/80 backdrop-blur-md shadow-sm'
                     : 'bg-transparent'
             }`}
-            style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                padding: '0 20px',
-            }}
         >
-            {/* Logo */}
-            <div style={{ flex: 'none' }}>
-                <Link to={'/'}>
-                    <img
-                        className="w-16 h-16"
+            <div className="container mx-auto px-4 h-full flex items-center justify-between">
+                {/* Logo */}
+                <Link to="/" className="flex items-center">
+                    <motion.img
+                        whileHover={{ scale: 1.05 }}
                         src="/img/DTN.webp"
                         alt="logo"
-                        loading="lazy"
+                        className="h-12 w-auto"
                     />
                 </Link>
-            </div>
 
-            {/* Menu chính */}
-            <div style={{ flex: 1, margin: '0 20px', maxWidth: '70%' }}>
-                <Menu
-                    theme="light"
-                    mode="horizontal"
-                    onClick={handleMenuClick}
-                    items={navItems}
-                    style={{
-                        backgroundColor: 'transparent',
-                        borderBottom: 'none',
-                    }}
-                />
-            </div>
+                {/* Desktop Navigation */}
+                {!isMobile && (
+                    <div className="flex-1 mx-8">
+                        <Menu
+                            mode="horizontal"
+                            selectedKeys={[location.pathname]}
+                            className="border-none bg-transparent"
+                        >
+                            {navItems.map((item) => (
+                                <Menu.Item
+                                    key={item.key}
+                                    icon={item.icon}
+                                    onClick={() => handleMenuClick(item.link)}
+                                    className="!text-gray-600 hover:!text-blue-600"
+                                >
+                                    {item.label}
+                                </Menu.Item>
+                            ))}
+                        </Menu>
+                    </div>
+                )}
 
-            {/* Menu tài khoản */}
-            <div style={{ flex: 1 }}>
-                <Menu
-                    theme="light"
-                    mode="horizontal"
-                    items={accountItems}
-                    onClick={handleMenuClick}
-                    style={{
-                        backgroundColor: 'transparent',
-                        borderBottom: 'none',
-                        alignItems: 'end',
-                        justifyContent: 'flex-end',
-                    }}
-                />
+                {/* Right Section */}
+                <div className="flex items-center gap-4">
+                    {/* Search Button (Mobile) */}
+                    {isMobile && (
+                        <Button
+                            type="text"
+                            icon={<SearchOutlined />}
+                            onClick={() => navigate('/search')}
+                        />
+                    )}
+
+                    {/* Notifications */}
+                    <Badge count={3} size="small">
+                        <Button
+                            type="text"
+                            icon={<BellOutlined />}
+                            className="flex items-center justify-center"
+                        />
+                    </Badge>
+
+                    {/* Cart */}
+                    {user && (
+                        <Badge count={2} size="small">
+                            <Button
+                                type="text"
+                                icon={<ShoppingCartOutlined />}
+                                onClick={() => navigate(`/cart/${user._id}`)}
+                                className="flex items-center justify-center"
+                            />
+                        </Badge>
+                    )}
+
+                    {/* User Menu */}
+                    {user ? (
+                        <Dropdown
+                            menu={{
+                                items: userMenuItems.map((item) => ({
+                                    key: item.key,
+                                    label: (
+                                        <span className="flex items-center gap-2">
+                                            {item.icon}
+                                            {item.label}
+                                        </span>
+                                    ),
+                                })),
+                            }}
+                            trigger={['click']}
+                        >
+                            <Button
+                                type="text"
+                                icon={<UserOutlined />}
+                                className="flex items-center gap-2"
+                            >
+                                {!isMobile && <span>{user.name}</span>}
+                            </Button>
+                        </Dropdown>
+                    ) : (
+                        <Button
+                            type="primary"
+                            icon={<LoginOutlined />}
+                            onClick={() => navigate('/login')}
+                        >
+                            {!isMobile && 'Login'}
+                        </Button>
+                    )}
+
+                    {/* Mobile Menu */}
+                    {isMobile && (
+                        <Dropdown
+                            menu={{
+                                items: navItems.map((item) => ({
+                                    key: item.key,
+                                    label: (
+                                        <span className="flex items-center gap-2">
+                                            {item.icon}
+                                            {item.label}
+                                        </span>
+                                    ),
+                                    onClick: () => handleMenuClick(item.link),
+                                })),
+                            }}
+                            trigger={['click']}
+                        >
+                            <Button type="text" icon={<MenuOutlined />} />
+                        </Dropdown>
+                    )}
+                </div>
             </div>
         </Header>
     )
 }
-
-export default Index

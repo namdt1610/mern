@@ -6,6 +6,7 @@ import Hero from '../Hero'
 import MainContent from '../MainContent'
 import Content from '../Content'
 import BackToTop from '@/components/BackToTop'
+import Slideshow from '../Slideshow'
 
 export default function LandingLayout() {
     return (
@@ -13,6 +14,7 @@ export default function LandingLayout() {
             <Header />
             <Main>
                 <Hero />
+                <Slideshow />
                 <Content />
                 <MainContent />
             </Main>

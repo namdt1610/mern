@@ -1,27 +1,28 @@
 import React, { useEffect, useState } from 'react'
-import { Button } from 'antd'
+import { Button, Spin, Tag, Tooltip } from 'antd'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
     useGetProductsQuery,
     useUpdateClickCountMutation,
 } from '@/services/ProductApi'
-import InfiniteScroll from 'react-infinite-scroll-component'
+import {
+    EyeOutlined,
+    ShoppingCartOutlined,
+    HeartOutlined,
+    StarOutlined,
+} from '@ant-design/icons'
 
 export default function MainContent() {
     const { data: products, isLoading, error } = useGetProductsQuery()
     const [updateClickCount] = useUpdateClickCountMutation()
     const [displayedProducts, setDisplayedProducts] = useState<any[]>([])
-    const [hasMore, setHasMore] = useState(true)
-    const itemsPerLoad = 8 // Number of items to load each time
-    const tempImg = '/public/img/bia1_thuong.webp'
-    useEffect(() => {
-        if (products) {
-            setDisplayedProducts(products.slice(0, itemsPerLoad))
-        }
-    }, [products])
+    const [currentPage, setCurrentPage] = useState(1)
+    const [selectedFilter, setSelectedFilter] = useState('all')
+    const itemsPerPage = 8
 
     useEffect(() => {
         if (products) {
-            setDisplayedProducts(products.slice(0, itemsPerLoad))
+            setDisplayedProducts(products.slice(0, itemsPerPage))
         }
     }, [products])
 
@@ -33,71 +34,190 @@ export default function MainContent() {
         }
     }
 
-    const fetchMoreData = () => {
-        if (displayedProducts.length >= (products?.length || 0)) {
-            setHasMore(false)
-            return
-        }
-
-        setTimeout(() => {
-            setDisplayedProducts(
-                products?.slice(0, displayedProducts.length + itemsPerLoad) ||
-                    []
-            )
-        }, 500)
+    const loadMore = () => {
+        const nextPage = currentPage + 1
+        const newProducts = products?.slice(0, nextPage * itemsPerPage) || []
+        setDisplayedProducts(newProducts)
+        setCurrentPage(nextPage)
     }
 
-    if (isLoading) return <div>Loading...</div>
-    if (error) return <div>Error loading products</div>
+    const hasMore = products
+        ? displayedProducts.length < products.length
+        : false
+
+    const filters = [
+        { key: 'all', label: 'All Books' },
+        { key: 'popular', label: 'Popular' },
+        { key: 'new', label: 'New Arrivals' },
+        { key: 'trending', label: 'Trending' },
+    ]
+
+    if (isLoading)
+        return (
+            <div className="flex justify-center items-center min-h-[400px]">
+                <Spin size="large" />
+            </div>
+        )
+
+    if (error)
+        return (
+            <div className="text-center text-red-500 p-8">
+                Error loading products
+            </div>
+        )
 
     return (
-        <div>
-            <div className="p-10 bg-white">
-                <h2 className="text-3xl font-bold text-gray-800 mb-6">
-                    Featured Products
-                </h2>
-                <InfiniteScroll
-                    dataLength={displayedProducts.length}
-                    next={fetchMoreData}
-                    hasMore={hasMore}
-                    loader={<h4>Loading more...</h4>}
+        <div className="bg-gray-50 min-h-screen">
+            <div className="container mx-auto px-4 py-8">
+                {/* Filters */}
+                <motion.div
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    className="mb-8"
                 >
-                    <div className="grid grid-cols-4 gap-6">
-                        {displayedProducts.map((product) => (
-                            <div
-                                key={product._id}
-                                onClick={() => handleProductClick(product._id)}
-                                className="p-4 bg-gray-100 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
+                    <div className="flex flex-wrap gap-4 mb-6">
+                        {filters.map((filter) => (
+                            <Button
+                                key={filter.key}
+                                type={
+                                    selectedFilter === filter.key
+                                        ? 'primary'
+                                        : 'default'
+                                }
+                                onClick={() => setSelectedFilter(filter.key)}
+                                className="rounded-full"
                             >
-                                <img
-                                    className="rounded-lg object-cover mb-4"
-                                    src={
-                                        !product.imageUrl
-                                            ? `localhost:8888${product.imageUrl}`
-                                            : tempImg
-                                    }
-                                    alt={product.name}
-                                />
-                                <h3 className="text-lg font-semibold text-gray-800">
-                                    {product.name}
-                                </h3>
-                                <p className="text-sm text-gray-600">
-                                    ${product.price}
-                                </p>
-                                <span className="text-sm text-gray-600">
-                                    Clicks: {product.clickCount}
-                                </span>
-                                <span className="text-sm text-gray-600">
-                                    Sold: {product.sold}
-                                </span>
-
-                                <Button className="mt-4 w-full" type="primary">
-                                    Details
-                                </Button>
-                            </div>
+                                {filter.label}
+                            </Button>
                         ))}
                     </div>
-                </InfiniteScroll>
+                </motion.div>
+
+                {/* Products Grid */}
+                <motion.div
+                    className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+                    layout
+                >
+                    <AnimatePresence>
+                        {displayedProducts.map((product) => (
+                            <motion.div
+                                key={product._id}
+                                layout
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: 20 }}
+                                whileHover={{ y: -5 }}
+                                className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300"
+                                onClick={() => handleProductClick(product._id)}
+                            >
+                                {/* Image Container */}
+                                <div className="relative aspect-[3/4] overflow-hidden rounded-t-xl">
+                                    <img
+                                        src={
+                                            `http://localhost:8888/uploads/${product.imageUrl}` ||
+                                            'public/img/bia1_thuong.webp'
+                                        }
+                                        alt={product.name}
+                                        className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-300"
+                                    />
+                                    {/* Overlay with Quick Actions */}
+                                    <div
+                                        className="absolute inset-0 bg-black bg-opacity-20 opacity-0 hover:opacity-100 
+                                        transition-opacity duration-300 flex items-center justify-center gap-3"
+                                    >
+                                        <Tooltip title="Quick View">
+                                            <Button
+                                                shape="circle"
+                                                icon={<EyeOutlined />}
+                                                className="hover:scale-110 transition-transform"
+                                            />
+                                        </Tooltip>
+                                        <Tooltip title="Add to Cart">
+                                            <Button
+                                                shape="circle"
+                                                icon={<ShoppingCartOutlined />}
+                                                className="hover:scale-110 transition-transform"
+                                            />
+                                        </Tooltip>
+                                        <Tooltip title="Add to Wishlist">
+                                            <Button
+                                                shape="circle"
+                                                icon={<HeartOutlined />}
+                                                className="hover:scale-110 transition-transform"
+                                            />
+                                        </Tooltip>
+                                    </div>
+                                    {/* New Tag if product is new */}
+                                    {product.isNew && (
+                                        <Tag
+                                            color="blue"
+                                            className="absolute top-3 left-3"
+                                        >
+                                            New
+                                        </Tag>
+                                    )}
+                                </div>
+
+                                {/* Content */}
+                                <div className="p-4">
+                                    <h3 className="text-lg font-semibold text-gray-800 line-clamp-2 mb-2">
+                                        {product.name}
+                                    </h3>
+                                    <div className="flex items-center gap-2 mb-3">
+                                        <StarOutlined className="text-yellow-400" />
+                                        <span className="text-sm text-gray-600">
+                                            4.5 (120 reviews)
+                                        </span>
+                                    </div>
+                                    <div className="flex justify-between items-center">
+                                        <div>
+                                            <p className="text-xl font-bold text-blue-600">
+                                                ${product.price}
+                                            </p>
+                                            {product.oldPrice && (
+                                                <p className="text-sm text-gray-400 line-through">
+                                                    ${product.oldPrice}
+                                                </p>
+                                            )}
+                                        </div>
+                                        <div className="flex items-center gap-2 text-sm text-gray-500">
+                                            <Tooltip title="Views">
+                                                <span className="flex items-center gap-1">
+                                                    <EyeOutlined />{' '}
+                                                    {product.clickCount}
+                                                </span>
+                                            </Tooltip>
+                                            <Tooltip title="Sold">
+                                                <span className="flex items-center gap-1">
+                                                    <ShoppingCartOutlined />{' '}
+                                                    {product.sold}
+                                                </span>
+                                            </Tooltip>
+                                        </div>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </AnimatePresence>
+                </motion.div>
+
+                {/* Load More Button */}
+                {hasMore && (
+                    <motion.div
+                        className="flex justify-center mt-8"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                    >
+                        <Button
+                            type="primary"
+                            size="large"
+                            onClick={loadMore}
+                            className="px-8 rounded-full"
+                        >
+                            Xem thêm
+                        </Button>
+                    </motion.div>
+                )}
             </div>
         </div>
     )
