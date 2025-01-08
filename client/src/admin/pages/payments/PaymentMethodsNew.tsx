@@ -1,6 +1,6 @@
 import React from 'react'
 import {useNavigate} from 'react-router-dom'
-import {useAddPaymentMethodMutation} from '@/services/PaymentMethod'
+import {useAddPaymentMethodMutation} from '@/services/PaymentMethodApi'
 import {Button, Form, Input} from 'antd'
 import {PaymentMethod} from 'shared/types/PaymentMethod'
 
