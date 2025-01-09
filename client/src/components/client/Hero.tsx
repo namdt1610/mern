@@ -57,7 +57,7 @@ const popularCategories = ['Fiction', 'Business', 'Self-Help', 'Science']
 
 type SuggestionType = {
     value: string
-    label: React.ReactNode
+    label: React.ReactElement
     disabled?: boolean
 }
 
@@ -72,7 +72,7 @@ export default function Hero() {
     const getPlaceholderSuggestions = () => [
         {
             label: (
-                <div className="py-2 px-3 text-xs text-gray-500 bg-gray-50 flex items-center gap-2">
+                <div className="py-2 px-3 text-xs text-gray-500 flex items-center gap-2">
                     <FireOutlined /> TRENDING SEARCHES
                 </div>
             ),
@@ -88,7 +88,7 @@ export default function Hero() {
         },
         {
             label: (
-                <div className="py-2 px-3 text-xs text-gray-500 bg-gray-50 flex items-center gap-2">
+                <div className="py-2 px-3 text-xs text-gray-500  flex items-center gap-2">
                     <HistoryOutlined /> RECENT SEARCHES
                 </div>
             ),
@@ -113,7 +113,7 @@ export default function Hero() {
         },
         {
             label: (
-                <div className="py-2 px-3 text-xs text-gray-500 bg-gray-50 flex items-center gap-2">
+                <div className="py-2 px-3 text-xs text-gray-500  flex items-center gap-2">
                     <BookOutlined /> POPULAR CATEGORIES
                 </div>
             ),
@@ -171,8 +171,8 @@ export default function Hero() {
                 }}
                 onFocus={() => setShowPlaceholder(true)}
                 className="w-full"
-                dropdownClassName="search-suggestions-dropdown"
-                dropdownMatchSelectWidth={500}
+                popupClassName="search-suggestions-dropdown"
+                popupMatchSelectWidth={500}
             >
                 <Input
                     size="large"
@@ -217,7 +217,7 @@ export default function Hero() {
     return (
         <>
             <style>{styles}</style>
-            <div className="relative min-h-[600px] bg-gradient-to-br from-gray-50 to-white overflow-hidden">
+            <div className="relative min-h-[600px] overflow-hidden">
                 {/* Background Decorative Elements */}
                 <motion.div
                     className="absolute inset-0 opacity-40"

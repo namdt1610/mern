@@ -387,9 +387,8 @@ export default function LayoutApp() {
                         padding: 24,
                         margin: 0,
                         minHeight: 280,
-                        background: 'rgba(255, 255, 255, 0.8)',
-                        backdropFilter: 'blur(10px)',
                         borderRadius: 12,
+                        backdropFilter: 'blur(10px)',
                     }}
                 >
                     <div className="grid grid-cols-2 gap-4">

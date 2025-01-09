@@ -10,7 +10,7 @@ import Slideshow from '../Slideshow'
 
 export default function LandingLayout() {
     return (
-        <div className="bg-gradient-to-r from-gray-200 via-gray-100 to-white min-h-screen flex flex-col">
+        <div className="min-h-screen flex flex-col">
             <Header />
             <Main>
                 <Hero />

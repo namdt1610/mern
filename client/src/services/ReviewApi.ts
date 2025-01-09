@@ -1,5 +1,5 @@
-import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
-import {Review} from '@/types/Review'
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { Review } from 'shared/types/Review'
 
 export const reviewApi = createApi({
     reducerPath: 'reviewApi',
@@ -8,6 +8,22 @@ export const reviewApi = createApi({
         getReviews: builder.query<Review[], string>({
             query: (bookId) => `/reviews/${bookId}`,
         }),
+        getReviewsByProductId: builder.query<Review[], string>({
+            query: (productId) => `/reviews/product/${productId}`,
+        }),
+        getReviewsByUserId: builder.query<Review[], string>({
+            query: (userId) => `/reviews/user/${userId}`,
+        }),
+        getReviewsByProductIdAndUserId: builder.query<
+            Review[],
+            { productId: string; userId: string }
+        >({
+            query: ({ productId, userId }) => `/reviews/${productId}/${userId}`,
+        }),
+        getAverageRating: builder.query<number, string>({
+            query: (productId) => `/reviews/average/${productId}`,
+        }),
+
         addReview: builder.mutation<Review, Review>({
             query: (review) => ({
                 url: '/reviews',
@@ -36,4 +52,8 @@ export const {
     useAddReviewMutation,
     useUpdateReviewMutation,
     useDeleteReviewMutation,
+    useGetReviewsByProductIdQuery,
+    useGetReviewsByUserIdQuery,
+    useGetReviewsByProductIdAndUserIdQuery,
+    useGetAverageRatingQuery,
 } = reviewApi

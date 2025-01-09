@@ -1,5 +1,5 @@
 import { getUserRoleFromCookie } from '@/utils/useGetToken'
-import { RouteConfig } from '@/admin/routes/routesConfig'
+import { RouteConfig } from '@/routes/admin/routesConfig'
 
 type UserRole = 'admin' | 'user'
 

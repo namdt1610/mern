@@ -107,7 +107,7 @@ export default function MainContent() {
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: 20 }}
                                 whileHover={{ y: -5 }}
-                                className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300"
+                                className="rounded-xl shadow-sm hover:shadow-md transition-all duration-300"
                                 onClick={() => handleProductClick(product._id)}
                             >
                                 {/* Image Container */}

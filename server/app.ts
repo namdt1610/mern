@@ -1,3 +1,4 @@
+//* server.ts
 import express, { Request, Response } from 'express'
 import path from 'path'
 import cors from 'cors'
@@ -6,18 +7,17 @@ import cookieParser from 'cookie-parser'
 import fs from 'fs'
 import upload from './middlewares/multer-config'
 import sharp from 'sharp'
+
 // Routes
-import authRoutes from './routes/Auth'
-import userRoutes from './routes/User'
-import categoryRoutes from './routes/Category'
-import productRoutes from './routes/Product'
-import inventoryRoutes from './routes/InventoryRoute'
-import orderRoutes from './routes/OrderRoute'
-import cartRoutes from './routes/CartRoute'
+import authRoutes from './routes/AuthRoutes'
+import userRoutes from './routes/UserRoutes.'
+import categoryRoutes from './routes/CategoryRoutes'
+import productRoutes from './routes/ProductRoutes.'
+import inventoryRoutes from './routes/InventoryRoutes'
+import orderRoutes from './routes/OrderRoutes'
+import cartRoutes from './routes/CartRoutes'
 import dashboardRoutes from './routes/DashboardRoutes'
-
-//* server.ts
-
+import reviewRoutes from './routes/ReviewRoutes'
 const app = express()
 
 // Middleware để parse JSON và URL-encoded body
@@ -132,6 +132,7 @@ app.use('/api/inventory', inventoryRoutes)
 app.use('/api/orders', orderRoutes)
 app.use('/api/cart', cartRoutes)
 app.use('/api/dashboard', dashboardRoutes)
+app.use('/api/reviews', reviewRoutes)
 
 // Global error handler
 app.use(
