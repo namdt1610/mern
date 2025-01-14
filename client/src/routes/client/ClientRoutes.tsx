@@ -12,7 +12,7 @@ const LoginPage = lazy(
 const RegisterPage = lazy(() => import('@/pages/client/auth/Register/Register'))
 const HomePage = lazy(() => import('@/pages/client/home/HomePage'))
 const StorePage = lazy(() => import('@/pages/client/store/StorePage'))
-const NotFound = lazy(() => import('@/pages/client/cart/CartPage'))
+const NotFound = lazy(() => import('@/pages/client/other/404'))
 const CheckoutPage = lazy(() => import('@/pages/client/checkout/CheckoutPage'))
 const UserProfilePage = lazy(
     () => import('@/pages/client/user/UserProfilePage')

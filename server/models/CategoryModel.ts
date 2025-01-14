@@ -1,4 +1,4 @@
-import mongoose, {Document, Schema} from 'mongoose'
+import mongoose, { Document, Schema } from 'mongoose'
 
 const schema = Schema
 
@@ -19,6 +19,10 @@ const categorySchema = new schema({
     isActive: {
         type: Boolean,
         default: true,
+    },
+    imgUrl: {
+        type: String,
+        default: '/beethoven.webp',
     },
 })
 

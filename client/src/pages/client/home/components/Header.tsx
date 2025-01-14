@@ -99,7 +99,7 @@ export default function HeaderComponent() {
                 <Link to="/" className="flex items-center">
                     <motion.img
                         whileHover={{ scale: 1.05 }}
-                        src="/img/DTN.webp"
+                        src="/img/logo_dtn.png"
                         alt="logo"
                         className="h-12 w-auto"
                     />

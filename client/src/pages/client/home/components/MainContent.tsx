@@ -11,8 +11,10 @@ import {
     HeartOutlined,
     StarOutlined,
 } from '@ant-design/icons'
+import { useNavigate } from 'react-router-dom'
 
 export default function MainContent() {
+    const nav = useNavigate()
     const { data: products, isLoading, error } = useGetProductsQuery()
     const [updateClickCount] = useUpdateClickCountMutation()
     const [displayedProducts, setDisplayedProducts] = useState<any[]>([])
@@ -29,6 +31,7 @@ export default function MainContent() {
     const handleProductClick = async (productId: string) => {
         try {
             await updateClickCount(productId).unwrap()
+            console.log('Click count updated')
         } catch (error) {
             console.error('Failed to update click count:', error)
         }
@@ -62,7 +65,7 @@ export default function MainContent() {
     if (error)
         return (
             <div className="text-center text-red-500 p-8">
-                Error loading products
+                Error loading products. Please check your connection try again later.
             </div>
         )
 
@@ -130,6 +133,12 @@ export default function MainContent() {
                                                 shape="circle"
                                                 icon={<EyeOutlined />}
                                                 className="hover:scale-110 transition-transform"
+                                                onClick={() => {
+                                                    nav('/' + product._id)
+                                                    handleProductClick(
+                                                        product._id
+                                                    )
+                                                }}
                                             />
                                         </Tooltip>
                                         <Tooltip title="Add to Cart">

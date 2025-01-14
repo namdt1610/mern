@@ -1,12 +1,12 @@
 import React from 'react'
-import Header from '../Header'
-import Main from '../Main'
-import Footer from '../Footer'
-import Hero from '../Hero'
-import MainContent from '../MainContent'
-import Content from '../Content'
+import Header from '../../../pages/client/home/components/Header'
+import Main from '@/pages/client/home/components/Main'
+import Footer from '../../../pages/client/home/components/Footer'
+import Hero from '../../../pages/client/home/components/Hero'
+import MainContent from '@/pages/client/home/components/MainContent'
+import Content from '../../../pages/client/home/components/Content'
 import BackToTop from '@/components/BackToTop'
-import Slideshow from '../Slideshow'
+import Slideshow from '@/pages/client/home/components/Slideshow'
 
 export default function LandingLayout() {
     return (

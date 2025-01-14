@@ -124,9 +124,11 @@ const BookDetail: React.FC = () => {
 
     if (!book) {
         return (
-            <Empty description={'Không tìm thấy sách này'}>
-                <Button onClick={refetch}>Tải lại</Button>
-            </Empty>
+            <MainLayout>
+                <Empty description={'Không tìm thấy sách này'}>
+                    <Button onClick={refetch}>Tải lại</Button>
+                </Empty>
+            </MainLayout>
         )
     }
 
