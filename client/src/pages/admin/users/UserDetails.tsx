@@ -71,8 +71,10 @@ const UserDetail: React.FC = () => {
         return (
             <LoadingError
                 isLoading={isLoading}
-                error={null}
+                isError={null}
                 refetch={refetch}
+                title="User Detail"
+                isLogin={false}
             />
         )
     if (isError || !user) return <Empty description="User not found" />

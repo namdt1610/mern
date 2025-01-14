@@ -25,6 +25,12 @@ export const orderApi = createApi({
             providesTags: ['Order'],
         }),
 
+        // Lấy danh sách đơn hàng theo ID user
+        getOrdersByUserId: builder.query<Order[], string>({
+            query: (userId) => `/orders/user/${userId}`,
+            providesTags: ['Order'],
+        }),
+
         // Tạo đơn hàng mới
         createOrder: builder.mutation<Order, CreateOrderRequest>({
             query: (order) => ({
@@ -65,4 +71,5 @@ export const {
     useCreateOrderMutation,
     useUpdateOrderStatusMutation,
     useDeleteOrderMutation,
+    useGetOrdersByUserIdQuery,
 } = orderApi

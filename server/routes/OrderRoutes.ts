@@ -12,6 +12,9 @@ router.get('/', orderController.getAllOrders)
 // Get single order by ID
 router.get('/:id', orderController.getOrderById)
 
+// Get orders by user ID
+router.get('/user/:id', orderController.getOrdersByUserId)
+
 // Update order
 router.put('/:id', orderController.updateOrder)
 

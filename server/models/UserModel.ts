@@ -51,6 +51,12 @@ const userSchema = new schema(
             required: false,
             default: null,
         },
+        favorites: [
+            {
+                type: schema.Types.ObjectId,
+                ref: 'Product',
+            },
+        ],
         createAt: {
             type: Date,
             default: Date.now,

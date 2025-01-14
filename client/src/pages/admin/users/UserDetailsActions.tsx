@@ -1,8 +1,13 @@
 // UserActions.tsx
 
 import React from 'react'
-import {Button, Card, Grid, Space} from 'antd'
-import {BackwardOutlined, DeleteOutlined, ReloadOutlined, SaveOutlined,} from '@ant-design/icons'
+import { Button, Card, Grid, Space } from 'antd'
+import {
+    BackwardOutlined,
+    DeleteOutlined,
+    ReloadOutlined,
+    SaveOutlined,
+} from '@ant-design/icons'
 
 const { useBreakpoint } = Grid
 

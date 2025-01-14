@@ -1,6 +1,7 @@
-import {Request, Response} from 'express'
+import { Request, Response } from 'express'
 import bcrypt from 'bcryptjs'
 import User from '../models/UserModel'
+import mongoose from 'mongoose'
 
 export const getAllUsers = async (
     req: Request,
@@ -92,5 +93,55 @@ export const deleteUser = async (
         res.status(200).json({ message: 'User deleted successfully' })
     } catch (error) {
         res.status(500).json({ message: 'Could not delete user' })
+    }
+}
+
+export const getFavoritesById = async (
+    req: Request,
+    res: Response
+): Promise<void> => {
+    try {
+        const { id } = req.params
+        const favorites = await User.findById(id).populate('favorites')
+        console.log('Favorites:', favorites)
+        res.status(200).json(favorites?.favorites)
+    } catch (error) {
+        res.status(500).json({ message: 'Could not fetch favorites' })
+    }
+}
+
+export const addToFavorites = async (
+    req: Request,
+    res: Response
+): Promise<void> => {
+    const { userId, productId } = req.body
+    if (!userId) {
+        res.status(400).json({ message: 'User not found' })
+        return
+    }
+
+    try {
+        const user = await User.findById(userId)
+        if (!user) {
+            res.status(404).json({ message: 'User not found' })
+            return
+        }
+
+        const pid = new mongoose.Types.ObjectId(productId)
+        if (user.favorites.includes(pid)) {
+            res.status(400).json({ message: 'Product already in favorites' })
+            return
+        }
+
+        user.favorites.push(pid)
+        await user.save()
+        res.status(200).json({
+            message: 'Product added to favorites successfully',
+            user,
+        })
+        return
+    } catch (error) {
+        res.status(500).json({ message: 'Could not add to favorites' })
+        return
     }
 }

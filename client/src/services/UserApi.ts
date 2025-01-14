@@ -58,6 +58,23 @@ export const userApi = createApi({
                 body: formData,
             }),
         }),
+
+        getFavorites: builder.query<any[], string>({
+            query: (userId) => ({
+                url: `/users/favorites/${userId}`,
+            }),
+        }),
+
+        addToFavorites: builder.mutation<
+            User,
+            { userId: string; productId: string }
+        >({
+            query: ({ userId, productId }) => ({
+                url: `/users/favorites`,
+                method: 'POST',
+                body: JSON.stringify({ userId, productId }),
+            }),
+        }),
     }),
 })
 
@@ -68,4 +85,6 @@ export const {
     useUpdateUserMutation,
     useDeleteUserMutation,
     useUploadAvatarMutation,
+    useGetFavoritesQuery,
+    useAddToFavoritesMutation,
 } = userApi

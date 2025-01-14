@@ -12,6 +12,7 @@ import { paymentMethodApi } from '@/services/PaymentMethodApi'
 import { vietQrApi } from '@/services/VietQrApi'
 import { openApi } from '@/services/OpenApi'
 import { dashboardApi } from '@/services/DashboardApi'
+import { reviewApi } from '@/services/ReviewApi'
 import userReducer from './userSlice'
 
 const store = configureStore({
@@ -29,6 +30,7 @@ const store = configureStore({
         [vietQrApi.reducerPath]: vietQrApi.reducer,
         [openApi.reducerPath]: openApi.reducer,
         [dashboardApi.reducerPath]: dashboardApi.reducer,
+        [reviewApi.reducerPath]: reviewApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware().concat(
@@ -44,6 +46,7 @@ const store = configureStore({
             vietQrApi.middleware,
             openApi.middleware,
             dashboardApi.middleware,
+            reviewApi.middleware,
         ),
 })
 

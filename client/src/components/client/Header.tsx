@@ -62,10 +62,27 @@ export default function HeaderComponent() {
     ]
 
     const userMenuItems = [
-        { key: 'profile', label: 'Profile', icon: <UserOutlined /> },
-        { key: 'orders', label: 'My Orders', icon: <ShoppingCartOutlined /> },
+        {
+            key: 'profile',
+            label: 'Profile',
+            icon: <UserOutlined />,
+            link: `/profile`,
+        },
+        {
+            key: 'orders',
+            label: 'My Orders',
+            icon: <ShoppingCartOutlined />,
+            link: `/orders/${user?._id}`,
+        },
         { key: 'logout', label: 'Logout', icon: <LoginOutlined /> },
     ]
+
+    const menuItems = navItems.map((item) => ({
+        key: item.key,
+        icon: item.icon,
+        label: item.label,
+        onClick: () => handleMenuClick(item.link),
+    }))
 
     const handleMenuClick = (path: string) => navigate(path)
 
@@ -95,8 +112,9 @@ export default function HeaderComponent() {
                             mode="horizontal"
                             selectedKeys={[location.pathname]}
                             className="border-none bg-transparent"
+                            items={menuItems}
                         >
-                            {navItems.map((item) => (
+                            {/* {navItems.map((item) => (
                                 <Menu.Item
                                     key={item.key}
                                     icon={item.icon}
@@ -105,7 +123,7 @@ export default function HeaderComponent() {
                                 >
                                     {item.label}
                                 </Menu.Item>
-                            ))}
+                            ))} */}
                         </Menu>
                     </div>
                 )}
@@ -154,6 +172,8 @@ export default function HeaderComponent() {
                                             {item.label}
                                         </span>
                                     ),
+                                    onClick: () =>
+                                        handleMenuClick(item?.link ?? ''),
                                 })),
                             }}
                             trigger={['click']}

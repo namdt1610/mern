@@ -12,7 +12,7 @@ const MainLayout: React.FC<StoreLayoutProps> = ({ children }) => {
     return (
         <div className="min-h-screen flex flex-col">
             <Header />
-            <main className="">
+            <main className=" mt-[74px]">
                 <Main>{children}</Main>
             </main>
             <Footer />

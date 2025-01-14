@@ -119,7 +119,7 @@ const CartPage: React.FC = () => {
 
     return (
         <MainLayout>
-            <div style={{ padding: '24px' }}>
+            <div className='mt-[74px] p-[24px]'>
                 <Title level={4}>Your Cart</Title>
 
                 {cart && cart.products.length > 0 ? (

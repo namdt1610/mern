@@ -181,7 +181,7 @@ const ListAllProduct: React.FC<ListAllProductProps> = ({
                                                   <img
                                                       alt={product.name}
                                                       src={
-                                                          product.imageUrl ||
+                                                          `http://localhost:8888/uploads/${product.imageUrl}` ||
                                                           '/img/bia1_thuong.webp'
                                                       }
                                                       className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-300"

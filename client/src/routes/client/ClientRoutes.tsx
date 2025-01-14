@@ -14,9 +14,11 @@ const HomePage = lazy(() => import('@/pages/client/home/HomePage'))
 const StorePage = lazy(() => import('@/pages/client/store/StorePage'))
 const NotFound = lazy(() => import('@/pages/client/cart/CartPage'))
 const CheckoutPage = lazy(() => import('@/pages/client/checkout/CheckoutPage'))
-const User = lazy(() => import('@/pages/client/user/index'))
+const UserProfilePage = lazy(
+    () => import('@/pages/client/user/UserProfilePage')
+)
 const BookDetailsPage = lazy(
-    () => import('@/pages/client/store/ProductDetailsPage')
+    () => import('@/pages/client/store/BookDetailsPage')
 )
 const CartPage = lazy(() => import('@/pages/client/cart/CartPage'))
 const OrderPage = lazy(() => import('@/pages/client/order/OrderStatusPage'))
@@ -54,14 +56,7 @@ export default function ClientRoutes() {
                 />
                 <Route path="/orders" element={<OrderStatusPage />} />
                 <Route path="/order/:id" element={<OrderDetailsPage />} />
-                <Route
-                    path="/user"
-                    element={
-                        <PrivateRoute>
-                            <User />
-                        </PrivateRoute>
-                    }
-                />
+                <Route path="/profile" element={<UserProfilePage />} />
                 <Route path="/*" element={<NotFound />} />
             </Routes>
         </Suspense>

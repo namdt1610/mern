@@ -3,6 +3,7 @@ import Order from '../models/OrderModel'
 import Inventory from '../models/InventoryModel'
 import InventoryActivity from '../models/InventoryActivityModel'
 import mongoose from 'mongoose'
+import User from '../models/UserModel'
 
 export const OrderController = {
     // Create a new order
@@ -12,6 +13,7 @@ export const OrderController = {
 
         try {
             const { items, ...orderData } = req.body
+            const userId = req.body.user
 
             // Check and update inventory for each item
             for (const item of items) {
@@ -55,6 +57,21 @@ export const OrderController = {
             // Create the order
             const order = await Order.create([orderData], { session })
 
+            // Clear ordered items from user's cart
+            await User.findByIdAndUpdate(
+                userId,
+                {
+                    $pull: {
+                        cart: {
+                            productId: {
+                                $in: items.map((item: any) => item.productId),
+                            },
+                        },
+                    },
+                },
+                { session }
+            )
+
             await session.commitTransaction()
             res.status(201).json(order[0])
         } catch (error: any) {
@@ -93,6 +110,24 @@ export const OrderController = {
             res.status(200).json(order)
         } catch (error) {
             res.status(500).json({ message: 'Error fetching order', error })
+            return
+        }
+    },
+
+    // Get orders by user ID
+    getOrdersByUserId: async (req: Request, res: Response): Promise<void> => {
+        try {
+            const orders = await Order.find({ user: req.params.id }).populate({
+                path: 'user',
+                select: 'name phone email',
+            })
+            if (!orders) {
+                res.status(404).json({ message: 'Orders not found' })
+                return
+            }
+            res.status(200).json(orders)
+        } catch (error) {
+            res.status(500).json({ message: 'Error fetching orders', error })
             return
         }
     },

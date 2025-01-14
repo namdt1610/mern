@@ -2,7 +2,7 @@ import './index.css'
 import React, { useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter as Router } from 'react-router-dom'
-import { ConfigProvider, theme } from 'antd'
+import { ConfigProvider, theme, App as AntApp } from 'antd'
 import { Provider } from 'react-redux'
 import store from '@/redux/Store'
 import App from './App'
@@ -40,8 +40,8 @@ const AppWrapper = () => {
                 },
                 components: {
                     Layout: {
-                        colorBgBody: isDark ? '#141414' : '#ffffff',
-                        colorBgHeader: isDark ? '#1f1f1f' : '#ffffff',
+                        bodyBg: isDark ? '#141414' : '#ffffff',
+                        headerBg: isDark ? '#1f1f1f' : '#ffffff',
                     },
                     Button: {
                         controlHeight: 36,
@@ -151,13 +151,15 @@ const AppWrapper = () => {
                 },
             }}
         >
-            <Router>
-                <App />
-                <ThemeToggle
-                    isDark={isDark}
-                    toggleTheme={() => setIsDark(!isDark)}
-                />
-            </Router>
+            <AntApp>
+                <Router>
+                    <App />
+                    <ThemeToggle
+                        isDark={isDark}
+                        toggleTheme={() => setIsDark(!isDark)}
+                    />
+                </Router>
+            </AntApp>
         </ConfigProvider>
     )
 }

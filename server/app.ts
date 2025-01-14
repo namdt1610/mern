@@ -10,7 +10,7 @@ import sharp from 'sharp'
 
 // Routes
 import authRoutes from './routes/AuthRoutes'
-import userRoutes from './routes/UserRoutes.'
+import userRoutes from './routes/UserRoutes'
 import categoryRoutes from './routes/CategoryRoutes'
 import productRoutes from './routes/ProductRoutes.'
 import inventoryRoutes from './routes/InventoryRoutes'

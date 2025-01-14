@@ -3,6 +3,10 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useGetProductByIdQuery } from '@/services/ProductApi'
 import { useAddToCartMutation } from '@/services/CartApi'
 import { useGetUserIdFromCookie } from '@/utils/useGetToken'
+import {
+    useAddToFavoritesMutation,
+    useGetFavoritesQuery,
+} from '@/services/UserApi'
 
 import {
     Button,
@@ -10,34 +14,31 @@ import {
     Empty,
     Input,
     InputNumber,
-    List,
-    message,
+    App,
     Spin,
     Typography,
     Row,
     Col,
     Divider,
-    Rate,
-    Tooltip,
 } from 'antd'
 import MainLayout from '@/components/client/layout/MainLayout'
-import toast from 'react-hot-toast'
 import ReviewSection from './components/ReviewSection'
 
 const { Title, Text } = Typography
-const { TextArea } = Input
 
 const BookDetail: React.FC = () => {
+    const { message } = App.useApp()
     const userId = useGetUserIdFromCookie()
-    console.log('User ID:', userId)
+    // console.log('User ID:', userId)
 
     const id: string = useParams<{ id: string }>().id ?? ''
-    console.log('Product ID:', id)
+    // console.log('Product ID:', id)
 
     const { data: book, isLoading, refetch } = useGetProductByIdQuery(id)
     const [addToCart] = useAddToCartMutation()
     const nav = useNavigate()
-
+    const [addToFav] = useAddToFavoritesMutation()
+    const { data: favorites } = useGetFavoritesQuery(userId!)
     const [inCart, setInCart] = useState(false)
     const [inFavorites, setInFavorites] = useState(false)
     const [comments, setComments] = useState<
@@ -59,7 +60,11 @@ const BookDetail: React.FC = () => {
         if (book) {
             fetchComments(book._id)
         }
-    }, [book])
+        if (favorites) {
+            const favIds = favorites.map((fav) => fav._id)
+            setInFavorites(favIds.includes(id))
+        }
+    }, [book, favorites, id])
 
     const fetchComments = async (bookId: string) => {
         // Replace with real API call to fetch comments
@@ -72,9 +77,10 @@ const BookDetail: React.FC = () => {
 
     const handleAddToCart = async () => {
         if (!userId) {
-            toast.error('Please log in to add to cart')
+            message.error('Please log in to add to cart')
             throw new Error('User not logged in')
         }
+
         if (!id) {
             console.error('Book not found')
             throw new Error('Book not found')
@@ -88,13 +94,25 @@ const BookDetail: React.FC = () => {
             message.success('Added to cart')
             setInCart(true)
         } catch (error) {
-            toast.error('Failed to add to cart')
+            console.log(error)
+            message.error('Failed to add to cart')
         }
     }
 
-    const handleAddToFavorites = () => {
-        setInFavorites(true)
-        // Handle logic to add to favorites (e.g., call API to add product to user's favorites)
+    const handleAddToFavorites = async () => {
+        if (!userId) {
+            message.error('Please log in to add to favorites')
+            throw new Error('User not logged in')
+        }
+        try {
+            await addToFav({ userId, productId: id }).unwrap()
+            message.success('Added to favorites')
+        } catch (error: any) {
+            const errorMessage =
+                error?.data?.message ||
+                'An error occurred while adding to favorites'
+            message.error(errorMessage)
+        }
     }
 
     const handleNewComment = async () => {
@@ -124,10 +142,10 @@ const BookDetail: React.FC = () => {
                                 cover={
                                     <img
                                         alt={book.name}
-                                        src={`localhost:8888${book.imageUrl}`}
+                                        src={`http://localhost:8888/uploads/${book.imageUrl}`}
                                         style={{
                                             objectFit: 'cover',
-                                            height: '400px',
+                                            height: '800px',
                                             borderRadius: '8px',
                                         }}
                                     />
