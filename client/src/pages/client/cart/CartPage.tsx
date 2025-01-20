@@ -10,6 +10,8 @@ import { Button, Empty, Typography, Table, InputNumber, Flex } from 'antd'
 import { DeleteOutlined } from '@ant-design/icons'
 import MainLayout from '@/components/client/layout/MainLayout'
 import LoadingError from '@/components/LoadingError'
+import { useGetInventoryByIdQuery } from '@/services/InventoryApi'
+import { CartDetails } from 'shared/types/Cart'
 
 const { Title, Text } = Typography
 
@@ -26,6 +28,24 @@ const CartPage: React.FC = () => {
             refetch() // Load lại giỏ hàng khi userId thay đổi
         }
     }, [userId, refetch])
+
+    const checkStockAvailability = async (cartItems: CartDetails[]) => {
+        const unavailableItems: string[] = []
+
+        for (const item of cartItems) {
+            const { product, quantity } = item
+            const { data: productInStock } = useGetInventoryByIdQuery(
+                product._id
+            ) // API gọi đến kho để kiểm tra số lượng
+            if (productInStock && productInStock.quantity < quantity) {
+                unavailableItems.push(product._id)
+            }
+        }
+        console.log('Unavailable items:', unavailableItems);
+        
+        return unavailableItems
+    }
+    const unavailableItems = checkStockAvailability(cart.products)
 
     const handleUpdateQuantity = async (
         userId: string,
@@ -119,7 +139,7 @@ const CartPage: React.FC = () => {
 
     return (
         <MainLayout>
-            <div className='mt-[74px] p-[24px]'>
+            <div className="mt-[74px] p-[24px]">
                 <Title level={4}>Your Cart</Title>
 
                 {cart && cart.products.length > 0 ? (

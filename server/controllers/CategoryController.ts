@@ -1,25 +1,42 @@
-import {Request, Response} from 'express'
-import Category from '../models/categoryModel'
+import { Request, Response } from 'express'
+import Category from '../models/CategoryModel'
+import redisClient from '../utils/redisClient'
 
-// GET all categories
 const getAllCategories = async (req: Request, res: Response) => {
     try {
+        const cacheKey = 'categories:all'
+        const cachedData = await redisClient.get(cacheKey)
+        if (cachedData) {
+            console.log('Cache hit')
+            return res.status(200).json(JSON.parse(cachedData))
+        }
+
         const categories = await Category.find().sort({ name: 1 })
+        await redisClient.set(cacheKey, JSON.stringify(categories), {
+            EX: 3600,
+        })
+        
         res.status(200).json(categories)
     } catch (error) {
         res.status(500).json({
             success: false,
             message: 'Server Error: Unable to get categories',
-            error: (error as Error).message, // Chuyển đổi error thành kiểu Error
+            error: (error as Error).message,
         })
     }
 }
 
-// GET a category by id
 const getCategoryById = async (req: Request, res: Response) => {
     try {
-        const category = await Category.findById(req.params.id)
+        const { id } = req.params
+        const cacheKey = `category:${id}`
+        const cachedData = await redisClient.get(cacheKey)
+        if (cachedData) {
+            console.log('Cache hit')
+            return res.status(200).json(JSON.parse(cachedData))
+        }
 
+        const category = await Category.findById(id)
         if (!category) {
             res.status(404).json({
                 success: false,
@@ -27,22 +44,27 @@ const getCategoryById = async (req: Request, res: Response) => {
             })
         }
 
-        res.status(200).json(category)
+        await redisClient.set(cacheKey, JSON.stringify(category), {
+            EX: 3600,
+        })
+
+        res.status(200).json({
+            message: 'Category loaded successfully',
+            category,
+        })
     } catch (error) {
+        console.error(error)
         res.status(500).json({
             success: false,
             message: 'Server Error: Unable to get category',
-            error: (error as Error).message, // Chuyển đổi error thành kiểu Error
+            error: (error as Error).message,
         })
     }
 }
 
-// POST a category
 const createCategory = async (req: Request, res: Response) => {
     try {
         const { name } = req.body
-
-        // Check if the name is provided
         if (!name) {
             res.status(400).json({
                 success: false,
@@ -50,7 +72,6 @@ const createCategory = async (req: Request, res: Response) => {
             })
         }
 
-        // Check if category already exists
         const existingCategory = await Category.findOne({ name })
         if (existingCategory) {
             res.status(400).json({
@@ -60,6 +81,7 @@ const createCategory = async (req: Request, res: Response) => {
         }
 
         const category = await Category.create({ name })
+        await redisClient.del('categories:all')
 
         res.status(201).json({ success: true, category })
     } catch (error) {
@@ -70,6 +92,7 @@ const createCategory = async (req: Request, res: Response) => {
                 message: 'Duplicate key error',
             })
         }
+
         res.status(500).json({
             success: false,
             message: (error as Error).message,
@@ -77,7 +100,6 @@ const createCategory = async (req: Request, res: Response) => {
     }
 }
 
-// DELETE a category
 const deleteCategory = async (req: Request, res: Response) => {
     try {
         const category = await Category.findById(req.params.id)
@@ -108,16 +130,14 @@ const updateCategory = async (req: Request, res: Response): Promise<void> => {
         const { name, isActive, productsCount } = req.body
         console.log('Request body:', req.body)
 
-        // Kiểm tra nếu không có name trong body request
         if (!name) {
             res.status(400).json({
                 success: false,
                 message: 'Category name is required',
             })
-            return // Dừng hàm nếu không có tên category
+            return
         }
 
-        // Tìm category theo ID
         const category = await Category.findById(req.params.id)
         if (!category) {
             res.status(404).json({
@@ -127,22 +147,18 @@ const updateCategory = async (req: Request, res: Response): Promise<void> => {
             return
         }
 
-        // Cập nhật thông tin category
         category.name = name
         category.isActive = isActive
         category.productsCount = productsCount
 
-        // Lưu vào cơ sở dữ liệu
         await category.save()
 
-        // Trả về thông tin category đã cập nhật
         res.status(200).json({
             success: true,
             message: 'Category updated successfully',
             category,
         })
     } catch (error) {
-        // Trả về lỗi nếu có lỗi trong quá trình xử lý
         console.error('Error updating category:', error)
         res.status(500).json({
             success: false,

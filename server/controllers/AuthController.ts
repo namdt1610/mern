@@ -11,14 +11,16 @@ interface UserRequest extends Request {
     }
 }
 
-// Đăng ký
 export const signup = async (req: Request, res: Response): Promise<void> => {
     const { name, email, password } = req.body
 
     try {
         const existingUser = await User.findOne({ email })
         if (existingUser) {
-            res.status(400).json({ message: 'User already exists' })
+            res.status(400).json({
+                status: false,
+                message: 'User already exists',
+            })
             return
         }
 
@@ -26,13 +28,24 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
         const newUser = new User({ name, email, password: hashedPassword })
         await newUser.save()
 
-        res.status(201).json({ user: newUser })
+        res.status(201).json({
+            status: true,
+            message: 'User registered successfully',
+            user: {
+                name: newUser.name,
+                email: newUser.email,
+                username: newUser.username,
+            },
+        })
     } catch (error) {
-        res.status(500).json({ message: 'Could not register user' })
+        res.status(500).json({
+            status: false,
+            message: 'Could not register user',
+            error: (error as Error).message,
+        })
     }
 }
 
-// Đăng nhập
 export const login = async (req: Request, res: Response): Promise<void> => {
     const { email, password } = req.body
 
@@ -41,16 +54,16 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     try {
         const user = await User.findOne({ email })
         if (!user) {
-            res.status(401).json({ message: 'Invalid user' })
+            res.status(400).json({ message: 'Your email is not existing' })
             return
         }
 
-        console.log('Password from request:', password)
-        console.log('Password from database (hashed):', user.password)
+        // console.log('Password from request:', password)
+        // console.log('Password from database (hashed):', user.password)
 
         const isMatch = bcrypt.compare(password, user.password)
         if (!isMatch) {
-            res.status(401).json({ message: 'Invalid password' })
+            res.status(400).json({ message: 'Invalid password' })
             return
         }
         console.log('User name before signing token:', user.name)
@@ -74,14 +87,24 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         res.status(200).json({ message: 'Login successful', token })
     } catch (error) {
         console.error('Lỗi khi đăng nhập:', error)
-        res.status(500).json({ message: 'Could not log in user' })
+        res.status(500).json({
+            message: 'Could not log in user',
+            error: (error as Error).message,
+        })
     }
 }
 
-// Đăng xuất
 export const logout = (req: Request, res: Response): void => {
-    res.clearCookie('user')
-    res.status(200).json({ message: 'Logged out' })
+    try {
+        res.clearCookie('user')
+        res.status(200).json({ status: false, message: 'User logged out' })
+    } catch (error) {
+        res.status(500).json({
+            status: false,
+            message: 'Could not log out user',
+            error: (error as Error).message,
+        })
+    }
 }
 
 // Middleware xác thực token

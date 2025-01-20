@@ -74,6 +74,11 @@ export const inventoryApi = createApi({
             providesTags: ['Inventory'],
         }),
 
+        getInventoryByCart: builder.query<Inventory[], string>({
+            query: (userId) => `/inventory/cart/${userId}`,
+            providesTags: ['Inventory'],
+        }),
+        
         updateInventory: builder.mutation<
             Inventory,
             { id: string; data: Partial<Inventory> }

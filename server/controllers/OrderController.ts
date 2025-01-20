@@ -4,6 +4,7 @@ import Inventory from '../models/InventoryModel'
 import InventoryActivity from '../models/InventoryActivityModel'
 import mongoose from 'mongoose'
 import User from '../models/UserModel'
+import { sendEmail } from '../utils/sendEmail'
 
 export const OrderController = {
     // Create a new order
@@ -15,6 +16,10 @@ export const OrderController = {
             const { items, ...orderData } = req.body
             const userId = req.body.user
 
+            if (!items || !Array.isArray(items) || items.length === 0) {
+                throw new Error('Order must contain at least one item')
+            }
+
             // Check and update inventory for each item
             for (const item of items) {
                 const inventory = await Inventory.findOne({
@@ -22,6 +27,8 @@ export const OrderController = {
                 })
 
                 if (!inventory || inventory.quantity < item.quantity) {
+                    res.status(400).json({ message: 'Insufficient stock' })
+                    console.log('Insufficient stock for product', item.productId)
                     throw new Error(
                         `Insufficient stock for product ${item.productId}`
                     )
@@ -57,6 +64,26 @@ export const OrderController = {
             // Create the order
             const order = await Order.create([orderData], { session })
 
+            // Send confirmation email
+            const emailSubject = 'Order Confirmation'
+            const emailText = `Thank you for your order! Your order ID is ${orderData._id}.`
+            const emailHtml = `
+            <h1>Thank you for your order!</h1>
+            <p>Your order ID is <strong>${orderData._id}</strong>.</p>
+            <p>Items:</p>
+            <ul>
+                ${items
+                    .map(
+                        (item: any) =>
+                            `<li>${item.quantity} x ${item.name} - $${item.price}</li>`
+                    )
+                    .join('')}
+            </ul>
+            <p>Total Amount: $${orderData.totalPrice}</p>
+        `
+
+            await sendEmail(orderData.email, emailSubject, emailText, emailHtml)
+
             // Clear ordered items from user's cart
             await User.findByIdAndUpdate(
                 userId,
@@ -76,7 +103,10 @@ export const OrderController = {
             res.status(201).json(order[0])
         } catch (error: any) {
             await session.abortTransaction()
-            res.status(400).json({ error: error.message })
+            res.status(500).json({
+                message: 'Error creating order',
+                error: error.message,
+            })
         } finally {
             session.endSession()
         }
@@ -87,7 +117,10 @@ export const OrderController = {
         try {
             const orders = await Order.find().populate('user', 'name')
             console.log('Orders: ', orders)
-            res.status(200).json(orders)
+            res.status(200).json({
+                message: 'Get all orders successfully',
+                orders,
+            })
         } catch (error) {
             res.status(500).json({ message: 'Error fetching orders', error })
             return

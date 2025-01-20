@@ -174,8 +174,8 @@ const CheckoutPage: React.FC = () => {
             }).unwrap()
             message.success('Đặt hàng thành công!')
             setIsSubmitting(false)
-        } catch (error) {
-            message.error('Đặt hàng thất bại!')
+        } catch (error: any) {
+            message.error(error?.data?.message || 'Đặt hàng thất bại!')
             console.error('Failed to checkout:', error)
         }
     }
