@@ -2,15 +2,31 @@ import { Request, Response } from 'express'
 import mongoose from 'mongoose'
 import Inventory from '../models/InventoryModel'
 import InventoryActivity from '../models/InventoryActivityModel'
+import redisClient from 'server/utils/redisClient'
 
 class InventoryController {
     // Get all inventory items
     async getAllInventory(req: Request, res: Response): Promise<void> {
         try {
+            const cacheKey = 'inventory:all'
+            const cacheData = await redisClient.get(cacheKey)
+            if (cacheData) {
+                res.status(200).json(JSON.parse(cacheData))
+                return
+            }
+
             const inventory = await Inventory.find().populate('product')
-            res.status(200).json(inventory)
+            await redisClient.set(cacheKey, JSON.stringify(inventory), {
+                EX: 3600,
+            })
+
+            res.status(200).json({ success: true, inventory })
         } catch (error: any) {
-            res.status(500).json({ error: error.message })
+            res.status(500).json({
+                success: false,
+                message: 'Failed to fetch inventory',
+                error: error.message,
+            })
         }
     }
 
@@ -18,17 +34,31 @@ class InventoryController {
     async getInventoryByProductId(req: Request, res: Response): Promise<void> {
         try {
             const { productId } = req.params
+            const cacheKey = `inventory:${productId}`
+            const cacheData = await redisClient.get(cacheKey)
+            if (cacheData) {
+                res.status(200).json(JSON.parse(cacheData))
+                return
+            }
+
             const inventory = await Inventory.findOne({
                 product: productId,
             }).populate('product')
-
             if (!inventory) {
                 res.status(404).json({ error: 'Inventory not found' })
                 return
             }
-            res.status(200).json(inventory)
+            await redisClient.set(cacheKey, JSON.stringify(inventory), {
+                EX: 3600,
+            })
+
+            res.status(200).json({ success: true, inventory })
         } catch (error: any) {
-            res.status(500).json({ error: error.message })
+            res.status(500).json({
+                success: false,
+                message: 'Failed to fetch inventory',
+                error: error.message,
+            })
         }
     }
 
@@ -36,9 +66,19 @@ class InventoryController {
     async createInventory(req: Request, res: Response): Promise<void> {
         try {
             const inventory = await Inventory.create(req.body)
-            res.status(201).json(inventory)
+            await redisClient.del('inventory:all')
+
+            res.status(201).json({
+                success: true,
+                message: 'Create inventory successfully',
+                inventory,
+            })
         } catch (error: any) {
-            res.status(400).json({ error: error.message })
+            res.status(400).json({
+                success: false,
+                message: 'Failed to create inventory',
+                error: error.message,
+            })
         }
     }
 
@@ -59,13 +99,33 @@ class InventoryController {
             }).populate('product')
 
             if (!inventory) {
-                res.status(404).json({ error: 'Inventory not found' })
+                res.status(404).json({
+                    success: false,
+                    error: 'Inventory not found',
+                })
                 return
             }
 
-            res.json(inventory)
+            await redisClient.set(
+                `inventory:${id}`,
+                JSON.stringify(inventory),
+                {
+                    EX: 3600,
+                }
+            )
+            await redisClient.del('inventory:all')
+
+            res.status(200).json({
+                success: true,
+                message: 'Inventory updated successfully',
+                inventory,
+            })
         } catch (error: any) {
-            res.status(500).json({ error: error.message })
+            res.status(500).json({
+                success: false,
+                message: 'Failed to update inventory',
+                error: error.message,
+            })
         }
     }
 
@@ -80,9 +140,20 @@ class InventoryController {
                 res.status(404).json({ error: 'Inventory not found' })
                 return
             }
-            res.status(200).json({ message: 'Inventory deleted successfully' })
+
+            await redisClient.del(`inventory:${inventory._id}`)
+            await redisClient.del('inventory:all')
+
+            res.status(200).json({
+                success: true,
+                message: 'Inventory deleted successfully',
+            })
         } catch (error: any) {
-            res.status(500).json({ error: error.message })
+            res.status(500).json({
+                success: true,
+                message: 'Failed to delete inventory',
+                error: error.message,
+            })
         }
     }
 
@@ -120,10 +191,20 @@ class InventoryController {
                 updatedBy: userId,
             })
 
-            res.status(200).json(inventory)
+            await redisClient.del(`inventory:all`)
+
+            res.status(200).json({
+                success: true,
+                message: 'Stock added',
+                inventory,
+            })
         } catch (error: any) {
             console.error('Add stock error:', error)
-            res.status(500).json({ error: error.message })
+            res.status(500).json({
+                success: false,
+                message: 'Failed to add stock',
+                error: error.message
+            })
         }
     }
 
@@ -158,9 +239,17 @@ class InventoryController {
                 updatedBy: userId,
             })
 
-            res.status(200).json(inventory)
+            res.status(200).json({
+                success: true,
+                message: 'Stock removed',
+                inventory,
+            })
         } catch (error: any) {
-            res.status(500).json({ error: error.message })
+            res.status(500).json({
+                success: false,
+                message: 'Failed to remove stock',
+                error: error.message,
+            })
         }
     }
 
@@ -176,12 +265,17 @@ class InventoryController {
                 })
                 .sort({ createdAt: -1 })
 
-            res.status(200).json(activities)
+            res.status(200).json({
+                success: true,
+                message: 'Fetched activities successfully',
+                activities,
+            })
         } catch (error: any) {
             console.error('Get activities error:', error.stack)
             res.status(500).json({
-                error: 'Failed to fetch activities',
-                details: error.message,
+                success: false,
+                message: 'Failed to fetch activities',
+                error: error.message,
             })
         }
     }
