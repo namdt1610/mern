@@ -5,23 +5,14 @@ import InventoryActivity from '../models/InventoryActivityModel'
 import mongoose from 'mongoose'
 import User from '../models/UserModel'
 import { sendEmail } from '../utils/sendEmail'
-import redisClient from 'server/utils/redisClient'
 
 export const OrderController = {
-    getAllOrders: async (req: Request, res: Response) => {
+    getAllOrders: async (req: Request, res: Response): Promise<void> => {
         try {
             const cacheKey = 'orders:all'
-            const cachedData = await redisClient.get(cacheKey)
-            if (cachedData) {
-                console.log('Cache hit')
-                return res.status(200).json(JSON.parse(cachedData))
-            }
 
             const orders = await Order.find().populate('user', 'name')
             console.log('Orders: ', orders)
-            await redisClient.set(cacheKey, JSON.stringify(orders), {
-                EX: 3600,
-            })
             res.status(200).json({
                 success: true,
                 message: 'Get all orders successfully',
@@ -40,19 +31,6 @@ export const OrderController = {
     getOrderById: async (req: Request, res: Response): Promise<void> => {
         try {
             const id = req.params.id
-            const cachedData = await redisClient.get('orders:all')
-            if (cachedData) {
-                const orders = JSON.parse(cachedData)
-                const order = orders.find((order: any) => order._id === id)
-                if (order) {
-                    res.status(200).json({
-                        success: true,
-                        message: 'Get order by ID successfully',
-                        order,
-                    })
-                    return
-                }
-            }
 
             const order = await Order.findById(req.params.id).populate({
                 path: 'user',
@@ -84,21 +62,6 @@ export const OrderController = {
     getOrdersByUserId: async (req: Request, res: Response): Promise<void> => {
         try {
             const id = req.params.id
-            const cachedData = await redisClient.get('orders:all')
-            if (cachedData) {
-                const orders = JSON.parse(cachedData)
-                const userOrders = orders.filter(
-                    (order: any) => order.user._id === id
-                )
-                if (userOrders.length > 0) {
-                    res.status(200).json({
-                        success: true,
-                        message: 'Get orders by user ID successfully',
-                        orders: userOrders,
-                    })
-                    return
-                }
-            }
 
             const orders = await Order.find({ id }).populate({
                 path: 'user',
@@ -219,7 +182,6 @@ export const OrderController = {
             )
 
             await session.commitTransaction()
-            await redisClient.del('orders:all')
 
             res.status(201).json({
                 success: true,
@@ -253,9 +215,6 @@ export const OrderController = {
                 })
             }
 
-            await redisClient.del(`orders:${id}`)
-            await redisClient.del('orders:all')
-
             res.status(200).json({
                 success: true,
                 message: 'Order updated successfully',
@@ -282,9 +241,6 @@ export const OrderController = {
                 res.status(404).json({ message: 'Order not found' })
             }
 
-            await redisClient.del(`orders:${id}`)
-            await redisClient.del('orders:all')
-
             res.status(200).json({
                 success: true,
                 message: 'Order status updated successfully',
@@ -306,9 +262,6 @@ export const OrderController = {
             if (!deletedOrder) {
                 res.status(404).json({ message: 'Order not found' })
             }
-
-            await redisClient.del(`orders:${id}`)
-            await redisClient.del('orders:all')
 
             res.status(200).json({
                 success: true,

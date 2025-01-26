@@ -2,7 +2,6 @@ import { Request, Response } from 'express'
 import Cart from '../models/CartModel'
 import Product from '../models/ProductModel'
 import { AddToCartRequest } from '../../shared/types/Cart'
-import redisClient from '../utils/redisClient'
 
 // 1. Lấy thông tin giỏ hàng
 export const getCart = async (req: Request, res: Response): Promise<void> => {
@@ -10,19 +9,10 @@ export const getCart = async (req: Request, res: Response): Promise<void> => {
     console.log('Received userId from client:', userId)
 
     try {
-        const cacheKey = `cart:${userId}`
-        const cachedData = await redisClient.get(cacheKey)
-        if (cachedData) {
-            console.log('Cache hit')
-            res.status(200).json(JSON.parse(cachedData))
-            return
-        }
-
         console.log('Finding cart for userId:', userId)
         const cart = await Cart.findOne({ user: userId }).populate(
             'products.product'
         )
-        await redisClient.set(cacheKey, JSON.stringify(cart), { EX: 3600 })
 
         console.log('Cart data from user:', cart)
         if (!cart) {
@@ -53,13 +43,6 @@ export const addToCart = async (req: Request, res: Response): Promise<void> => {
             'quantity:',
             quantity
         )
-        const cacheKey = `cart:${userId}`
-        const cartData = await redisClient.get(cacheKey)
-        if (cartData) {
-            console.log('Cache hit')
-            res.status(200).json(JSON.parse(cartData))
-            return
-        }
 
         // Tìm sản phẩm trong database
         const product = await Product.findById(
@@ -117,7 +100,6 @@ export const addToCart = async (req: Request, res: Response): Promise<void> => {
         console.log('Updated cart:', cart)
 
         await cart.save()
-        await redisClient.set(cacheKey, JSON.stringify(cart), { EX: 3600 })
         res.status(200).json(cart)
     } catch (error) {
         console.error('Error adding product to cart:', error)
@@ -137,14 +119,6 @@ export const updateCartItem = async (
         const { userId, productId } = req.params
         console.log('Received userId:', userId, 'productId:', productId)
         const { quantity } = req.body
-
-        const cacheKey = `cart:${userId}`
-        const cachedData = await redisClient.get(cacheKey)
-        if (cachedData) {
-            console.log('Cache hit')
-            res.status(200).json(JSON.parse(cachedData))
-            return
-        }
 
         const cart = await Cart.findOne({ user: userId })
         if (!cart) {
@@ -174,7 +148,6 @@ export const updateCartItem = async (
         }, 0)
 
         await cart.save()
-        await redisClient.set(cacheKey, JSON.stringify(cart), { EX: 3600 })
         res.status(200).json(cart)
     } catch (error) {
         res.status(500).json({
@@ -191,13 +164,6 @@ export const removeFromCart = async (
 ): Promise<void> => {
     try {
         const { userId, productId } = req.params
-        const cacheKey = `cart:${userId}`
-        const cachedData = await redisClient.get(cacheKey)
-        if (cachedData) {
-            console.log('Cache hit')
-            res.status(200).json(JSON.parse(cachedData))
-            return
-        }
 
         const cart = await Cart.findOne({ user: userId })
         if (!cart) {
@@ -217,7 +183,6 @@ export const removeFromCart = async (
         }, 0)
 
         await cart.save()
-        await redisClient.set(cacheKey, JSON.stringify(cart), { EX: 3600 })
 
         res.status(200).json(cart)
     } catch (error) {

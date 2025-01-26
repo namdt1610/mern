@@ -2,23 +2,12 @@ import { Request, Response } from 'express'
 import mongoose from 'mongoose'
 import Inventory from '../models/InventoryModel'
 import InventoryActivity from '../models/InventoryActivityModel'
-import redisClient from 'server/utils/redisClient'
 
 class InventoryController {
     // Get all inventory items
     async getAllInventory(req: Request, res: Response): Promise<void> {
         try {
-            const cacheKey = 'inventory:all'
-            const cacheData = await redisClient.get(cacheKey)
-            if (cacheData) {
-                res.status(200).json(JSON.parse(cacheData))
-                return
-            }
-
             const inventory = await Inventory.find().populate('product')
-            await redisClient.set(cacheKey, JSON.stringify(inventory), {
-                EX: 3600,
-            })
 
             res.status(200).json({ success: true, inventory })
         } catch (error: any) {
@@ -35,11 +24,6 @@ class InventoryController {
         try {
             const { productId } = req.params
             const cacheKey = `inventory:${productId}`
-            const cacheData = await redisClient.get(cacheKey)
-            if (cacheData) {
-                res.status(200).json(JSON.parse(cacheData))
-                return
-            }
 
             const inventory = await Inventory.findOne({
                 product: productId,
@@ -48,9 +32,6 @@ class InventoryController {
                 res.status(404).json({ error: 'Inventory not found' })
                 return
             }
-            await redisClient.set(cacheKey, JSON.stringify(inventory), {
-                EX: 3600,
-            })
 
             res.status(200).json({ success: true, inventory })
         } catch (error: any) {
@@ -66,7 +47,6 @@ class InventoryController {
     async createInventory(req: Request, res: Response): Promise<void> {
         try {
             const inventory = await Inventory.create(req.body)
-            await redisClient.del('inventory:all')
 
             res.status(201).json({
                 success: true,
@@ -106,15 +86,6 @@ class InventoryController {
                 return
             }
 
-            await redisClient.set(
-                `inventory:${id}`,
-                JSON.stringify(inventory),
-                {
-                    EX: 3600,
-                }
-            )
-            await redisClient.del('inventory:all')
-
             res.status(200).json({
                 success: true,
                 message: 'Inventory updated successfully',
@@ -140,9 +111,6 @@ class InventoryController {
                 res.status(404).json({ error: 'Inventory not found' })
                 return
             }
-
-            await redisClient.del(`inventory:${inventory._id}`)
-            await redisClient.del('inventory:all')
 
             res.status(200).json({
                 success: true,
@@ -191,8 +159,6 @@ class InventoryController {
                 updatedBy: userId,
             })
 
-            await redisClient.del(`inventory:all`)
-
             res.status(200).json({
                 success: true,
                 message: 'Stock added',
@@ -203,7 +169,7 @@ class InventoryController {
             res.status(500).json({
                 success: false,
                 message: 'Failed to add stock',
-                error: error.message
+                error: error.message,
             })
         }
     }

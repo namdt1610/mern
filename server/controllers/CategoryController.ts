@@ -1,20 +1,11 @@
 import { Request, Response } from 'express'
 import Category from '../models/CategoryModel'
-import redisClient from '../utils/redisClient'
 
-const getAllCategories = async (req: Request, res: Response) => {
+const getAllCategories = async (req: Request, res: Response): Promise<void> => {
     try {
         const cacheKey = 'categories:all'
-        const cachedData = await redisClient.get(cacheKey)
-        if (cachedData) {
-            console.log('Cache hit')
-            return res.status(200).json(JSON.parse(cachedData))
-        }
 
         const categories = await Category.find().sort({ name: 1 })
-        await redisClient.set(cacheKey, JSON.stringify(categories), {
-            EX: 3600,
-        })
 
         res.status(200).json(categories)
     } catch (error) {
@@ -26,17 +17,9 @@ const getAllCategories = async (req: Request, res: Response) => {
     }
 }
 
-const getCategoryById = async (req: Request, res: Response) => {
+const getCategoryById = async (req: Request, res: Response): Promise<void> => {
     try {
         const { id } = req.params
-        const cachedCategory = await redisClient.get(`category:${id}`)
-        if (cachedCategory) {
-            return res.status(200).json({
-                success: true,
-                message: 'Category fetched from cache',
-                data: JSON.parse(cachedCategory),
-            })
-        }
 
         const category = await Category.findById(id)
         if (!category) {
@@ -45,10 +28,6 @@ const getCategoryById = async (req: Request, res: Response) => {
                 message: 'Category not found',
             })
         }
-
-        await redisClient.set(`category:${id}`, JSON.stringify(category), {
-            EX: 3600,
-        })
 
         res.status(200).json({
             success: true,
@@ -84,7 +63,6 @@ const createCategory = async (req: Request, res: Response) => {
         }
 
         const category = await Category.create({ name })
-        await redisClient.del('categories:all')
 
         res.status(201).json({
             success: true,
@@ -119,8 +97,6 @@ const deleteCategory = async (req: Request, res: Response) => {
         }
 
         await Category.deleteOne({ _id: req.params.id })
-        await redisClient.del(`category:${req.params.id}`)
-        await redisClient.del('categories:all')
         res.status(200).json({
             success: true,
             message: 'Category deleted successfully',
@@ -160,9 +136,6 @@ const updateCategory = async (req: Request, res: Response): Promise<void> => {
         category.productsCount = productsCount
 
         await category.save()
-
-        await redisClient.del(`category:${req.params.id}`)
-        await redisClient.del('categories:all')
 
         res.status(200).json({
             success: true,

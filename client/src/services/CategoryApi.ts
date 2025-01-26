@@ -1,34 +1,50 @@
-import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
-import {Category} from '@shared/types/Category' // Định nghĩa kiểu Category
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { Category } from '@shared/types/Category' // Định nghĩa kiểu Category
 
 export const categoryApi = createApi({
     reducerPath: 'categoryApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: 'http://localhost:8888/api', // API backend URL
+        baseUrl:
+            process.env.REACT_APP_API_BASE_URL || 'http://localhost:8888/api', // API backend URL
         credentials: 'include',
         prepareHeaders: (headers) => {
             headers.set('Content-Type', 'application/json')
             return headers
         },
     }),
+    tagTypes: ['Categories'],
+
     endpoints: (builder) => ({
         // Lấy danh sách các danh mục
         getCategories: builder.query<Category[], void>({
             query: () => '/categories',
+            transformResponse: (response: any) => response.data,
+            providesTags: (result) =>
+                result
+                    ? [
+                          ...result.map(({ _id }) => ({
+                              type: 'Categories' as const,
+                              _id,
+                          })),
+                          { type: 'Categories', id: 'LIST' },
+                      ]
+                    : [{ type: 'Categories', id: 'LIST' }],
         }),
 
         // Lấy chi tiết danh mục theo ID
         getCategoryById: builder.query<Category, string>({
             query: (id) => `/categories/${id}`,
+            providesTags: (result, error, id) => [{ type: 'Categories', id }],
         }),
 
         // Thêm danh mục mới
-        addCategory: builder.mutation<Category, Category>({
+        addCategory: builder.mutation<Category, Omit<Category, '_id'>>({
             query: (category) => ({
                 url: '/categories',
                 method: 'POST',
                 body: category,
             }),
+            invalidatesTags: [{ type: 'Categories', id: 'LIST' }],
         }),
 
         // Cập nhật danh mục
@@ -41,6 +57,9 @@ export const categoryApi = createApi({
                 method: 'PATCH',
                 body: data,
             }),
+            invalidatesTags: (result, error, { id }) => [
+                { type: 'Categories', id },
+            ],
         }),
 
         // Xóa danh mục
@@ -49,6 +68,10 @@ export const categoryApi = createApi({
                 url: `/categories/${id}`,
                 method: 'DELETE',
             }),
+            invalidatesTags: (result, error, id) => [
+                { type: 'Categories', id },
+                { type: 'Categories', id: 'LIST' },
+            ],
         }),
     }),
 })
