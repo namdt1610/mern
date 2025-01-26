@@ -23,11 +23,10 @@ class InventoryController {
     async getInventoryByProductId(req: Request, res: Response): Promise<void> {
         try {
             const { productId } = req.params
-            const cacheKey = `inventory:${productId}`
-
+            
             const inventory = await Inventory.findOne({
                 product: productId,
-            }).populate('product')
+            }).populate('warehouse')
             if (!inventory) {
                 res.status(404).json({ error: 'Inventory not found' })
                 return

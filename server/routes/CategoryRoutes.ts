@@ -22,34 +22,150 @@ export default router
 
 /**
  * @swagger
+ * tags:
+ *   name: Categories
+ *   description: Category management APIs
+ */
+
+/**
+ * @swagger
  * /api/categories:
  *   get:
  *     summary: Get all categories
+ *     tags: [Categories]
  *     responses:
  *       '200':
- *         description: A successful response
+ *         description: A successful response with all categories
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: string
+ *                   name:
+ *                     type: string
+ *       '500':
+ *         description: Server error
+ */
+
+/**
+ * @swagger
  * /api/categories/{id}:
  *   get:
- *     summary: Get category by id
+ *     summary: Get a category by id
+ *     tags: [Categories]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the category
  *     responses:
  *       '200':
- *         description: A successful response
- * /api/categories/{id}:
+ *         description: A successful response with the category data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 _id:
+ *                   type: string
+ *                 name:
+ *                   type: string
+ *       '404':
+ *         description: Category not found
+ *       '500':
+ *         description: Server error
+ */
+
+/**
+ * @swagger
+ * /api/categories:
  *   post:
- *     summary: Create category
+ *     summary: Create a new category
+ *     tags: [Categories]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
  *     responses:
- *       '200':
- *         description: A successful response
+ *       '201':
+ *         description: Category successfully created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 _id:
+ *                   type: string
+ *                 name:
+ *                   type: string
+ *       '400':
+ *         description: Invalid input
+ *       '500':
+ *         description: Server error
+ */
+
+/**
+ * @swagger
  * /api/categories/{id}:
  *   delete:
- *     summary: Delete category
+ *     summary: Delete a category by id
+ *     tags: [Categories]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the category to delete
  *     responses:
  *       '200':
- *         description: A successful response
+ *         description: Category successfully deleted
+ *       '404':
+ *         description: Category not found
+ *       '500':
+ *         description: Server error
+ */
+
+/**
+ * @swagger
  * /api/categories/{id}:
  *   patch:
- *     summary: Update category
+ *     summary: Update a category by id
+ *     tags: [Categories]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the category to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
  *     responses:
  *       '200':
- *         description: A successful response
+ *         description: Category successfully updated
+ *       '400':
+ *         description: Invalid input
+ *       '404':
+ *         description: Category not found
+ *       '500':
+ *         description: Server error
  */

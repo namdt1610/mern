@@ -45,7 +45,7 @@ const CartPage: React.FC = () => {
         
         return unavailableItems
     }
-    const unavailableItems = checkStockAvailability(cart.products)
+    // const unavailableItems = checkStockAvailability(cart.products)
 
     const handleUpdateQuantity = async (
         userId: string,

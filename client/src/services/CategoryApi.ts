@@ -18,7 +18,7 @@ export const categoryApi = createApi({
         // Lấy danh sách các danh mục
         getCategories: builder.query<Category[], void>({
             query: () => '/categories',
-            transformResponse: (response: any) => response.data,
+            // transformResponse: (response: any) => response,
             providesTags: (result) =>
                 result
                     ? [

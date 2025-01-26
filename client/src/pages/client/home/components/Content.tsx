@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Button, Input, Spin, Tag } from 'antd'
+import React, { useState, useEffect } from 'react'
+import { Button, Input, Result, Spin, Tag } from 'antd'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useGetCategoriesQuery } from '@/services/CategoryApi'
 import { SearchOutlined, BookOutlined, FireOutlined } from '@ant-design/icons'
@@ -10,6 +10,19 @@ export default function Content() {
     const { data: categories, isLoading, error } = useGetCategoriesQuery()
     const [activeCategory, setActiveCategory] = useState<string | null>(null)
     const [searchTerm, setSearchTerm] = useState('')
+
+    // console.log('isLoading:', isLoading)
+    // console.log('Categories:', categories)
+    // console.log('Error:', error)
+
+    useEffect(() => {
+        if (isLoading) {
+            console.log('Calling get all categories API...')
+        }
+        if (error) {
+            console.error('Error calling get all categories API:', error)
+        }
+    }, [isLoading, error])
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -43,7 +56,7 @@ export default function Content() {
             </div>
         )
 
-    if (!categories) return null
+    if (!categories) return <Result status="404" title="No categories found" />
 
     const filteredCategories = categories.filter((category) =>
         category.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -56,6 +69,7 @@ export default function Content() {
             initial="hidden"
             animate="visible"
         >
+            <p>Cate</p>
             {/* Search and Filter Section */}
             <div className="container mx-auto px-4 py-8">
                 <motion.div

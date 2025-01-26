@@ -24,12 +24,6 @@ const productSchema = new Schema(
             ref: 'Category',
             required: true,
         },
-        stock: {
-            type: Schema.Types.ObjectId,
-            ref: 'Inventory',
-            default: null,
-            // required: true,
-        },
         clickCount: {
             type: Number,
             default: 0,
@@ -45,9 +39,6 @@ const productSchema = new Schema(
         author: {
             type: String,
         },
-        // sku: {
-        //     type: String,
-        // },
     },
     { timestamps: true }
 )

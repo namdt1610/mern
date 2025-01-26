@@ -3,10 +3,8 @@ import Category from '../models/CategoryModel'
 
 const getAllCategories = async (req: Request, res: Response): Promise<void> => {
     try {
-        const cacheKey = 'categories:all'
-
         const categories = await Category.find().sort({ name: 1 })
-
+        // console.log('Categories:', categories)
         res.status(200).json(categories)
     } catch (error) {
         res.status(500).json({

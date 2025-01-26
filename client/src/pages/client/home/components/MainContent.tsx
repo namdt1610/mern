@@ -26,6 +26,12 @@ export default function MainContent() {
         if (products) {
             setDisplayedProducts(products.slice(0, itemsPerPage))
         }
+        if (isLoading) {
+            console.log('Calling get all books API...')
+        }
+        if (error) {
+            console.error('Error calling get all books API:', error)
+        }
     }, [products])
 
     const handleProductClick = async (productId: string) => {
@@ -65,7 +71,8 @@ export default function MainContent() {
     if (error)
         return (
             <div className="text-center text-red-500 p-8">
-                Error loading products. Please check your connection try again later.
+                Error loading products. Please check your connection try again
+                later.
             </div>
         )
 
