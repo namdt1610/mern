@@ -217,7 +217,7 @@ export default function Hero() {
     return (
         <>
             <style>{styles}</style>
-            <div className="relative min-h-[600px] overflow-hidden">
+            <div className="relative min-h-[600px] overflow-hidden px-14">
                 {/* Background Decorative Elements */}
                 <motion.div
                     className="absolute inset-0 opacity-40"

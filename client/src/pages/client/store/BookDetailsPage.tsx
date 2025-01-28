@@ -7,12 +7,12 @@ import {
     useAddToFavoritesMutation,
     useGetFavoritesQuery,
 } from '@/services/UserApi'
+import { useGetInventoryByIdQuery } from '@/services/InventoryApi'
 
 import {
     Button,
     Card,
     Empty,
-    Input,
     InputNumber,
     App,
     Spin,
@@ -20,32 +20,29 @@ import {
     Row,
     Col,
     Divider,
+    Image,
 } from 'antd'
 import MainLayout from '@/components/client/layout/MainLayout'
 import ReviewSection from './components/ReviewSection'
+import styles from './styles/BookDetailsPage.module.scss'
 
 const { Title, Text } = Typography
 
 const BookDetail: React.FC = () => {
     const { message } = App.useApp()
-    const userId = useGetUserIdFromCookie()
-    // console.log('User ID:', userId)
+    const nav = useNavigate()
 
+    const userId = useGetUserIdFromCookie()
     const id: string = useParams<{ id: string }>().id ?? ''
-    // console.log('Product ID:', id)
 
     const { data: book, isLoading, refetch } = useGetProductByIdQuery(id)
-    const [addToCart] = useAddToCartMutation()
-    const nav = useNavigate()
-    const [addToFav] = useAddToFavoritesMutation()
+    const { data: stock } = useGetInventoryByIdQuery(id)
     const { data: favorites } = useGetFavoritesQuery(userId!)
+    const [addToCart] = useAddToCartMutation()
+    const [addToFav] = useAddToFavoritesMutation()
+
     const [inCart, setInCart] = useState(false)
     const [inFavorites, setInFavorites] = useState(false)
-    const [comments, setComments] = useState<
-        Array<{ author: string; content: string }>
-    >([])
-    const [newComment, setNewComment] = useState('')
-
     const [quantity, setQuantity] = useState(1)
 
     const handleChange = (value: number | null) => {
@@ -57,23 +54,11 @@ const BookDetail: React.FC = () => {
         setQuantity((prev) => (prev > 1 ? prev - 1 : 1))
 
     useEffect(() => {
-        if (book) {
-            fetchComments(book._id)
-        }
         if (favorites) {
             const favIds = favorites.map((fav) => fav._id)
             setInFavorites(favIds.includes(id))
         }
-    }, [book, favorites, id])
-
-    const fetchComments = async (bookId: string) => {
-        // Replace with real API call to fetch comments
-        // Example:
-        // const response = await fetch(`/api/books/${bookId}/comments`);
-        // const data = await response.json();
-        //   const data = [] // Replace with real response data
-        //   setComments(data)
-    }
+    }, [favorites, id])
 
     const handleAddToCart = async () => {
         if (!userId) {
@@ -115,13 +100,6 @@ const BookDetail: React.FC = () => {
         }
     }
 
-    const handleNewComment = async () => {
-        // Call API to add new comment
-        const newCommentData = { author: 'User', content: newComment }
-        setComments((prevComments) => [...prevComments, newCommentData])
-        setNewComment('') // Clear input after submission
-    }
-
     if (!book) {
         return (
             <MainLayout>
@@ -134,113 +112,146 @@ const BookDetail: React.FC = () => {
 
     return (
         <MainLayout>
-            <div style={{ padding: '24px' }}>
+            <div className={styles.container}>
                 {isLoading ? (
-                    <Spin className="flex justify-center items-center h-full" />
+                    <div className={styles.glassCard}>
+                        <Spin />
+                    </div>
                 ) : (
-                    <Row gutter={16}>
-                        <Col xs={24} md={12}>
-                            <Card
-                                cover={
-                                    <img
-                                        alt={book.name}
-                                        src={`http://localhost:8888/uploads/${book.imageUrl}`}
-                                        style={{
-                                            objectFit: 'cover',
-                                            height: '800px',
-                                            borderRadius: '8px',
-                                        }}
-                                    />
-                                }
-                                style={{
-                                    marginBottom: '24px',
-                                    borderRadius: '8px',
-                                }}
-                            >
-                                <Card.Meta
-                                    title={<Title level={3}>{book.name}</Title>}
-                                    description={
-                                        <>
-                                            <Text strong>Author: </Text>
-                                            <Text>{book.author}</Text>
-                                            <br />
-                                            <Text strong>Price: </Text>
-                                            <Text>${book.price}</Text>
-                                            <br />
-                                            <Text strong>Description: </Text>
-                                            <Text>{book.description}</Text>
-                                        </>
-                                    }
-                                />
-                                <Divider />
-
-                                {!book.stock ? (
-                                    <>
-                                        <Text type="success">In Stock</Text>
-                                        <div
-                                            style={{
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                gap: 8,
-                                                marginTop: '16px',
-                                            }}
-                                        >
-                                            <Button
-                                                onClick={handleDecrease}
-                                                disabled={book.stock <= 1}
-                                            >
-                                                -
-                                            </Button>
-                                            <InputNumber
-                                                min={1}
-                                                value={quantity}
-                                                onChange={handleChange}
-                                                style={{ width: 70 }}
-                                            />
-                                            <Button onClick={handleIncrease}>
-                                                +
-                                            </Button>
-                                        </div>
-                                    </>
-                                ) : (
-                                    <Text type="danger">Out of Stock</Text>
-                                )}
-                                <Button
-                                    type="primary"
-                                    style={{ marginTop: '16px', width: '100%' }}
-                                    onClick={handleAddToCart}
-                                    disabled={!book.stock}
-                                >
-                                    {inCart ? 'Added to Cart' : 'Add to Cart'}
-                                </Button>
-                                <Button
-                                    type="default"
+                    <>
+                        <div className={styles.imageContainer}>
+                            <div className={styles.glassCard}>
+                                <Image
+                                    alt={book.name}
+                                    src={`http://localhost:8888/uploads/${book.imageUrl}`}
                                     style={{
-                                        marginTop: '8px',
-                                        width: '100%',
+                                        objectFit: 'cover',
+                                        height: '500px',
+                                        borderRadius: '8px',
                                     }}
-                                    onClick={handleAddToFavorites}
-                                    disabled={inFavorites}
-                                >
-                                    {inFavorites
-                                        ? 'Favorited'
-                                        : 'Add to Favorites'}
-                                </Button>
-                                <Button
-                                    type="primary"
-                                    style={{ marginTop: '16px', width: '100%' }}
-                                    onClick={() => nav('/books')}
-                                >
-                                    Back to Books
-                                </Button>
-                            </Card>
-                        </Col>
-                        <Col xs={24} md={12}>
-                            <div style={{ marginTop: '24px' }}>
-                                <ReviewSection productId={id} />
+                                />
                             </div>
-                        </Col>
-                    </Row>
+                        </div>
+                        <div className={styles.infoContainer}>
+                            <div className={styles.glassCard}>
+                                <div className={styles.bookInfoContainer}>
+                                    <div className={styles.bookInfo}>
+                                        <Title level={3}>{book.name}</Title>
+                                        <Text strong>Author: </Text>
+                                        <Text>{book.author}</Text>
+                                        <br />
+                                        <Text strong>Price: </Text>
+                                        <Text>${book.price}</Text>
+                                        <br />
+                                        <Text strong>Description: </Text>
+                                        <Text>{book.description}</Text>
+                                    </div>
+                                    <div className={styles.blankDiv}></div>
+                                    <div className={styles.stockInfo}>
+                                        {stock ? (
+                                            <>
+                                                <Text type="success">
+                                                    In Stock
+                                                </Text>
+                                                <br />
+                                                <Text>
+                                                    Quantity: {stock?.quantity}
+                                                </Text>
+                                                <div
+                                                    className={
+                                                        styles.quantityControls
+                                                    }
+                                                >
+                                                    <Button
+                                                        onClick={handleDecrease}
+                                                        disabled={
+                                                            quantity === 1
+                                                        }
+                                                    >
+                                                        -
+                                                    </Button>
+                                                    <InputNumber
+                                                        min={1}
+                                                        max={stock?.quantity}
+                                                        value={quantity}
+                                                        onChange={handleChange}
+                                                    />
+                                                    <Button
+                                                        onClick={handleIncrease}
+                                                        disabled={
+                                                            quantity >=
+                                                            stock?.quantity
+                                                        }
+                                                    >
+                                                        +
+                                                    </Button>
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <Text type="danger">
+                                                This items is currently out of
+                                                Stock
+                                            </Text>
+                                        )}
+                                        <Button
+                                            type="primary"
+                                            style={{
+                                                marginTop: '16px',
+                                                width: '100%',
+                                            }}
+                                            onClick={handleAddToCart}
+                                            disabled={!stock}
+                                        >
+                                            {inCart
+                                                ? 'Added to Cart'
+                                                : 'Add to Cart'}
+                                        </Button>
+                                        <Button
+                                            type="primary"
+                                            style={{
+                                                marginTop: '16px',
+                                                width: '100%',
+                                            }}
+                                            onClick={handleAddToCart}
+                                            disabled={!stock}
+                                        >
+                                            {inCart
+                                                ? 'Added to Cart'
+                                                : 'Buy Now'}
+                                        </Button>
+                                        <Button
+                                            type="default"
+                                            style={{
+                                                marginTop: '8px',
+                                                width: '100%',
+                                            }}
+                                            onClick={handleAddToFavorites}
+                                            disabled={inFavorites}
+                                        >
+                                            {inFavorites
+                                                ? 'Favorited'
+                                                : 'Add to Favorites'}
+                                        </Button>
+                                        <Button
+                                            type="primary"
+                                            style={{
+                                                marginTop: '16px',
+                                                width: '100%',
+                                            }}
+                                            onClick={() => nav('/books')}
+                                        >
+                                            Back to Books
+                                        </Button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className={styles.reviewContainer}>
+                            <Card className={styles.glassCard}>
+                                <ReviewSection productId={id} />
+                            </Card>
+                        </div>
+                    </>
                 )}
             </div>
         </MainLayout>

@@ -1,32 +1,40 @@
 import React from 'react'
 import { Card } from 'antd/lib'
 import LoginForm from './LoginForm'
-import LoginBanner from './LoginBanner'
 import { useLocation } from 'react-router-dom'
 import LoginLayout from './LoginLayout'
-import MainLayout from '@/components/client/layout/MainLayout'
+import { motion, AnimatePresence } from 'framer-motion'
+import styles from '@/styles/GlassCard.module.scss'
 
 const Login: React.FC = () => {
     const location = useLocation()
     const from = location.state?.from?.pathname || '/'
 
     return (
-        <MainLayout>
-            <LoginLayout>
-                <Card className="w-full max-w-6xl card-border">
-                    <div className="flex flex-col md:flex-row items-center justify-center w-full">
-                        <div className="w-full md:w-1/2 mb-8 md:mb-0">
-                            <LoginBanner />
-                        </div>
-                        <div className="w-full md:w-1/2 flex justify-center items-center">
-                            <div className="w-full max-w-[450px] px-4">
-                                <LoginForm from={from} />
-                            </div>
-                        </div>
+        <LoginLayout>
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+            >
+                <Card className={styles.glassCard}>
+                    <div className="flex justify-center">
+                        <img
+                            className="h-20 m-6"
+                            src="/img/logo_dtn.png"
+                            alt="logo"
+                        />
                     </div>
+                    <motion.div
+                        initial={{ opacity: 0, y: 40 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.6 }}
+                    >
+                        <LoginForm from={from} />
+                    </motion.div>
                 </Card>
-            </LoginLayout>
-        </MainLayout>
+            </motion.div>
+        </LoginLayout>
     )
 }
 

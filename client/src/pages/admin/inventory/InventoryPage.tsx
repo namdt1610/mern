@@ -82,16 +82,7 @@ const InventoryPage: React.FC = () => {
                 <Tag color={quantity > 0 ? 'green' : 'red'}>{quantity}</Tag>
             ),
         },
-        {
-            title: 'Status',
-            dataIndex: 'status',
-            key: 'status',
-            render: (status: string) => (
-                <Tag color={status === 'active' ? 'blue' : 'orange'}>
-                    {status.toUpperCase()}
-                </Tag>
-            ),
-        },
+
         {
             title: 'Actions',
             key: 'actions',

@@ -7,7 +7,9 @@ class InventoryController {
     // Get stock status
     async getAllInventory(req: Request, res: Response): Promise<void> {
         try {
-            const inventory = await Inventory.find().populate('warehouse').populate('product')
+            const inventory = await Inventory.find()
+                .populate('warehouse')
+                .populate('product')
 
             res.status(200).json(inventory)
         } catch (error: any) {
@@ -32,7 +34,7 @@ class InventoryController {
                 return
             }
 
-            res.status(200).json({ success: true, inventory })
+            res.status(200).json(inventory)
         } catch (error: any) {
             res.status(500).json({
                 success: false,
@@ -144,7 +146,7 @@ class InventoryController {
     async addStock(req: Request, res: Response) {
         try {
             const { productId } = req.params
-            const { quantity, userId } = req.body
+            const { quantity, userId, warehouseId } = req.body
 
             if (!productId || !quantity || quantity < 0) {
                 res.status(400).json({ error: 'Invalid input data' })
@@ -157,7 +159,8 @@ class InventoryController {
             if (!inventory) {
                 inventory = new Inventory({
                     product: productId,
-                    quantity: 0,
+                    quantity: quantity,
+                    warehouse: warehouseId,
                 })
             }
 

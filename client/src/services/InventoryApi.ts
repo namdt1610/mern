@@ -12,12 +12,12 @@ export const inventoryApi = createApi({
         // Add stock
         addStock: builder.mutation<
             IInventory,
-            { productId: string; quantity: number; userId: string | null }
+            { productId: string; quantity: number; userId: string | null; warehouseId?: string }
         >({
-            query: ({ productId, quantity, userId }) => ({
+            query: ({ productId, quantity, userId, warehouseId }) => ({
                 url: `/inventory/${productId}/add`,
                 method: 'POST',
-                body: { quantity, userId },
+                body: { quantity, userId, warehouseId },
             }),
             invalidatesTags: ['Inventory'],
         }),
@@ -48,13 +48,11 @@ export const inventoryApi = createApi({
             invalidatesTags: ['Inventory'],
         }),
 
-        // Add this new endpoint
         getAllStock: builder.query<IInventory[], void>({
             query: () => '/inventory',
             providesTags: ['Inventory'],
         }),
 
-        // Add to the existing endpoints
         getStockActivity: builder.query<any[], [Date, Date] | undefined>({
             query: (dateRange) => ({
                 url: '/inventory/activity',
@@ -68,7 +66,7 @@ export const inventoryApi = createApi({
             providesTags: ['Inventory'],
         }),
 
-        // Add to existing endpoints
+        // Get product's stock by ID
         getInventoryById: builder.query<IInventory, string>({
             query: (id) => `/inventory/${id}`,
             providesTags: ['Inventory'],

@@ -3,6 +3,7 @@ import { Button, Checkbox, Form, Input, message } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import { useLoginMutation } from '@/services/AuthApi'
 import { useGetUserIdFromCookie } from '@/utils/useGetToken'
+import styles from '@/styles/GlassCard.module.scss'
 
 type LoginFormProps = {
     from: string
@@ -39,7 +40,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ from }) => {
 
     return (
         <Form
-            style={{ width: 500, paddingRight: '90px' }}
+            style={{ width: '100%' }}
             initialValues={{ remember: true }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
@@ -57,7 +58,11 @@ const LoginForm: React.FC<LoginFormProps> = ({ from }) => {
                     },
                 ]}
             >
-                <Input autoComplete="email" placeholder="Enter your email" />
+                <Input
+                    size="large"
+                    autoComplete="email"
+                    placeholder="Enter your email"
+                />
             </Form.Item>
 
             <Form.Item
@@ -68,6 +73,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ from }) => {
                 ]}
             >
                 <Input.Password
+                    size="large"
                     autoComplete="current-password"
                     placeholder="Enter your password"
                 />
@@ -78,12 +84,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ from }) => {
             </Form.Item>
 
             <Form.Item>
-                <Button
+                <Button 
                     type="primary"
                     htmlType="submit"
                     size="large"
                     loading={isLoading} // Thêm loading khi đang gọi API
-                    className="btn-hover"
+                    className={styles.glassButton}
                     style={{ width: '100%' }}
                 >
                     Submit

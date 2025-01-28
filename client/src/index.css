@@ -1,8 +1,17 @@
-/* @import url('https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&display=swap'); */
-
+@import url('https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&display=swap');
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+@layer base {
+    body {
+        background: linear-gradient(120deg, #e7bdbf, #1ac6c347); /* Gradient màu */
+        background-attachment: fixed; /* Giữ cố định khi cuộn */
+        background-size: cover; /* Phủ toàn bộ màn hình */
+        font-family: 'Karla', sans-serif; /* Font chữ */
+    }
+}
+
 
 @layer components {
     /* Điều chỉnh kích thước của thanh cuộn */

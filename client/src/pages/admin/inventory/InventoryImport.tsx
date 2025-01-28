@@ -20,6 +20,7 @@ import { useGetWarehousesQuery } from '@/services/WarehouseApi'
 interface ImportFormData {
     productId: string
     quantity: number
+    warehouseId: string
 }
 
 const InventoryImport: React.FC = () => {
@@ -32,11 +33,13 @@ const InventoryImport: React.FC = () => {
     const userId = useGetUserIdFromCookie() || null
 
     const handleSubmit = async (values: ImportFormData) => {
+        // console.log('values', values)
         try {
             await addStock({
                 productId: values.productId,
                 quantity: values.quantity,
                 userId: userId,
+                warehouseId: values.warehouseId,
             }).unwrap()
 
             message.success('Stock added successfully')
@@ -109,7 +112,7 @@ const InventoryImport: React.FC = () => {
                     </Form.Item>
                     <Form.Item
                         label="Warehouse"
-                        name="warehouse"
+                        name="warehouseId"
                         rules={[
                             {
                                 required: true,
