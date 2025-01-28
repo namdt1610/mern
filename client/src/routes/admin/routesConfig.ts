@@ -19,7 +19,10 @@ export interface RouteConfig {
 }
 
 export const authRoutes: RouteConfig[] = [
-    { path: 'login', element: lazy(() => import('../../pages/admin/auth/Login/Login')) },
+    {
+        path: 'login',
+        element: lazy(() => import('../../pages/admin/auth/Login/Login')),
+    },
     {
         path: 'register',
         element: lazy(() => import('../../pages/admin/auth/Register/Register')),
@@ -38,7 +41,9 @@ const adminRoutes: RouteConfig = {
         {
             index: true,
             path: '',
-            element: lazy(() => import('../../pages/admin/dashboard/AdminDashboard')),
+            element: lazy(
+                () => import('../../pages/admin/dashboard/AdminDashboard')
+            ),
             permissions: {
                 view: ['admin', 'user'],
                 edit: ['admin'],
@@ -56,32 +61,46 @@ const adminRoutes: RouteConfig = {
         },
         {
             path: 'products/:id',
-            element: lazy(() => import('../../pages/admin/products/ProductDetails')),
+            element: lazy(
+                () => import('../../pages/admin/products/ProductDetails')
+            ),
         },
         {
             path: 'products/new',
-            element: lazy(() => import('../../pages/admin/products/ProductNew')),
+            element: lazy(
+                () => import('../../pages/admin/products/ProductNew')
+            ),
         },
         {
             path: 'products/reports',
-            element: lazy(() => import('../../pages/admin/products/ProductReports')),
+            element: lazy(
+                () => import('../../pages/admin/products/ProductReports')
+            ),
         },
         //* Category routes
         {
             path: 'categories/new',
-            element: lazy(() => import('../../pages/admin/categories/CategoryNew')),
+            element: lazy(
+                () => import('../../pages/admin/categories/CategoryNew')
+            ),
         },
         {
             path: 'categories/reports',
-            element: lazy(() => import('../../pages/admin/categories/CategoryReports')),
+            element: lazy(
+                () => import('../../pages/admin/categories/CategoryReports')
+            ),
         },
         {
             path: 'categories/:id',
-            element: lazy(() => import('../../pages/admin/categories/CategoryDetails')),
+            element: lazy(
+                () => import('../../pages/admin/categories/CategoryDetails')
+            ),
         },
         {
             path: 'categories',
-            element: lazy(() => import('../../pages/admin/categories/Category')),
+            element: lazy(
+                () => import('../../pages/admin/categories/Category')
+            ),
         },
         //* Customer routes
         {
@@ -91,7 +110,9 @@ const adminRoutes: RouteConfig = {
         //* Inventory routes
         {
             path: 'inventory',
-            element: lazy(() => import('../../pages/admin/inventory/InventoryPage')),
+            element: lazy(
+                () => import('../../pages/admin/inventory/InventoryPage')
+            ),
             permissions: {
                 view: ['admin', 'user'],
                 edit: ['admin'],
@@ -100,33 +121,47 @@ const adminRoutes: RouteConfig = {
         },
         {
             path: 'inventory/:id',
-            element: lazy(() => import('../../pages/admin/inventory/InventoryDetails')),
+            element: lazy(
+                () => import('../../pages/admin/inventory/InventoryDetails')
+            ),
         },
         {
             path: 'inventory/stock-in-out',
-            element: lazy(() => import('../../pages/admin/inventory/InventoryImport')),
+            element: lazy(
+                () => import('../../pages/admin/inventory/InventoryImport')
+            ),
         },
         {
             path: 'inventory/activity',
-            element: lazy(() => import('../../pages/admin/inventory/InventoryActivity')),
+            element: lazy(
+                () => import('../../pages/admin/inventory/InventoryActivity')
+            ),
         },
         //* Order routes
         {
             path: 'orders',
-            element: lazy(() => import('../../pages/admin/orders/AdminOrdersPage')),
+            element: lazy(
+                () => import('../../pages/admin/orders/AdminOrdersPage')
+            ),
         },
         {
             path: 'orders/:id',
-            element: lazy(() => import('../../pages/admin/orders/OrderDetailsPage')),
+            element: lazy(
+                () => import('../../pages/admin/orders/OrderDetailsPage')
+            ),
         },
         {
             path: 'orders/new',
-            element: lazy(() => import('../../pages/admin/orders/OrderNewPage')),
+            element: lazy(
+                () => import('../../pages/admin/orders/OrderNewPage')
+            ),
         },
         //* Payment methods routes
         {
             path: 'payment-methods',
-            element: lazy(() => import('../../pages/admin/payments/PaymentMethods')),
+            element: lazy(
+                () => import('../../pages/admin/payments/PaymentMethods')
+            ),
         },
         {
             path: 'payment-methods/:id',
@@ -136,7 +171,9 @@ const adminRoutes: RouteConfig = {
         },
         {
             path: 'payment-methods/new',
-            element: lazy(() => import('../../pages/admin/payments/PaymentMethodsNew')),
+            element: lazy(
+                () => import('../../pages/admin/payments/PaymentMethodsNew')
+            ),
         },
 
         //* User routes
@@ -152,7 +189,29 @@ const adminRoutes: RouteConfig = {
             path: 'users/reports',
             element: lazy(() => import('../../pages/admin/users/UserReports')),
         },
-        { path: '*', element: lazy(() => import('../../pages/admin/result/404')) },
+        {
+            path: '*',
+            element: lazy(() => import('../../pages/admin/result/404')),
+        },
+
+        //* Warehouse routes
+        {
+            path: 'warehouses',
+            element: lazy(
+                () => import('../../pages/admin/warehouses/WarehouseAdminPage')
+            ),
+            permissions: {
+                view: ['admin', 'user'],
+                edit: ['admin'],
+                delete: ['admin'],
+            },
+        },
+        {
+            path: 'users/:id',
+            element: lazy(
+                () => import('../../pages/admin/warehouses/WarehouseAdminPage')
+            ),
+        },
     ],
 }
 
@@ -161,4 +220,3 @@ const fallbackRoutes: RouteConfig[] = [
 ]
 
 export default adminRoutes
-

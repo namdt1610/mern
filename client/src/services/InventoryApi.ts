@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { Inventory } from 'shared/types/Inventory'
+import { IInventory } from '@shared/types/IInventory'
 
 export const inventoryApi = createApi({
     reducerPath: 'inventoryApi',
@@ -11,7 +11,7 @@ export const inventoryApi = createApi({
     endpoints: (builder) => ({
         // Add stock
         addStock: builder.mutation<
-            Inventory,
+            IInventory,
             { productId: string; quantity: number; userId: string | null }
         >({
             query: ({ productId, quantity, userId }) => ({
@@ -24,7 +24,7 @@ export const inventoryApi = createApi({
 
         // Remove stock
         removeStock: builder.mutation<
-            Inventory,
+            IInventory,
             { productId: string; quantity: number }
         >({
             query: ({ productId, quantity }) => ({
@@ -37,7 +37,7 @@ export const inventoryApi = createApi({
 
         // Update stock
         updateStock: builder.mutation<
-            Inventory,
+            IInventory,
             { productId: string; quantity: number }
         >({
             query: ({ productId, quantity }) => ({
@@ -49,7 +49,7 @@ export const inventoryApi = createApi({
         }),
 
         // Add this new endpoint
-        getAllStock: builder.query<Inventory[], void>({
+        getAllStock: builder.query<IInventory[], void>({
             query: () => '/inventory',
             providesTags: ['Inventory'],
         }),
@@ -69,19 +69,19 @@ export const inventoryApi = createApi({
         }),
 
         // Add to existing endpoints
-        getInventoryById: builder.query<Inventory, string>({
+        getInventoryById: builder.query<IInventory, string>({
             query: (id) => `/inventory/${id}`,
             providesTags: ['Inventory'],
         }),
 
-        getInventoryByCart: builder.query<Inventory[], string>({
+        getInventoryByCart: builder.query<IInventory[], string>({
             query: (userId) => `/inventory/cart/${userId}`,
             providesTags: ['Inventory'],
         }),
-        
+
         updateInventory: builder.mutation<
-            Inventory,
-            { id: string; data: Partial<Inventory> }
+            IInventory,
+            { id: string; data: Partial<IInventory> }
         >({
             query: ({ id, data }) => ({
                 url: `/inventory/${id}`,

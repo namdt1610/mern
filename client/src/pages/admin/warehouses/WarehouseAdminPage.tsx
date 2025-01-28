@@ -19,78 +19,57 @@ import {
     EyeOutlined,
 } from '@ant-design/icons'
 import {
-    useGetAllStockQuery as useGetInventoryQuery,
-    useRemoveStockMutation,
-} from '@/services/InventoryApi'
+    useGetWarehousesQuery,
+    useDeleteWarehouseMutation,
+} from '@/services/WarehouseApi'
 import { usePermissions } from '@/hooks/usePermissions'
 import adminRoutes from '@/routes/admin/routesConfig'
-import { IInventory } from '@shared/types/IInventory'
+import { IWarehouse } from '@shared/types/IWarehouse'
 
-const InventoryPage: React.FC = () => {
+const WarehousesPage: React.FC = () => {
     const navigate = useNavigate()
     const [searchText, setSearchText] = useState('')
-    const { data: inventory, isLoading } = useGetInventoryQuery()
-    const [deleteStock] = useRemoveStockMutation()
+    const { data: warehouses, isLoading } = useGetWarehousesQuery()
+    const [deleteWarehouse] = useDeleteWarehouseMutation()
     const { canView, canEdit, canDelete } = usePermissions(
-        adminRoutes.children?.find((route) => route.path === 'inventory')
+        adminRoutes.children?.find((route) => route.path === 'warehouses')
             ?.permissions
     )
 
-    console.log('inventory', inventory)
+    console.log('warehouses', warehouses)
     // console.log(canView, canEdit, canDelete)
 
-    const handleDelete = async (_id: string, quantity: number) => {
+    const handleDelete = async (id: string) => {
         try {
-            await deleteStock({ productId: _id, quantity: quantity }).unwrap()
-            message.success('Inventory item deleted successfully')
+            await deleteWarehouse(id).unwrap()
+            message.success('warehouses item deleted successfully')
         } catch (error: any) {
             message.error(
-                error?.data?.message || 'Failed to delete inventory item'
+                error?.data?.message || 'Failed to delete warehouses item'
             )
         }
     }
 
     const columns = [
         {
-            title: 'SKU',
-            dataIndex: ['product', 'sku'],
-            key: 'sku',
-            sorter: (a: any, b: any) =>
-                a.product.sku.localeCompare(b.product.sku),
-        },
-        {
-            title: 'Warehouse',
-            dataIndex: ['warehouse', 'name'],
-            key: 'warehouse',
-            sorter: (a: any, b: any) =>
-                a.warehouse.name.localeCompare(b.warehouse.name),
-        },
-        {
-            title: 'Product Name',
-            dataIndex: ['product', 'name'],
+            title: 'Name',
+            dataIndex: 'name',
             key: 'name',
             filterable: true,
-            sorter: (a: any, b: any) =>
-                a.product.name.localeCompare(b.product.name),
+            sorter: (a: any, b: any) => a.name.localeCompare(b.name),
         },
         {
-            title: 'Quantity',
-            dataIndex: 'quantity',
-            key: 'quantity',
-            sorter: (a: any, b: any) => a.quantity - b.quantity,
-            render: (quantity: number) => (
-                <Tag color={quantity > 0 ? 'green' : 'red'}>{quantity}</Tag>
-            ),
+            title: 'Location',
+            dataIndex: 'location',
+            key: 'location',
+            filterable: true,
+            sorter: (a: any, b: any) => a.location.localeCompare(b.location),
         },
         {
-            title: 'Status',
-            dataIndex: 'status',
-            key: 'status',
-            render: (status: string) => (
-                <Tag color={status === 'active' ? 'blue' : 'orange'}>
-                    {status.toUpperCase()}
-                </Tag>
-            ),
+            title: 'Description',
+            dataIndex: 'description',
+            key: 'description',
+            sorter: (a: any, b: any) => a.description - b.description,
         },
         {
             title: 'Actions',
@@ -103,9 +82,7 @@ const InventoryPage: React.FC = () => {
                                 type="primary"
                                 icon={<EditOutlined />}
                                 onClick={() =>
-                                    navigate(
-                                        `/admin/inventory/${record.product._id}`
-                                    )
+                                    navigate(`/admin/warehouses/${record._id}`)
                                 }
                             />
                         </Tooltip>
@@ -115,12 +92,7 @@ const InventoryPage: React.FC = () => {
                             <Button
                                 danger
                                 icon={<DeleteOutlined />}
-                                onClick={() =>
-                                    handleDelete(
-                                        record.product._id,
-                                        record.quantity
-                                    )
-                                }
+                                onClick={() => handleDelete(record._id)}
                             />
                         </Tooltip>
                     )}
@@ -129,9 +101,7 @@ const InventoryPage: React.FC = () => {
                             <Button
                                 icon={<EyeOutlined />}
                                 onClick={() =>
-                                    navigate(
-                                        `/admin/inventory/${record.product._id}`
-                                    )
+                                    navigate(`/admin/warehouses/${record._id}`)
                                 }
                             />
                         </Tooltip>
@@ -141,16 +111,16 @@ const InventoryPage: React.FC = () => {
         },
     ]
 
-    const filteredData = inventory?.filter((item: IInventory) => {
-        if (!item?.product?.name || !item?.product?._id) return false
+    const filteredData = warehouses?.filter((item: IWarehouse) => {
+        if (!item?.name || !item?._id) return false
 
         const searchContent = searchText.toLowerCase()
         return (
-            item.product._id.toLowerCase().includes(searchContent) ||
-            item.product.name.toLowerCase().includes(searchContent)
+            item._id.toLowerCase().includes(searchContent) ||
+            item.name.toLowerCase().includes(searchContent) ||
+            item.location.toLowerCase().includes(searchContent)
         )
     })
-    console.log('filteredData', filteredData)
 
     if (!canView) {
         return (
@@ -170,7 +140,7 @@ const InventoryPage: React.FC = () => {
                 <div className="flex justify-between items-center mb-4">
                     <Space>
                         <Input
-                            placeholder="Search by SKU or name"
+                            placeholder="Search by location or name"
                             prefix={<SearchOutlined />}
                             onChange={(e) => setSearchText(e.target.value)}
                             style={{ width: 300 }}
@@ -181,10 +151,10 @@ const InventoryPage: React.FC = () => {
                             type="primary"
                             icon={<PlusOutlined />}
                             onClick={() =>
-                                navigate('/admin/inventory/stock-in-out')
+                                navigate('/admin/warehouses/stock-in-out')
                             }
                         >
-                            Import Stock
+                            Add New Warehouse
                         </Button>
                     </Space>
                 </div>
@@ -205,4 +175,4 @@ const InventoryPage: React.FC = () => {
     )
 }
 
-export default InventoryPage
+export default WarehousesPage

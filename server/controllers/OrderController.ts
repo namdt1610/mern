@@ -121,9 +121,6 @@ export const OrderController = {
                 inventory.quantity -= item.quantity
 
                 // Update status if quantity becomes 0
-                if (inventory.quantity === 0) {
-                    inventory.status = 'out-of-stock'
-                }
 
                 await inventory.save({ session })
 

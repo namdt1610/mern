@@ -82,7 +82,6 @@ export const addToCart = async (req: Request, res: Response): Promise<void> => {
                     name: product.name,
                     price: product.price,
                     imageUrl: product.imageUrl ?? '',
-                    stock: Number(product.stock),
                 },
                 quantity,
             })

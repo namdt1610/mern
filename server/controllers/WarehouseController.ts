@@ -7,7 +7,7 @@ class WarehouseController {
         try {
             const warehouses = await Warehouse.find()
 
-            res.status(200).json({ success: true, warehouses })
+            res.status(200).json(warehouses)
         } catch (error: any) {
             res.status(500).json({
                 success: false,
@@ -118,3 +118,5 @@ class WarehouseController {
         }
     }
 }
+
+export default new WarehouseController()

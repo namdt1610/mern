@@ -15,6 +15,7 @@ import { SaveOutlined, RollbackOutlined } from '@ant-design/icons'
 import { useGetProductsQuery } from '@/services/ProductApi'
 import { useAddStockMutation } from '@/services/InventoryApi'
 import { useGetUserIdFromCookie } from '@/utils/useGetToken'
+import { useGetWarehousesQuery } from '@/services/WarehouseApi'
 
 interface ImportFormData {
     productId: string
@@ -25,6 +26,8 @@ const InventoryImport: React.FC = () => {
     const navigate = useNavigate()
     const [form] = Form.useForm()
     const { data: products, isLoading: productsLoading } = useGetProductsQuery()
+    const { data: warehouses, isLoading: warehousesLoading } =
+        useGetWarehousesQuery()
     const [addStock] = useAddStockMutation()
     const userId = useGetUserIdFromCookie() || null
 
@@ -83,7 +86,6 @@ const InventoryImport: React.FC = () => {
                             ))}
                         </Select>
                     </Form.Item>
-
                     <Form.Item
                         label="Quantity"
                         name="quantity"
@@ -105,7 +107,27 @@ const InventoryImport: React.FC = () => {
                             min={1}
                         />
                     </Form.Item>
-
+                    <Form.Item
+                        label="Warehouse"
+                        name="warehouse"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please enter warehouse',
+                            },
+                        ]}
+                    >
+                        <Select>
+                            {warehouses?.map((warehouse) => (
+                                <Select.Option
+                                    key={warehouse._id}
+                                    value={warehouse._id}
+                                >
+                                    {warehouse.name}
+                                </Select.Option>
+                            ))}
+                        </Select>
+                    </Form.Item>
                     <Divider />
 
                     <Form.Item>

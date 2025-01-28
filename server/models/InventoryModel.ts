@@ -1,14 +1,13 @@
-import mongoose, { Schema } from 'mongoose'
-import { Product } from '../../shared/types/Product'
+import mongoose, { Schema, Types } from 'mongoose'
 
-interface InventoryDocument extends Document {
-    product: Product['_id']
+interface IInventory extends Document {
+    product: Types.ObjectId
+    warehouse: Types.ObjectId
     quantity: number
-    status: 'in-stock' | 'out-of-stock' | 'discontinued'
     lastUpdated: Date
 }
 
-const inventorySchema = new Schema(
+const InventorySchema = new Schema(
     {
         product: {
             type: Schema.Types.ObjectId,
@@ -18,6 +17,7 @@ const inventorySchema = new Schema(
         },
         warehouse: {
             type: Schema.Types.ObjectId,
+            ref: 'Warehouse',
             required: true,
         },
         quantity: {
@@ -38,10 +38,7 @@ const inventorySchema = new Schema(
 )
 
 // Drop any existing indexes and recreate only what we need
-inventorySchema.index({ product: 1 }, { unique: true })
+InventorySchema.index({ product: 1 }, { unique: true })
 
-const Inventory = mongoose.model<InventoryDocument>(
-    'Inventory',
-    inventorySchema
-)
+const Inventory = mongoose.model<IInventory>('Inventory', InventorySchema)
 export default Inventory

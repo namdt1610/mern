@@ -18,6 +18,8 @@ import orderRoutes from './routes/OrderRoutes'
 import cartRoutes from './routes/CartRoutes'
 import dashboardRoutes from './routes/DashboardRoutes'
 import reviewRoutes from './routes/ReviewRoutes'
+import warehouseRoutes from './routes/WarehouseRoutes'
+
 const app = express()
 
 // Middleware để parse JSON và URL-encoded body
@@ -133,6 +135,7 @@ app.use('/api/orders', orderRoutes)
 app.use('/api/cart', cartRoutes)
 app.use('/api/dashboard', dashboardRoutes)
 app.use('/api/reviews', reviewRoutes)
+app.use('/api/warehouses', warehouseRoutes)
 
 // Global error handler
 app.use(

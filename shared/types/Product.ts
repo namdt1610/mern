@@ -8,7 +8,6 @@ export interface Product {
     createdAt: Date
     updatedAt: Date
     clickCount: number
-    stock: number
     status: string
     sku: string
     isActive: boolean

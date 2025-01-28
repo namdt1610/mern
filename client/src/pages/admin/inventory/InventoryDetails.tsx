@@ -1,25 +1,30 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Card, Row, Col, Space, message } from 'antd'
-import { useGetInventoryByIdQuery, useUpdateInventoryMutation } from '@/services/InventoryApi'
+import {
+    useGetInventoryByIdQuery,
+    useUpdateInventoryMutation,
+} from '@/services/InventoryApi'
 import DetailsActions from './InventoryDetailsActions'
 import DetailsForm from './InventoryDetailsForm'
 import LoadingError from '@/components/LoadingError'
-import { Inventory } from 'shared/types/Inventory'
+import { Inventory } from '@shared/types/IInventory'
 
 const InventoryDetails: React.FC = () => {
     const { id } = useParams<{ id: string }>()
     const navigate = useNavigate()
     const [isEditing, setIsEditing] = useState(false)
-    const [editedInventory, setEditedInventory] = useState<Partial<Inventory>>({})
-    
-    const { 
-        data: inventory, 
+    const [editedInventory, setEditedInventory] = useState<Partial<Inventory>>(
+        {}
+    )
+
+    const {
+        data: inventory,
         isLoading,
         isError,
-        refetch 
+        refetch,
     } = useGetInventoryByIdQuery(id!)
-    
+
     const [updateInventory] = useUpdateInventoryMutation()
 
     useEffect(() => {
@@ -32,9 +37,9 @@ const InventoryDetails: React.FC = () => {
         try {
             await updateInventory({
                 id: id!,
-                data: editedInventory
+                data: editedInventory,
             }).unwrap()
-            
+
             message.success('Inventory updated successfully')
             setIsEditing(false)
             refetch()
@@ -44,7 +49,15 @@ const InventoryDetails: React.FC = () => {
     }
 
     if (isLoading || isError) {
-        return <LoadingError isLoading={isLoading} isError={isError} refetch={refetch} isLogin={false} title="Inventory" />
+        return (
+            <LoadingError
+                isLoading={isLoading}
+                isError={isError}
+                refetch={refetch}
+                isLogin={false}
+                title="Inventory"
+            />
+        )
     }
 
     return (
@@ -57,17 +70,17 @@ const InventoryDetails: React.FC = () => {
                     onCancel={() => setIsEditing(false)}
                     onRefresh={refetch}
                 />
-                
+
                 <Row gutter={[16, 16]}>
                     <Col xs={24} lg={16}>
                         <DetailsForm
                             inventory={inventory!}
                             isEditing={isEditing}
                             editedInventory={editedInventory}
-                            onChange={(field, value) => 
-                                setEditedInventory(prev => ({
+                            onChange={(field, value) =>
+                                setEditedInventory((prev) => ({
                                     ...prev,
-                                    [field]: value
+                                    [field]: value,
                                 }))
                             }
                         />

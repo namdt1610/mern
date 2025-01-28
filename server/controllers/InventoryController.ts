@@ -4,12 +4,12 @@ import Inventory from '../models/InventoryModel'
 import InventoryActivity from '../models/InventoryActivityModel'
 
 class InventoryController {
-    // Get all inventory items
+    // Get stock status
     async getAllInventory(req: Request, res: Response): Promise<void> {
         try {
-            const inventory = await Inventory.find().populate('product')
+            const inventory = await Inventory.find().populate('warehouse').populate('product')
 
-            res.status(200).json({ success: true, inventory })
+            res.status(200).json(inventory)
         } catch (error: any) {
             res.status(500).json({
                 success: false,
@@ -19,11 +19,11 @@ class InventoryController {
         }
     }
 
-    // Get inventory by product ID
+    // Get inventory status by product ID
     async getInventoryByProductId(req: Request, res: Response): Promise<void> {
         try {
             const { productId } = req.params
-            
+
             const inventory = await Inventory.findOne({
                 product: productId,
             }).populate('warehouse')
@@ -37,6 +37,22 @@ class InventoryController {
             res.status(500).json({
                 success: false,
                 message: 'Failed to fetch inventory',
+                error: error.message,
+            })
+        }
+    }
+
+    // Get product list in an warehouse
+    async getProductsInInventory(req: Request, res: Response): Promise<void> {
+        try {
+            const inventory = await Inventory.find().populate('product')
+            const products = inventory.map((item) => item.product)
+
+            res.status(200).json(products)
+        } catch (error: any) {
+            res.status(500).json({
+                success: false,
+                message: 'Failed to fetch products',
                 error: error.message,
             })
         }
