@@ -17,9 +17,6 @@ import {
     App,
     Spin,
     Typography,
-    Row,
-    Col,
-    Divider,
     Image,
 } from 'antd'
 import MainLayout from '@/components/client/layout/MainLayout'

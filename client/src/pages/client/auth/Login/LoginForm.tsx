@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button, Checkbox, Form, Input, message } from 'antd'
+import { KeyOutlined, UserOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
 import { useLoginMutation } from '@/services/AuthApi'
 import { useGetUserIdFromCookie } from '@/utils/useGetToken'
@@ -59,6 +60,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ from }) => {
                 ]}
             >
                 <Input
+                    prefix={<UserOutlined />}
                     size="large"
                     autoComplete="email"
                     placeholder="Enter your email"
@@ -73,6 +75,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ from }) => {
                 ]}
             >
                 <Input.Password
+                    prefix={<KeyOutlined />}
                     size="large"
                     autoComplete="current-password"
                     placeholder="Enter your password"
@@ -84,7 +87,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ from }) => {
             </Form.Item>
 
             <Form.Item>
-                <Button 
+                <Button
                     type="primary"
                     htmlType="submit"
                     size="large"

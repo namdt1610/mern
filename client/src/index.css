@@ -5,13 +5,12 @@
 
 @layer base {
     body {
-        background: linear-gradient(120deg, #e7bdbf, #1ac6c347); /* Gradient màu */
+        background: linear-gradient(120deg, #e7bdbf, #1ac6c347);
         background-attachment: fixed; /* Giữ cố định khi cuộn */
         background-size: cover; /* Phủ toàn bộ màn hình */
         font-family: 'Karla', sans-serif; /* Font chữ */
     }
 }
-
 
 @layer components {
     /* Điều chỉnh kích thước của thanh cuộn */

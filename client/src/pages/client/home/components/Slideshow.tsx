@@ -41,7 +41,7 @@ export default function Slideshow() {
     }
 
     return (
-        <div className="relative h-[400px] md:h-[500px] overflow-hidden rounded-2xl">
+        <div className="relative h-[400px] md:h-[500px] overflow-hidden">
             {/* Slides */}
             {slides.map((slide, index) => (
                 <div

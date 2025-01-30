@@ -51,9 +51,11 @@ export default function Content() {
 
     if (error)
         return (
-            <div className="text-center text-red-500 p-8">
-                Error loading categories. Please try again later.
-            </div>
+            <Result
+                status="500"
+                title="Error loading categories"
+                subTitle="Please check your connection and try again."
+            ></Result>
         )
 
     if (!categories) return <Result status="404" title="No categories found" />
@@ -69,7 +71,6 @@ export default function Content() {
             initial="hidden"
             animate="visible"
         >
-            <p>Cate</p>
             {/* Search and Filter Section */}
             <div className="container mx-auto px-4 py-8">
                 <motion.div

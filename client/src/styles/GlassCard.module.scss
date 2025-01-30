@@ -1,5 +1,5 @@
 .glassCard {
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: rgba(255, 255, 255, 0.5);
     border-radius: 30px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(16px); /* Mờ nền */
@@ -7,6 +7,11 @@
     border: 1px solid rgba(255, 255, 255, 0.18);
     padding: 3em 0.5em 0 0.5em;
     width: 500px;
+    transition: all 0.3s ease-in-out;
+}
+
+.glassCard:hover {
+    box-shadow: 0 5px 15px rgba(255, 255, 255, 0.8);
 }
 
 .glassButton {
@@ -14,7 +19,7 @@
     border: 0;
     text-decoration: none;
     border-radius: 15px;
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.6);
     border: 1px solid rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(30px);
     color: rgba(255, 255, 255, 0.8);
@@ -22,9 +27,11 @@
     letter-spacing: 2px;
     cursor: pointer;
     text-transform: uppercase;
+    transition: all 0.6s ease-in-out !important;
 }
 
 .glassButton:hover {
     background-color: rgba(0, 0, 0, 0.8) !important;
     color: rgba(255, 255, 255, 1) !important;
+    box-shadow: 0 5px 15px rgba(255, 255, 255, 0.8) !important;
 }

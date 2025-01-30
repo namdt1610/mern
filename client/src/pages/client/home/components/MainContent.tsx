@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Spin, Tag, Tooltip } from 'antd'
+import { Button, Result, Spin, Tag, Tooltip } from 'antd'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
     useGetProductsQuery,
@@ -70,10 +70,11 @@ export default function MainContent() {
 
     if (error)
         return (
-            <div className="text-center text-red-500 p-8">
-                Error loading products. Please check your connection try again
-                later.
-            </div>
+            <Result
+                status="500"
+                title="Error loading products"
+                subTitle="Please check your connection and try again."
+            ></Result>
         )
 
     return (

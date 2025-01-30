@@ -6,11 +6,8 @@ import { ConfigProvider, theme, App as AntApp } from 'antd'
 import { Provider } from 'react-redux'
 import store from '@/redux/Store'
 import App from './App'
-import ThemeToggle from './components/shared/ThemeToggle'
 
 const AppWrapper = () => {
-    const [isDark, setIsDark] = useState(false)
-
     return (
         <ConfigProvider
             theme={{
@@ -23,10 +20,6 @@ const AppWrapper = () => {
             <AntApp>
                 <Router>
                     <App />
-                    <ThemeToggle
-                        isDark={isDark}
-                        toggleTheme={() => setIsDark(!isDark)}
-                    />
                 </Router>
             </AntApp>
         </ConfigProvider>
