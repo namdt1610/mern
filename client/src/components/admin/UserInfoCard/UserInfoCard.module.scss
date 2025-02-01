@@ -1,0 +1,68 @@
+.userCard {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 16px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    .avatar {
+        border: 2px solid #fff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+
+        &:hover {
+            transform: scale(1.05);
+        }
+    }
+
+    .userInfo {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+
+        .welcome {
+            font-size: 16px;
+            font-weight: 500;
+            color: #1890ff;
+        }
+
+        .email {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .role {
+            font-size: 12px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+    }
+
+    .loginButton {
+        margin-left: auto;
+        background: #1890ff;
+        border: none;
+        border-radius: 8px;
+        color: white;
+        padding: 8px 24px;
+        transition: all 0.3s ease;
+
+        &:hover {
+            background: #40a9ff;
+            transform: translateY(-1px);
+        }
+
+        &:active {
+            transform: scale(0.98);
+        }
+    }
+}

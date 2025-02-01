@@ -1,0 +1,24 @@
+.ct-series-a .ct-line {
+    stroke: #1890ff;
+    stroke-width: 2px;
+}
+.ct-series-a .ct-area {
+    fill: #1890ff;
+    fill-opacity: 0.1;
+}
+.ct-series-a .ct-point {
+    stroke: #1890ff;
+    stroke-width: 6px;
+}
+.ct-series-a .ct-slice-donut {
+    stroke: #1890ff;
+}
+.ct-series-b .ct-slice-donut {
+    stroke: #52c41a;
+}
+.ct-series-c .ct-slice-donut {
+    stroke: #faad14;
+}
+.ct-series-d .ct-slice-donut {
+    stroke: #722ed1;
+}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Input, Button, AutoComplete, Divider } from 'antd'
+import { Input, AutoComplete } from 'antd'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
     SearchOutlined,
@@ -10,14 +10,12 @@ import {
 } from '@ant-design/icons'
 import { debounce } from 'lodash'
 
-const { Search } = Input
-
 const featuredBooks = [
     {
         id: 1,
-        title: 'Atomic Habits',
+        title: 'Thuật Thao Túng',
         author: 'James Clear',
-        image: 'public/img/atomic-habits.webp',
+        image: '/img/thuat-thao-tung.webp',
         color: 'from-blue-500/20',
         description: 'Tiny Changes, Remarkable Results',
     },
@@ -25,7 +23,7 @@ const featuredBooks = [
         id: 2,
         title: 'Dopamine Nation',
         author: 'Dr. Anna Lembke',
-        image: 'public/img/dopamine.webp',
+        image: '/img/dopamine.webp',
         color: 'from-purple-500/20',
         description: 'Finding Balance in the Age of Indulgence',
     },
@@ -33,7 +31,7 @@ const featuredBooks = [
         id: 3,
         title: 'Beethoven',
         author: 'John Suchet',
-        image: 'public/img/beethoven.webp',
+        image: '/img/beethoven.webp',
         color: 'from-emerald-500/20',
         description: 'The Man Revealed',
     },
@@ -167,56 +165,22 @@ export default function Hero() {
                 onSelect={(value) => {
                     setSearchValue(value)
                     setShowPlaceholder(false)
-                    // Handle search selection
                 }}
                 onFocus={() => setShowPlaceholder(true)}
                 className="w-full"
-                popupClassName="search-suggestions-dropdown"
-                popupMatchSelectWidth={500}
             >
                 <Input
                     size="large"
                     placeholder="Search for books, authors, or categories..."
                     prefix={<SearchOutlined className="text-gray-400" />}
-                    className="rounded-full search-input"
+                    className="rounded-full"
                 />
             </AutoComplete>
         </motion.div>
     )
 
-    // Add these styles to your CSS
-    const styles = `
-        .search-suggestions-dropdown {
-            max-height: 400px;
-            overflow-y: auto;
-        }
-
-        .search-suggestions-dropdown .ant-select-item {
-            padding: 0 !important;
-        }
-        
-        .search-suggestions-dropdown .ant-select-item-option-disabled {
-            cursor: default !important;
-        }
-        
-        .search-suggestions-dropdown .ant-select-item-option-disabled:hover {
-            background-color: transparent !important;
-        }
-
-        .search-input:focus {
-            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
-        }
-
-        .ant-select-dropdown {
-            padding: 0;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-    `
-
     return (
         <>
-            <style>{styles}</style>
             <div className="relative min-h-[600px] overflow-hidden px-14">
                 {/* Background Decorative Elements */}
                 <motion.div
@@ -313,8 +277,14 @@ export default function Hero() {
                                         <div className="space-y-4">
                                             <motion.h3
                                                 className="text-2xl font-bold text-gray-900"
-                                                initial={{ opacity: 0, y: 20 }}
-                                                animate={{ opacity: 1, y: 0 }}
+                                                initial={{
+                                                    opacity: 0,
+                                                    y: 20,
+                                                }}
+                                                animate={{
+                                                    opacity: 1,
+                                                    y: 0,
+                                                }}
                                             >
                                                 {
                                                     featuredBooks[activeBook]

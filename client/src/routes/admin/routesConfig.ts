@@ -42,7 +42,7 @@ const adminRoutes: RouteConfig = {
             index: true,
             path: '',
             element: lazy(
-                () => import('../../pages/admin/dashboard/AdminDashboard')
+                () => import('../../pages/admin/dashboard/AdminDashboard/AdminDashboard')
             ),
             permissions: {
                 view: ['admin', 'user'],

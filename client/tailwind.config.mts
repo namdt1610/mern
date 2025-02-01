@@ -6,6 +6,4 @@ export const theme = {
     extend: {},
 }
 
-export const daisyui = {
-    themes: ['light', 'dark'],
-}
+export const mode = 'jit'

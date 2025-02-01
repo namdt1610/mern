@@ -1,10 +1,7 @@
 import React, { Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom'
-import adminRoutes, {
-    authRoutes,
-    RouteConfig,
-} from './routesConfig'
-import LoadingError from '@/components/LoadingError'
+import adminRoutes, { authRoutes, RouteConfig } from './routesConfig'
+import LoadingError from '@/components/shared/LoadingError'
 import PrivateRoute from '@/routes/admin/PrivateRoute'
 import AdminLayout from '@/components/admin/layout/AdminLayout'
 import AuthLayout from '@/components/admin/layout/AuthLayout'

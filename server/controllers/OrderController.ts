@@ -13,11 +13,7 @@ export const OrderController = {
 
             const orders = await Order.find().populate('user', 'name')
             console.log('Orders: ', orders)
-            res.status(200).json({
-                success: true,
-                message: 'Get all orders successfully',
-                orders,
-            })
+            res.status(200).json(orders)
         } catch (error: any) {
             res.status(500).json({
                 success: false,

@@ -12,7 +12,7 @@ import {
 } from 'antd'
 import { Link } from 'react-router-dom'
 import MainLayout from '@/components/client/layout/MainLayout'
-import UserInfoCard from '@/components/admin/UserInfoCard'
+import UserInfoCard from '@/components/admin/UserInfoCard/UserInfoCard'
 import { useGetOrdersByUserIdQuery } from '@/services/OrderApi'
 import { useUpdateUserMutation } from '@/services/UserApi'
 import { formatCurrency } from '@/utils/formatCurrency'
