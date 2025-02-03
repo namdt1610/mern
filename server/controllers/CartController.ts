@@ -20,6 +20,28 @@ export const getCart = async (req: Request, res: Response): Promise<void> => {
             return
         }
 
+        // Kiểm tra sản phẩm nào không còn tồn tại
+        const validProducts = cart.products.filter(
+            (item) => item.product !== null
+        )
+        const removedProducts = cart.products.length - validProducts.length
+
+        // Nếu có sản phẩm bị xóa, cập nhật giỏ hàng
+        if (removedProducts > 0) {
+            cart.products = validProducts
+            cart.totalQuantity = cart.products.reduce(
+                (sum, item) => sum + item.quantity,
+                0
+            )
+            await cart.save()
+        }
+
+        res.setHeader(
+            'X-Cart-Message',
+            removedProducts > 0
+                ? `${removedProducts} sản phẩm đã bị xóa khỏi giỏ hàng vì không còn tồn tại.`
+                : ''
+        )
         res.status(200).json(cart)
     } catch (error) {
         console.error('Error fetching cart:', error)

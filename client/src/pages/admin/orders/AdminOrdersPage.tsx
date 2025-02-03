@@ -6,7 +6,7 @@ import { Badge, Button, Card, Input, message, Modal, Space, Table } from 'antd/'
 import { ColumnsType } from 'antd/lib/table'
 import { ReloadOutlined, SearchOutlined } from '@ant-design/icons'
 import { useDeleteOrderMutation, useGetOrdersQuery } from '@/services/OrderApi' // API của Orders
-import LoadingError from '@/components/LoadingError'
+import LoadingError from '@/components/shared/LoadingError'
 
 export default function Orders() {
     // Interface cho record đơn hàng

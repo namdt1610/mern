@@ -15,7 +15,7 @@ import {
 import { ColumnsType } from 'antd/lib/table'
 import { ImportOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons'
 import { useDeleteUserMutation, useGetUsersQuery } from '@/services/UserApi'
-import LoadingError from '@/components/LoadingError'
+import LoadingError from '@/components/shared/LoadingError'
 
 export default function Users() {
     // Interface cho record
@@ -149,7 +149,8 @@ export default function Users() {
                         text={status}
                     ></Badge>
                 ),
-                sorter: (a, b) => (a.status ?? '').localeCompare(b.status ?? ''),
+                sorter: (a, b) =>
+                    (a.status ?? '').localeCompare(b.status ?? ''),
             },
             {
                 title: 'Action',
@@ -197,7 +198,7 @@ export default function Users() {
     if (isLoading || error) {
         return (
             <LoadingError
-                title="User Management"
+                title="There was an error while fetching users"
                 isLogin={!users}
                 isLoading={isLoading}
                 isError={error}

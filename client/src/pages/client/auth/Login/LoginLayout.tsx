@@ -1,5 +1,5 @@
 import React from 'react'
-import BackgroundVideo from '@/components/BackgroundVideo'
+import BackgroundVideo from '@/components/shared/BackgroundVideo'
 
 interface LoginLayoutProps {
     children: React.ReactNode

@@ -7,7 +7,7 @@ import {
     useAddToFavoritesMutation,
     useGetFavoritesQuery,
 } from '@/services/UserApi'
-import { useGetInventoryByIdQuery } from '@/services/InventoryApi'
+import { useGetInventoryByBookIdQuery } from '@/services/InventoryApi'
 
 import {
     Button,
@@ -33,7 +33,7 @@ const BookDetail: React.FC = () => {
     const id: string = useParams<{ id: string }>().id ?? ''
 
     const { data: book, isLoading, refetch } = useGetProductByIdQuery(id)
-    const { data: stock } = useGetInventoryByIdQuery(id)
+    const { data: stock } = useGetInventoryByBookIdQuery(id)
     const { data: favorites } = useGetFavoritesQuery(userId!)
     const [addToCart] = useAddToCartMutation()
     const [addToFav] = useAddToFavoritesMutation()
@@ -187,7 +187,7 @@ const BookDetail: React.FC = () => {
                                         ) : (
                                             <Text type="danger">
                                                 This items is currently out of
-                                                Stock
+                                                stock
                                             </Text>
                                         )}
                                         <Button

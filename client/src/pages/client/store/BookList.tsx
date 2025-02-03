@@ -235,11 +235,11 @@ const ListAllProduct: React.FC<ListAllProductProps> = ({
                                               />
                                               <div className="flex justify-between items-center">
                                                   <span className="text-lg font-bold text-blue-600">
-                                                      ${product.price}
+                                                      đ{product.price}
                                                   </span>
                                                   <Tag color="blue">
                                                       {product.clickCount} views
-                                                  </Tag>
+                                                </Tag>
                                               </div>
                                           </div>
                                       </Card>

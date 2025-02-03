@@ -67,8 +67,8 @@ export const inventoryApi = createApi({
         }),
 
         // Get product's stock by ID
-        getInventoryById: builder.query<IInventory, string>({
-            query: (id) => `/inventory/${id}`,
+        getInventoryByBookId: builder.query<IInventory, string>({
+            query: (bookId) => `/inventory/${bookId}`,
             providesTags: ['Inventory'],
         }),
 
@@ -97,6 +97,7 @@ export const {
     useRemoveStockMutation,
     useUpdateStockMutation,
     useGetStockActivityQuery,
-    useGetInventoryByIdQuery,
+    useGetInventoryByBookIdQuery,
     useUpdateInventoryMutation,
+    useLazyGetInventoryByBookIdQuery
 } = inventoryApi

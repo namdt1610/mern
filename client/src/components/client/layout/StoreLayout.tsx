@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import Header from '../../../pages/client/home/components/Header'
-import Main from '../Main'
-import Footer from '../../../pages/client/home/components/Footer'
+import Header from '@/pages/client/home/components/Header'
+import Main from '@/pages/client/home/components/Main'
+import Footer from '@/pages/client/home/components/Footer'
 import MainContent from '@/pages/client/store/BookList'
-import BackToTop from '@/components/BackToTop'
+import BackToTop from '@/components/shared/BackToTop'
 import Sidebar from './StoreSidebar'
 import StoreRightSidebar from './StoreRightSidebar'
 

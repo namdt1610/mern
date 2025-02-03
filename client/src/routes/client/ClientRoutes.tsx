@@ -18,7 +18,7 @@ const UserProfilePage = lazy(
 const BookDetailsPage = lazy(
     () => import('@/pages/client/store/BookDetailsPage')
 )
-const CartPage = lazy(() => import('@/pages/client/cart/CartPage'))
+const CartPage = lazy(() => import('@/pages/client/cart/CartContainer'))
 
 // Import Skeleton Components
 import UserProfileSkeleton from '@/components/client/skeletons/UserProfileSkeleton'

@@ -55,12 +55,12 @@ const LoadingError: React.FC<LoadingErrorProps> = ({
             <div className="flex justify-center items-center h-screen">
                 <Result
                     status="error"
-                    title={title || 'Đã xảy ra lỗi'}
-                    subTitle="Vui lòng thử lại sau."
+                    title={title || 'There was an error'}
+                    subTitle="Please try again later."
                     extra={
                         refetch && (
                             <Button type="primary" onClick={refetch}>
-                                Thử lại
+                                Refresh
                             </Button>
                         )
                     }

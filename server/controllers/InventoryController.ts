@@ -29,8 +29,11 @@ class InventoryController {
             const inventory = await Inventory.findOne({
                 product: productId,
             }).populate('warehouse')
+
             if (!inventory) {
-                res.status(404).json({ error: 'Inventory not found' })
+                res.status(404).json({
+                    error: 'Inventory not found',
+                })
                 return
             }
 

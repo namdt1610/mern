@@ -7,14 +7,14 @@ import {
 } from '@/services/InventoryApi'
 import DetailsActions from './InventoryDetailsActions'
 import DetailsForm from './InventoryDetailsForm'
-import LoadingError from '@/components/LoadingError'
-import { Inventory } from '@shared/types/IInventory'
+import LoadingError from '@/components/shared/LoadingError'
+import { IInventory } from '@shared/types/IInventory'
 
 const InventoryDetails: React.FC = () => {
     const { id } = useParams<{ id: string }>()
     const navigate = useNavigate()
     const [isEditing, setIsEditing] = useState(false)
-    const [editedInventory, setEditedInventory] = useState<Partial<Inventory>>(
+    const [editedInventory, setEditedInventory] = useState<Partial<IInventory>>(
         {}
     )
 
