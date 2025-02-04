@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import {
     useGetProductByIdQuery,
     useUpdateProductMutation,
-} from '@/services/ProductApi' // Giả sử API này trả về dữ liệu sản phẩm
+} from '@/services/ProductApi'
 import { useGetCategoriesQuery } from '@/services/CategoryApi'
 import {
     Button,
@@ -12,23 +12,33 @@ import {
     Form,
     Image,
     Input,
-    message,
     Select,
     Space,
     Spin,
     Typography,
-    Upload,
     UploadProps,
+    Switch,
+    Row,
+    Col,
+    App,
 } from 'antd'
-import { RcFile } from 'antd/es/upload'
+import {
+    EditOutlined,
+    SaveOutlined,
+    ReloadOutlined,
+    ArrowLeftOutlined,
+} from '@ant-design/icons'
+import ImageUploader from './components/ImageUploader'
 
 const { Title, Text } = Typography
 
-const ProductDetails: React.FC = () => {
-    const { id } = useParams<{ id: string }>() // Lấy id từ URL
-    const navigate = useNavigate()
 
-    // Gọi API để lấy thông tin sản phẩm
+const ProductDetails: React.FC = () => {
+    const { id } = useParams<{ id: string }>()
+    const navigate = useNavigate()
+    const { message } = App.useApp()
+
+    // Lấy thông tin sản phẩm
     const {
         data: product,
         isLoading,
@@ -38,20 +48,20 @@ const ProductDetails: React.FC = () => {
     const [updateProduct, { isLoading: isUpdating }] =
         useUpdateProductMutation()
 
-    // Gọi API để lấy danh sách category
+    // Lấy danh sách category
     const { data: categories } = useGetCategoriesQuery()
 
-    const [isEditing, setIsEditing] = useState(false) // Trạng thái chỉnh sửa
+    const [isEditing, setIsEditing] = useState(false)
     const [form] = Form.useForm()
 
     const handleSave = async (values: any) => {
         try {
-            // Gửi request cập nhật sản phẩm, bao gồm cả ảnh nếu có thay đổi
+            // Cập nhật sản phẩm, nếu có upload ảnh sẽ được xử lý tại đây
             await updateProduct({ id, ...values }).unwrap()
-            message.success('Product updated successfully')
+            message.success('Cập nhật sản phẩm thành công')
             setIsEditing(false)
         } catch (error: any) {
-            message.error('Failed to update product. Please try again.')
+            message.error('Cập nhật sản phẩm thất bại, vui lòng thử lại!')
             console.error('Error from backend:', error)
         }
     }
@@ -63,162 +73,183 @@ const ProductDetails: React.FC = () => {
 
     const handleImageChange: UploadProps['onChange'] = (info) => {
         if (info.file.status === 'done') {
-            message.success(`${info.file.name} file uploaded successfully`)
+            message.success(`${info.file.name} tải lên thành công`)
         } else if (info.file.status === 'error') {
-            message.error(`${info.file.name} file upload failed.`)
+            message.error(`${info.file.name} tải lên thất bại`)
         }
     }
 
     if (isLoading || isUpdating) {
-        return <Spin size="large" tip="Loading..." />
+        return (
+            <div style={{ textAlign: 'center', padding: '50px 0' }}>
+                <Spin size="large" tip="Đang tải..." />
+            </div>
+        )
     }
 
     if (isError || !product) {
-        return <Empty description="Product not found" />
+        return <Empty description="Không tìm thấy sản phẩm" />
     }
 
     return (
-        <Card title={`Product Details - ${product?.name}`} className="my-4">
+        <Card
+            title={`Chi tiết sản phẩm - ${product?.name}`}
+            className="my-4"
+            extra={
+                <Space>
+                    <Button
+                        type="dashed"
+                        onClick={() => refetch()}
+                        icon={<ReloadOutlined />}
+                    >
+                        Làm mới
+                    </Button>
+                    <Button
+                        onClick={() => navigate('/admin/products')}
+                        icon={<ArrowLeftOutlined />}
+                    >
+                        Quay lại
+                    </Button>
+                </Space>
+            }
+        >
             {isEditing ? (
                 <Form
                     form={form}
                     layout="vertical"
                     onFinish={handleSave}
-                    initialValues={product} // Đảm bảo form bắt đầu với dữ liệu sản phẩm hiện tại
+                    initialValues={{
+                        ...product,
+                        // Nếu product.isActive là boolean thì không cần chuyển đổi
+                        isActive: product?.isActive,
+                    }}
                 >
-                    <Form.Item
-                        label="Product Name"
-                        name="name"
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please enter product name',
-                            },
-                        ]}
-                    >
-                        <Input />
-                    </Form.Item>
-                    <Form.Item label="Category" name="categoryId">
-                        <Select>
-                            {/* Hiển thị danh sách category */}
-                            {categories?.map((category) => (
-                                <Select.Option
-                                    key={category._id}
-                                    value={category._id}
-                                >
-                                    {category.name}
-                                </Select.Option>
-                            ))}
-                        </Select>
-                    </Form.Item>
+                    <Row gutter={16}>
+                        <Col span={12}>
+                            <Form.Item
+                                label="Tên sản phẩm"
+                                name="name"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Vui lòng nhập tên sản phẩm',
+                                    },
+                                ]}
+                            >
+                                <Input placeholder="Nhập tên sản phẩm" />
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item label="Danh mục" name="categoryId">
+                                <Select placeholder="Chọn danh mục">
+                                    {categories?.map((category) => (
+                                        <Select.Option
+                                            key={category._id}
+                                            value={category._id}
+                                        >
+                                            {category.name}
+                                        </Select.Option>
+                                    ))}
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                    </Row>
 
-                    <Form.Item label="Price" name="price">
-                        <Input type="number" />
-                    </Form.Item>
-
-                    <Form.Item label="Status" name="isActive">
-                        <Input type="checkbox" />
-                    </Form.Item>
-
-                    {/* Upload hình ảnh */}
-                    <Form.Item label="Image" name="imageUrl">
-                        <Upload
-                            name="file"
-                            action="/upload" // Địa chỉ API để upload hình ảnh (điều chỉnh theo API của bạn)
-                            listType="picture-card"
-                            onChange={handleImageChange}
-                            showUploadList={false} // Nếu bạn không muốn hiển thị danh sách ảnh đã tải lên
-                            beforeUpload={(file: RcFile) => {
-                                // Kiểm tra loại file trước khi upload
-                                const isImage = file.type.startsWith('image/')
-                                if (!isImage) {
-                                    message.error(
-                                        'You can only upload image files!'
-                                    )
-                                }
-                                return isImage
-                            }}
-                        >
-                            {product?.imageUrl ? (
-                                <Image
-                                    src={product?.imageUrl}
-                                    alt={product?.name}
-                                    width={100}
+                    <Row gutter={16}>
+                        <Col span={12}>
+                            <Form.Item label="Giá" name="price">
+                                <Input
+                                    type="number"
+                                    placeholder="Nhập giá sản phẩm"
                                 />
-                            ) : (
-                                <div>+ Upload</div>
-                            )}
-                        </Upload>
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item
+                                label="Trạng thái"
+                                name="isActive"
+                                valuePropName="checked"
+                            >
+                                <Switch
+                                    checkedChildren="Active"
+                                    unCheckedChildren="Inactive"
+                                />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+
+                    <Form.Item
+                        label="Hình ảnh"
+                        name="imageUrl"
+                        valuePropName="fileList"
+                        getValueFromEvent={(e) =>
+                            Array.isArray(e?.fileList) ? e.fileList : []
+                        }
+                    >
+                        <ImageUploader />
                     </Form.Item>
 
-                    <Space>
+                    <Space size="middle">
                         <Button
                             type="primary"
                             htmlType="submit"
                             loading={isUpdating}
+                            icon={<SaveOutlined />}
                         >
-                            Save
+                            Lưu
                         </Button>
-                        <Button onClick={handleCancel}>Cancel</Button>
+                        <Button onClick={handleCancel}>Hủy</Button>
                     </Space>
                 </Form>
             ) : (
-                <Space
-                    direction="vertical"
-                    size="large"
-                    style={{ width: '100%' }}
-                >
-                    <div>
-                        <Title level={5}>Name:</Title>
-                        <Text>{product?.name}</Text>
-                    </div>
-                    <div>
-                        <Title level={5}>Category:</Title>
-                        <Text>{product?.category}</Text>
-                    </div>
-                    <div>
-                        <Title level={5}>Click:</Title>
-                        <Text>{product?.clickCount}</Text>
-                    </div>
-                    <div>
-                        <Title level={5}>Sold:</Title>
-                        <Text>{product?.sold}</Text>
-                    </div>
-                    <div>
-                        <Title level={5}>Price:</Title>
-                        <Text>{product?.price}</Text>
-                    </div>
-
-                    <div>
-                        <Title level={5}>Status:</Title>
-                        <Text>{product?.isActive ? 'Active' : 'Inactive'}</Text>
-                    </div>
-
-                    {/* Hiển thị hình ảnh sản phẩm */}
-                    <div>
-                        <Title level={5}>Image:</Title>
-                        <Image
-                            width={200}
-                            src={product?.imageUrl}
-                            alt={product?.name}
-                        />
-                    </div>
-
-                    <Space>
+                <div>
+                    <Row gutter={[16, 16]}>
+                        <Col span={12}>
+                            <Title level={5}>Tên sản phẩm:</Title>
+                            <Text>{product?.name}</Text>
+                        </Col>
+                        <Col span={12}>
+                            <Title level={5}>Danh mục:</Title>
+                            <Text>{product?.category?.name}</Text>
+                        </Col>
+                        <Col span={12}>
+                            <Title level={5}>Lượt xem:</Title>
+                            <Text>{product?.clickCount}</Text>
+                        </Col>
+                        <Col span={12}>
+                            <Title level={5}>Đã bán:</Title>
+                            <Text>{product?.sold}</Text>
+                        </Col>
+                        <Col span={12}>
+                            <Title level={5}>Giá:</Title>
+                            <Text>{product?.price}</Text>
+                        </Col>
+                        <Col span={12}>
+                            <Title level={5}>Trạng thái:</Title>
+                            <Text>
+                                {product?.isActive ? 'Active' : 'Inactive'}
+                            </Text>
+                        </Col>
+                        <Col span={24}>
+                            <Title level={5}>Hình ảnh sản phẩm:</Title>
+                            <Image
+                                width={200}
+                                src={product?.imageUrl}
+                                alt={product?.name}
+                                style={{ borderRadius: '4px' }}
+                            />
+                        </Col>
+                    </Row>
+                    <Space style={{ marginTop: '20px' }}>
                         <Button
                             type="primary"
                             onClick={() => setIsEditing(true)}
+                            icon={<EditOutlined />}
                         >
-                            Edit
-                        </Button>
-                        <Button onClick={() => navigate('/admin/products')}>
-                            Back
-                        </Button>
-                        <Button type="dashed" onClick={() => refetch()}>
-                            Refresh
+                            Chỉnh sửa
                         </Button>
                     </Space>
-                </Space>
+                </div>
             )}
         </Card>
     )

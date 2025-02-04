@@ -4,7 +4,7 @@ export interface Product {
     price: number
     description: string
     imageUrl?: string
-    category: string
+    category: { name: string }
     createdAt: Date
     updatedAt: Date
     clickCount: number
