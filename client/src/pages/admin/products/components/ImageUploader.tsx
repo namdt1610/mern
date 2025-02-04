@@ -1,41 +1,70 @@
-import React from 'react'
-import { Upload, UploadProps, Image, message } from 'antd'
-import { RcFile, UploadFile } from 'antd/es/upload'
+import React, { useState } from 'react'
+import { Upload, UploadFile, message } from 'antd'
+import { PlusOutlined } from '@ant-design/icons'
 
 interface ImageUploaderProps {
-    value?: UploadFile[] // Nhận fileList từ Form
-    onChange?: (fileList: UploadFile[]) => void // Callback để cập nhật giá trị lên Form
+    value?: UploadFile[]
+    onUploadSuccess?: (fileUrl: string) => void
+    modelType: 'product' | 'user' | 'category'
+    modelId: string
 }
 
 const ImageUploader: React.FC<ImageUploaderProps> = ({
     value = [],
-    onChange,
+    onUploadSuccess,
+    modelType,
+    modelId,
 }) => {
-    const handleImageChange: UploadProps['onChange'] = (info) => {
+    const [fileList, setFileList] = useState<UploadFile[]>(value)
+
+    const handleChange = (info: any) => {
+        let newFileList = [...info.fileList]
+
         if (info.file.status === 'done') {
-            message.success(`${info.file.name} tải lên thành công`)
+            const imageUrl = info.file.response?.imageUrl
+            if (imageUrl) {
+                message.success('Tải ảnh lên thành công!')
+                onUploadSuccess?.(imageUrl)
+                newFileList = newFileList.map((file) =>
+                    file.uid === info.file.uid
+                        ? {
+                              ...file,
+                              url: `http://localhost:8888/uploads/${imageUrl}`,
+                              status: 'done',
+                          }
+                        : file
+                )
+            }
         } else if (info.file.status === 'error') {
-            message.error(`${info.file.name} tải lên thất bại`)
+            message.error('Tải ảnh lên thất bại!')
         }
-        onChange?.(info.fileList) // Cập nhật danh sách file lên Form
+
+        setFileList(newFileList)
     }
 
     return (
         <Upload
             name="file"
-            action="/upload" // API upload
+            action="/api/upload"
+            method="POST"
             listType="picture-card"
-            fileList={value} // Nhận từ Form
-            onChange={handleImageChange}
-            beforeUpload={(file: RcFile) => {
-                const isImage = file.type.startsWith('image/')
-                if (!isImage) {
+            fileList={fileList}
+            data={{ modelType, id: modelId }}
+            onChange={handleChange}
+            beforeUpload={(file) => {
+                if (!file.type.startsWith('image/')) {
                     message.error('Chỉ cho phép tải lên file hình ảnh!')
+                    return false
                 }
-                return isImage
+                return true
             }}
         >
-            {value.length === 0 ? <div>+ Tải lên</div> : null}
+            {fileList.length < 1 && (
+                <div>
+                    <PlusOutlined />
+                    <div style={{ marginTop: 8 }}>Tải lên</div>
+                </div>
+            )}
         </Upload>
     )
 }

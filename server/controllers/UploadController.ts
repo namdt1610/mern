@@ -8,7 +8,7 @@ export const uploadImage = async (
 ): Promise<void> => {
     try {
         // Middleware Multer sẽ xử lý việc tải file lên
-        upload.single('avatar')(req, res, (err: any) => {
+        upload.single('file')(req, res, (err: any) => {
             if (err) {
                 return res.status(500).json({ message: 'File upload error' })
             }
@@ -19,6 +19,7 @@ export const uploadImage = async (
 
             // Tiến hành xử lý file, ví dụ lưu đường dẫn vào cơ sở dữ liệu
             const filePath = req.file.path
+            console.log('File uploaded:', filePath)
 
             // Trả về kết quả
             res.status(200).json({

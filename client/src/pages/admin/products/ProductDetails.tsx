@@ -14,13 +14,12 @@ import {
     Input,
     Select,
     Space,
-    Spin,
-    Typography,
-    UploadProps,
     Switch,
     Row,
     Col,
     App,
+    Modal,
+    Typography,
 } from 'antd'
 import {
     EditOutlined,
@@ -54,9 +53,15 @@ const ProductDetails: React.FC = () => {
     const [isEditing, setIsEditing] = useState(false)
     const [form] = Form.useForm()
 
+    // Modal sửa ảnh
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [imageUrl, setImageUrl] = useState(product?.imageUrl || '')
+
+    const handleOpenModal = () => setIsModalOpen(true)
+    const handleCloseModal = () => setIsModalOpen(false)
+
     const handleSave = async (values: any) => {
         try {
-            // Cập nhật sản phẩm, nếu có upload ảnh sẽ được xử lý tại đây
             await updateProduct({ id, ...values }).unwrap()
             message.success('Cập nhật sản phẩm thành công')
             setIsEditing(false)
@@ -69,14 +74,6 @@ const ProductDetails: React.FC = () => {
     const handleCancel = () => {
         setIsEditing(false)
         form.resetFields()
-    }
-
-    const handleImageChange: UploadProps['onChange'] = (info) => {
-        if (info.file.status === 'done') {
-            message.success(`${info.file.name} tải lên thành công`)
-        } else if (info.file.status === 'error') {
-            message.error(`${info.file.name} tải lên thất bại`)
-        }
     }
 
     if (isLoading || isUpdating) {
@@ -109,6 +106,26 @@ const ProductDetails: React.FC = () => {
                 </Space>
             }
         >
+            {/* Hình ảnh sản phẩm */}
+            <Col span={24}>
+                <Title level={5}>Hình ảnh sản phẩm:</Title>
+
+                <Image
+                    width={200}
+                    src={
+                        imageUrl ||
+                        `http://localhost:8888/uploads/${product?.imageUrl}`
+                    }
+                    alt={product?.name}
+                    style={{ borderRadius: '4px' }}
+                />
+
+                <Button onClick={handleOpenModal} style={{ marginTop: 10 }}>
+                    Sửa avatar
+                </Button>
+            </Col>
+
+            {/* Form chỉnh sửa sản phẩm */}
             {isEditing ? (
                 <Form
                     form={form}
@@ -116,7 +133,6 @@ const ProductDetails: React.FC = () => {
                     onFinish={handleSave}
                     initialValues={{
                         ...product,
-                        // Nếu product.isActive là boolean thì không cần chuyển đổi
                         isActive: product?.isActive,
                     }}
                 >
@@ -174,17 +190,6 @@ const ProductDetails: React.FC = () => {
                         </Col>
                     </Row>
 
-                    <Form.Item
-                        label="Hình ảnh"
-                        name="imageUrl"
-                        valuePropName="fileList"
-                        getValueFromEvent={(e) =>
-                            Array.isArray(e?.fileList) ? e.fileList : []
-                        }
-                    >
-                        <ImageUploader />
-                    </Form.Item>
-
                     <Space size="middle">
                         <Button
                             type="primary"
@@ -226,15 +231,6 @@ const ProductDetails: React.FC = () => {
                                 {product?.isActive ? 'Active' : 'Inactive'}
                             </Text>
                         </Col>
-                        <Col span={24}>
-                            <Title level={5}>Hình ảnh sản phẩm:</Title>
-                            <Image
-                                width={200}
-                                src={product?.imageUrl}
-                                alt={product?.name}
-                                style={{ borderRadius: '4px' }}
-                            />
-                        </Col>
                     </Row>
                     <Space style={{ marginTop: '20px' }}>
                         <Button
@@ -247,6 +243,24 @@ const ProductDetails: React.FC = () => {
                     </Space>
                 </div>
             )}
+
+            {/* Modal sửa ảnh */}
+            <Modal
+                title="Cập nhật ảnh sản phẩm"
+                open={isModalOpen}
+                onCancel={handleCloseModal}
+                footer={null}
+            >
+                <ImageUploader
+                    value={[]}
+                    onUploadSuccess={(fileUrl) => {
+                        setImageUrl(fileUrl) // Cập nhật ảnh ngay khi upload thành công
+                        handleCloseModal()
+                    }}
+                    modelType="product"
+                    modelId={product._id}
+                />
+            </Modal>
         </Card>
     )
 }

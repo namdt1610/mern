@@ -7,6 +7,7 @@ import {
     updateClickCount,
     updateProduct,
 } from '../controllers/ProductController'
+import upload from '../middlewares/multer-config'
 
 const router = Router()
 

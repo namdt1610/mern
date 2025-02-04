@@ -1,38 +1,32 @@
-//* server.ts
-import express, { Request, Response } from 'express'
-import path from 'path'
+import express from 'express'
 import cors from 'cors'
 import morgan from 'morgan'
 import cookieParser from 'cookie-parser'
+import path from 'path'
 import fs from 'fs'
-import upload from './middlewares/multer-config'
-import sharp from 'sharp'
 
-// Routes
+// Import Routes
 import authRoutes from './routes/AuthRoutes'
 import userRoutes from './routes/UserRoutes'
 import categoryRoutes from './routes/CategoryRoutes'
-import productRoutes from './routes/ProductRoutes.'
+import productRoutes from './routes/ProductRoutes'
 import inventoryRoutes from './routes/InventoryRoutes'
 import orderRoutes from './routes/OrderRoutes'
 import cartRoutes from './routes/CartRoutes'
 import dashboardRoutes from './routes/DashboardRoutes'
 import reviewRoutes from './routes/ReviewRoutes'
 import warehouseRoutes from './routes/WarehouseRoutes'
+import uploadRoutes from './routes/UploadRoutes'
 
 const app = express()
 
-// Middleware để parse JSON và URL-encoded body
+// Middleware cơ bản
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-
-// Morgan for logging requests
+app.use(cookieParser())
 app.use(morgan('dev'))
 
-// Cookie parser middleware
-app.use(cookieParser())
-
-// CORS options
+// Cấu hình CORS
 const corsOptions = {
     origin: ['http://localhost:5173', 'https://mern-psi-nine.vercel.app'],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
@@ -42,66 +36,23 @@ const corsOptions = {
 }
 app.use(cors(corsOptions))
 
-// Serve static files for uploaded images
+// Cấu hình thư mục lưu ảnh
 const uploadsPath = path.join(__dirname, 'uploads')
 if (!fs.existsSync(uploadsPath)) {
     fs.mkdirSync(uploadsPath, { recursive: true })
 }
 app.use('/uploads', express.static(uploadsPath))
 
-// Logging middleware với thời gian và User-Agent
+// Log request
 app.use((req, res, next) => {
-    console.log(
-        `[${new Date().toISOString()}] ${req.method} ${req.path} - User-Agent: ${req.get('User-Agent')}`
-    )
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`)
     next()
 })
 
-// Endpoint upload ảnh sử dụng async/await và sharp để chuyển đổi ảnh sang WebP
-app.post(
-    '/api/upload',
-    upload.single('avatar'),
-    async (req: Request, res: Response): Promise<void> => {
-        try {
-            if (!req.file) {
-                res.status(400).json({ message: 'No file uploaded' })
-                return
-            }
-
-            // Xây dựng đường dẫn file gốc
-            const filePath = path.join(__dirname, 'uploads', req.file.filename)
-            // Đổi đuôi file thành .webp
-            const webpFilePath = filePath.replace(
-                path.extname(filePath),
-                '.webp'
-            )
-
-            // Sử dụng sharp để chuyển đổi ảnh sang WebP với chất lượng 80%
-            await sharp(filePath).webp({ quality: 80 }).toFile(webpFilePath)
-
-            // Xóa file gốc sau khi chuyển đổi thành công
-            await fs.promises.unlink(filePath)
-
-            // Trả về URL ảnh mới (WebP)
-            const avatarUrl = `/uploads/${path.basename(webpFilePath)}`
-            res.json({
-                message: 'File uploaded and converted successfully!',
-                file: { avatarUrl },
-            })
-        } catch (error) {
-            console.error('Error during image upload/conversion:', error)
-            res.status(500).json({
-                message: 'Error processing image',
-                error: (error as Error).message,
-            })
-        }
-    }
-)
-
-// Các route khác
-app.use('/api', authRoutes)
+// Import Routes
+app.use('/api/auth', authRoutes)
 app.use('/api/users', userRoutes)
-app.use('/api/products', productRoutes)
+app.use('/api/products', productRoutes) // <-- Đã có API upload ảnh trong route này
 app.use('/api/categories', categoryRoutes)
 app.use('/api/inventory', inventoryRoutes)
 app.use('/api/orders', orderRoutes)
@@ -109,8 +60,9 @@ app.use('/api/cart', cartRoutes)
 app.use('/api/dashboard', dashboardRoutes)
 app.use('/api/reviews', reviewRoutes)
 app.use('/api/warehouses', warehouseRoutes)
+app.use('/api', uploadRoutes)
 
-// Global error handler
+// Middleware xử lý lỗi chung
 app.use(
     (
         err: Error,
@@ -118,11 +70,10 @@ app.use(
         res: express.Response,
         next: express.NextFunction
     ) => {
-        console.error('Error stack:', err.stack)
+        console.error('Lỗi:', err.stack)
         res.status(500).json({
             status: 'error',
-            message: 'Internal server error',
-            error: err.message || 'Unknown error',
+            message: err.message || 'Lỗi máy chủ!',
         })
     }
 )
