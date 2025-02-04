@@ -29,9 +29,9 @@ import {
     ArrowLeftOutlined,
 } from '@ant-design/icons'
 import ImageUploader from './components/ImageUploader'
+import ProductDetailsSkeleton from './components/ProductDetailsSkeleton'
 
 const { Title, Text } = Typography
-
 
 const ProductDetails: React.FC = () => {
     const { id } = useParams<{ id: string }>()
@@ -80,11 +80,7 @@ const ProductDetails: React.FC = () => {
     }
 
     if (isLoading || isUpdating) {
-        return (
-            <div style={{ textAlign: 'center', padding: '50px 0' }}>
-                <Spin size="large" tip="Đang tải..." />
-            </div>
-        )
+        return <ProductDetailsSkeleton />
     }
 
     if (isError || !product) {

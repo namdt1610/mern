@@ -40,18 +40,16 @@ const corsOptions = {
     credentials: true,
     optionsSuccessStatus: 200,
 }
-
-// CORS middleware
 app.use(cors(corsOptions))
 
 // Serve static files for uploaded images
 const uploadsPath = path.join(__dirname, 'uploads')
 if (!fs.existsSync(uploadsPath)) {
-    fs.mkdirSync(uploadsPath, { recursive: true }) // Ensure uploads folder exists
+    fs.mkdirSync(uploadsPath, { recursive: true })
 }
 app.use('/uploads', express.static(uploadsPath))
 
-// Logging middleware with time and user-agent
+// Logging middleware với thời gian và User-Agent
 app.use((req, res, next) => {
     console.log(
         `[${new Date().toISOString()}] ${req.method} ${req.path} - User-Agent: ${req.get('User-Agent')}`
@@ -59,73 +57,48 @@ app.use((req, res, next) => {
     next()
 })
 
-// Route để tải lên ảnh
-// app.post(
-//     '/api/upload',
-//     upload.single('avatar'),
-//     (req: Request, res: Response): void => {
-//         if (!req.file) {
-//             res.status(400).json({ message: 'No file uploaded' })
-//             return
-//         }
-//         const avatarUrl = `/uploads/${req.file.filename}` // Tạo URL từ filename
-//         res.json({
-//             message: 'File uploaded successfully!',
-//             file: {
-//                 avatarUrl, // Trả về avatarUrl
-//             },
-//         })
-//     }
-// )
-
+// Endpoint upload ảnh sử dụng async/await và sharp để chuyển đổi ảnh sang WebP
 app.post(
     '/api/upload',
     upload.single('avatar'),
-    (req: Request, res: Response): void => {
-        if (!req.file) {
-            res.status(400).json({ message: 'No file uploaded' })
-            return
-        }
+    async (req: Request, res: Response): Promise<void> => {
+        try {
+            if (!req.file) {
+                res.status(400).json({ message: 'No file uploaded' })
+                return
+            }
 
-        const filePath = path.join(__dirname, 'uploads', req.file.filename) // Đảm bảo tạo đường dẫn tuyệt đối
-        const webpFilePath = filePath.replace(path.extname(filePath), '.webp') // Đổi đuôi thành .webp
+            // Xây dựng đường dẫn file gốc
+            const filePath = path.join(__dirname, 'uploads', req.file.filename)
+            // Đổi đuôi file thành .webp
+            const webpFilePath = filePath.replace(
+                path.extname(filePath),
+                '.webp'
+            )
 
-        // Sử dụng sharp để chuyển đổi ảnh sang WebP
-        sharp(filePath)
-            .webp({ quality: 80 })
-            .toFile(webpFilePath, (err, info) => {
-                if (err) {
-                    console.error('Error during image conversion:', err)
-                    return res.status(500).json({
-                        message: 'Error converting image',
-                        error: err.message, // Thêm chi tiết lỗi
-                    })
-                }
+            // Sử dụng sharp để chuyển đổi ảnh sang WebP với chất lượng 80%
+            await sharp(filePath).webp({ quality: 80 }).toFile(webpFilePath)
 
-                // Nếu thành công, xóa ảnh gốc
-                fs.unlink(filePath, (unlinkErr) => {
-                    if (unlinkErr) {
-                        console.error(
-                            'Error deleting original image:',
-                            unlinkErr
-                        )
-                        return res.status(500).json({
-                            message: 'Failed to delete original image',
-                            error: unlinkErr.message, // Thêm chi tiết lỗi
-                        })
-                    }
+            // Xóa file gốc sau khi chuyển đổi thành công
+            await fs.promises.unlink(filePath)
 
-                    // Trả về URL của ảnh WebP
-                    const avatarUrl = `/uploads/${path.basename(webpFilePath)}`
-                    res.json({
-                        message: 'File uploaded and converted successfully!',
-                        file: { avatarUrl },
-                    })
-                })
+            // Trả về URL ảnh mới (WebP)
+            const avatarUrl = `/uploads/${path.basename(webpFilePath)}`
+            res.json({
+                message: 'File uploaded and converted successfully!',
+                file: { avatarUrl },
             })
+        } catch (error) {
+            console.error('Error during image upload/conversion:', error)
+            res.status(500).json({
+                message: 'Error processing image',
+                error: (error as Error).message,
+            })
+        }
     }
 )
 
+// Các route khác
 app.use('/api', authRoutes)
 app.use('/api/users', userRoutes)
 app.use('/api/products', productRoutes)
@@ -149,7 +122,7 @@ app.use(
         res.status(500).json({
             status: 'error',
             message: 'Internal server error',
-            error: err.message || 'Unknown error', // Return more error details in response
+            error: err.message || 'Unknown error',
         })
     }
 )
