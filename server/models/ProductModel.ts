@@ -39,6 +39,10 @@ const productSchema = new Schema(
         author: {
             type: String,
         },
+        favorites: {
+            type: Number,
+            default: 0,
+        },
     },
     { timestamps: true }
 )

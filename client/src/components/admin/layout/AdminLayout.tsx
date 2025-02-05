@@ -9,7 +9,7 @@ import ContentArea from './components/Content'
 const { Sider } = Layout
 
 export default function AdminLayout() {
-    const [collapsed, setCollapsed] = useState(false)
+    const [collapsed, setCollapsed] = useState(true)
 
     const onLogout = () => {
         // Xử lý logout ở đây
@@ -27,7 +27,6 @@ export default function AdminLayout() {
                 breakpoint="lg"
                 style={{
                     overflowY: 'auto',
-                    background: 'rgba(255, 255, 255, 0.8)',
                     backdropFilter: 'blur(10px)',
                     borderRight: '1px solid rgba(0, 0, 0, 0.06)',
                     height: '100vh',

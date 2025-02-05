@@ -8,7 +8,6 @@
         background: linear-gradient(120deg, #e7bdbf, #1ac6c347);
         background-attachment: fixed; /* Giữ cố định khi cuộn */
         background-size: cover; /* Phủ toàn bộ màn hình */
-        font-family: 'Karla', sans-serif; /* Font chữ */
     }
 }
 
@@ -33,83 +32,4 @@
     }
 }
 
-/* Transition for all interactive elements */
-button,
-a,
-input,
-select,
-.ant-table-row {
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
 
-/* Glass effect for cards and modals */
-.ant-card,
-.ant-modal-content {
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-}
-
-/* Smooth hover transitions */
-.ant-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-/* Active state animation */
-.ant-btn:active {
-    transform: translateY(0);
-}
-
-/* Table row hover effect */
-.ant-table-tbody > tr:hover > td {
-    background-color: rgba(245, 245, 247, 0.8) !important;
-    backdrop-filter: blur(4px);
-}
-
-/* Modal animation */
-.ant-modal {
-    transform-origin: center !important;
-}
-
-/* Message and notification animations */
-.ant-message-notice,
-.ant-notification-notice {
-    opacity: 0.95;
-    backdrop-filter: blur(8px);
-}
-
-@layer base {
-    :root {
-        --background: 0 0% 100%;
-        --foreground: 240 10% 3.9%;
-
-        --card: 0 0% 100%;
-        --card-foreground: 240 10% 3.9%;
-
-        --popover: 0 0% 100%;
-        --popover-foreground: 240 10% 3.9%;
-
-        --primary: 240 5.9% 10%;
-        --primary-foreground: 0 0% 98%;
-
-        --secondary: 240 4.8% 95.9%;
-        --secondary-foreground: 240 5.9% 10%;
-    }
-
-    .dark {
-        --background: 240 10% 3.9%;
-        --foreground: 0 0% 98%;
-
-        --card: 240 10% 3.9%;
-        --card-foreground: 0 0% 98%;
-
-        --popover: 240 10% 3.9%;
-        --popover-foreground: 0 0% 98%;
-
-        --primary: 0 0% 98%;
-        --primary-foreground: 240 5.9% 10%;
-
-        --secondary: 240 3.7% 15.9%;
-        --secondary-foreground: 0 0% 98%;
-    }
-}

@@ -14,7 +14,6 @@ export default function HeaderBar({ collapsed, setCollapsed }: HeaderProps) {
     return (
         <Header
             style={{
-                background: '#fff',
                 padding: '0 16px',
                 display: 'flex',
                 alignItems: 'center',

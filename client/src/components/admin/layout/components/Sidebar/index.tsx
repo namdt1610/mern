@@ -1,7 +1,7 @@
 // Sidebar.tsx
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Button, Menu } from 'antd'
+import { Button, Menu, Space } from 'antd'
 import type { MenuProps } from 'antd'
 import {
     BarChartOutlined,
@@ -312,8 +312,8 @@ export default function Sidebar({
     ]
 
     return (
-        <div className="flex flex-col h-full">
-            <div className="flex items-center justify-between p-4">
+        <div className="flex flex-col h-svh">
+            <Space direction="vertical" className="items-center p-4">
                 <Link to="/admin/dashboard">
                     <img
                         src="/img/logo_dtn.png"
@@ -326,7 +326,6 @@ export default function Sidebar({
                     />
                 </Link>
                 <Button
-                    type="text"
                     icon={
                         collapsed ? (
                             <MenuUnfoldOutlined />
@@ -335,17 +334,14 @@ export default function Sidebar({
                         )
                     }
                     onClick={() => setCollapsed(!collapsed)}
-                    className="transition-all duration-200"
                 />
-            </div>
+            </Space>
             <Menu
                 mode="inline"
                 selectedKeys={[currentPath]}
                 defaultOpenKeys={[]}
                 style={{
                     flex: 1,
-                    border: 'none',
-                    background: 'transparent',
                 }}
                 items={items2}
             />

@@ -1,21 +1,34 @@
+// ThemeSwitcher.tsx
 import React from 'react'
 import { Button } from 'antd'
 import { BulbOutlined, BulbFilled } from '@ant-design/icons'
+import Cookies from 'js-cookie'
 
-interface ThemeToggleProps {
-    isDark: boolean
+const THEME_KEY = 'user-theme'
+interface ThemeSwitcherProps {
+    isDarkMode: boolean
     toggleTheme: () => void
 }
 
-const ThemeToggle: React.FC<ThemeToggleProps> = ({ isDark, toggleTheme }) => {
+const ThemeSwitcher: React.FC<ThemeSwitcherProps> = ({
+    isDarkMode,
+    toggleTheme,
+}) => {
     return (
         <Button
-            icon={isDark ? <BulbOutlined /> : <BulbFilled />}
-            onClick={toggleTheme}
-            type="text"
+            type="primary"
+            shape="circle"
+            icon={isDarkMode ? <BulbFilled /> : <BulbOutlined />}
             size="large"
+            onClick={toggleTheme}
+            style={{
+                position: 'fixed',
+                bottom: 20,
+                right: 20,
+                zIndex: 1000,
+            }}
         />
     )
 }
 
-export default ThemeToggle
+export default ThemeSwitcher

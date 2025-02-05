@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useState, useMemo, useEffect } from 'react'
+import { useNavigate, Link } from 'react-router-dom'
 import {
     useDeleteProductMutation,
     useGetProductsQuery,
@@ -7,27 +7,29 @@ import {
 import {
     Button,
     Card,
-    message,
     Popconfirm,
     Space,
-    Spin,
     Table,
     Radio,
     Divider,
     App,
+    Input,
+    Tooltip,
 } from 'antd'
-import { DeleteOutlined, PlusOutlined } from '@ant-design/icons'
+import { DeleteOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons'
 import LoadingError from '@/components/shared/LoadingError'
 import { Product } from '@shared/types/Product'
 import type { TableColumnsType, TableProps } from 'antd'
+import { debounce } from 'lodash'
 
 const ProductPage: React.FC = () => {
     const navigate = useNavigate()
     const { message } = App.useApp()
+    const { Search } = Input
 
     // Fetching product data using RTK Query
     const {
-        data: products,
+        data: products = [],
         isLoading,
         isError,
         refetch,
@@ -37,8 +39,10 @@ const ProductPage: React.FC = () => {
         'checkbox'
     )
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
+    const [filteredData, setFilteredData] = useState<Product[]>([])
+    const [searchTerm, setSearchTerm] = useState('')
 
-    // Handle delete product
+    // Handle delete products
     const handleDelete = async (_id: string) => {
         try {
             await deleteProduct(_id).unwrap()
@@ -49,45 +53,51 @@ const ProductPage: React.FC = () => {
         }
     }
 
-    if (isLoading) {
-        return <Spin tip="Loading products..." />
-    }
+    // Handle real-time search
+    const handleRealTimeSearch = useMemo(
+        () =>
+            debounce((value: string) => {
+                const lowercasedValue = value.toLowerCase()
+                if (!value.trim()) {
+                    setFilteredData(products)
+                } else {
+                    const filtered = products.filter((product) =>
+                        product.name.toLowerCase().includes(lowercasedValue)
+                    )
+                    setFilteredData(filtered)
+                }
+            }, 300), // Delay 300ms
+        [products]
+    )
 
-    // Handle delete nhiều sản phẩm cùng lúc
+    useEffect(() => {
+        handleRealTimeSearch(searchTerm)
+    }, [searchTerm, handleRealTimeSearch])
+
+    // Delete multiple products
     const handleDeleteMultiple = async () => {
         if (selectedRowKeys.length === 0) {
-            message.warning('Vui lòng chọn ít nhất 1 sản phẩm để xóa.')
+            message.warning('Please pick at least one product to delete.')
             return
         }
 
         try {
-            // Xóa đồng thời các sản phẩm đã chọn
+            // Delete selected products
             await Promise.all(
                 selectedRowKeys.map((key) =>
                     deleteProduct(key as string).unwrap()
                 )
             )
-            message.success('Xóa các sản phẩm đã chọn thành công')
-            // Reset lại danh sách đã chọn sau khi xóa
+            message.success('Deleted products successfully.')
+            // Reset
             setSelectedRowKeys([])
             refetch()
         } catch (error) {
-            message.error('Xóa sản phẩm thất bại. Vui lòng thử lại.')
+            message.error('Delete products failed. Please try again.')
         }
     }
 
-    if (isError) {
-        return (
-            <LoadingError
-                isLogin={false}
-                title="Products"
-                isLoading={isLoading}
-                isError={isError}
-                refetch={refetch}
-            />
-        )
-    }
-
+    // Table logic
     interface ColumnType {
         title: string
         dataIndex?: string
@@ -100,25 +110,33 @@ const ProductPage: React.FC = () => {
             title: 'Product Name',
             dataIndex: 'name',
             key: 'name',
+            width: '40%',
+            sorter: (a, b) => (a.name ?? '').localeCompare(b.name ?? ''),
+            render: (_, { name, _id }) => (
+                <Link to={`/admin/products/${_id}`}>{name}</Link>
+            ),
         },
         {
             title: 'Price',
             dataIndex: 'price',
             key: 'price',
+            sorter: (a, b) => (a.price ?? 0) - (b.price ?? 0),
         },
         {
             title: 'Actions',
             key: 'actions',
             render: (_, record: Product) => (
-                <Space size="middle">
-                    <Button
-                        type="link"
-                        onClick={() =>
-                            navigate(`/admin/products/${record._id}`)
-                        } // Navigate to the product details page
-                    >
-                        Edit
-                    </Button>
+                <Space direction="horizontal" wrap size={10}>
+                    <Tooltip title="View product details">
+                        <Button
+                            variant="outlined"
+                            onClick={() =>
+                                navigate(`/admin/products/${record._id}`)
+                            } // Navigate to the product details page
+                        >
+                            View
+                        </Button>
+                    </Tooltip>
                     <Popconfirm
                         title="Are you sure you want to delete this product?"
                         onConfirm={() => handleDelete(record._id)}
@@ -132,6 +150,7 @@ const ProductPage: React.FC = () => {
         },
     ]
 
+    // Row selection
     const rowSelection: TableProps<Product>['rowSelection'] = {
         onChange: (
             newSelectedRowKeys: React.Key[],
@@ -150,18 +169,58 @@ const ProductPage: React.FC = () => {
         }),
     }
 
+    // Conditions
+    if (!products) {
+        return null
+    }
+
+    if (isError || isLoading) {
+        return (
+            <LoadingError
+                isLogin={false}
+                title="Products"
+                isLoading={isLoading}
+                isError={isError}
+                refetch={refetch}
+            />
+        )
+    }
+
     return (
         <>
             <Card
                 title="Product List"
                 extra={
-                    <Button
-                        type="primary"
-                        icon={<PlusOutlined />}
-                        onClick={() => navigate('/admin/products/new')}
-                    >
-                        Add Product
-                    </Button>
+                    <Space direction="horizontal" wrap size={10}>
+                        <Tooltip title="Search for a product">
+                            <Search
+                                placeholder="Input search text"
+                                allowClear
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                style={{ width: 'auto' }}
+                            />
+                        </Tooltip>
+
+                        <Tooltip title="Click to refetch the product list">
+                            <Button
+                                type="dashed"
+                                onClick={() => refetch()}
+                                icon={<ReloadOutlined />}
+                            >
+                                Refresh
+                            </Button>
+                        </Tooltip>
+
+                        <Tooltip title="Click to add a new product">
+                            <Button
+                                type="primary"
+                                icon={<PlusOutlined />}
+                                onClick={() => navigate('/admin/products/new')}
+                            >
+                                Add Product
+                            </Button>
+                        </Tooltip>
+                    </Space>
                 }
                 className="my-4"
             >
@@ -174,14 +233,18 @@ const ProductPage: React.FC = () => {
                 </Radio.Group>
                 <Divider />
                 <Table<Product>
+                    scroll={{ x: 'max-content' }}
+                    sticky={true}
                     rowSelection={{ type: selectionType, ...rowSelection }}
                     columns={columns}
-                    dataSource={products}
+                    dataSource={filteredData}
                     rowKey="_id"
                     pagination={{ pageSize: 10 }}
-                    // Sử dụng thuộc tính footer để hiển thị thông tin và nút xóa nhiều sản phẩm
+                    // Using footer to display the number of selected products
                     footer={() => (
                         <Space
+                            direction="horizontal"
+                            wrap
                             style={{
                                 display: 'flex',
                                 justifyContent: 'space-between',
@@ -192,13 +255,13 @@ const ProductPage: React.FC = () => {
                                 <b>{selectedRowKeys.length}</b>
                             </span>
                             <Popconfirm
-                                title="Bạn có chắc chắn muốn xóa các sản phẩm đã chọn?"
+                                title="Are you sure deleting these products?"
                                 onConfirm={handleDeleteMultiple}
                                 okText="Yes"
                                 cancelText="No"
                             >
                                 <Button danger icon={<DeleteOutlined />}>
-                                    Xóa sản phẩm đã chọn
+                                    Delete selected products
                                 </Button>
                             </Popconfirm>
                         </Space>

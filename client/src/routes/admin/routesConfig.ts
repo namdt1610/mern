@@ -52,7 +52,7 @@ const adminRoutes: RouteConfig = {
         //* Product routes
         {
             path: 'products',
-            element: lazy(() => import('../../pages/admin/products/Product')),
+            element: lazy(() => import('../../pages/admin/products/ProductList')),
             permissions: {
                 view: ['admin', 'user'],
                 edit: ['admin'],
@@ -99,7 +99,7 @@ const adminRoutes: RouteConfig = {
         {
             path: 'categories',
             element: lazy(
-                () => import('../../pages/admin/categories/Category')
+                () => import('../../pages/admin/categories/CategoryList')
             ),
         },
         //* Customer routes

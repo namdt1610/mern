@@ -14,12 +14,14 @@ import {
     Input,
     Select,
     Space,
+    Spin,
+    Typography,
+    UploadFile,
     Switch,
     Row,
     Col,
     App,
     Modal,
-    Typography,
 } from 'antd'
 import {
     EditOutlined,
@@ -55,7 +57,7 @@ const ProductDetails: React.FC = () => {
 
     // Modal sửa ảnh
     const [isModalOpen, setIsModalOpen] = useState(false)
-    const [imageUrl, setImageUrl] = useState(product?.imageUrl || '')
+    const [imageFileList, setImageFileList] = useState<UploadFile[]>([])
 
     const handleOpenModal = () => setIsModalOpen(true)
     const handleCloseModal = () => setIsModalOpen(false)
@@ -112,10 +114,7 @@ const ProductDetails: React.FC = () => {
 
                 <Image
                     width={200}
-                    src={
-                        imageUrl ||
-                        `http://localhost:8888/uploads/${product?.imageUrl}`
-                    }
+                    src={`http://localhost:8888/uploads/${product?.imageUrl}`}
                     alt={product?.name}
                     style={{ borderRadius: '4px' }}
                 />
@@ -249,16 +248,30 @@ const ProductDetails: React.FC = () => {
                 title="Cập nhật ảnh sản phẩm"
                 open={isModalOpen}
                 onCancel={handleCloseModal}
-                footer={null}
+                footer={[
+                    <Button key="cancel" onClick={handleCloseModal}>
+                        Hủy
+                    </Button>,
+                    <Button
+                        key="save"
+                        type="primary"
+                        onClick={() => {
+                            console.log('Lưu ảnh mới:', imageFileList)
+
+                            handleCloseModal()
+                        }}
+                    >
+                        Lưu
+                    </Button>,
+                ]}
             >
                 <ImageUploader
-                    value={[]}
+                    value={imageFileList}
+                    onChange={(fileList) => setImageFileList(fileList)}
                     onUploadSuccess={(fileUrl) => {
-                        setImageUrl(fileUrl) // Cập nhật ảnh ngay khi upload thành công
+                        console.log('Ảnh mới:', fileUrl)
                         handleCloseModal()
                     }}
-                    modelType="product"
-                    modelId={product._id}
                 />
             </Modal>
         </Card>

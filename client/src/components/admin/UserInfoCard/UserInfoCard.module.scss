@@ -1,10 +1,10 @@
 .userCard {
+    flex-wrap: wrap;
     display: flex;
     align-items: center;
     gap: 20px;
     padding: 16px;
     border-radius: 12px;
-    background: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(10px);
     transition: all 0.3s ease;
 
@@ -31,7 +31,6 @@
         .welcome {
             font-size: 16px;
             font-weight: 500;
-            color: #1890ff;
         }
 
         .email {
@@ -49,7 +48,6 @@
 
     .loginButton {
         margin-left: auto;
-        background: #1890ff;
         border: none;
         border-radius: 8px;
         color: white;
@@ -57,7 +55,6 @@
         transition: all 0.3s ease;
 
         &:hover {
-            background: #40a9ff;
             transform: translateY(-1px);
         }
 
