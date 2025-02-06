@@ -40,11 +40,7 @@ export const OrderController = {
                 })
                 return
             }
-            res.status(200).json({
-                success: true,
-                message: 'Get order by ID successfully',
-                order,
-            })
+            res.status(200).json(order)
         } catch (error: any) {
             res.status(500).json({
                 success: false,
@@ -68,11 +64,7 @@ export const OrderController = {
                 return
             }
 
-            res.status(200).json({
-                success: true,
-                message: 'Get orders by user ID successfully',
-                orders,
-            })
+            res.status(200).json(orders)
         } catch (error) {
             res.status(500).json({
                 success: false,

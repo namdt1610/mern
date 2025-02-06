@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useGetProductsQuery } from '@/services/ProductApi'
+import { useGetActiveProductsQuery } from '@/services/ProductApi'
 import { useGetCategoriesQuery } from '@/services/CategoryApi'
 import {
     Button,
@@ -34,7 +34,7 @@ interface ListAllProductProps {
 const ListAllProduct: React.FC<ListAllProductProps> = ({
     selectedCategory,
 }) => {
-    const { data: products, isLoading } = useGetProductsQuery()
+    const { data: products, isLoading } = useGetActiveProductsQuery()
     const { data: categories } = useGetCategoriesQuery()
     const [searchTerm, setSearchTerm] = useState('')
     const [category, setCategory] = useState('')

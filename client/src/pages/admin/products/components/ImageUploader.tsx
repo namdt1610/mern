@@ -5,6 +5,7 @@ import { PlusOutlined } from '@ant-design/icons'
 interface ImageUploaderProps {
     value?: UploadFile[]
     onUploadSuccess?: (fileUrl: string) => void
+    onChange?: (fileList: UploadFile[]) => void
     modelType: 'product' | 'user' | 'category'
     modelId: string
 }
@@ -12,6 +13,7 @@ interface ImageUploaderProps {
 const ImageUploader: React.FC<ImageUploaderProps> = ({
     value = [],
     onUploadSuccess,
+    onChange,
     modelType,
     modelId,
 }) => {

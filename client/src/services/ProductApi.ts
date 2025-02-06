@@ -1,5 +1,5 @@
-import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
-import {Product} from '@shared/types/Product'
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { Product } from '@shared/types/Product'
 
 export const productApi = createApi({
     reducerPath: 'productApi',
@@ -17,6 +17,11 @@ export const productApi = createApi({
             query: () => '/products',
         }),
 
+        // Get active products
+        getActiveProducts: builder.query<Product[], void>({
+            query: () => '/products/active',
+        }),
+
         // Lấy chi tiết sản phẩm theo ID
         getProductById: builder.query<Product, string>({
             query: (id) => `/products/${id}`,
@@ -32,13 +37,10 @@ export const productApi = createApi({
         }),
 
         // Cập nhật sản phẩm
-        updateProduct: builder.mutation<
-            Product,
-            Partial<Product> & { id: string }
-        >({
+        updateProduct: builder.mutation({
             query: ({ id, ...data }) => ({
                 url: `/products/${id}`,
-                method: 'PUT',
+                method: 'PATCH',
                 body: data,
             }),
         }),
@@ -63,6 +65,7 @@ export const productApi = createApi({
 
 export const {
     useGetProductsQuery,
+    useGetActiveProductsQuery,
     useGetProductByIdQuery,
     useAddProductMutation,
     useUpdateProductMutation,

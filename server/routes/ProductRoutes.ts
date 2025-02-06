@@ -6,12 +6,14 @@ import {
     getProductById,
     updateClickCount,
     updateProduct,
+    getActiveProducts
 } from '../controllers/ProductController'
 import upload from '../middlewares/multer-config'
 
 const router = Router()
 
 router.get('/', getAllProducts)
+router.get('/active', getActiveProducts)
 router.get('/:id', getProductById)
 router.post('/', createProduct)
 router.delete('/:id', deleteProduct)

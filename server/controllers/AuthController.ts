@@ -84,7 +84,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         console.log('Cookie:', res.getHeaders())
         console.log('Token:', token)
 
-        res.status(200).json({ message: 'Login successful', token })
+        res.status(200).json(token)
     } catch (error) {
         console.error('Lỗi khi đăng nhập:', error)
         res.status(500).json({

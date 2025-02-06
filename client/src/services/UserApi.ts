@@ -35,10 +35,10 @@ export const userApi = createApi({
 
         updateUser: builder.mutation<
             User,
-            Partial<User> & { id: string | undefined }
+            Partial<User> & { userId: string | undefined }
         >({
-            query: ({ id, ...data }) => ({
-                url: `/users/${id}`,
+            query: ({ userId, ...data }) => ({
+                url: `/users/${userId}`,
                 method: 'PUT',
                 body: data,
             }),

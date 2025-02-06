@@ -1,7 +1,7 @@
 import React from 'react'
 import { Tabs, Card, Result, Button } from 'antd'
 import MainLayout from '@/components/client/layout/MainLayout'
-import UserInfoCard from '@/components/admin/UserInfoCard/UserInfoCard'
+import UserInfoCard from '@/components/admin/UserInfoCard'
 import { getUserFromCookie } from '@/utils/useGetToken'
 import { OrderStatus } from '@/pages/client/user/components/OrderStatus'
 import { FavoriteItems } from '@/pages/client/user/components/FavoriteItems'

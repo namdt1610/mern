@@ -170,15 +170,11 @@ const ProductPage: React.FC = () => {
     }
 
     // Conditions
-    if (!products) {
-        return null
-    }
-
-    if (isError || isLoading) {
+    if (isError || isLoading || !products) {
         return (
             <LoadingError
                 isLogin={false}
-                title="Products"
+                title="Products List"
                 isLoading={isLoading}
                 isError={isError}
                 refetch={refetch}

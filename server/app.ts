@@ -52,7 +52,7 @@ app.use((req, res, next) => {
 // Import Routes
 app.use('/api/auth', authRoutes)
 app.use('/api/users', userRoutes)
-app.use('/api/products', productRoutes) // <-- Đã có API upload ảnh trong route này
+app.use('/api/products', productRoutes)
 app.use('/api/categories', categoryRoutes)
 app.use('/api/inventory', inventoryRoutes)
 app.use('/api/orders', orderRoutes)

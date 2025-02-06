@@ -38,9 +38,10 @@ export const updateUser = async (
     req: Request,
     res: Response
 ): Promise<void> => {
-    const { id } = req.params
-    const { email, password, name, role, status, phone, address, avatar } =
+    const { user, email, password, name, role, status, phone, address } =
         req.body
+
+    console.log('User Data:', req.body)
 
     try {
         // Chuẩn bị dữ liệu cập nhật, bỏ qua những thuộc tính không thay đổi
@@ -51,7 +52,6 @@ export const updateUser = async (
             status,
             phone,
             address,
-            avatar,
         }
 
         // Chỉ hash mật khẩu nếu có sự thay đổi
@@ -61,7 +61,7 @@ export const updateUser = async (
         }
 
         // Cập nhật thông tin người dùng
-        const updatedUser = await User.findByIdAndUpdate(id, updatedData, {
+        const updatedUser = await User.findByIdAndUpdate(user, updatedData, {
             new: true,
         })
 
@@ -144,4 +144,20 @@ export const addToFavorites = async (
         res.status(500).json({ message: 'Could not add to favorites' })
         return
     }
+}
+
+export const resetPassword = async (
+    req: Request,
+    res: Response
+): Promise<void> => {
+    const { email, password } = req.body
+
+    try {
+        const updatedPassword = await bcrypt.hash(password, 12)
+        const updatedUser = await User.findOneAndUpdate(
+            { email },
+            { password: updatedPassword },
+            { new: true }
+        )
+    } catch (error) {}
 }

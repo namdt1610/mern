@@ -9,7 +9,12 @@ export interface User {
     role: string
     status?: string
     phone?: string
-    address?: string
+    address?: {
+        province: string
+        district: string
+        ward: string
+        address: string
+    }
     createdAt: string
     updatedAt?: string
 }

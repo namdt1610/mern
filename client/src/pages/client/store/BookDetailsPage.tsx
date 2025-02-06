@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, startTransaction } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useGetProductByIdQuery } from '@/services/ProductApi'
 import { useAddToCartMutation } from '@/services/CartApi'
@@ -43,7 +43,11 @@ const BookDetail: React.FC = () => {
     const [quantity, setQuantity] = useState(1)
 
     const handleChange = (value: number | null) => {
-        if (value) setQuantity(value)
+        if (value) {
+            startTransition(() => {
+                setQuantity(value)
+            })
+        }
     }
 
     const handleIncrease = () => setQuantity((prev) => prev + 1)

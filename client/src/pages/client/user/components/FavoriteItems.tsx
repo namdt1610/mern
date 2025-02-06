@@ -7,7 +7,7 @@ import { useGetUserIdFromCookie } from '@/utils/useGetToken'
 
 export const FavoriteItems = () => {
     const userId = useGetUserIdFromCookie()
-    const { data: favorites, isLoading } = useGetFavoritesQuery(userId!)
+    const { data: favorites = [], isLoading } = useGetFavoritesQuery(userId!)
 
     return (
         <List

@@ -15,6 +15,24 @@ const getAllProducts = async (req: Request, res: Response): Promise<void> => {
     }
 }
 
+// GET active products (for client)
+export const getActiveProducts = async (
+    req: Request,
+    res: Response
+): Promise<void> => {
+    try {
+        const products = await Product.find({ isActive: true }).sort({
+            name: 1,
+        })
+        res.status(200).json(products)
+    } catch (error) {
+        res.status(500).json({
+            message: 'Server Error: Unable to get products',
+            error: (error as Error).message,
+        })
+    }
+}
+
 // GET a product by id
 const getProductById = async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params
@@ -101,27 +119,37 @@ const deleteProduct = async (req: Request, res: Response): Promise<void> => {
 
 // UPDATE a product by id
 const updateProduct = async (req: Request, res: Response): Promise<void> => {
-    const { id } = req.params
+    try {
+        const { id } = req.params
+        console.log('id', id)
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-        res.status(404).json({ error: 'Invalid product id' })
-        return
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            console.log('Invalid product id')
+            res.status(404).json({ error: 'Invalid product id' })
+            return
+        }
+
+        const product = await Product.findOneAndUpdate(
+            { _id: id },
+            {
+                ...req.body,
+            },
+            { new: true }
+        )
+
+        if (!product) {
+            res.status(400).json({ error: `Product with id ${id} not found` })
+            return
+        }
+
+        res.status(200).json(product)
+    } catch (error: any) {
+        console.error(error)
+        res.status(500).json({
+            message: 'Failed to update product',
+            error: error.message,
+        })
     }
-
-    const product = await Product.findOneAndUpdate(
-        { _id: id },
-        {
-            ...req.body,
-        },
-        { new: true }
-    )
-
-    if (!product) {
-        res.status(400).json({ error: `Product with id ${id} not found` })
-        return
-    }
-
-    res.status(200).json(product)
 }
 
 // Update click count
