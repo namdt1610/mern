@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import { useGetOrderByIdQuery } from '@/services/OrderApi'
 import { Card, List, Typography, Divider, Button, Empty } from 'antd'
 import dayjs from 'dayjs'
-import MainLayout from '@/components/client/layout/MainLayout'
+import MainLayout from '@/components/client/layouts/MainLayout'
 import { formatCurrency } from '@/utils/formatCurrency'
 
 const { Title, Text } = Typography

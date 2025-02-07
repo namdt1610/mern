@@ -60,6 +60,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ from }) => {
                 ]}
             >
                 <Input
+                    className={styles.glassInput}
                     prefix={<UserOutlined />}
                     size="large"
                     autoComplete="email"
@@ -75,6 +76,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ from }) => {
                 ]}
             >
                 <Input.Password
+                    className={styles.glassInput}
                     prefix={<KeyOutlined />}
                     size="large"
                     autoComplete="current-password"

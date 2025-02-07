@@ -19,7 +19,7 @@ import {
     Typography,
     Image,
 } from 'antd'
-import MainLayout from '@/components/client/layout/MainLayout'
+import MainLayout from '@/components/client/layouts/MainLayout'
 import ReviewSection from './components/ReviewSection'
 import styles from './styles/BookDetailsPage.module.scss'
 

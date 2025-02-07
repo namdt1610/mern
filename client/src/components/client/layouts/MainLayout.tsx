@@ -1,7 +1,6 @@
 import React from 'react'
-import Header from '@/pages/client/home/components/Header'
-import Main from '@/pages/client/home/components/Main'
-import Footer from '@/pages/client/home/components/Footer'
+import Header from '@/components/shared/Header'
+import Footer from '@/components/shared/Footer'
 import BackToTop from '@/components/shared/BackToTop'
 
 interface StoreLayoutProps {
@@ -12,9 +11,7 @@ const MainLayout: React.FC<StoreLayoutProps> = ({ children }) => {
     return (
         <div className="min-h-screen flex flex-col">
             <Header />
-            <main className=" mt-[74px]">
-                <Main>{children}</Main>
-            </main>
+            <main className=" mt-[74px]">{children}</main>
             <Footer />
             <BackToTop />
         </div>

@@ -10,6 +10,18 @@ export default defineConfig({
         emptyOutDir: true,
         minify: 'esbuild', // Hoặc 'esbuild' nếu cần tốc độ nhanh hơn
         sourcemap: true, // Nếu bạn cần sourcemaps cho việc debug
+        rollupOptions: {
+            output: {
+                manualChunks(id) {
+                    if (id.includes('node_modules')) {
+                        return 'vendor'
+                    }
+                    if (id.includes('components')) {
+                        return 'components'
+                    }
+                },
+            },
+        },
     },
     //! Cấu hình cho tailwindcss
     css: {

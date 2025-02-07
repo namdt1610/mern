@@ -11,19 +11,6 @@ export default function Content() {
     const [activeCategory, setActiveCategory] = useState<string | null>(null)
     const [searchTerm, setSearchTerm] = useState('')
 
-    // console.log('isLoading:', isLoading)
-    // console.log('Categories:', categories)
-    // console.log('Error:', error)
-
-    useEffect(() => {
-        if (isLoading) {
-            console.log('Calling get all categories API...')
-        }
-        if (error) {
-            console.error('Error calling get all categories API:', error)
-        }
-    }, [isLoading, error])
-
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: {

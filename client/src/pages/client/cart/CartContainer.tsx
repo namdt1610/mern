@@ -9,7 +9,7 @@ import { useLazyGetInventoryByBookIdQuery } from '@/services/InventoryApi'
 import { getUserFromCookie } from '@/utils/useGetToken'
 import { Button, InputNumber, Typography, Table, Empty } from 'antd'
 import { DeleteOutlined } from '@ant-design/icons'
-import MainLayout from '@/components/client/layout/MainLayout'
+import MainLayout from '@/components/client/layouts/MainLayout'
 
 const { Text, Title } = Typography
 

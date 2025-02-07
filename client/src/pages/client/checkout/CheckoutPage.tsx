@@ -20,7 +20,7 @@ import { useGetPaymentMethodsQuery } from '@/services/PaymentMethodApi'
 import { useGetBanksQuery } from '@/services/VietQrApi'
 import { CartDetails } from '@shared/types/Cart'
 import LoadingError from '@/components/LoadingError'
-import MainLayout from '@/components/client/layout/MainLayout'
+import MainLayout from '@/components/client/layouts/MainLayout'
 import { useGetProvincesQuery } from '@/services/OpenApi'
 
 const CheckoutPage: React.FC = () => {

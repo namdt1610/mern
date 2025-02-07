@@ -35,3 +35,32 @@
     color: rgba(255, 255, 255, 1) !important;
     box-shadow: 0 5px 15px rgba(255, 255, 255, 0.8) !important;
 }
+
+.glassInput {
+    background-color: rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 16px;
+    color: #fff;
+    transition: all 0.3s ease-in-out;
+}
+
+.glassInput::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.glassInput:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+.glassInput:focus {
+    background-color: rgba(255, 255, 255, 0.4);
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+    
+}

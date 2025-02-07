@@ -10,7 +10,9 @@ const LoginLayout: React.FC<LoginLayoutProps> = ({ children }) => {
         <div className="w-full h-screen">
             {/* Video background */}
             <BackgroundVideo />
-
+            {/* <div className="fixed w-screen h-screen -z-10">
+                <img className="w-screen h-screen object-cover" src="/img/blue-cloud.jpg" alt="" />
+            </div> */}
             {/* Gradient overlay */}
             {/* <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 opacity-50" /> */}
 

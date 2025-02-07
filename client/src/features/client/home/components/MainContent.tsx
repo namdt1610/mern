@@ -26,12 +26,6 @@ export default function MainContent() {
         if (products) {
             setDisplayedProducts(products.slice(0, itemsPerPage))
         }
-        if (isLoading) {
-            console.log('Calling get all books API...')
-        }
-        if (error) {
-            console.error('Error calling get all books API:', error)
-        }
     }, [products])
 
     const handleProductClick = async (productId: string) => {

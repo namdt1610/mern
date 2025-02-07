@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useGetOrdersQuery } from '@/services/OrderApi'
 import { Table, Button, Typography } from 'antd'
 import dayjs from 'dayjs'
-import MainLayout from '@/components/client/layout/MainLayout'
+import MainLayout from '@/components/client/layouts/MainLayout'
 import { useNavigate } from 'react-router-dom'
 import { formatCurrency } from '@/utils/formatCurrency'
 

@@ -11,7 +11,7 @@ import {
     Result,
 } from 'antd'
 import { Link } from 'react-router-dom'
-import MainLayout from '@/components/client/layout/MainLayout'
+import MainLayout from '@/components/client/layouts/MainLayout'
 import UserInfoCard from '@/components/admin/UserInfoCard'
 import { useGetOrdersByUserIdQuery } from '@/services/OrderApi'
 import { useUpdateUserMutation } from '@/services/UserApi'
@@ -23,8 +23,7 @@ const { TabPane } = Tabs
 export const OrderStatus = () => {
     const userId = useGetUserIdFromCookie()
     const { data: orders = [], isLoading } = useGetOrdersByUserIdQuery(userId!)
-    console.log(orders);
-    
+    console.log(orders)
 
     const columns = [
         { title: 'Order ID', dataIndex: '_id' },
