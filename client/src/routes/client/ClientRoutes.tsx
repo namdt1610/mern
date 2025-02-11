@@ -11,7 +11,7 @@ import HomePage from '@/pages/client/home/HomePage' // Load ngay lập tức
 
 const StorePage = lazy(() => import('@/pages/client/store/StorePage'))
 const NotFound = lazy(() => import('@/pages/client/other/404'))
-const CheckoutPage = lazy(() => import('@/pages/client/checkout/CheckoutPage'))
+const CheckoutPage = lazy(() => import('@/features/client/checkout/CheckoutPage'))
 const UserProfilePage = lazy(
     () => import('@/pages/client/user/UserProfilePage')
 )

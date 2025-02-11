@@ -1,11 +1,11 @@
-import { Product } from './IProduct'
+import { IProduct } from './IProduct'
 
 export interface CartDetails {
-    product: Pick<Product, '_id' | 'name' | 'price' | 'imageUrl'>
+    product: Pick<IProduct, '_id' | 'name' | 'price' | 'imageUrl'>
     quantity: number
 }
 
-export interface Cart {
+export interface ICart {
     user: string
     products: CartDetails[]
     totalQuantity: number
