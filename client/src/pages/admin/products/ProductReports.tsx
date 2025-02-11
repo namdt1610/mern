@@ -5,7 +5,7 @@ import { useGetProductsQuery } from '@/services/ProductApi'
 import dayjs from 'dayjs'
 import 'chart.js/auto'
 import { ColumnsType } from 'antd/lib/table'
-import { Product } from 'shared/types/Product'
+import { Product } from '@shared/types/IProduct'
 
 const ProductReport: React.FC = () => {
     const { data: products, error, isLoading } = useGetProductsQuery()

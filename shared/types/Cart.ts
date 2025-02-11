@@ -1,4 +1,4 @@
-import { Product } from './Product'
+import { Product } from './IProduct'
 
 export interface CartDetails {
     product: Pick<Product, '_id' | 'name' | 'price' | 'imageUrl'>

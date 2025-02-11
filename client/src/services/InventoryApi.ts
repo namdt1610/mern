@@ -12,7 +12,12 @@ export const inventoryApi = createApi({
         // Add stock
         addStock: builder.mutation<
             IInventory,
-            { productId: string; quantity: number; userId: string | null; warehouseId?: string }
+            {
+                productId: string
+                quantity: number
+                userId: string | null
+                warehouseId?: string
+            }
         >({
             query: ({ productId, quantity, userId, warehouseId }) => ({
                 url: `/inventory/${productId}/add`,
@@ -67,7 +72,7 @@ export const inventoryApi = createApi({
         }),
 
         // Get product's stock by ID
-        getInventoryByBookId: builder.query<IInventory, string>({
+        getInventoryByProductId: builder.query<IInventory, string>({
             query: (bookId) => `/inventory/${bookId}`,
             providesTags: ['Inventory'],
         }),
@@ -97,7 +102,7 @@ export const {
     useRemoveStockMutation,
     useUpdateStockMutation,
     useGetStockActivityQuery,
-    useGetInventoryByBookIdQuery,
+    useGetInventoryByProductIdQuery,
     useUpdateInventoryMutation,
-    useLazyGetInventoryByBookIdQuery
+    useLazyGetInventoryByProductIdQuery,
 } = inventoryApi

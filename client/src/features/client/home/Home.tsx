@@ -6,11 +6,11 @@ import {
     HeroSkeleton,
     MainContentSkeleton,
     SubContentSkeleton,
-} from '@/features/client/home'
+} from './index'
 
 export const Home = () => {
     return (
-        <div>
+        <>
             <Suspense fallback={<HeroSkeleton />}>
                 <Hero />
             </Suspense>
@@ -20,6 +20,6 @@ export const Home = () => {
             <Suspense fallback={<SubContentSkeleton />}>
                 <SubContent />
             </Suspense>
-        </div>
+        </>
     )
 }

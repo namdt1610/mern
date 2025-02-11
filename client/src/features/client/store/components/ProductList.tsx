@@ -4,10 +4,8 @@ import { useGetCategoriesQuery } from '@/services/CategoryApi'
 import {
     Button,
     Card,
-    Col,
     Input,
     Pagination,
-    Row,
     Select,
     Skeleton,
     Tag,
@@ -27,11 +25,11 @@ import {
 const { Search } = Input
 const { Option } = Select
 
-interface ListAllProductProps {
+export interface ProductListProps {
     selectedCategory?: string
 }
 
-const ListAllProduct: React.FC<ListAllProductProps> = ({
+const ProductList: React.FC<ProductListProps> = ({
     selectedCategory,
 }) => {
     const { data: products, isLoading } = useGetActiveProductsQuery()
@@ -84,6 +82,7 @@ const ListAllProduct: React.FC<ListAllProductProps> = ({
     return (
         <div className="min-h-screen bg-gray-50 py-8 rounded-xl">
             <div className="container mx-auto px-4">
+                
                 {/* Filters Section */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -269,4 +268,4 @@ const ListAllProduct: React.FC<ListAllProductProps> = ({
     )
 }
 
-export default ListAllProduct
+export default ProductList

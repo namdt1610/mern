@@ -1,5 +1,5 @@
-import { IWarehouse } from './IWarehouse';
-import { Product } from './Product'
+import { IWarehouse } from './IWarehouse'
+import { Product } from './IProduct'
 
 export interface IInventory {
     _id: string

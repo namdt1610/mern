@@ -16,7 +16,7 @@ const UserProfilePage = lazy(
     () => import('@/pages/client/user/UserProfilePage')
 )
 const BookDetailsPage = lazy(
-    () => import('@/pages/client/store/BookDetailsPage')
+    () => import('@/features/client/productDetails/ProductDetails')
 )
 const CartPage = lazy(() => import('@/pages/client/cart/CartContainer'))
 

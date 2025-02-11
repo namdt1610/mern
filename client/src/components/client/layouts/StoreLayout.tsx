@@ -1,12 +1,16 @@
-import React, { useState } from 'react'
+import React, { useState, ReactNode } from 'react'
 import Header from '@/components/shared/Header'
 import Footer from '@/components/shared/Footer'
-import MainContent from '@/pages/client/store/BookList'
+import MainContent from '@/features/client/store/components/ProductList'
 import BackToTop from '@/components/shared/BackToTop'
 import Sidebar from './StoreSidebar'
 import StoreRightSidebar from './StoreRightSidebar'
 
-export default function StoreLayout() {
+interface StoreLayoutProps {
+    children: ReactNode
+}
+
+export default function StoreLayout({ children }: StoreLayoutProps) {
     const [selectedCategory, setSelectedCategory] = useState<
         string | undefined
     >()
@@ -14,6 +18,7 @@ export default function StoreLayout() {
     const handleCategoryChange = (category: string) => {
         setSelectedCategory(category)
     }
+
     return (
         <div className="bg-gradient-to-r from-gray-200 via-gray-100 to-white min-h-screen flex flex-col">
             <Header />

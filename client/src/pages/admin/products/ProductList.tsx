@@ -18,7 +18,7 @@ import {
 } from 'antd'
 import { DeleteOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons'
 import LoadingError from '@/components/shared/LoadingError'
-import { Product } from '@shared/types/Product'
+import { Product } from '@shared/types/IProduct'
 import type { TableColumnsType, TableProps } from 'antd'
 import { debounce } from 'lodash'
 

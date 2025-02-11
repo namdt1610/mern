@@ -4,19 +4,18 @@ import {
     useGetReviewsByProductIdQuery,
     useAddReviewMutation,
 } from '@/services/ReviewApi'
-import { useGetUserIdFromCookie } from '@/utils/useGetToken'
 import { UserOutlined } from '@ant-design/icons'
 import toast from 'react-hot-toast'
 
 const { TextArea } = Input
 const { Title, Text } = Typography
 
-interface ReviewSectionProps {
+export interface ProductReviewProps {
+    userId: string
     productId: string
 }
 
-const ReviewSection: React.FC<ReviewSectionProps> = ({ productId }) => {
-    const userId = useGetUserIdFromCookie()
+const ProductReview: React.FC<ProductReviewProps> = ({ userId, productId }) => {
     const [rating, setRating] = useState<number>(5)
     const [comment, setComment] = useState<string>('')
 
@@ -24,7 +23,7 @@ const ReviewSection: React.FC<ReviewSectionProps> = ({ productId }) => {
         data: reviews,
         isLoading,
         refetch,
-    } = useGetReviewsByProductIdQuery(productId)
+    } = useGetReviewsByProductIdQuery(productId!, { skip: !productId })
     const [addReview] = useAddReviewMutation()
 
     const handleSubmitReview = async () => {
@@ -125,4 +124,4 @@ const ReviewSection: React.FC<ReviewSectionProps> = ({ productId }) => {
     )
 }
 
-export default ReviewSection
+export default ProductReview
