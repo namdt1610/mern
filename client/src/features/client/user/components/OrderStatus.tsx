@@ -16,12 +16,11 @@ import UserInfoCard from '@/components/admin/UserInfoCard'
 import { useGetOrdersByUserIdQuery } from '@/services/OrderApi'
 import { useUpdateUserMutation } from '@/services/UserApi'
 import { formatCurrency } from '@/utils/formatCurrency'
-import { useGetUserIdFromCookie } from '@/utils/useGetToken'
+import { getUserFromCookie } from '@/utils/useGetToken'
 
 const { TabPane } = Tabs
 
-export const OrderStatus = () => {
-    const userId = useGetUserIdFromCookie()
+export default function OrderStatus({ userId }: { userId: string }) {
     const { data: orders = [], isLoading } = useGetOrdersByUserIdQuery(userId!)
     console.log(orders)
 

@@ -6,11 +6,12 @@ import {
     HeroSkeleton,
     MainContentSkeleton,
     SubContentSkeleton,
-} from './index'
+} from '.'
+import ErrorBoundary from '@/components/shared/ErrorBoudaries'
 
 export const Home = () => {
     return (
-        <>
+        <ErrorBoundary>
             <Suspense fallback={<HeroSkeleton />}>
                 <Hero />
             </Suspense>
@@ -20,6 +21,6 @@ export const Home = () => {
             <Suspense fallback={<SubContentSkeleton />}>
                 <SubContent />
             </Suspense>
-        </>
+        </ErrorBoundary>
     )
 }

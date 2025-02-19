@@ -1,6 +1,6 @@
 // LoadingError.tsx
 import React from 'react'
-import { Button, Result, Spin } from 'antd'
+import { Button, Result, Skeleton, Spin } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
 
 interface LoadingErrorProps {
@@ -36,18 +36,9 @@ const LoadingError: React.FC<LoadingErrorProps> = ({
                 />
             </div>
         )
+    
     if (isLoading) {
-        return (
-            <div className="flex justify-center items-center h-screen">
-                <Spin
-                    fullscreen
-                    tip="Loading..."
-                    indicator={
-                        <LoadingOutlined style={{ fontSize: 100 }} spin />
-                    }
-                />
-            </div>
-        )
+        return <Skeleton active />
     }
 
     if (isError) {

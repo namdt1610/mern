@@ -29,9 +29,7 @@ export interface ProductListProps {
     selectedCategory?: string
 }
 
-const ProductList: React.FC<ProductListProps> = ({
-    selectedCategory,
-}) => {
+const ProductList: React.FC<ProductListProps> = ({ selectedCategory }) => {
     const { data: products, isLoading } = useGetActiveProductsQuery()
     const { data: categories } = useGetCategoriesQuery()
     const [searchTerm, setSearchTerm] = useState('')
@@ -59,7 +57,7 @@ const ProductList: React.FC<ProductListProps> = ({
     const filteredProducts = products?.filter((product) => {
         const matchesCategory =
             selectedCategory || category
-                ? product.category === (selectedCategory || category)
+                ? product.category.name === (selectedCategory || category)
                 : true
         const matchesSearch = product.name
             .toLowerCase()
@@ -82,7 +80,6 @@ const ProductList: React.FC<ProductListProps> = ({
     return (
         <div className="min-h-screen bg-gray-50 py-8 rounded-xl">
             <div className="container mx-auto px-4">
-                
                 {/* Filters Section */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -238,7 +235,7 @@ const ProductList: React.FC<ProductListProps> = ({
                                                   </span>
                                                   <Tag color="blue">
                                                       {product.clickCount} views
-                                                </Tag>
+                                                  </Tag>
                                               </div>
                                           </div>
                                       </Card>

@@ -1,14 +1,15 @@
 import './index.css'
-import { ConfigProvider, App as AntApp, theme } from 'antd'
-import enUS from 'antd/locale/en_US'
-import React, { useState, useEffect } from 'react'
-import { createRoot } from 'react-dom/client'
-import { BrowserRouter as Router } from 'react-router-dom'
-import { Provider } from 'react-redux'
-import store from '@/redux/Store'
 import App from './App'
-import ThemeSwitcher from '@/components/shared/ThemeToggle'
 import Cookies from 'js-cookie'
+import store from '@/redux/Store'
+import enUS from 'antd/locale/en_US'
+import { Provider } from 'react-redux'
+import { createRoot } from 'react-dom/client'
+import React, { useState, useEffect } from 'react'
+import { BrowserRouter as Router } from 'react-router-dom'
+import { ConfigProvider, App as AntApp, theme } from 'antd'
+import ThemeSwitcher from '@/components/shared/ThemeToggle'
+
 const THEME_KEY = 'user-theme'
 const { darkAlgorithm, defaultAlgorithm } = theme
 

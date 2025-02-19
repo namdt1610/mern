@@ -1,12 +1,10 @@
-import { Button, Card, List } from 'antd'
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { Button, Card, List } from 'antd'
 import { useGetFavoritesQuery } from '@/services/UserApi'
 import { formatCurrency } from '@/utils/formatCurrency'
-import { useGetUserIdFromCookie } from '@/utils/useGetToken'
 
-export const FavoriteItems = () => {
-    const userId = useGetUserIdFromCookie()
+export default function FavoriteItems({ userId }: { userId: string }) {
     const { data: favorites = [], isLoading } = useGetFavoritesQuery(userId!)
 
     return (

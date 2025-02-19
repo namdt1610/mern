@@ -3,6 +3,7 @@ import { Button, Empty, Skeleton } from 'antd'
 import { useProducts } from './hooks/useProducts'
 import { ProductImage, ProductInfo, ProductReview } from '.'
 import MainLayout from '@/components/client/layouts/MainLayout'
+import ErrorBoundary from '@/components/shared/ErrorBoudaries'
 
 export const ProductDetails: React.FC = () => {
     const { userId, product, isLoading, refetch, stock, favorites } =
@@ -21,7 +22,7 @@ export const ProductDetails: React.FC = () => {
     }
 
     return (
-        <>
+        <ErrorBoundary>
             <Suspense fallback={<Skeleton active />}>
                 <ProductImage product={product} />
             </Suspense>
@@ -36,6 +37,6 @@ export const ProductDetails: React.FC = () => {
             <Suspense fallback={<Skeleton active />}>
                 <ProductReview userId={userId} productId={product._id} />
             </Suspense>
-        </>
+        </ErrorBoundary>
     )
 }

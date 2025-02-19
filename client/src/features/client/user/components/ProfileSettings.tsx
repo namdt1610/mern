@@ -1,16 +1,16 @@
 import { Form, Input, Button, Select, Divider, Result, App } from 'antd'
 import React from 'react'
 import { useUpdateUserMutation, useGetUserByIdQuery } from '@/services/UserApi'
-import { useGetUserIdFromCookie } from '@/utils/useGetToken'
-import { User } from 'shared/types/User'
 
 const { Option } = Select
 
-export const ProfileSettings = () => {
+export default function ProfileSettings({
+    userId,
+}: {
+    userId: string 
+}) {
     const { message } = App.useApp()
-    const userId = useGetUserIdFromCookie()
-    console.log('userId:', userId);
-    
+
     const [form] = Form.useForm()
     const [updateUser] = useUpdateUserMutation()
     const { data: user } = useGetUserByIdQuery(userId!)
