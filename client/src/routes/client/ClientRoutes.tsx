@@ -4,7 +4,7 @@ import { Route, Routes } from 'react-router-dom'
 import OrderStatusPage from '@/pages/client/order/OrderStatusPage'
 import OrderDetailsPage from '@/pages/client/order/OrderDetailsPage'
 const LoginPage = lazy(() => import('@/features/client/login/Login'))
-const RegisterPage = lazy(() => import('@/pages/client/auth/Register/Register'))
+const RegisterPage = lazy(() => import('@/features/client/register/Register'))
 import HomePage from '@/pages/client/home/HomePage' // Load ngay lập tức
 
 const StorePage = lazy(() => import('@/pages/client/store/StorePage'))
@@ -14,7 +14,7 @@ const UserProfilePage = lazy(() => import('@/features/client/user/User'))
 const BookDetailsPage = lazy(
     () => import('@/features/client/productDetails/ProductDetails')
 )
-const CartPage = lazy(() => import('@/pages/client/cart/CartContainer'))
+const CartPage = lazy(() => import('@/features/client/cart/Cart'))
 
 // Import Skeleton Components
 import UserProfileSkeleton from '@/components/client/skeletons/UserProfileSkeleton'

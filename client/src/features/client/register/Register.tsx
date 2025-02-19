@@ -1,7 +1,7 @@
 import React from 'react'
-import RegisterForm from './RegisterForm'
-import RegisterBanner from './RegisterBanner'
-import RegisterLayout from './RegisterLayout'
+import RegisterForm from './components/RegisterForm'
+import RegisterBanner from './components/RegisterBanner'
+import RegisterLayout from './components/RegisterLayout'
 import {useLocation} from 'react-router-dom'
 import {Card} from 'antd/lib'
 
