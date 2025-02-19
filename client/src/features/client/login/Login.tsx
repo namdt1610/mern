@@ -1,17 +1,16 @@
-import React from 'react'
-import { Card } from 'antd/lib'
-import LoginForm from './LoginForm'
+import React, { Suspense } from 'react'
+import { Card, Skeleton } from 'antd'
+import { LoginForm } from '.'
 import { useLocation } from 'react-router-dom'
-import LoginLayout from './LoginLayout'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import styles from '@/styles/GlassCard.module.scss'
 
-const Login: React.FC = () => {
+export default function Login() {
     const location = useLocation()
     const from = location.state?.from?.pathname || '/'
 
     return (
-        <LoginLayout>
+        <Suspense fallback={<Skeleton active />}>
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -34,8 +33,6 @@ const Login: React.FC = () => {
                     </motion.div>
                 </Card>
             </motion.div>
-        </LoginLayout>
+        </Suspense>
     )
 }
-
-export default Login

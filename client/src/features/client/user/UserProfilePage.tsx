@@ -3,9 +3,9 @@ import { Tabs, Card, Result, Button } from 'antd'
 import MainLayout from '@/components/client/layouts/MainLayout'
 import UserInfoCard from '@/components/admin/UserInfoCard'
 import { getUserFromCookie } from '@/utils/useGetToken'
-import { OrderStatus } from '@/pages/client/user/components/OrderStatus'
-import { FavoriteItems } from '@/pages/client/user/components/FavoriteItems'
-import { ProfileSettings } from '@/pages/client/user/components/ProfileSettings'
+import { OrderStatus } from '@/features/client/user/components/OrderStatus'
+import { FavoriteItems } from '@/features/client/user/components/FavoriteItems'
+import { ProfileSettings } from '@/features/client/user/components/ProfileSettings'
 
 export default function UserProfilePage() {
     const user = getUserFromCookie()
@@ -41,14 +41,12 @@ export default function UserProfilePage() {
     ]
 
     return (
-        <MainLayout>
-            <div className="max-w-7xl mx-auto p-6">
-                <UserInfoCard />
+        <div className="max-w-7xl mx-auto p-6">
+            <UserInfoCard />
 
-                <Card className="mt-6">
-                    <Tabs defaultActiveKey="orders" items={items} />
-                </Card>
-            </div>
-        </MainLayout>
+            <Card className="mt-6">
+                <Tabs defaultActiveKey="orders" items={items} />
+            </Card>
+        </div>
     )
 }

@@ -81,8 +81,9 @@ export const login = async (req: Request, res: Response): Promise<void> => {
             sameSite: 'strict', // Ngăn chặn request từ các domain khác
             path: '/', // Cookie có hiệu lực trên toàn bộ website
         })
-        console.log('Cookie:', res.getHeaders())
-        console.log('Token:', token)
+
+        // console.log('Cookie:', res.getHeaders())
+        // console.log('Token:', token)
 
         res.status(200).json(token)
     } catch (error) {

@@ -1,31 +1,14 @@
 import React, { Suspense } from 'react'
-import { useParams } from 'react-router-dom'
-import { useGetProductByIdQuery } from '@/services/ProductApi'
-import { getUserFromCookie } from '@/utils/useGetToken'
-import { useGetFavoritesQuery } from '@/services/UserApi'
-import { useGetInventoryByProductIdQuery } from '@/services/InventoryApi'
-import { Button, Empty, Spin } from 'antd'
+import { Button, Empty, Skeleton } from 'antd'
+import { useProducts } from './hooks/useProducts'
 import { ProductImage, ProductInfo, ProductReview } from '.'
 import MainLayout from '@/components/client/layouts/MainLayout'
 
 export const ProductDetails: React.FC = () => {
-    const userId = getUserFromCookie()?._id ?? ''
-    const productId = useParams<{ productId: string }>().productId ?? ''
+    const { userId, product, isLoading, refetch, stock, favorites } =
+        useProducts()
 
-    // Fetch API
-    const {
-        data: product,
-        refetch,
-        isLoading,
-    } = useGetProductByIdQuery(productId!, {
-        skip: !productId,
-    })
-    const { data: stock } = useGetInventoryByProductIdQuery(productId!, {
-        skip: !productId,
-    })
-    const { data: favorites } = useGetFavoritesQuery(userId!, { skip: !userId })
-
-    if (isLoading) return <Spin />
+    if (isLoading) return <Skeleton active />
 
     if (!product) {
         return (
@@ -39,10 +22,10 @@ export const ProductDetails: React.FC = () => {
 
     return (
         <>
-            <Suspense fallback={<Spin />}>
+            <Suspense fallback={<Skeleton active />}>
                 <ProductImage product={product} />
             </Suspense>
-            <Suspense fallback={<Spin />}>
+            <Suspense fallback={<Skeleton active />}>
                 <ProductInfo
                     userId={userId}
                     product={product}
@@ -50,7 +33,7 @@ export const ProductDetails: React.FC = () => {
                     favorites={favorites}
                 />
             </Suspense>
-            <Suspense fallback={<Spin />}>
+            <Suspense fallback={<Skeleton active />}>
                 <ProductReview userId={userId} productId={product._id} />
             </Suspense>
         </>

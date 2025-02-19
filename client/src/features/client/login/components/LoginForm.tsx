@@ -3,7 +3,7 @@ import { Button, Checkbox, Form, Input, message } from 'antd'
 import { KeyOutlined, UserOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
 import { useLoginMutation } from '@/services/AuthApi'
-import { useGetUserIdFromCookie } from '@/utils/useGetToken'
+import { getUserFromCookie } from '@/utils/useGetToken'
 import styles from '@/styles/GlassCard.module.scss'
 
 type LoginFormProps = {
@@ -13,7 +13,7 @@ type LoginFormProps = {
 const LoginForm: React.FC<LoginFormProps> = ({ from }) => {
     const navigate = useNavigate()
     const [login, { isLoading, error }] = useLoginMutation()
-    const userId = useGetUserIdFromCookie()
+    const userId = getUserFromCookie()
 
     const onFinish = async (values: { email: string; password: string }) => {
         try {

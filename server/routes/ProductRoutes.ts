@@ -6,19 +6,21 @@ import {
     getProductById,
     updateClickCount,
     updateProduct,
-    getActiveProducts
+    getActiveProducts,
 } from '../controllers/ProductController'
-import upload from '../middlewares/multer-config'
+import { decodeToken } from '../middlewares/jwtDecode'
+import { isAuthorized } from '../middlewares/isAuthenticated'
 
 const router = Router()
 
-router.get('/', getAllProducts)
 router.get('/active', getActiveProducts)
 router.get('/:id', getProductById)
-router.post('/', createProduct)
-router.delete('/:id', deleteProduct)
-router.patch('/:id', updateProduct)
 router.patch('/:id/click', updateClickCount)
+
+router.get('/', decodeToken, isAuthorized(['admin', 'user']), getAllProducts)
+router.post('/', decodeToken, isAuthorized(['admin']), createProduct)
+router.delete('/:id', decodeToken, isAuthorized(['admin']), deleteProduct)
+router.patch('/:id', decodeToken, isAuthorized(['admin']), updateProduct)
 
 export default router
 

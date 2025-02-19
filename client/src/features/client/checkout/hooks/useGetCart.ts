@@ -1,6 +1,12 @@
 import { useGetCartQuery } from '@/services/CartApi'
+import { getUserFromCookie } from '@/utils/useGetToken'
 
 export const useGetCart = () => {
     const userId = getUserFromCookie()?._id
-    return useGetCartQuery(userId!)
+    const { data: cart } = useGetCartQuery(userId!)
+
+    return {
+        userId,
+        cart,
+    }
 }

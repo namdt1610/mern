@@ -4,16 +4,16 @@ import { Route, Routes } from 'react-router-dom'
 import OrderStatusPage from '@/pages/client/order/OrderStatusPage'
 import OrderDetailsPage from '@/pages/client/order/OrderDetailsPage'
 const LoginPage = lazy(
-    () => import('@/pages/client/auth/Login/LoginClientPage')
+    () => import('@/features/client/login/Login')
 )
 const RegisterPage = lazy(() => import('@/pages/client/auth/Register/Register'))
 import HomePage from '@/pages/client/home/HomePage' // Load ngay lập tức
 
 const StorePage = lazy(() => import('@/pages/client/store/StorePage'))
 const NotFound = lazy(() => import('@/pages/client/other/404'))
-const CheckoutPage = lazy(() => import('@/features/client/checkout/CheckoutPage'))
+const CheckoutPage = lazy(() => import('@/features/client/checkout/Checkout'))
 const UserProfilePage = lazy(
-    () => import('@/pages/client/user/UserProfilePage')
+    () => import('@/features/client/user/UserProfilePage')
 )
 const BookDetailsPage = lazy(
     () => import('@/features/client/productDetails/ProductDetails')

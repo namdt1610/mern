@@ -1,7 +1,7 @@
-import { User } from '@shared/types/User'
+import { IUser } from '@shared/types/IUser'
 import { jwtDecode } from 'jwt-decode'
 
-export interface DecodedToken extends User {
+export interface DecodedToken extends IUser {
     exp: number
 }
 

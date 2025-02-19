@@ -1,6 +1,6 @@
 // services/CartApi.ts
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { AddToCartRequest, Cart } from '@shared/types/ICart'
+import { AddToCartRequest, ICart } from '@shared/types/ICart'
 
 export const cartApi = createApi({
     reducerPath: 'cartApi',
@@ -15,7 +15,7 @@ export const cartApi = createApi({
     tagTypes: ['Cart'],
     endpoints: (builder) => ({
         // Lấy giỏ hàng của người dùng
-        getCart: builder.query<Cart, string>({
+        getCart: builder.query<ICart, string>({
             // Nhận id người dùng làm tham số
             query: (userId) => `/cart/${userId}`,
             providesTags: ['Cart'],

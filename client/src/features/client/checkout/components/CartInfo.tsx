@@ -11,7 +11,7 @@ export default function CartInfo({ cart }: { cart: ICart }) {
                     <List.Item>
                         <List.Item.Meta
                             title={item.product.name}
-                            description={`Số lượng: ${item.quantity}`}
+                            description={`Quantities: ${item.quantity}`}
                         />
                         <Typography.Text>
                             {item.product.price} VND

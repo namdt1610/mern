@@ -1,4 +1,4 @@
-import { User } from '../../shared/types/User'
+import { User } from '../../shared/types/IUser'
 import mongoose from 'mongoose'
 import bcrypt from 'bcryptjs'
 import validator from 'validator'

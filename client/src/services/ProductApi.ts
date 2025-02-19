@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { Product } from '@shared/types/IProduct'
+import { IProduct } from '@shared/types/IProduct'
 
 export const productApi = createApi({
     reducerPath: 'productApi',
@@ -13,22 +13,22 @@ export const productApi = createApi({
     }),
     endpoints: (builder) => ({
         // Lấy danh sách sản phẩm
-        getProducts: builder.query<Product[], void>({
+        getProducts: builder.query<IProduct[], void>({
             query: () => '/products',
         }),
 
         // Get active products
-        getActiveProducts: builder.query<Product[], void>({
+        getActiveProducts: builder.query<IProduct[], void>({
             query: () => '/products/active',
         }),
 
         // Lấy chi tiết sản phẩm theo ID
-        getProductById: builder.query<Product, string>({
+        getProductById: builder.query<IProduct, string>({
             query: (id) => `/products/${id}`,
         }),
 
         // Thêm sản phẩm mới
-        addProduct: builder.mutation<Product, Partial<Product>>({
+        addProduct: builder.mutation<IProduct, Partial<IProduct>>({
             query: (data) => ({
                 url: '/products',
                 method: 'POST',
@@ -54,7 +54,7 @@ export const productApi = createApi({
         }),
 
         // Tăng số lượt click cho sản phẩm
-        updateClickCount: builder.mutation<Product, string>({
+        updateClickCount: builder.mutation<IProduct, string>({
             query: (productId) => ({
                 url: `products/${productId}/click`,
                 method: 'PATCH',

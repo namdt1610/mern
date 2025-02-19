@@ -13,7 +13,8 @@ import {
     Flex,
     Image,
 } from 'antd'
-import { getUserFromCookie } from '@/utils/useGetToken'
+import { useGetCart } from './hooks/useGetCart'
+import { useCheckOut } from './hooks/useCheckOut'
 import { useCreateOrderMutation } from '@/services/OrderApi'
 import { useGetPaymentMethodsQuery } from '@/services/PaymentMethodApi'
 import { useGetBanksQuery } from '@/services/VietQrApi'
@@ -25,14 +26,20 @@ import CartInfo from './components/CartInfo'
 import DeliveryInfo from './components/DeliveryInfo'
 
 const CheckoutPage: React.FC = () => {
-    const userId = getUserFromCookie()?._id
-    const { data: cart } = useGetCartQuery(userId!)
-    const [createOrder, { isLoading, isError }] = useCreateOrderMutation()
-    // const { data: paymentMethods } = useGetPaymentMethodsQuery()
-    const [isSubmitting, setIsSubmitting] = useState(false)
-    const { data: banks, error, isLoading: isBanksLoading } = useGetBanksQuery()
-    const { data: provinces } = useGetProvincesQuery()
+    const { userId, cart } = useGetCart()
+    const {
+        createOrder,
+        isLoading,
+        error,
+        banks,
+        errorBanks,
+        isBanksLoading,
+        provinces,
+        errorProvinces,
+        isProvinceLoading,
+    } = useCheckOut()
 
+    const [isSubmitting, setIsSubmitting] = useState(false)
     const [form] = Form.useForm()
     const [paymentMethod, setPaymentMethod] = useState<string>('COD')
     const [qrCode, setQrCode] = useState<string | null>(null)
@@ -54,7 +61,7 @@ const CheckoutPage: React.FC = () => {
             <MainLayout>
                 <LoadingError
                     isLogin={userId !== ''}
-                    isError={isError}
+                    isError={error}
                     isLoading={isLoading}
                     refetch={undefined}
                     title={'Tải đơn hàng thất bại'}
@@ -137,8 +144,6 @@ const CheckoutPage: React.FC = () => {
             message.error('Lỗi tạo mã QR. Vui lòng thử lại.')
         }
     }
-
-    
 
     return (
         <MainLayout>
