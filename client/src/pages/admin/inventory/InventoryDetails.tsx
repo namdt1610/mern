@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Card, Row, Col, Space, message } from 'antd'
 import {
-    useGetInventoryByBookIdQuery,
+    useGetInventoryByProductIdQuery,
     useUpdateInventoryMutation,
 } from '@/services/InventoryApi'
 import DetailsActions from './InventoryDetailsActions'
@@ -23,7 +23,7 @@ const InventoryDetails: React.FC = () => {
         isLoading,
         isError,
         refetch,
-    } = useGetInventoryByBookIdQuery(id!)
+    } = useGetInventoryByProductIdQuery(id!)
 
     const [updateInventory] = useUpdateInventoryMutation()
 

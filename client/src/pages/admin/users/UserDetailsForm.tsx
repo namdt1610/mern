@@ -20,13 +20,13 @@ import {
     PhoneOutlined,
     UserOutlined,
 } from '@ant-design/icons'
-import { User } from '@shared/types/User'
-import { getUserRoleFromCookie } from '@/utils/useGetToken'
+import { IUser } from '@shared/types/IUser'
+import { getUserFromCookie } from '@/utils/useGetToken'
 
 interface UserFormProps {
-    user: User
+    user: IUser
     isEditing: boolean
-    editedUser: Partial<User>
+    editedUser: Partial<IUser>
     onInputChange: (field: string, value: string) => void
     errors: { email: string; phone: string }
     validations: { email: boolean; phone: boolean }
@@ -40,7 +40,11 @@ const UserForm: React.FC<UserFormProps> = ({
     errors,
     validations,
 }) => {
-    const userRole = getUserRoleFromCookie()
+    if (!user) {
+        return null
+    }
+
+    const userRole = getUserFromCookie()?.role
     return (
         <>
             <Space direction="vertical" size="large">
@@ -135,9 +139,12 @@ const UserForm: React.FC<UserFormProps> = ({
                                         Inactive
                                     </Select.Option>
                                 </Select>
-                            ) : (
+                            ) : // Add null check and provide default value
+                            user.status ? (
                                 user.status.charAt(0).toUpperCase() +
                                 user.status.slice(1)
+                            ) : (
+                                'N/A'
                             )}
                         </Descriptions.Item>
                     </Descriptions>
@@ -229,13 +236,21 @@ const UserForm: React.FC<UserFormProps> = ({
                                 <Input
                                     prefix={<HomeOutlined />}
                                     size="large"
-                                    value={editedUser.address || ''}
+                                    value={editedUser.address?.address || ''}
                                     onChange={(e) =>
                                         onInputChange('address', e.target.value)
                                     }
                                 />
                             ) : (
-                                user.address
+                                <>
+                                    <p>Province: {user.address?.province} </p>
+                                    <br />
+                                    <p>District: {user.address?.district}</p>
+                                    <br />
+                                    <p>Ward: {user.address?.ward}</p>
+                                    <br />
+                                    <p>Address: {user.address?.address}</p>
+                                </>
                             )}
                         </Descriptions.Item>
                     </Descriptions>

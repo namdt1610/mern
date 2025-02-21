@@ -1,10 +1,10 @@
-import { getUserRoleFromCookie } from '@/utils/useGetToken'
+import { getUserFromCookie } from '@/utils/useGetToken'
 import { RouteConfig } from '@/routes/admin/routesConfig'
 
 type UserRole = 'admin' | 'user'
 
 export const usePermissions = (permissions?: RouteConfig['permissions']) => {
-    const userRole = getUserRoleFromCookie() as UserRole | null
+    const userRole = getUserFromCookie()?.role as UserRole | null
 
     if (!permissions || !userRole) {
         return { canView: false, canEdit: false, canDelete: false }

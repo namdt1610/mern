@@ -5,7 +5,7 @@ import {
     useUpdateCartItemMutation,
     useRemoveCartItemMutation,
 } from '@/services/CartApi'
-import { useLazyGetInventoryByBookIdQuery } from '@/services/InventoryApi'
+import { useLazyGetInventoryByProductIdQuery } from '@/services/InventoryApi'
 import { getUserFromCookie } from '@/utils/useGetToken'
 import { Button, InputNumber, Typography, Table, Empty } from 'antd'
 import { DeleteOutlined } from '@ant-design/icons'
@@ -23,7 +23,7 @@ const CartPage: React.FC = () => {
     const [removeCartItem] = useRemoveCartItemMutation()
 
     // Sử dụng lazy query để gọi API kiểm tra kho cho từng sản phẩm
-    const [getInventoryByIdTrigger] = useLazyGetInventoryByBookIdQuery()
+    const [getInventoryByIdTrigger] = useLazyGetInventoryByProductIdQuery()
 
     // State lưu danh sách sản phẩm không đủ hàng hoặc hết hàng
     const [unavailableItems, setUnavailableItems] = useState<string[]>([])

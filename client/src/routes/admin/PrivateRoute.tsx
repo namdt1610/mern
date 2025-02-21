@@ -1,5 +1,5 @@
 import { Navigate, useLocation } from 'react-router-dom'
-import { getUserRoleFromCookie } from '@/utils/useGetToken'
+import { getUserFromCookie } from '@/utils/useGetToken'
 import { usePermissions } from '@/hooks/usePermissions'
 import { RouteConfig } from '@/routes/admin/routesConfig'
 import React from 'react'
@@ -14,7 +14,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
     permissions,
 }) => {
     const location = useLocation()
-    const userRole = getUserRoleFromCookie()
+    const userRole = getUserFromCookie()?.role
 
     // If no permissions required, just check if user is logged in
     if (!permissions) {

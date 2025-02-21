@@ -14,7 +14,7 @@ import {
 import { SaveOutlined, RollbackOutlined } from '@ant-design/icons'
 import { useGetProductsQuery } from '@/services/ProductApi'
 import { useAddStockMutation } from '@/services/InventoryApi'
-import { useGetUserIdFromCookie } from '@/utils/useGetToken'
+import { getUserFromCookie } from '@/utils/useGetToken'
 import { useGetWarehousesQuery } from '@/services/WarehouseApi'
 
 interface ImportFormData {
@@ -30,7 +30,7 @@ const InventoryImport: React.FC = () => {
     const { data: warehouses, isLoading: warehousesLoading } =
         useGetWarehousesQuery()
     const [addStock] = useAddStockMutation()
-    const userId = useGetUserIdFromCookie() || null
+    const userId = getUserFromCookie()?._id || null
 
     const handleSubmit = async (values: ImportFormData) => {
         // console.log('values', values)
