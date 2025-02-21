@@ -5,7 +5,7 @@ import { ProductImage, ProductInfo, ProductReview } from '.'
 import MainLayout from '@/components/client/layouts/MainLayout'
 import ErrorBoundary from '@/components/shared/ErrorBoudaries'
 
-export const ProductDetails: React.FC = () => {
+export default function ProductDetails() {
     const { userId, product, isLoading, refetch, stock, favorites } =
         useProducts()
 

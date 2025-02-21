@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Input, Result, Spin, Tag } from 'antd'
+import { Button, Input, Result, Skeleton, Spin, Tag } from 'antd'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useGetCategoriesQuery } from '@/services/CategoryApi'
 import { SearchOutlined, BookOutlined, FireOutlined } from '@ant-design/icons'
@@ -31,9 +31,7 @@ export default function Content() {
 
     if (isLoading)
         return (
-            <div className="flex justify-center items-center min-h-[400px]">
-                <Spin size="large" />
-            </div>
+            <Skeleton active />
         )
 
     if (error)

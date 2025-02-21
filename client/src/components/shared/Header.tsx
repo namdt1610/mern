@@ -12,10 +12,12 @@ import {
     MenuOutlined,
     BellOutlined,
     SearchOutlined,
+    WarningFilled,
 } from '@ant-design/icons'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { getUserFromCookie } from '@/utils/useGetToken'
 import { motion, AnimatePresence } from 'framer-motion'
+import * as Sentry from '@sentry/react'
 
 const { Header } = Layout
 
@@ -187,13 +189,28 @@ export default function HeaderComponent() {
                             </Button>
                         </Dropdown>
                     ) : (
-                        <Button
-                            type="primary"
-                            icon={<LoginOutlined />}
-                            onClick={() => navigate('/login')}
-                        >
-                            {!isMobile && 'Login'}
-                        </Button>
+                        <>
+                            <Button
+                                type="primary"
+                                icon={<LoginOutlined />}
+                                onClick={() => navigate('/login')}
+                            >
+                                {!isMobile && 'Login'}
+                            </Button>
+                            <Button
+                                type="primary"
+                                icon={<WarningFilled />}
+                                onClick={async () => {
+                                    Sentry.captureException(
+                                        new Error('Lỗi test')
+                                    )
+                                    await Sentry.flush(2000) // Chờ 2 giây để đảm bảo lỗi được gửi đi
+                                    console.log('Error sent to Sentry!')
+                                }}
+                            >
+                                {!isMobile && 'Break the app'}
+                            </Button>
+                        </>
                     )}
 
                     {/* Mobile Menu */}

@@ -1,3 +1,4 @@
+import { sentryVitePlugin } from "@sentry/vite-plugin";
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
@@ -32,7 +33,10 @@ export default defineConfig({
             plugins: [tailwindcss, autoprefixer],
         },
     },
-    plugins: [react()],
+    plugins: [react(), sentryVitePlugin({
+        org: "none-k7t",
+        project: "javascript-react"
+    })],
     resolve: {
         alias: {
             '@/': `${path.resolve(__dirname, 'src')}/`,

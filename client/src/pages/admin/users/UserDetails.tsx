@@ -6,11 +6,11 @@ import {
     useUpdateUserMutation,
 } from '@/services/UserApi'
 import { Col, Empty, message, Row, Space } from 'antd'
-import LoadingError from '@/components/LoadingError'
+import LoadingError from '@/components/shared/LoadingError'
 import UserActions from './UserDetailsActions'
 import UserAvatar from './UserDetailsAvatar'
 import UserForm from './UserDetailsForm'
-import { User } from 'shared/types/User'
+import { IUser } from 'shared/types/IUser'
 
 const UserDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>()
@@ -20,7 +20,7 @@ const UserDetail: React.FC = () => {
     const [deleteUser] = useDeleteUserMutation()
 
     const [isEditing, setIsEditing] = useState(false)
-    const [editedUser, setEditedUser] = useState<Partial<User>>({})
+    const [editedUser, setEditedUser] = useState<Partial<IUser>>({})
     const [avatarPreview, setAvatarPreview] = useState<string | undefined>(
         user?.avatar
     )

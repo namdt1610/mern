@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Result, Spin, Tag, Tooltip } from 'antd'
+import { Button, Result, Skeleton, Spin, Tag, Tooltip } from 'antd'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
     useGetProductsQuery,
@@ -55,12 +55,7 @@ export default function MainContent() {
         { key: 'trending', label: 'Trending' },
     ]
 
-    if (isLoading)
-        return (
-            <div className="flex justify-center items-center min-h-[400px]">
-                <Spin size="large" />
-            </div>
-        )
+    if (isLoading) return <Skeleton active />
 
     if (error)
         return (

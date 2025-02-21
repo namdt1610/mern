@@ -20,6 +20,7 @@ const CartPage = lazy(() => import('@/features/client/cart/Cart'))
 import UserProfileSkeleton from '@/components/client/skeletons/UserProfileSkeleton'
 import CheckoutSkeleton from '@/components/client/skeletons/CheckoutSkeleton'
 import StoreSkeleton from '@/components/client/skeletons/StoreSkeleton'
+import { Spin } from 'antd'
 
 export default function ClientRoutes() {
     return (
@@ -29,7 +30,16 @@ export default function ClientRoutes() {
             <Route
                 path="/login"
                 element={
-                    <Suspense fallback={<div>Loading...</div>}>
+                    <Suspense
+                        fallback={
+                            <Spin
+                                spinning
+                                fullscreen
+                                size="large"
+                                percent={'auto'}
+                            />
+                        }
+                    >
                         <LoginPage />
                     </Suspense>
                 }
@@ -38,7 +48,16 @@ export default function ClientRoutes() {
             <Route
                 path="/register"
                 element={
-                    <Suspense fallback={<div>Loading...</div>}>
+                    <Suspense
+                        fallback={
+                            <Spin
+                                spinning
+                                fullscreen
+                                size="large"
+                                percent={'auto'}
+                            />
+                        }
+                    >
                         <RegisterPage />
                     </Suspense>
                 }
@@ -47,7 +66,16 @@ export default function ClientRoutes() {
             <Route
                 path="books"
                 element={
-                    <Suspense fallback={<StoreSkeleton />}>
+                    <Suspense
+                        fallback={
+                            <Spin
+                                spinning
+                                fullscreen
+                                size="large"
+                                percent={'auto'}
+                            />
+                        }
+                    >
                         <StorePage />
                     </Suspense>
                 }
@@ -74,7 +102,16 @@ export default function ClientRoutes() {
             <Route
                 path="/cart/:id"
                 element={
-                    <Suspense fallback={<div>Loading Cart...</div>}>
+                    <Suspense
+                        fallback={
+                            <Spin
+                                spinning
+                                fullscreen
+                                size="large"
+                                percent={'auto'}
+                            />
+                        }
+                    >
                         <CartPage />
                     </Suspense>
                 }

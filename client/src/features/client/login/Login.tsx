@@ -17,6 +17,7 @@ export default function Login() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
+                    className="flex items-center justify-center w-full h-screen"
                 >
                     <Card className={styles.glassCard}>
                         <div className="flex justify-center">

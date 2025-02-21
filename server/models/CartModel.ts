@@ -1,9 +1,9 @@
 import mongoose from 'mongoose'
-import { Cart } from '../../shared/types/Cart'
+import { ICart } from '../../shared/types/ICart'
 
 const Schema = mongoose.Schema
 
-const cartSchema = new Schema<Cart>(
+const cartSchema = new Schema<ICart>(
     {
         user: {
             type: String,

@@ -5,7 +5,6 @@ import { IProduct } from '@shared/types/IProduct'
 import { IInventory } from '@shared/types/IInventory'
 import { useAddToFavoritesMutation } from '@/services/UserApi'
 import { useAddToCartMutation } from '@/services/CartApi'
-import styles from './ProductInfo.module.scss'
 
 const { Title, Text } = Typography
 
@@ -87,10 +86,10 @@ export default function ProductInfo({
         }
     }
     return (
-        <div className={styles.infoContainer}>
-            <div className={styles.glassCard}>
-                <div className={styles.productInfoContainer}>
-                    <div className={styles.productInfo}>
+        <div>
+            <div>
+                <div>
+                    <div>
                         <Title level={3}>{product.name}</Title>
                         <Text strong>Author: </Text>
                         <Text>{product.author}</Text>
@@ -101,14 +100,13 @@ export default function ProductInfo({
                         <Text strong>Description: </Text>
                         <Text>{product.description}</Text>
                     </div>
-                    <div className={styles.blankDiv}></div>
-                    <div className={styles.stockInfo}>
+                    <div>
                         {stock ? (
                             <>
                                 <Text type="success">In Stock</Text>
                                 <br />
                                 <Text>Quantity: {stock?.quantity}</Text>
-                                <div className={styles.quantityControls}>
+                                <div>
                                     <Button
                                         onClick={handleDecrease}
                                         disabled={quantity === 1}

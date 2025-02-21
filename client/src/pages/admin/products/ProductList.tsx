@@ -18,7 +18,7 @@ import {
 } from 'antd'
 import { DeleteOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons'
 import LoadingError from '@/components/shared/LoadingError'
-import { Product } from '@shared/types/IProduct'
+import { IProduct } from '@shared/types/IProduct'
 import type { TableColumnsType, TableProps } from 'antd'
 import { debounce } from 'lodash'
 
@@ -39,7 +39,7 @@ const ProductPage: React.FC = () => {
         'checkbox'
     )
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
-    const [filteredData, setFilteredData] = useState<Product[]>([])
+    const [filteredData, setFilteredData] = useState<IProduct[]>([])
     const [searchTerm, setSearchTerm] = useState('')
 
     // Handle delete products
@@ -102,10 +102,10 @@ const ProductPage: React.FC = () => {
         title: string
         dataIndex?: string
         key: string
-        render?: (_: any, record: Product) => JSX.Element
+        render?: (_: any, record: IProduct) => JSX.Element
     }
 
-    const columns: TableColumnsType<Product> = [
+    const columns: TableColumnsType<IProduct> = [
         {
             title: 'Product Name',
             dataIndex: 'name',
@@ -125,7 +125,7 @@ const ProductPage: React.FC = () => {
         {
             title: 'Actions',
             key: 'actions',
-            render: (_, record: Product) => (
+            render: (_, record: IProduct) => (
                 <Space direction="horizontal" wrap size={10}>
                     <Tooltip title="View product details">
                         <Button
@@ -151,10 +151,10 @@ const ProductPage: React.FC = () => {
     ]
 
     // Row selection
-    const rowSelection: TableProps<Product>['rowSelection'] = {
+    const rowSelection: TableProps<IProduct>['rowSelection'] = {
         onChange: (
             newSelectedRowKeys: React.Key[],
-            selectedRows: Product[]
+            selectedRows: IProduct[]
         ) => {
             console.log(
                 `selectedRowKeys: ${selectedRowKeys}`,
@@ -163,7 +163,7 @@ const ProductPage: React.FC = () => {
             )
             setSelectedRowKeys(newSelectedRowKeys)
         },
-        getCheckboxProps: (record: Product) => ({
+        getCheckboxProps: (record: IProduct) => ({
             disabled: record.name === 'Disabled User', // Column configuration not to be checked
             name: record.name,
         }),
@@ -228,7 +228,7 @@ const ProductPage: React.FC = () => {
                     <Radio value="radio">Radio</Radio>
                 </Radio.Group>
                 <Divider />
-                <Table<Product>
+                <Table<IProduct>
                     scroll={{ x: 'max-content' }}
                     sticky={true}
                     rowSelection={{ type: selectionType, ...rowSelection }}

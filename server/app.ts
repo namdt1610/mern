@@ -30,7 +30,13 @@ app.use(morgan('dev'))
 const corsOptions = {
     origin: ['http://localhost:5173', 'https://mern-psi-nine.vercel.app'],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+    allowedHeaders: [
+        'Content-Type',
+        'Authorization',
+        'X-Requested-With',
+        'sentry-trace',
+        'baggage'
+    ],
     credentials: true,
     optionsSuccessStatus: 200,
 }

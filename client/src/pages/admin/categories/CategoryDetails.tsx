@@ -17,7 +17,7 @@ import {
     Space,
     Typography,
 } from 'antd'
-import LoadingError from '@/components/LoadingError'
+import LoadingError from '@/components/shared/LoadingError'
 
 const { Title, Text } = Typography
 
@@ -69,7 +69,7 @@ const CategoryDetails: React.FC = () => {
                 isLoading={isLoading}
                 isError={error}
                 isLogin={false}
-                title='Category Details'
+                title="Category Details"
                 refetch={refetch}
             />
         )
