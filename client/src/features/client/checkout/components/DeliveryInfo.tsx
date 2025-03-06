@@ -11,7 +11,7 @@ import {
     Button,
 } from 'antd'
 import { useCheckOut } from '../hooks/useCheckOut'
-import { ICart, CartDetails } from '@shared/types/ICart'
+import { ICart, CartDetails } from '@/types/ICart'
 import MainLayout from '@/components/client/layouts/MainLayout'
 import LoadingError from '@/components/shared/LoadingError'
 
@@ -127,6 +127,7 @@ export default function DeliveryInfo({
             message.error('Lỗi tạo mã QR. Vui lòng thử lại.')
         }
     }
+
     const handleCheckout = async () => {
         setIsSubmitting(true)
         const values = form.getFieldsValue()
@@ -147,6 +148,8 @@ export default function DeliveryInfo({
                 price: item.product.price,
                 product: item.product._id,
             }))
+            console.log('orderItems:', orderItems)
+
             await createOrder({
                 user: userId!,
                 orderItems,
@@ -162,13 +165,14 @@ export default function DeliveryInfo({
                 shippingPrice,
                 totalPrice,
             }).unwrap()
-            message.success('Đặt hàng thành công!')
+            message.success('Place order successfully!')
             setIsSubmitting(false)
         } catch (error: any) {
-            message.error(error?.data?.message || 'Đặt hàng thất bại!')
+            message.error(error?.data?.message || 'Failed to place order!')
             console.error('Failed to checkout:', error)
         }
     }
+
     return (
         <Card title="Thông tin giao hàng" style={{ marginTop: 20 }}>
             <Form form={form} layout="vertical" onFinish={handleCheckout}>

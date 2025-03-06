@@ -1,7 +1,7 @@
 import React from 'react'
 import { Card, List, Typography, Divider, Skeleton, Result } from 'antd'
 import { useGetCart } from '../hooks/useGetCart'
-import { ICart } from '@shared/types/ICart'
+import { ICart } from '@/types/ICart'
 
 export default function CartInfo({
     cart,

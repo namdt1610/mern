@@ -4,7 +4,7 @@ import { Button, Card, Input, message, Modal, Space, Table } from 'antd/lib'
 import { ColumnsType } from 'antd/lib/table'
 import { ImportOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons'
 import { debounce } from 'lodash'
-import { Category } from '@shared/types/Category'
+import { Category } from '@/types/Category'
 import {
     useDeleteCategoryMutation,
     useGetCategoriesQuery,

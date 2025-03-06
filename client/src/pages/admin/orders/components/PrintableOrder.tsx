@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import { Order } from '@shared/types/Order'
+import { Order } from '@/types/Order'
 import { User } from '@shared/types/User'
 import { Typography, Table, Divider, Modal, Button } from 'antd'
 import dayjs from 'dayjs'

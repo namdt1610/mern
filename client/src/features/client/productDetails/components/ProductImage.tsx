@@ -1,6 +1,6 @@
 import React from 'react'
 import { Image } from 'antd'
-import { IProduct } from '@shared/types/IProduct'
+import { IProduct } from '@/types/IProduct'
 
 export default function ProductImage({ product }: { product: IProduct }) {
     return (

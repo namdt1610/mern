@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Card, Descriptions, Input, InputNumber, Select, Space } from 'antd'
 import { BarcodeOutlined, NumberOutlined, TagOutlined } from '@ant-design/icons'
-import { IInventory } from '@shared/types/IInventory'
+import { IInventory } from '@/types/IInventory'
 import dayjs from 'dayjs'
 
 interface InventoryDetailsFormProps {

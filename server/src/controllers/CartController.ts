@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import Cart from '../models/CartModel'
 import Product from '../models/ProductModel'
-import { AddToCartRequest } from '../../shared/types/ICart'
+import { AddToCartRequest } from '../../../client/src/types/ICart'
 
 // 1. Lấy thông tin giỏ hàng
 export const getCart = async (req: Request, res: Response): Promise<void> => {

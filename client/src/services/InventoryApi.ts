@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { IInventory } from '@shared/types/IInventory'
+import { IInventory } from '@/types/IInventory'
 
 export const inventoryApi = createApi({
     reducerPath: 'inventoryApi',

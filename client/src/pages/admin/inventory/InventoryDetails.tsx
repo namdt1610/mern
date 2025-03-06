@@ -8,7 +8,7 @@ import {
 import DetailsActions from './InventoryDetailsActions'
 import DetailsForm from './InventoryDetailsForm'
 import LoadingError from '@/components/shared/LoadingError'
-import { IInventory } from '@shared/types/IInventory'
+import { IInventory } from '@/types/IInventory'
 
 const InventoryDetails: React.FC = () => {
     const { id } = useParams<{ id: string }>()

@@ -1,23 +1,25 @@
-import { Request, Response } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import bcrypt from 'bcryptjs'
 import User from '../models/UserModel'
 import mongoose from 'mongoose'
 
 export const getAllUsers = async (
     req: Request,
-    res: Response
+    res: Response,
+    next: NextFunction
 ): Promise<void> => {
     try {
         const users = await User.find()
         res.status(200).json(users)
     } catch (error) {
-        res.status(500).json({ message: 'Could not fetch users' })
+        next(error)
     }
 }
 
 export const getUserById = async (
     req: Request,
-    res: Response
+    res: Response,
+    next: NextFunction
 ): Promise<void> => {
     const { id } = req.params
 
@@ -29,8 +31,7 @@ export const getUserById = async (
         }
         res.status(200).json(user)
     } catch (error) {
-        res.status(500).json({ message: 'Could not fetch user' })
-        return
+        next(error)
     }
 }
 

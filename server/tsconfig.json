@@ -1,18 +1,14 @@
 {
-    "extends": "../tsconfig.base.json", // Kế thừa từ file tsconfig.json ở root
     "compilerOptions": {
-        "module": "CommonJS", // Quy định output module được sử dụng
-        "target": "ES2023", // Target output cho code
-        "outDir": "dist", // Đường dẫn output cho thư mục build
+        "module": "CommonJS",
+        "target": "ES2023",
         "esModuleInterop": true,
-        "strict": true /* Enable all strict type-checking options. */,
-        "skipLibCheck": true /* Skip type checking all .d.ts files. */,
-        // "baseUrl": ".", // Đường dẫn base cho các import
-        "rootDir": "../",
+        "strict": true,
+        "skipLibCheck": true,
+        "baseUrl": "./",
         "paths": {
-            "~/*": ["src/*"] // Đường dẫn tương đối cho các import (alias)
+            "@/*": ["src/*"]
         }
     },
-    // "files": ["src/type.d.ts"], // Các file dùng để defined global type cho dự án
-    "include": ["src/**/*.ts", "index.ts", "../shared/**/*", "**/*.ts"] // Đường dẫn include cho các file cần build
+    "include": ["src"]
 }

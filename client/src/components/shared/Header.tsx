@@ -201,11 +201,7 @@ export default function HeaderComponent() {
                                 type="primary"
                                 icon={<WarningFilled />}
                                 onClick={async () => {
-                                    Sentry.captureException(
-                                        new Error('Lỗi test')
-                                    )
-                                    await Sentry.flush(2000) // Chờ 2 giây để đảm bảo lỗi được gửi đi
-                                    console.log('Error sent to Sentry!')
+                                    throw new Error('Lỗi test')
                                 }}
                             >
                                 {!isMobile && 'Break the app'}

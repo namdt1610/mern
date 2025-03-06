@@ -1,6 +1,6 @@
 // services/CartApi.ts
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { AddToCartRequest, ICart } from '@shared/types/ICart'
+import { AddToCartRequest, ICart } from '@/types/ICart'
 
 export const cartApi = createApi({
     reducerPath: 'cartApi',

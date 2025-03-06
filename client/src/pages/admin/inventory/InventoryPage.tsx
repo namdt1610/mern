@@ -24,7 +24,7 @@ import {
 } from '@/services/InventoryApi'
 import { usePermissions } from '@/hooks/usePermissions'
 import adminRoutes from '@/routes/admin/routesConfig'
-import { IInventory } from '@shared/types/IInventory'
+import { IInventory } from '@/types/IInventory'
 
 const InventoryPage: React.FC = () => {
     const navigate = useNavigate()

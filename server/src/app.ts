@@ -4,6 +4,7 @@ import morgan from 'morgan'
 import cookieParser from 'cookie-parser'
 import path from 'path'
 import fs from 'fs'
+import errorHandler from './middlewares/errorHandler'
 
 // Import Routes
 import authRoutes from './routes/AuthRoutes'
@@ -35,7 +36,7 @@ const corsOptions = {
         'Authorization',
         'X-Requested-With',
         'sentry-trace',
-        'baggage'
+        'baggage',
     ],
     credentials: true,
     optionsSuccessStatus: 200,
@@ -83,5 +84,7 @@ app.use(
         })
     }
 )
+
+app.use(errorHandler)
 
 export default app

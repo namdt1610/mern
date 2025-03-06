@@ -24,7 +24,7 @@ import {
 } from '@/services/WarehouseApi'
 import { usePermissions } from '@/hooks/usePermissions'
 import adminRoutes from '@/routes/admin/routesConfig'
-import { IWarehouse } from '@shared/types/IWarehouse'
+import { IWarehouse } from '@/types/IWarehouse'
 
 const WarehousesPage: React.FC = () => {
     const navigate = useNavigate()

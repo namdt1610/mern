@@ -1,4 +1,4 @@
-import { IUser } from '@shared/types/IUser'
+import { IUser } from '@/types/IUser'
 import { jwtDecode } from 'jwt-decode'
 
 export interface DecodedToken extends IUser {

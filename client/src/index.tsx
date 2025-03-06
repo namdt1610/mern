@@ -1,7 +1,8 @@
+import './instrument'
 import './index.css'
 import App from './App'
 import Cookies from 'js-cookie'
-import store from '@/redux/Store'
+import store from '@/redux/store'
 import enUS from 'antd/locale/en_US'
 import { Provider } from 'react-redux'
 import { createRoot } from 'react-dom/client'
@@ -9,6 +10,7 @@ import React, { useState, useEffect } from 'react'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { ConfigProvider, App as AntApp, theme } from 'antd'
 import ThemeSwitcher from '@/components/shared/ThemeToggle'
+import * as Sentry from '@sentry/react'
 
 const THEME_KEY = 'user-theme'
 const { darkAlgorithm, defaultAlgorithm } = theme
@@ -62,7 +64,16 @@ const AppWrapper = () => {
 }
 
 const container = document.getElementById('root') as HTMLElement
-const root = createRoot(container)
+const root = createRoot(container, {
+    // Callback called when an error is thrown and not caught by an ErrorBoundary.
+    onUncaughtError: Sentry.reactErrorHandler((error, errorInfo) => {
+        console.warn('Uncaught error', error, errorInfo.componentStack)
+    }),
+    // Callback called when React catches an error in an ErrorBoundary.
+    onCaughtError: Sentry.reactErrorHandler(),
+    // Callback called when React automatically recovers from errors.
+    onRecoverableError: Sentry.reactErrorHandler(),
+})
 
 root.render(
     <React.StrictMode>

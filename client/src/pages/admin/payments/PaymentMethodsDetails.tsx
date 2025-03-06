@@ -5,7 +5,7 @@ import {
     useUpdatePaymentMethodMutation,
 } from '@/services/PaymentMethodApi'
 import { Button, Form, Input, Spin } from 'antd'
-import { PaymentMethod } from 'shared/types/PaymentMethod'
+import { PaymentMethod } from '@/types/PaymentMethod'
 
 const PaymentMethodsDetails = () => {
     const { id } = useParams()

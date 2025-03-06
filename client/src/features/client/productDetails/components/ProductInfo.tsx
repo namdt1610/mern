@@ -1,8 +1,8 @@
 import React, { useState, startTransition, useEffect } from 'react'
 import { Button, InputNumber, Typography, App } from 'antd'
 import { useNavigate } from 'react-router-dom'
-import { IProduct } from '@shared/types/IProduct'
-import { IInventory } from '@shared/types/IInventory'
+import { IProduct } from '@/types/IProduct'
+import { IInventory } from '@/types/IInventory'
 import { useAddToFavoritesMutation } from '@/services/UserApi'
 import { useAddToCartMutation } from '@/services/CartApi'
 

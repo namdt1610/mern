@@ -1,31 +1,20 @@
+import { baseQueryWithReauth } from './../redux/baseQuery';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { User } from '@shared/types/User'
+import { IUser } from '@/types/IUser'
 
 export const userApi = createApi({
     reducerPath: 'userApi',
-    baseQuery: fetchBaseQuery({
-        baseUrl: 'http://localhost:8888/api',
-        credentials: 'include',
-        prepareHeaders: (headers) => {
-            // Tránh việc thiết lập Content-Type cho FormData
-            const isFileUpload =
-                headers.get('Content-Type') === 'multipart/form-data'
-            if (!isFileUpload) {
-                headers.set('Content-Type', 'application/json')
-            }
-            return headers
-        },
-    }),
+    baseQuery: baseQueryWithReauth,
     endpoints: (builder) => ({
-        getUsers: builder.query<User[], void>({
+        getUsers: builder.query<IUser[], void>({
             query: () => '/users',
         }),
 
-        getUserById: builder.query<User, string>({
+        getUserById: builder.query<IUser, string>({
             query: (id) => `/users/${id}`,
         }),
 
-        createUser: builder.mutation<User, Partial<User>>({
+        createUser: builder.mutation<IUser, Partial<IUser>>({
             query: (data) => ({
                 url: '/users',
                 method: 'POST',
@@ -34,8 +23,8 @@ export const userApi = createApi({
         }),
 
         updateUser: builder.mutation<
-            User,
-            Partial<User> & { userId: string | undefined }
+            IUser,
+            Partial<IUser> & { userId: string | undefined }
         >({
             query: ({ userId, ...data }) => ({
                 url: `/users/${userId}`,
@@ -66,7 +55,7 @@ export const userApi = createApi({
         }),
 
         addToFavorites: builder.mutation<
-            User,
+            IUser,
             { userId: string; productId: string }
         >({
             query: ({ userId, productId }) => ({

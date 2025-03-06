@@ -20,7 +20,7 @@ import {
     PhoneOutlined,
     UserOutlined,
 } from '@ant-design/icons'
-import { IUser } from '@shared/types/IUser'
+import { IUser } from '@/types/IUser'
 import { getUserFromCookie } from '@/utils/useGetToken'
 
 interface UserFormProps {

@@ -5,7 +5,7 @@ import {
     useDeletePaymentMethodMutation,
     useGetPaymentMethodsQuery,
 } from '@/services/PaymentMethodApi'
-import { PaymentMethod } from '@shared/types/PaymentMethod'
+import { PaymentMethod } from '@/types/PaymentMethod'
 
 const PaymentMethods: React.FC = () => {
     const { data: paymentMethods, isLoading } = useGetPaymentMethodsQuery()

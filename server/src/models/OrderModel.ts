@@ -1,5 +1,9 @@
-import mongoose, { Schema } from 'mongoose'
-import { Order } from '../../shared/types/Order'
+import mongoose, { Schema, Document } from 'mongoose'
+import { Order } from '../../../client/src/types/Order'
+
+// export interface IOrder extends Document{
+//     _id: string
+// }
 
 const orderSchema = new Schema<Order>(
     {

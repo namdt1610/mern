@@ -5,6 +5,10 @@ import InventoryActivity from '../models/InventoryActivityModel'
 import mongoose from 'mongoose'
 import User from '../models/UserModel'
 import { sendEmail } from '../utils/sendEmail'
+import { UnitOfWork } from '@/repositories/unitOfWork'
+import { OrderService } from '@/services/orderService'
+
+const orderService = new OrderService()
 
 export const OrderController = {
     getAllOrders: async (req: Request, res: Response): Promise<void> => {
@@ -76,112 +80,22 @@ export const OrderController = {
     },
 
     createOrder: async (req: Request, res: Response) => {
-        const session = await mongoose.startSession()
-        session.startTransaction()
+        const uow = new UnitOfWork()
+        await uow.start()
 
         try {
-            const { items, ...orderData } = req.body
             const userId = req.body.user
+            const order = await orderService.createOrder(userId, req.body, uow)
 
-            if (!items || !Array.isArray(items) || items.length === 0) {
-                throw new Error('Order must contain at least one item')
-            }
-
-            // Check and update inventory for each item
-            for (const item of items) {
-                const inventory = await Inventory.findOne({
-                    product: item.productId,
-                })
-
-                if (!inventory || inventory.quantity < item.quantity) {
-                    res.status(400).json({ message: 'Insufficient stock' })
-                    console.log(
-                        'Insufficient stock for product',
-                        item.productId
-                    )
-                    throw new Error(
-                        `Insufficient stock for product ${item.productId}`
-                    )
-                }
-
-                // Decrease stock
-                const previousQuantity = inventory.quantity
-                inventory.quantity -= item.quantity
-
-                // Update status if quantity becomes 0
-
-                await inventory.save({ session })
-
-                // Log activity
-                await InventoryActivity.create(
-                    [
-                        {
-                            product: item.productId,
-                            action: 'remove',
-                            quantity: item.quantity,
-                            previousQuantity,
-                            newQuantity: inventory.quantity,
-                            updatedBy: 'order-system',
-                        },
-                    ],
-                    { session }
-                )
-            }
-
-            // Create the order
-            const order = await Order.create([orderData], { session })
-
-            // Send confirmation email
-            const emailSubject = 'Order Confirmation'
-            const emailText = `Thank you for your order! Your order ID is ${orderData._id}.`
-            const emailHtml = `
-            <h1>Thank you for your order!</h1>
-            <p>Your order ID is <strong>${orderData._id}</strong>.</p>
-            <p>Items:</p>
-            <ul>
-                ${items
-                    .map(
-                        (item: any) =>
-                            `<li>${item.quantity} x ${item.name} - $${item.price}</li>`
-                    )
-                    .join('')}
-            </ul>
-            <p>Total Amount: $${orderData.totalPrice}</p>
-        `
-
-            await sendEmail(orderData.email, emailSubject, emailText, emailHtml)
-
-            // Clear ordered items from user's cart
-            await User.findByIdAndUpdate(
-                userId,
-                {
-                    $pull: {
-                        cart: {
-                            productId: {
-                                $in: items.map((item: any) => item.productId),
-                            },
-                        },
-                    },
-                },
-                { session }
-            )
-
-            await session.commitTransaction()
-
+            await uow.commit()
             res.status(201).json({
                 success: true,
-                message: 'Order created successfully',
-                order: order[0],
+                message: 'Order created successfully!',
+                order,
             })
         } catch (error: any) {
-            await session.abortTransaction()
-            res.status(500).json({
-                success: false,
-                message: 'Error creating order',
-                error: error.message,
-            })
-        } finally {
-            session.endSession()
+            await uow.rollback()
+            res.status(500).json({ success: false, message: error.message })
         }
     },
 

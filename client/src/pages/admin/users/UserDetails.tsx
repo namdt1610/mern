@@ -10,7 +10,7 @@ import LoadingError from '@/components/shared/LoadingError'
 import UserActions from './UserDetailsActions'
 import UserAvatar from './UserDetailsAvatar'
 import UserForm from './UserDetailsForm'
-import { IUser } from 'shared/types/IUser'
+import { IUser } from '@/types/IUser'
 
 const UserDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>()

@@ -14,11 +14,11 @@ import { openApi } from '@/services/OpenApi'
 import { dashboardApi } from '@/services/DashboardApi'
 import { reviewApi } from '@/services/ReviewApi'
 import { WarehouseApi } from '@/services/WarehouseApi'
-import userReducer from './userSlice'
+import authReducer from './authSlice'
 
 const store = configureStore({
     reducer: {
-        user: userReducer,
+        auth: authReducer,
         [authApi.reducerPath]: authApi.reducer,
         [userApi.reducerPath]: userApi.reducer,
         [categoryApi.reducerPath]: categoryApi.reducer,

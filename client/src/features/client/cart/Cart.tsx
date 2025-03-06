@@ -150,6 +150,9 @@ const CartPage: React.FC = () => {
                     )}
                 </>
             ),
+            status: unavailableItems.includes(item.product._id)
+                ? 'Out of stock'
+                : 'Available',
             remove: (
                 <Button
                     icon={<DeleteOutlined />}
@@ -175,6 +178,7 @@ const CartPage: React.FC = () => {
                             dataIndex: 'quantity',
                             key: 'quantity',
                         },
+                        { title: 'Status', dataIndex: 'status', key: 'status' },
                         { title: 'Remove', dataIndex: 'remove', key: 'remove' },
                     ]}
                     footer={() => (
@@ -194,7 +198,7 @@ const CartPage: React.FC = () => {
                 <Button
                     type="primary"
                     onClick={() => {
-                        navigate('/checkout')
+                        navigate(`/checkout/${userId}`)
                     }}
                 >
                     Proceed to Checkout

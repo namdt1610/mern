@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { IWarehouse } from '@shared/types/IWarehouse' // Định nghĩa kiểu Warehouse
+import { IWarehouse } from '@/types/IWarehouse' // Định nghĩa kiểu Warehouse
 
 export const WarehouseApi = createApi({
     reducerPath: 'WarehouseApi',

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Badge, Card, Descriptions, Space, Tag, Typography } from 'antd'
 import { User } from '@shared/types/User'
-import { Order } from '@shared/types/Order'
+import { Order } from '@/types/Order'
 
 const { Title } = Typography
 

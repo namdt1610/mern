@@ -1,6 +1,6 @@
 import React from 'react'
 import { Card, Table, Tag, Space, Typography } from 'antd'
-import { OrderItems } from '@shared/types/Order'
+import { OrderItems } from '@/types/Order'
 
 const { Title } = Typography
 

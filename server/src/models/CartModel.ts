@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { ICart } from '../../shared/types/ICart'
+import { ICart } from '../../../client/src/types/ICart'
 
 const Schema = mongoose.Schema
 

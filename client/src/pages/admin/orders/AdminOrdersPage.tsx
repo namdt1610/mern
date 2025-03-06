@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { Order } from 'shared/types/Order' // Interface cho đơn hàng
+import { Order } from '@/types/Order' // Interface cho đơn hàng
 import { debounce } from 'lodash'
 import { useNavigate } from 'react-router-dom'
 import { Badge, Button, Card, Input, message, Modal, Space, Table } from 'antd/'
